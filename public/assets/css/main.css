@@ -6,7 +6,7 @@ html, body{
    height: 100%;
    
 }
-.main{
+/*.main{
     display: flex;
     height: 100%;
     
@@ -20,7 +20,7 @@ html, body{
     flex:3;
 }
 
-/*nav*/
+/*nav
 nav{
   padding:0.3rem;
   background-image:url("/public/images/lago.jpg");
@@ -64,8 +64,8 @@ nav table{
 #thead{
     display: inline;
 
-}
-/*cookies*/
+}*/
+/*cookies
 #popup{
     background-color: #cdd2df;
     width:300px;
@@ -93,7 +93,7 @@ top: 0;
 left: 0;
 z-index: 4;
 
-}
+}*/
 
 
 
