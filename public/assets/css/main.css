@@ -4,96 +4,82 @@
 }
 html, body{
    height: 100%;
-   
 }
-/*.main{
+
+.grid{
+    
+    border: 8px solid, black;
+    display: grid;
+    grid-template-columns:repeat(16, 1ft);
+    grid-template-rows: repeat(16, 1ft);
+    gap:10px
+}
+.box{
     display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: blue;
+    font-size: 40pt;
+}
+#logo{
+    grid-column: 1/ 4;
+    grid-row: 1/ 4;
+}
+
+
+#nav{
+    grid-column: 1/ 4;
+    grid-row: 4/ 16;
+}
+#center{
+    grid-column: 4 / 16;
+    grid-row: 1/14;
+}
+#bottom{
+    grid-column: 4/16;
+    grid-row: 14/16;
+}
+@media(max-width:1000px) {
+.grid{
+     border: 8px solid, black;
+    display: grid;
+    grid-template-columns:repeat(auto-fit, 300px);
     height: 100%;
-    
+    justify-content: center;
+    gap:10px
 }
-.top_left{
-    flex:1;
-}
-.top_center{
-   
-    background-color: rgb(166, 255, 0);
-    flex:3;
-}
-
-/*nav
-nav{
-  padding:0.3rem;
-  background-image:url("/public/images/lago.jpg");
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-attachment: scroll;
-}
-.nav_li img{
-    background-image: radial-gradient(#1a4ce2, #3363dd, #486bc9, #8394c1, #9198ac);
-    border-radius: 50%;
-}
-.icon{
-    text-align: right;
-    padding-right: 1rem;
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-    font-size: 1,8rem;
-}
-.icon[alt="who"]{
-    color:aliceblue;
-}
-.icon[alt="who"]:hover, [alt="why"]:hover{
-    color:rgb(17, 188, 117);
-}
-
-p:hover{
-        color:rgb(74, 10, 213);
+  .box{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(0, 255, 149);
+    font-size: 30pt;
     }
-div.icon{
-    color: blue;  
-    
+
+#logo{
+    grid-column: 1/ 16;
+    grid-row: 1/ 4;
 }
 
-.bottom{
-    background-color: yellow;
-}
-nav table{
-    width: 100%;
-    margin-top: 5rem;
+
+#nav{
+    grid-column: 1/ 16;
+    grid-row: 4/ 8;
     
 }
-#thead{
-    display: inline;
-
-}*/
-/*cookies
-#popup{
-    background-color: #cdd2df;
-    width:300px;
-    position: fixed;
-    top:50%;
-    left: 50%;
-    text-align: center;
-    border-radius: 20%;
-    padding:1.5em;
-    translate: -18% -50%;
-    z-index: 5;
-    
+#center{
+    grid-column: 1 / 16;
+    grid-row: 8/12;
 }
-#popup button{
-    margin-top:10px;
-    padding: .6em 2.5em;
-    font:inherit;
+#bottom{
+    grid-column: 1/16;
+    grid-row: 12/16;
 }
-#overlay{
-background-color: rgb(0,0,0,0.7);
-width: 100vw;
-height: 100vh;
-position:fixed;
-top: 0;
-left: 0;
-z-index: 4;
 
-}*/
+}
+
+
+
 
 
 
