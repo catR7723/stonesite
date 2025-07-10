@@ -1,0 +1,44 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+:root{
+    --color-1: rgb(5, 90, 50);
+    --text-color: rgb(18, 20, 19);
+    --accent-color: rgb(126, 8, 230);
+
+}
+
+#nav{
+    margin: 0;
+    padding: 0;
+    font-size: 12pt;
+    font-family: Poppins, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
+}
+.nav{
+ height: 80px;
+ width: 100%;
+ padding-left: 10%;
+ background-color: var(--color-1);
+ display: flex;
+ justify-content: end;
+ align-items: center;
+ margin-top: 1%;
+}
+#links-container{
+    display: flex;
+    height: 100%;
+    width: 100%;
+    flex-direction: row;
+    align-items: center;
+}
+.nav a{
+    height: 100%;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    color:var(--text-color);
+    text-decoration: none;
+}
+.nav :hover{
+    background-color: var(--accent-color);
+}
+
