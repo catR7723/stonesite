@@ -5,14 +5,12 @@
 html, body{
    height: 100%;
 }
-
 .grid{
-    
     border: 8px solid, black;
     display: grid;
     grid-template-columns:repeat(16, 1ft);
     height: 100%;
-    gap:10px;
+    
 }
 .box{
     display: flex;
@@ -20,15 +18,11 @@ html, body{
     align-items: center;
     background-color: blue;
     font-size: 40pt;
-    
 }
 #logo{
     grid-column: 1/ 4;
     grid-row: 1/ 4;
-    
 }
-
-
 #nav{
     grid-column: 1/ 4;
     grid-row: 4/ 16;
@@ -40,4 +34,25 @@ html, body{
 #bottom{
     grid-column: 4/16;
     grid-row: 14/16;
+}
+
+@media(max-width: 1000px){
+#logo{
+    grid-column: 1/16;
+    grid-row: 1/2;
+}
+#nav{
+    grid-column: 1/ 16;
+    grid-row: 2/4;
+    
+}
+#center{
+    grid-column: 1/ 16;
+    grid-row: 4/14;
+}
+#bottom{
+    grid-column: 1/16;
+    grid-row: 14/16;
+    
+}
 }
