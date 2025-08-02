@@ -3,25 +3,38 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     
+    <title>navbar</title>
+    <link rel="stylesheet" type="text/css" href="/public/assets/css/nav_logo.css">
     <link rel="stylesheet" type="text/css" href="/public/assets/css/main.css">
-   
-    <title>Document</title>
   </head>
-  <body class="grid">
-   
-    <div id="logo" class="box">logo</div>
-    <div id="nav" class="box">Nav</div>
-    <div id="center" class="box">center</div>
-    <div id="bottom" class="box">bottom</div>
-  
+  <body>
+     <nav>
+         <input type="checkbox" id="sidebar-active" >
+         <label for="sidebar-active" class="open-sidebar-button">
+          <svg xmlns="http://www.w3.org/2000/svg" height="32px" viewBox="0 -960 960 960" width="32px" fill="#1f1f1f"><path d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z"/></svg>
+         </label>
+         <label for="sidebar-active" id="overlay"></label>
+         <div class="links-container">
+         <label for="sidebar-active" class="close-sidebar-button">
+          <svg xmlns="http://www.w3.org/2000/svg" height="32px" viewBox="0 -960 960 960" width="32px" fill="#1f1f1f"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg>
+         </label>
+         <a class="home-link" href="#home">Home</a>
+         <a href="#Centro">Centro L'Aurora</a>
+         <a href="#Cicala">La Casa della Cicala</a>
+         <a href="#Chi Siamo">Chi Siamo</a>
+         <a href="#Shop">Shop</a>
+         <a href="#Login">Login</a>
+         </div>
+     </nav>
+     <div class="grid">
+         <div id="logo" class="box">
+          <img src="/public/images/logostone.png" >
+          <p>Stone Società Cooperativa Sociale a r.l.</p>
+         </div>
+         <div id="nav" class="box">Nav</div>
+         <div id="center" class="box">center</div>
+         <div id="bottom" class="box">bottom</div>
+     </div>
   </body>
-    
-  
-  </body>
-  
-  
-
-
-
-    
 </html>
