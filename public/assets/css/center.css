@@ -1,0 +1,29 @@
+:root{
+    --accent-nav-color: red;
+    --primary-nav-color: rgb(2, 26, 98);
+    --secondary-nav-color: rgb(4, 4, 152);
+    --text-nav-color: white;
+    --secondary-nav-text-color: rgb(131, 230, 241);
+}
+
+#nav{
+    margin:0;
+    padding:0;
+   font-size: 14pt;
+   color: var(--text-color);
+   background-color: var(--primary-nav-color);
+   padding: 0 20px;
+   display: flex;
+   justify-content: center;
+   flex-wrap: wrap-reverse;
+}
+#nav.container{
+    width: 850px;
+    max-width: 100%;
+    margin-left: 2px;
+
+}
+#nav img{
+    height: 30vh;
+    width: 30vh;
+}

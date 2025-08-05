@@ -6,7 +6,7 @@ html, body{
    height: 100%;
 }
 .grid{
-    border: 8px solid, black;
+    
     display: grid;
     grid-template-columns:repeat(16, 1ft);
     height: 100%;
