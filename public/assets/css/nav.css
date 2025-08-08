@@ -1,0 +1,85 @@
+:root{
+    --accent-nav-color: rgb(0, 42, 255);
+    --primary-nav-color: rgb(2, 26, 98);
+    --secondary-nav-color: rgb(4, 4, 152);
+    --text-nav-color: white;
+    --secondary-nav-text-color: rgb(131, 230, 241);
+}
+
+#nav{
+    display: grid;
+    grid-template-columns:repeat(8, 1ft);
+    height: 100%;
+    width: 100%;
+   background-color: var(--primary-nav-color);
+   color: var(--text-nav-color);
+   background-color: var(--primary-nav-color);
+}
+.header-nav{
+    margin-top: 10%;
+   display: flex;
+   justify-content: center;
+   flex-wrap: wrap-reverse;
+    grid-column: 1/ 8;
+    grid-row: 1/ 4;
+}
+
+#nav img{
+    height: 30vh;
+    width: 20vh;
+    
+}
+
+.header-nav h2{
+   
+    font-weight: 200;
+    margin-left: 5px;
+}
+.h2{
+    margin: 10px 0 10px 0;
+}
+.header-nav p{
+margin-left: 5px;
+color: var(--secondary-nav-text-color);
+}
+.read-more{
+display: inline-block;
+background-color: var(--accent-nav-color);
+color: aliceblue;
+font-size: 1.25rem;
+margin-left: 5px;
+border-radius: 1000px;
+padding: .5em 1.25em;
+text-decoration: none;
+margin-bottom: 80px;
+transition: 200ms ease;
+cursor: pointer;
+}
+.read-more:hover{
+    background-color: var(--secondary-nav-color);
+}
+#skill-section{
+    padding: 80px 20px 150px 20px;
+   
+      grid-column: 1/ 2;
+    grid-row: 4/ 8;
+}
+#skill-section h2{
+   font-size: 2rem;
+   text-align: center;
+}
+#skill-section h3{
+   font-size: 1rem;
+   text-align: center;
+   margin-top: 5%;
+   margin-bottom: 3%;
+}
+.skill-container{
+    width: 100%;
+    position: relative;
+}
+.wrapper li{
+    color: aquamarine;
+}
+
+

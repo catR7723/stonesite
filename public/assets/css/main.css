@@ -5,11 +5,12 @@
 html, body{
    height: 100%;
 }
-.grid{
+#grid{
     
     display: grid;
     grid-template-columns:repeat(16, 1ft);
     height: 100%;
+    width: 100%;
     
 }
 .box{
@@ -17,22 +18,22 @@ html, body{
     justify-content: center;
     align-items: center;
     background-color: blue;
-    font-size: 40pt;
+    
 }
 #logo{
-    grid-column: 1/ 4;
+    grid-column: 1/ 2;
     grid-row: 1/ 4;
 }
 #nav{
-    grid-column: 1/ 4;
+    grid-column: 1/ 2;
     grid-row: 4/ 16;
 }
 #center{
-    grid-column: 4 / 16;
+    grid-column: 2 / 16;
     grid-row: 1/14;
 }
 #bottom{
-    grid-column: 4/16;
+    grid-column: 2/16;
     grid-row: 14/16;
 }
 
