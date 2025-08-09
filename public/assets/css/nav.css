@@ -16,7 +16,7 @@
    background-color: var(--primary-nav-color);
 }
 .header-nav{
-    margin-top: 10%;
+    margin-top: 40%;
    display: flex;
    justify-content: center;
    flex-wrap: wrap-reverse;
@@ -77,9 +77,33 @@ cursor: pointer;
 .skill-container{
     width: 100%;
     position: relative;
+    margin-top: 20%;
 }
 .wrapper li{
     color: aquamarine;
 }
+
+progress {
+  border: none;
+  margin-left: 3%;
+  height: 5px;
+  width: 70%;
+ 
+}
+progress::-webkit-progress-value {
+  background: rgb(2, 92, 44);
+}
+progress::-webkit-progress-bar {
+  background: rgb(162, 162, 211);
+}
+li{
+    font-size: 12px;
+    margin-bottom: 5%;
+}
+li::marker {
+  color: rgb(151, 234, 42);
+}
+
+
 
 
