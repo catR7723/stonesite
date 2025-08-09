@@ -9,7 +9,7 @@
     <link rel="stylesheet" type="text/css" href="/public/assets/css/main.css">
     <link rel="stylesheet" type="text/css" href="/public/assets/css/nav.css">
   </head>
-  <body>
+  <body id="body">
      <nav>
          <input type="checkbox" id="sidebar-active" >
          <label for="sidebar-active" class="open-sidebar-button">
@@ -36,7 +36,7 @@
          <div id="nav" class="box">
             <div class="header-nav">
               <div>
-                <img src="/public/images/lago.jpg">
+                <img id="nav-img" src="/public/images/lago.jpg">
               </div>
               <div class="container">
               <p>Lungo un sentiero </p>
@@ -57,9 +57,9 @@
            </div>
            <div class="section" id="skill-section">
            
-            <div class="wrapper">
-              <div class="skill-container">
-                <h3>Dicono di Noi</h3>
+            <div class="wrapper" id="skill">
+              <div class="skill-container" id="skill01">
+                <h3 class="say">Dicono di Noi:</h3>
                 <ul>
                   <li>Sono Attenti ai bisogni<progress max="100" value="90"></progress></li>
                   <li>Hanno esperienza<progress max="100" value="90"></progress></li>
@@ -68,8 +68,8 @@
                   <li>E' bello collaborare<progress max="100" value="80"></progress></li>
                 </ul>
               </div>
-              <div class="skill-container">
-                <h3> utenti e famiglie sono soddisfatti dei:</h3>
+              <div class="skill-container" id="skill02">
+                <h3> Utenti e famiglie sono soddisfatti:</h3>
                 <ul>
                   <li>Laboratori innovativi<progress max="100" value="90"></progress></li>
                   <li>Progetti Personalizzati<progress max="100" value="90"></progress></li>
