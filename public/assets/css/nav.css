@@ -6,8 +6,6 @@
     --secondary-nav-text-color: rgb(131, 230, 241);
 }
 
-
-
 #nav{
     display: grid;
    
@@ -65,8 +63,6 @@ cursor: pointer;
 .read-more:hover{
     background-color: var(--secondary-nav-color);
 }
-
-
 #skill-section h3{
    font-size: 1rem;
    text-align: start;
@@ -74,11 +70,8 @@ cursor: pointer;
 .say{
     padding-top: 5%;
 }
-
-
 .wrapper li{
     color: aquamarine;
-    
 }
 
 progress {
@@ -121,6 +114,7 @@ li::marker {
     max-width: 100%;
     border: 10px solid var(--secondary-nav-color);
     border-top: none;
+    margin-bottom: 50px;
 }
 .skill-container h3{
     background-color: var(--secondary-nav-color);
@@ -129,8 +123,12 @@ li::marker {
 
 }
 .skill-container ul{
-    margin: 10px 0;
+    margin-bottom: -60px;
     list-style: none;
+}
+
+#skill01 h3{
+padding-bottom: 30px;
 }
 
 @media(max-width: 450px){
@@ -144,15 +142,20 @@ li::marker {
     #skill01{
      grid-column: 1/ 8;
     grid-row: 1/ 4;
-    
-   
 }
 #skill02{
      grid-column: 1/ 8;
     grid-row: 4/ 8;
+    
 }
 #nav-img{
     display: none;
+}
+.container{
+   text-align: center; 
+}
+.skill-container{
+    height: 350px;;
 }
 
 }

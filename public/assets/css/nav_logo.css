@@ -100,7 +100,11 @@ fill: var(--text-color);
     }
 }
 
-
+@media(min-width:450px){
+    .mediadiv{
+        display: none;
+    }
+}
 @media(max-width: 450px){
    .links-container{
         flex-direction: column;
@@ -138,4 +142,15 @@ fill: var(--text-color);
     left:0;
     z-index: 9;
    }
+   #write{
+    display: none;
+   }
+   .mediadiv{
+    text-align: left;
+    }
+   #logo p{
+    margin-top: 2rem;
+    color:rgb(0, 255, 4);
+}
+    
 }

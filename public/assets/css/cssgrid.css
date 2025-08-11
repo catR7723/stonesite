@@ -1,9 +1,10 @@
-body{
-    min-height: 800px;
+#center-body{
+    min-height: 500px;
+    width: 100%;
     border: 8px solid, black;
     display: grid;
-    grid-template-columns:300px 300px 300px 300px;
-    grid-template-rows: 300px 300px 300px 300px;
+    grid-template-columns:1ft;
+    grid-template-rows: 1ft;
     grid-template-areas:
     "box-1 box-2 box-3 box-4"
     "box-1 box-5 box-5 box-4"
@@ -24,12 +25,56 @@ body{
     
 }
 
-.box{
+.center-box{
     display: flex;
    
     justify-content: center;
     align-items: center;
    
-    background-color: blue;
-    font-size: 40pt;
+    background-color: rgb(255, 0, 162);
+    font-size: 100%;
+}
+@media(max-width:450px){
+#center-body{
+     display: grid;
+    grid-template-columns:repeat(4, 1ft);
+    grid-template-rows: repeat(9, 1ft);
+    gap:10px;
+}
+#b-one{
+     grid-column: 1/ 4;
+    grid-row: 1/ 2;
+}
+#b-two{
+     grid-column: 1/ 4;
+    grid-row: 2/ 3;
+}
+#b-three{
+     grid-column: 1/ 4;
+    grid-row: 3/ 4;
+}
+#b-four{
+     grid-column: 1/ 4;
+    grid-row: 4/ 5;
+}
+#b-five{
+     grid-column: 1/ 4;
+    grid-row: 5/ 6;
+}
+#b-six{
+     grid-column: 1/ 4;
+    grid-row: 6/ 7;
+}
+#b-seven{
+     grid-column: 1/ 4;
+    grid-row: 7/ 8;
+}
+#b-eigth{
+     grid-column: 1/ 4;
+    grid-row: 8/ 9;
+}
+#b-nine{
+     grid-column: 1/ 4;
+    grid-row: 9/ 10;
+}
 }

@@ -8,6 +8,8 @@
     <link rel="stylesheet" type="text/css" href="/public/assets/css/nav_logo.css">
     <link rel="stylesheet" type="text/css" href="/public/assets/css/main.css">
     <link rel="stylesheet" type="text/css" href="/public/assets/css/nav.css">
+    <link rel="stylesheet" type="text/css" href="/public/assets/css/cssgrid.css">
+
   </head>
   <body id="body">
      <nav>
@@ -31,7 +33,11 @@
      <div id="grid">
          <div id="logo" class="box">
           <img src="/public/images/logostone.png" >
-          <p>Stone Società Cooperativa Sociale a r.l.</p>
+          <p id="write">Stone Società Cooperativa Sociale a r.l.</p>
+          <div class="mediadiv"> 
+            <p>Stone Soc. Coop. Sociale a r.l.</p>
+          </div>
+         
          </div>
          <div id="nav" class="box">
             <div class="header-nav">
@@ -56,7 +62,6 @@
              </div>
            </div>
            <div class="section" id="skill-section">
-           
             <div class="wrapper" id="skill">
               <div class="skill-container" id="skill01">
                 <h3 class="say">Dicono di Noi:</h3>
@@ -78,15 +83,23 @@
                   <li>Attività per l'Autonomia<progress max="100" value="80"></progress></li>
                   <li>Attività Sportive<progress max="100" value="80"></progress></li>
                 </ul>
-
               </div>
+             </div>
             </div>
-
-           </div>
-
-         </div>
+          </div>
          <div id="center" class="box">
-          center
+          <div id="center-body">
+           <div style="grid-area: box-1" class="center-box" id="b-one">1</div>
+           <div style="grid-area: box-2" class="center-box" id="b-two">2</div>
+           <div style="grid-area: box-3" class="center-box" id="b-three">3</div>
+           <div style="grid-area: box-4" class="center-box" id="b-four">4</div>
+           <div style="grid-area: box-5" class="center-box" id="b-five">5</div>
+           <div style="grid-area: box-6" class="center-box" id="b-six">6</div>
+           <div style="grid-area: box-7" class="center-box" id="b-seven">7</div>
+           <div style="grid-area: box-8" class="center-box" id="b-eigth">8</div>
+           <div style="grid-area: box-9" class="center-box" id="b-nine">9</div>
+          </div>
+          
         </div>
          <div id="bottom" class="box">bottom</div>
      </div>
