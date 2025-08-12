@@ -131,7 +131,7 @@ li::marker {
 padding-bottom: 30px;
 }
 
-@media(max-width: 450px){
+@media(max-width: 800px){
     #skill{
      display: grid;
     grid-template-columns:repeat(8, 1ft);
@@ -156,6 +156,9 @@ padding-bottom: 30px;
 }
 .skill-container{
     height: 350px;;
+}
+#nav{
+    min-height: 800px;
 }
 
 }
