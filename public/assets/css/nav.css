@@ -8,16 +8,12 @@
 
 #nav{
     display: grid;
-   
     grid-template-columns:repeat(8, 1ft);
-    height: 100%;
-    width: 100%;
-   background-color: var(--primary-nav-color);
-   color: var(--text-nav-color);
-   background-color: var(--primary-nav-color);
-}
+    background-color: var(--primary-nav-color);
+    color: var(--text-nav-color);
+  }
 .header-nav{
-    margin-top: 40%;
+    margin-top: 30%;
    display: flex;
    justify-content: center;
    flex-wrap: wrap-reverse;
@@ -28,17 +24,13 @@
      grid-column: 1/ 8;
     grid-row: 4/ 8;
 }
-
 #nav img{
     height: 30vh;
     width: 20vh;
-    
 }
-
 .header-nav h2{
-   
-    font-weight: 200;
-    margin-left: 5px;
+   font-weight: 200;
+   margin-left: 5px;
 }
 .h2{
     margin: 10px 0 10px 0;
@@ -99,7 +91,8 @@ li::marker {
     grid-template-columns:repeat(8, 1ft);
     gap: 5%;
     margin-left: 5%;
-    margin-top: 30%;
+    margin-top: 20%;
+    margin-bottom: 20%;
 }
 #skill01{
      grid-column: 1/ 4;
