@@ -126,9 +126,9 @@ padding-bottom: 30px;
 
 @media(max-width: 800px){
     #skill{
-     display: grid;
+    display: grid;
     grid-template-columns:repeat(8, 1ft);
-   gap:10px;
+    gap:10px;
     margin-left: 5%;
     margin-top: 10%;
 }
@@ -148,12 +148,18 @@ padding-bottom: 30px;
    text-align: center; 
 }
 .skill-container{
-    height: 350px;;
+    height: 350px;
+    
 }
 #nav{
     min-height: 800px;
 }
 
+}
+@media(max-width:450px){
+   #skill-section{
+    padding-left: 6%;
+   }
 }
 
 

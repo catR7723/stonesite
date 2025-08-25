@@ -1,24 +1,17 @@
 *{
     margin:0;
     padding:0;
-    
 }
-
-
 #grid{
     display: grid;
     grid-template-columns:repeat(16, 1ft);
     grid-template-rows:repeat(16,1ft);
-    
 }
 .box{
     display: flex;
     justify-content: center;
     align-items: center;
     background-color: blue;
-   
-   
-  
 }
 #logo{
     grid-column: 1/ 2;
@@ -38,12 +31,6 @@
 #bottom{
     grid-column: 2/16;
     grid-row: 14/16;
-
-    
-    
-  
-    
-  
 }
 
 @media(max-width: 800px){
@@ -65,7 +52,4 @@
     grid-column: 1/16;
     grid-row: 14/16;
 }
-
-
-
 }
