@@ -56,51 +56,15 @@
 @media(max-width:800px){
    
 #center-body{
-    justify-items: center;
-    margin-top: 5%;
-    display: grid;
-    grid-template-areas:
-    "box-1"
-    "box-2"
-    "box-3"
-    "box-4"
-    "box-5"
-    "box-6"
-    "box-7"
-    "box-8"
-    "box-9" ;
-    gap: 10px;
+    display: flex;
+    flex-direction: column;
 }
 .center-box{
-  
-    min-height: 300px;
-    width: 80%;
-    gap:5px;
-    
+ min-height: 18em ;
+ gap: 25px;
+ margin:1rem 1rem 0 1rem;
 }
 }
-@media(max-width:1000px){
-   
-#center-body{
-    justify-items: center;
-    margin-top: 5%;
-    display: grid;
-    grid-template-areas:
-    "box-1"
-    "box-2"
-    "box-3"
-    "box-4"
-    "box-5"
-    "box-6"
-    "box-7"
-    "box-8"
-    "box-9" ;
-    gap: 10px;
-}
-.center-box{
-  max-height: 100px;
-  width: 80%;
-}
-}
+
  
 

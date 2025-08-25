@@ -126,21 +126,10 @@ padding-bottom: 30px;
 
 @media(max-width: 800px){
     #skill{
-    display: grid;
-    grid-template-columns:repeat(8, 1ft);
-    gap:10px;
-    margin-left: 5%;
-    margin-top: 10%;
+    display: flex;
+    flex-direction: column;
 }
-    #skill01{
-     grid-column: 1/ 8;
-    grid-row: 1/ 4;
-}
-#skill02{
-     grid-column: 1/ 8;
-    grid-row: 4/ 8;
-    
-}
+   
 #nav-img{
     display: none;
 }
@@ -158,7 +147,7 @@ padding-bottom: 30px;
 }
 @media(max-width:450px){
    #skill-section{
-    padding-left: 6%;
+    padding-left: 9%;
    }
 }
 

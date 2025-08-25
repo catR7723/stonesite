@@ -1,0 +1,39 @@
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+:root{
+    --base-color: rgb(246, 247, 188);
+    --text-color:rgb(50, 2, 9);
+    --primary-color:rgb(237, 182, 30);
+    --secondary-color:violet;
+    --color-1: rgb(250, 166, 143);
+    --color-2: rgb(227, 123, 123);
+    --color-3: green;
+}
+*{
+    margin:0;
+    padding:0;
+    box-sizing: border-box;
+}
+html{
+    font-family: Poppins, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: var(--text-color);
+}
+body{
+    padding: 1em;
+    background-color: var(--base-color);
+}
+h1, h2, h3 {
+    font-family: Merriweather, Poppins, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+nav{
+    margin: 1em auto 3em auto;
+    width: min(1000px, 100%);
+}
+nav ul{
+    display:flex;
+    align-items: center;
+    list-style-type: none;
+    gap: 2em;
+}
+

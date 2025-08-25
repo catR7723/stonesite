@@ -42,13 +42,10 @@ nav a{
 }
  nav a:hover{
     background-color: var(--accent-color);
-    
-    
 }
 nav .home-link{
     margin-right:auto;
 }
-
 nav svg{
 fill: var(--text-color);
 }
@@ -67,8 +64,6 @@ fill: var(--text-color);
     font-size: 1.3vh;
     font-family: Poppins, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     position: relative;
-    
-    
 }
 #logo p{
     margin-top: 6rem;
