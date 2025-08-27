@@ -1,7 +1,8 @@
 #center-body{
-   min-width: 98%;
+   min-width: 100%;
    min-height: 90vh;
    display: grid;
+  
    grid-template-columns:1ft;
    grid-template-rows: 1ft;
     grid-template-areas:
@@ -11,10 +12,11 @@
     "box-8 box-8 box-9 box-7";
     gap: 10px;
     align-self: start;
-    padding-top: 1%;
-   
+    padding: 2%;
     
 }
+
+
 .center-box{
     display: contents;
     display: flex;
@@ -27,6 +29,7 @@
 }
 #box01{
     background-image: url("/public/images/grid-img/site01.jpg");
+    border-radius: 50px 0 0 0;
 }
 #box02{
     background-image: url("/public/images/grid-img/site02.jpg");
@@ -36,6 +39,7 @@
 }
 #box04{
     background-image: url("/public/images/grid-img/site05.jpg");
+    border-radius: 0 50px 0 0;
 }
 #box05{
     background-image: url("/public/images/grid-img/site09.jpg");
@@ -45,9 +49,11 @@
 }
 #box07{
     background-image: url("/public/images/grid-img/site07.jpg");
+     border-radius: 0 0 50px 0;
 }
 #box08{
     background-image: url("/public/images/grid-img/site08.jpg");
+    border-radius: 0 0 0 50px;
 }
 #box09{
     background-image: url("/public/images/grid-img/site06.jpg");

@@ -18,6 +18,7 @@
 html{
     font-family: Poppins, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     color: var(--text-color);
+     background-color:aqua;
 }
 body{
     padding: 1em;

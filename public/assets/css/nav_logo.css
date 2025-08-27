@@ -59,7 +59,8 @@ fill: var(--text-color);
 #logo{
     
     border-radius: 50px;
-    margin: 2%;
+    margin:3% ;
+    
     text-align: center;
     font-size: 1.3vh;
     font-family: Poppins, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -68,6 +69,8 @@ fill: var(--text-color);
 #logo p{
     margin-top: 6rem;
     color:aqua;
+   
+    
 }
 @property --angle{
     syntax: "<angle>";
@@ -80,12 +83,14 @@ fill: var(--text-color);
     position:absolute;
     height: 100%;
     width: 100%;
-    background-image: conic-gradient(from var(--angle), transparent -50%, rgb(15, 175, 154));
+    background-image: conic-gradient(from var(--angle), transparent -30%, rgb(16, 210, 25));
     z-index: -1;
-    padding: 2%; 
+    padding: 60% 10% 60% 10%; 
     filter: blur(1rem);
-    opacity:0.9;
-    animation: 12s spin linear infinite;
+    animation: 18s spin linear infinite;
+    background-color:rgb(15, 175, 154);
+   
+    
 }
 @keyframes spin{
     from{
