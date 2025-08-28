@@ -64,15 +64,15 @@ fill: var(--text-color);
 #logo{
     
     border-radius: 50px;
-    margin:3% ;
+    
     text-align: center;
-    font-size: 1.3vh;
+    font-size: 1.8vh;
     font-family: Poppins, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     position: relative;
 }
 #logo p{
     margin-top: 6rem;
-    color:aqua;
+    color:rgb(4, 36, 181);
    
     
 }
@@ -89,7 +89,7 @@ fill: var(--text-color);
     width: 100%;
     background-image: conic-gradient(from var(--angle), transparent -50%, rgb(226, 226, 238));
     z-index: -1;
-    padding: 2.5%;
+    padding: 3%;
    
     filter: blur(1rem);
     animation: 18s spin linear infinite;

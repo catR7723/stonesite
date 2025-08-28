@@ -18,18 +18,17 @@ html{
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: blue;
+    
     
     
 }
 #logo{
     grid-column: 1/ 16;
     grid-row: 1/ 4;
-    background-color:blue;
     margin: 2% 1% 2% 1%;
-    
-   
-   
+}
+#logo img{
+    margin-right: 80%;
 }
 #nav{
     grid-column: 1/ 16;
