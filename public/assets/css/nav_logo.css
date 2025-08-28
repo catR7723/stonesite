@@ -17,12 +17,17 @@ html{
     
 }
 nav{
+position: fixed;
+z-index: 1;
+width: 100%;
  height: 80px;
  background-color: var(--color-1);
+ opacity: 0.8;
  display: flex;
  justify-content: flex-end;
  align-items: center;
  text-align: center;
+ margin-top: -5%;
  
 }
 .links-container{
@@ -60,7 +65,6 @@ fill: var(--text-color);
     
     border-radius: 50px;
     margin:3% ;
-    
     text-align: center;
     font-size: 1.3vh;
     font-family: Poppins, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -83,9 +87,10 @@ fill: var(--text-color);
     position:absolute;
     height: 100%;
     width: 100%;
-    background-image: conic-gradient(from var(--angle), transparent -30%, rgb(4, 4, 69));
+    background-image: conic-gradient(from var(--angle), transparent -50%, rgb(226, 226, 238));
     z-index: -1;
-    padding: 2.5%; 
+    padding: 2.5%;
+   
     filter: blur(1rem);
     animation: 18s spin linear infinite;
     background-color:rgb(15, 175, 154);

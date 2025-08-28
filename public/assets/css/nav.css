@@ -13,7 +13,7 @@
     color: var(--text-nav-color);
   }
 .header-nav{
-    margin-top: 30%;
+    margin-top: 10%;
    display: flex;
    justify-content: center;
    flex-wrap: wrap-reverse;
@@ -43,7 +43,7 @@ color: var(--secondary-nav-text-color);
 display: inline-block;
 background-color: var(--accent-nav-color);
 color: aliceblue;
-font-size: 1.25rem;
+font-size: 1.5rem;
 margin-left: 5px;
 border-radius: 1000px;
 padding: .5em 1.25em;
@@ -56,7 +56,7 @@ cursor: pointer;
     background-color: var(--secondary-nav-color);
 }
 #skill-section h3{
-   font-size: 1rem;
+   font-size: 3rem;
    text-align: start;
 }
 .say{
@@ -68,10 +68,9 @@ cursor: pointer;
 
 progress {
   border: none;
-  margin-left: 3%;
-  height: 5px;
-  width: 70%;
- 
+  margin-left: 30px;
+  height: 20px;
+  width: 80%;
 }
 progress::-webkit-progress-value {
   background: rgb(2, 92, 44);
@@ -80,8 +79,10 @@ progress::-webkit-progress-bar {
   background: rgb(162, 162, 211);
 }
 li{
-    font-size: 12px;
-    margin-bottom: 5%;
+    font-size: 18px;
+    margin-bottom: 2%;
+    margin-top: 5px;
+    
 }
 li::marker {
   color: rgb(151, 234, 42);
@@ -89,18 +90,23 @@ li::marker {
 #skill{
      display: grid;
     grid-template-columns:repeat(8, 1ft);
-    gap: 5%;
-    margin-left: 5%;
-    margin-top: 20%;
+    gap:2%;
+    
+    margin-top: 1%;
     margin-bottom: 20%;
 }
 #skill01{
-     grid-column: 1/ 4;
-    grid-row: 1/ 8;
+     grid-column: 1/ 8;
+    grid-row: 1/ 4;
+    width: 165vh;
+    max-width: 100%;
+    
 }
 #skill02{
-     grid-column: 4/ 8;
-    grid-row: 1/ 8;
+     grid-column: 1/ 8;
+    grid-row: 4/ 8;
+    width: 165vh;
+    max-width: 100%;
 }
 .skill-container{
     width: 200px;

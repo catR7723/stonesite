@@ -20,8 +20,9 @@
 }
 .flex-bottom-container details{
   margin: 20px auto;
-  width: 1000px;
+  min-width: 165vh;
   max-width: 100%;
+  
   background-color: var(--secondary-bottom-color);
   border-radius: 6px;
 }
