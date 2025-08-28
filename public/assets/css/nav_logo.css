@@ -83,14 +83,12 @@ fill: var(--text-color);
     position:absolute;
     height: 100%;
     width: 100%;
-    background-image: conic-gradient(from var(--angle), transparent -30%, rgb(16, 210, 25));
+    background-image: conic-gradient(from var(--angle), transparent -30%, rgb(4, 4, 69));
     z-index: -1;
-    padding: 60% 10% 60% 10%; 
+    padding: 2.5%; 
     filter: blur(1rem);
     animation: 18s spin linear infinite;
     background-color:rgb(15, 175, 154);
-   
-    
 }
 @keyframes spin{
     from{
