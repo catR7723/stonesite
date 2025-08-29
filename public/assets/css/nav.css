@@ -9,8 +9,8 @@
 #nav{
     display: grid;
     grid-template-columns:repeat(8, 1ft);
-    
-   
+    background-color: var(--primary-nav-color);
+    color: var(--text-nav-color);
   }
 .header-nav{
     margin-top: 5%;

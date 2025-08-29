@@ -25,11 +25,9 @@ html{
 #logo{
     grid-column: 1/ 16;
     grid-row: 1/ 4;
-    margin: 2% 1% 2% 1%;
+    margin: 2% 1% 2% -65%;
 }
-#logo img{
-    margin-right: 80%;
-}
+
 #nav{
     grid-column: 1/ 16;
     grid-row: 13/ 16;
