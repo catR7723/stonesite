@@ -64,7 +64,7 @@ header, section{
  align-items: center;
  flex-wrap: wrap;
  gap:3em;
- flex-direction: column;
+ 
 }
 header img{
     max-width: 100%;
@@ -99,6 +99,9 @@ section{
     padding: 3em min(2em, 15%);
     background-color: var(--color-2);
     text-align: center;
+}
+h2{
+    font-size: 2rem;
 }
 section p{
     margin-top: 1em;

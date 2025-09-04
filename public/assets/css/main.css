@@ -33,13 +33,15 @@ html{
 #center{
     grid-column: 1 / 16;
     grid-row: 4/10;
-    margin: 0% 1% 2% 1%;
-    border-radius: 50px;
+    width: 100%;
+    
+  
 
 }
 #bottom{
     grid-column: 1/16;
     grid-row: 10/13;
+    margin-top: -25%;
     
 }
 #final{
