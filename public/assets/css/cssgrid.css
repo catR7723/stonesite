@@ -1,6 +1,7 @@
 #center-body{
    min-width: 100%;
-   min-height: 90vh;
+   min-height: 80vh;
+  
    display: grid;
   
    grid-template-columns:1ft;
@@ -12,18 +13,32 @@
     "box-8 box-8 box-9 box-7";
     gap: 10px;
     align-self: start;
-    padding: 1%;
-    
+   
+    margin: -1% 1% 1% 1%;
 }
 .center-box{
     display: contents;
     display: flex;
     justify-content: center;
     align-items: center;
-    
     font-size: 100%;
+    z-index: 2;
+}
+.back{
+    background-color:aliceblue;
+    min-width: 110%;
+   min-height: 117vh;
+   z-index: 1;
+   position: absolute;
+   margin-top: -5%;
+   background: linear-gradient(-90deg, rgba(0,0,0,0), rgba(0,0,0,0.01), rgba(0,0,255,1));
+   animation: gradient 25s ease infinite;
+   background-size: 200%;
    
-    
+  
+   content: '';
+  
+  
 }
 #box01{
     background-image: url("/public/images/grid-img/site01.jpg");
@@ -40,7 +55,11 @@
     border-radius: 0 50px 0 0;
 }
 #box05{
-    background-image: url("/public/images/grid-img/site09.jpg");
+  
+   
+}
+#box05 h1{
+ display: absolute;
 }
 #box06{
     background-image: url("/public/images/grid-img/site03.jpg");

@@ -11,27 +11,23 @@ html{
 #grid{
     display: grid;
     grid-template-columns:repeat(16, 1ft);
-    grid-template-rows:repeat(16,1ft);
+    grid-template-rows:repeat(20,1ft);
     
 }
 .box{
     display: flex;
     justify-content: center;
     align-items: center;
-    
-    
-    
 }
 #logo{
     grid-column: 1/ 16;
     grid-row: 1/ 4;
-    margin: 2% 1% 2% -65%;
 }
 
 #nav{
     grid-column: 1/ 16;
     grid-row: 13/ 16;
-    min-height: 100%;
+   
    
 }
 #center{
@@ -44,8 +40,20 @@ html{
 #bottom{
     grid-column: 1/16;
     grid-row: 10/13;
+    
 }
-
+#final{
+    grid-column: 1/16;
+    grid-row: 16/20;
+   text-align: center;
+   margin-top: 8%;
+  padding: 3%;
+}
+#final {
+	background: linear-gradient(-90deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+	background-size: 400% 400%;
+	animation: gradient 15s ease infinite;
+}
 @media(max-width: 800px){
 
 #logo{

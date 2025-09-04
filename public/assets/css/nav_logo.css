@@ -11,9 +11,7 @@
 }
 
 html{
-    
     font-family: Poppins, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: rgb(1, 24, 24); 
     
 }
 nav{
@@ -28,6 +26,7 @@ width: 100%;
  align-items: center;
  text-align: center;
  margin-top: -5%;
+ z-index: 3;
  
 }
 .links-container{
@@ -63,45 +62,81 @@ fill: var(--text-color);
 }
 #logo{
     
-    border-radius: 50px;
-    
-    text-align: center;
+    width: 100%;
+    min-width: 100%;
+    display: grid;
+    grid-template-columns:repeat(16, 10vh);
+   margin-top: -0.6%;
+   z-index: 2;
     font-size: 1.8vh;
     font-family: Poppins, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    position: relative;
-}
-#logo p{
-    margin-top: 6rem;
-    color:rgb(4, 36, 181);
-   
     
+   
 }
+.logo{
+ grid-column: 1/ 2;
+    grid-row: 1/ 16;
+    margin-left: 5%;
+   
+}
+
+#write{
+ grid-column: 3/ 7;
+    grid-row: 1/ 16;
+   
+   
+  
+}
+.poetry{
+     grid-column: 9/ 14;
+    grid-row: 4/ 12;
+    text-align: end;
+}
+.h2{
+     grid-column: 3/ 15;
+    grid-row: 10/ 16;
+}
+.read-more{
+     grid-column: 14/ 16;
+    grid-row: 14/ 16;
+   text-align: center;
+   width: 140%;
+   
+   
+   
+   
+  
+}
+#img{
+    margin-top: 8%;
+    margin-bottom: 3%;
+     grid-column: 15/ 16;
+    grid-row: 4/ 12;
+    align-self: second baseline;
+    width: 120%;
+  
+   
+}
+
 @property --angle{
     syntax: "<angle>";
     initial-value: 0deg;
     inherits: false;
 
 }
-#logo::after, #logo::before{
-    content: '';
-    position:absolute;
-    height: 100%;
-    width: 100%;
-    background-image: conic-gradient(from var(--angle), transparent -50%, rgb(226, 226, 238));
-    z-index: -1;
-    padding: 3%;
-   
-    filter: blur(1rem);
-    animation: 18s spin linear infinite;
-    background-color:rgb(15, 175, 154);
-}
-@keyframes spin{
-    from{
-        --angle: 0deg;
-    }
-    to{
-        --angle:360deg;
-    }
+
+@keyframes gradient {
+	0% {
+		background-position: 0% 50%;
+       
+	}
+	50% {
+		background-position: 100% 50%;
+        
+	}
+	100% {
+		background-position: 0% 50%;
+	}
 }
 
 @media(min-width:800px){

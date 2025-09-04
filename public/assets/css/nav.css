@@ -5,43 +5,19 @@
     --text-nav-color: white;
     --secondary-nav-text-color: rgb(131, 230, 241);
 }
-
 #nav{
-    display: grid;
-    grid-template-columns:repeat(8, 1ft);
-    background-color: var(--primary-nav-color);
+   display:flex;
+   flex-direction: column;
     color: var(--text-nav-color);
+   
   }
-.header-nav{
-    margin-top: 5%;
-   display: flex;
-   justify-content: center;
-   flex-wrap: wrap-reverse;
-    grid-column: 1/ 8;
-    grid-row: 1/ 4;
-}
 #skill-section{
      grid-column: 1/ 8;
     grid-row: 4/ 8;
 }
-#nav img{
-    height: 30vh;
-    width: 20vh;
-}
-.header-nav h2{
-   font-weight: 200;
-   margin-left: 5px;
-}
-.h2{
-    margin: 10px 0 10px 0;
-}
-.header-nav p{
-margin-left: 5px;
-color: var(--secondary-nav-text-color);
-}
 .read-more{
 display: inline-block;
-background-color: var(--accent-nav-color);
+background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
 color: aliceblue;
 font-size: 1.5rem;
 margin-left: 5px;
@@ -65,7 +41,6 @@ cursor: pointer;
 .wrapper li{
     color: aquamarine;
 }
-
 progress {
   border: none;
   margin-left: 30px;
@@ -152,6 +127,7 @@ padding-bottom: 30px;
 #nav{
     min-height: 800px;
 }
+
 
 }
 @media(max-width:450px){
