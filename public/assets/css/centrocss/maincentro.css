@@ -4,10 +4,10 @@
 :root{
     --base-color: rgb(246, 247, 188);
     --text-color:rgb(50, 2, 9);
-    --primary-color:rgb(237, 182, 30);
-    --secondary-color:violet;
+    --primary-color:rgb(239, 125, 38);
+    --secondary-color:rgb(150, 33, 150);
     --color-1: rgb(250, 166, 143);
-    --color-2: rgb(227, 123, 123);
+    --color-2: rgb(243, 213, 168);
     --color-3: green;
 }
 *{
@@ -16,9 +16,9 @@
     box-sizing: border-box;
 }
 html{
-    font-family: Poppins, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    color: var(--text-color);
-     background-color:aqua;
+    font-family: Merryweather, Poppins, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+   
+    
 }
 body{
     padding: 1em;
@@ -29,7 +29,8 @@ h1, h2, h3 {
 }
 nav{
     margin: 1em auto 3em auto;
-    width: min(1000px, 100%);
+    width:100%;
+    
 }
 nav ul{
     display:flex;
@@ -37,4 +38,73 @@ nav ul{
     list-style-type: none;
     gap: 2em;
 }
+nav li:first-child{
+    margin:0 auto 0 0;
+    font-family: Merriweather, Poppins, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: bold;
+}
+nav a {
+    text-decoration: none;
+    color: var(--text-color);
+}
+nav a:hover{
+    text-decoration: underline;
+}
+header, section{
+    margin: 2em auto;
+    width: 100%;
+    border-radius: 1em;
+    background-color: var(--color-1);
+    padding: min(2em, 15%);
+    border-radius: 1em;
+}
+.flex-container{
+ display: flex;
+ justify-content: center;
+ align-items: center;
+ flex-wrap: wrap;
+ gap:3em;
+ flex-direction: column;
+}
+header img{
+    max-width: 100%;
+    border-radius: 1em;
+    object-fit: cover;
+    object-position: bottom;
+}
+.text-container{
+    flex: 0 1 34em;
+}
+h1{
+    font-size: 2.5em;
+}
+.flex-container p{
+    margin: .75em 0 1em 0;
+    font-size: 1.25em;
+}
+.cta-button{
+    display: inline-block;
+    text-decoration: none;
+    color: white;
+    background-color: var(--primary-color);
+    padding: .75em 1.25em;
+    border-radius: .5em;
+    font-weight: 600;
+    
+}
+.secondary{
+    background-color: var(--secondary-color);
+}
+section{
+    padding: 3em min(2em, 15%);
+    background-color: var(--color-2);
+    text-align: center;
+}
+section p{
+    margin-top: 1em;
+    font-size: 1.25em;
+}
+
+
+
 
