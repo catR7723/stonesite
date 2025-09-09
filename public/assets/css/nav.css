@@ -9,6 +9,8 @@
    display:flex;
    flex-direction: column;
     color: var(--text-nav-color);
+   background-color: antiquewhite;
+   margin-top: -1%;
    
   }
 #skill-section{
@@ -107,6 +109,7 @@ li::marker {
 padding-bottom: 30px;
 }
 
+
 @media(max-width: 800px){
     #skill{
     display: flex;
@@ -124,9 +127,7 @@ padding-bottom: 30px;
    
     
 }
-#nav{
-    min-height: 800px;
-}
+
 
 
 }

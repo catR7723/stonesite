@@ -5,10 +5,7 @@
     --text-bottom-color: white;
     --secondary-bottom-text-color: rgb(131, 230, 241);
 }
-#bottom{
-    color: var(--secondary-bottom-text-color);
-   
-}
+
 #project-bottom-section{
     padding: 100px 20px;
     

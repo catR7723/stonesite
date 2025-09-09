@@ -1,3 +1,7 @@
+#center{
+    margin-bottom: -23%;
+   display: flex;
+}
 #center-body{
    width: 100%;
    display: grid;
@@ -9,25 +13,24 @@
     "box-6 box-5 box-5 box-7"
     "box-8 box-8 box-9 box-7";
     gap: 1em;
+    margin-left: 4%;
     z-index: 2;
-    margin-left: 2%;
-    margin-right: -3%;
 }
-
 #center-body img{
     height: 100%;
     width: 100%;
     border-radius: .5em;
     transition: 100ms ease;
 }
-#center-body img:hover{
+#box01:hover{
     scale: 1.1;
+   
 }
 .back{
-    background-color:aliceblue;
+    
     min-width: 110%;
    min-height: 140%;
-   z-index: 1;
+   z-index: -2;
    position: absolute;
    margin-top: -5%;
    background: linear-gradient(-90deg, rgba(0,0,0,0), rgba(0,0,0,0.01), rgba(0,0,255,1));
@@ -35,9 +38,52 @@
    background-size: 200%;
    content: '';
 }
-#box05 h1{
- display: absolute;
+.bestbotton{
+    background-color: rgb(144, 240, 11);
+    border-radius: 10%;
+     min-width: 10rem;
+   min-height: 9rem;
+   z-index: 3;
+   position: absolute;
+  top: 72%;
+  left: 50%;
+   
+   
+
 }
+  @keyframes fadeOut {
+      from { z-index: 1; } 
+      to { z-index: -2;;
+    
+    }
+}
+@keyframes best {
+    from{  min-width: 10rem;
+       min-height: 9rem;
+    }
+    to { min-width: 40rem;
+        min-height: 19rem;
+        top:62%;
+    }
+}
+    
+
+    
+
+#box05{
+   background-image:url(/public/images/grid-img/site09.jpg);
+   background-size:cover;
+}
+#box05:hover{
+     filter: grayscale(100%);
+     
+    }
+.bestbotton:hover{
+    animation: best 3s forwards;
+    
+}
+
+
 
 
 @media(max-width:800px){

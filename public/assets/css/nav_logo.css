@@ -61,17 +61,14 @@ fill: var(--text-color);
     
 }
 #logo{
-    
     width: 100%;
     min-width: 100%;
     display: grid;
     grid-template-columns:repeat(16, 10vh);
-   margin-top: -0.6%;
-   z-index: 2;
+    margin-top: -0.6%;
+    z-index: 2;
     font-size: 1.8vh;
     font-family: Poppins, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    
-   
 }
 .logo{
  grid-column: 1/ 2;
@@ -83,9 +80,7 @@ fill: var(--text-color);
 #write{
  grid-column: 3/ 7;
     grid-row: 1/ 16;
-   
-   
-  
+    
 }
 .poetry{
      grid-column: 9/ 14;
@@ -95,17 +90,13 @@ fill: var(--text-color);
 .h2{
      grid-column: 3/ 15;
     grid-row: 10/ 16;
+    margin-left: 8%;
 }
 .read-more{
      grid-column: 14/ 16;
     grid-row: 14/ 16;
    text-align: center;
    width: 140%;
-   
-   
-   
-   
-  
 }
 #img{
     margin-top: 8%;
@@ -114,11 +105,9 @@ fill: var(--text-color);
     grid-row: 4/ 12;
     align-self: second baseline;
     width: 120%;
-  
-   
 }
 
-@property --angle{
+/*@property --angle{
     syntax: "<angle>";
     initial-value: 0deg;
     inherits: false;
@@ -137,7 +126,7 @@ fill: var(--text-color);
 	100% {
 		background-position: 0% 50%;
 	}
-}
+}*/
 
 @media(min-width:800px){
     .mediadiv{
