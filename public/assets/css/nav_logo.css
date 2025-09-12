@@ -78,8 +78,9 @@ fill: var(--text-color);
 }
 
 #write{
- grid-column: 3/ 7;
+ grid-column: 3/ 8;
     grid-row: 1/ 16;
+    margin-left: 15%;
     
 }
 .poetry{
