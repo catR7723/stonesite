@@ -163,7 +163,7 @@ fill: var(--text-color);
     right: 0;
    }
    #sidebar-active:checked ~ #overlay{
-    background: rgb(165, 234, 215);
+    background: rgb(217, 234, 165);
     height: 100%;
     position:fixed;
     width: 100%;
