@@ -8,7 +8,7 @@
 #center-body{
     width: 97rem;
    min-width: 100%;
-   height: 60rem;
+   height: 59rem;
    min-height: 100%;
    display: grid;
    grid-template-columns:repeat(4,25%);
@@ -20,7 +20,7 @@
     "box-8 box-8 box-9 box-7";
     gap: 1em;
  
-    margin: 0 3% 10% 3%;
+  
     z-index: 2;
 }
 #center-body img{
@@ -28,6 +28,15 @@
     width: 100%;
     border-radius: .5em;
     transition: 100ms ease;
+}
+.box5 img{
+     min-height: 205%;
+    min-width: 205%;
+    border-radius: .5em;
+    transition: 100ms ease;
+}
+.box5{
+   position: relative;
 }
 #box01:hover, #box02:hover, #box03:hover, #box04:hover, #box06:hover, #box07:hover, #box08:hover, #box09:hover{
     scale: 1.1;
@@ -44,11 +53,10 @@
    background-size: 200%;
    content: '';
 }
-/*why we are the best*/
+
 #box01{
     background-image:url(/public/images/grid-img/peschiera2025.png);
    background-size:cover; 
-   
 }
 #box02{
     background-image:url(/public/images/grid-img/cucina.png);
@@ -83,20 +91,19 @@
     background-image:url(/public/images/grid-img/piscina.jpg);
    background-size:cover; 
 }
-
-
+/*why we are the best*/
 .bestbotton{
     font-size: 20px;
     display: flex;
     flex-direction: column;
     color: rgb(217, 234, 165);
-   font-family: Poppins, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: Poppins, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     position: absolute;
     min-width: 25rem;
     min-height: 9rem;
     z-index: 3;
     text-align: center;
-    top: 72%;
+    top: 71%;
     left: 42%;
 }
 .bestbh{
@@ -104,38 +111,38 @@
     font-family: Poppins, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     font-size: 2rem;
     margin-top: 20%;
-   
-   
     top:-50%;
-
 }
 .close-sidebar-button-best {
     display: absolute;
     z-index: -1;
 }
-
 .links-container-best{
     display: none;
-   
 }
 #sidebar-active-best{
-    display: none;
+   display: none;
+}
+.bestbotton svg{
+     height: 31rem;
+    position: absolute;
+    width: 50rem;
+    top:-30%;
+    left: -45%;
+    z-index: 9;
+    display: flex;
+    padding: 25% 45% 65% 45%;
 }
 
-   #sidebar-active-best:checked ~ .links-container-best{
-     
-    flex-direction: column;
-        
-        position: absolute;
-        display: flex;
-        z-index: 10;
-        width: 100%;
-        align-items: center;
-       
-       
-       
-   }
-   #sidebar-active-best:checked ~ #overlay-best{
+#sidebar-active-best:checked ~ .links-container-best{
+     flex-direction: column;
+     position: absolute;
+     display: flex;
+     z-index: 10;
+     width: 100%;
+     align-items: center;
+}
+#sidebar-active-best:checked ~ #overlay-best{
     background: rgb(217, 234, 165);
     height: 31rem;
     position: absolute;
