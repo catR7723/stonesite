@@ -2,13 +2,12 @@
 
 #center{
     display: flex;
-
-   
 }
 #center-body{
-    width: 97rem;
+    position: relative;
+   width: 96rem;
    min-width: 100%;
-   height: 59rem;
+   height: 58rem;
    min-height: 100%;
    display: grid;
    grid-template-columns:repeat(4,25%);
@@ -19,8 +18,6 @@
     "box-6 box-5 box-5 box-7"
     "box-8 box-8 box-9 box-7";
     gap: 1em;
- 
-  
     z-index: 2;
 }
 #center-body img{
@@ -40,14 +37,16 @@
 }
 #box01:hover, #box02:hover, #box03:hover, #box04:hover, #box06:hover, #box07:hover, #box08:hover, #box09:hover{
     scale: 1.1;
+    z-index: 14;
    
 }
 .back{
    min-width: 110%;
-   min-height: 140%;
+   min-height: 150%;
    z-index: -2;
    position: absolute;
    margin-top: -5%;
+   
    background: linear-gradient(-90deg, rgba(0,0,0,0), rgba(0,0,0,0.01), rgba(0,0,255,1));
    animation: gradient 25s ease infinite;
    background-size: 200%;
@@ -98,24 +97,27 @@
     flex-direction: column;
     color: rgb(217, 234, 165);
     font-family: Poppins, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    position: absolute;
+    position: relative;
     min-width: 25rem;
     min-height: 9rem;
     z-index: 3;
     text-align: center;
-    top: 71%;
-    left: 42%;
+    top:-200%;
+    left: 50%;
+   
+    
 }
+
 .bestbh{
     color:black;
     font-family: Poppins, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     font-size: 2rem;
-    margin-top: 20%;
-    top:-50%;
 }
+   
 .close-sidebar-button-best {
-    display: absolute;
+    position: relative;
     z-index: -1;
+    display: flex;
 }
 .links-container-best{
     display: none;
@@ -124,14 +126,15 @@
    display: none;
 }
 .bestbotton svg{
-     height: 31rem;
-    position: absolute;
+     height: 30.5rem;
+    position: relative;
     width: 50rem;
-    top:-30%;
-    left: -45%;
+   
     z-index: 9;
     display: flex;
-    padding: 25% 45% 65% 45%;
+    margin-top: -35%;
+    left:-48.5%;
+    padding:35% 50% 68% 50%;
 }
 
 #sidebar-active-best:checked ~ .links-container-best{
@@ -144,13 +147,14 @@
 }
 #sidebar-active-best:checked ~ #overlay-best{
     background: rgb(217, 234, 165);
-    height: 31rem;
-    position: absolute;
+    height: 30rem;
+    position: relative;
     width: 50rem;
-    top:-30%;
-    left: -45%;
+     margin-top: -122%;
+    left:-50%;
     z-index: 9;
     display: flex;
+    border-radius: 10px;
    }
    
    
