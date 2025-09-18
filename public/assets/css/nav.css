@@ -19,22 +19,7 @@
      grid-column: 1/ 8;
     grid-row: 4/ 8;
 }
-.read-more{
-display: inline-block;
-background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
-color: aliceblue;
-font-size: 1.5rem;
-margin-left: 5px;
-border-radius: 1000px;
-padding: .5em 1.25em;
-text-decoration: none;
-margin-bottom: 80px;
-transition: 200ms ease;
-cursor: pointer;
-}
-.read-more:hover{
-    background-color: var(--secondary-nav-color);
-}
+
 #skill-section h3{
    font-size: 2rem;
    text-align: start;
@@ -109,6 +94,15 @@ li::marker {
 
 #skill01 h3{
 padding-bottom: 30px;
+}
+#chisiamo{
+    background: linear-gradient(-30deg, rgb(238, 119, 82), rgba(231, 60, 126), rgba(35, 166, 213), rgb(35, 213, 171));
+ animation: gradient 10s ease infinite;
+   background-size: 200%;
+   content: '';
+}
+#chisiamo:hover{
+background: rgb(151, 234, 42);
 }
 
 

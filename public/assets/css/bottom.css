@@ -8,8 +8,10 @@
 
 #project-bottom-section{
     padding: 100px 20px;
+   
     
 }
+
 #projects-bottom-section h2{
     font-size: 2rem;
     text-align: center;
@@ -17,13 +19,15 @@
     margin-top: 40px;
 }
 .flex-bottom-container details{
-  margin: 20px auto;
-  width: 165vh;
-  min-width: 100%;
+  margin: 25px auto auto 4%;
+  
+  width: 158vh;
+  max-width: 100%;
  background-image: linear-gradient(to left, rgba(0,0,0,0) 0%, rgba(0,0,0,0.01) 5%, rgba(0,0,255,1) 100%);
  border-radius: 40px;
  
 }
+
 .flex-bottom-container .opinions{
 background-image: linear-gradient(to right, rgba(0,0,0,0) 0%, rgba(0,0,0,0.01) 5%, rgba(0,0,255,1) 100%);
 }

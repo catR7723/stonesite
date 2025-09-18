@@ -42,11 +42,10 @@
 }
 .back{
    min-width: 110%;
-   min-height: 150%;
+   min-height: 140%;
    z-index: -2;
    position: absolute;
    margin-top: -5%;
-   
    background: linear-gradient(-90deg, rgba(0,0,0,0), rgba(0,0,0,0.01), rgba(0,0,255,1));
    animation: gradient 25s ease infinite;
    background-size: 200%;
@@ -111,7 +110,8 @@
 .bestbh{
     color:black;
     font-family: Poppins, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 2rem;
+    font-size: 1.5rem;
+    cursor: pointer;
 }
    
 .close-sidebar-button-best {
@@ -129,7 +129,7 @@
      height: 30.5rem;
     position: relative;
     width: 50rem;
-   
+   cursor: pointer;
     z-index: 9;
     display: flex;
     margin-top: -35%;
@@ -145,8 +145,23 @@
      width: 100%;
      align-items: center;
 }
+#img{
+    position: relative;
+   display: flex;
+  
+  
+}
+#overlay-best img{
+    width: 20%;
+}
+
+
+
 #sidebar-active-best:checked ~ #overlay-best{
-    background: rgb(217, 234, 165);
+    background:url(/public/images/pulmino.png) right bottom no-repeat, url(/public/images/palma.png) left bottom no-repeat, url(/public/images/lavoratore.png) center bottom no-repeat ;
+   cursor: pointer;
+  background-color:  rgb(217, 234, 165);
+  background-size: 25%;
     height: 30rem;
     position: relative;
     width: 50rem;
@@ -156,6 +171,7 @@
     display: flex;
     border-radius: 10px;
    }
+   
    
    
 

@@ -43,6 +43,7 @@ html{
 #nav{
     grid-column: 1/ 16;
     grid-row: 2/4;
+    
 }
 #center{
     grid-column: 1/ 16;
