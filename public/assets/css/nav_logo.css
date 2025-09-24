@@ -1,14 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
-:root{
-    --color-1: rgb(145, 156, 235);
-    --text-color: rgb(18, 20, 19);
-    --accent-color: rgb(8, 230, 60);
 
-}
-*{
-   margin: 0;
-   padding: 0;
-}
 
 html{
     font-family: Poppins, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -26,7 +17,7 @@ width: 100%;
  align-items: center;
  text-align: center;
  margin-top: -5%;
- z-index: 3;
+ z-index: 30;
  
 }
 .links-container{
@@ -68,7 +59,7 @@ fill: var(--text-color);
     display: flex;
     background: url(/public/images/logostone.png) top left no-repeat;
     background-size: 10%;
-    margin-top: -0.6%;
+   
     z-index: 2;
     font-size: 1.8vh;
     font-family: Poppins, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;

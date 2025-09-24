@@ -1,10 +1,4 @@
-:root{
-    --accent-nav-color: rgb(0, 42, 255);
-    --primary-nav-color: rgb(2, 26, 98);
-    --secondary-nav-color: rgb(4, 4, 152);
-    --text-nav-color: white;
-    --secondary-nav-text-color: rgb(131, 230, 241);
-}
+
 #nav{
    display:flex;
    

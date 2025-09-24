@@ -1,10 +1,4 @@
-:root{
-    --accent-bottom-color: rgb(0, 42, 255);
-    --primary-bottom-color: rgb(2, 26, 98);
-    --secondary-bottom-color: green; 
-    --text-bottom-color: white;
-    --secondary-bottom-text-color: rgb(131, 230, 241);
-}
+
 
 #project-bottom-section{
     padding: 100px 20px;
