@@ -35,11 +35,14 @@ progress::-webkit-progress-value {
 }
 progress::-webkit-progress-bar {
   background: rgb(162, 162, 211);
+  
 }
 li{
     font-size: 18px;
     margin-bottom: 2%;
     margin-top: 5px;
+   
+    
     
 }
 li::marker {
@@ -94,6 +97,17 @@ padding-bottom: 30px;
  animation: gradient 10s ease infinite;
    background-size: 200%;
    content: '';
+}
+#casacicala{
+  background: url(/public/images/logocicala.jpeg)center no-repeat;
+ font-weight:700;
+ 
+ color: rgb(3, 1, 22);
+ font-size: 18px;
+  background-size: 40%;
+}
+#casacicala:hover{
+background: rgb(151, 234, 42);
 }
 #chisiamo:hover{
 background: rgb(151, 234, 42);

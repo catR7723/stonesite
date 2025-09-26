@@ -158,7 +158,7 @@
 
 
 #sidebar-active-best:checked ~ #overlay-best{
-    background:url(/public/images/pulmino.png) right bottom no-repeat, url(/public/images/palma.png) left bottom no-repeat, url(/public/images/lavoratore.png) center bottom no-repeat ;
+    background:url(/public/images/lavoratore.png) right bottom no-repeat, url(/public/images/pulmino.png) left bottom no-repeat, url(/public/images/palma.png) center bottom no-repeat ;
    cursor: pointer;
   background-color:  rgb(217, 234, 165);
   background-size: 25%;
@@ -171,6 +171,8 @@
     display: flex;
     border-radius: 10px;
    }
+
+  
    
    
    
