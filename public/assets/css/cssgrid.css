@@ -61,11 +61,11 @@
    background-size:cover; 
 }
 #box03{
-    background-image:url(/public/images/grid-img/trasporti.png);
-   background-size:cover; 
+    background-image:url(/public/images/grid-img/chanel.jpg);
+   background-size:100% 100%; 
 }
 #box04{
-    background-image:url(/public/images/grid-img/laboratorioartistico.png);
+    background-image:url(/public/images/grid-img/casacicala2.jpeg);
    background-size:cover; 
 }
 #box05{
@@ -74,20 +74,24 @@
    filter: grayscale(100%);
 }
 #box06{
-    background-image:url(/public/images/grid-img/dopodinoi.png);
+    background-image:url(/public/images/grid-img/gruppomusica.jpeg);
    background-size:cover; 
 }
 #box07{
-    background-image:url(/public/images/grid-img/ginnastica.jpg);
-   background-size:cover; 
+    background-image:url(/public/images/grid-img/ginnastica3.jpg);
+   background-size:100% 100%; 
 }
 #box08{
-    background-image:url(/public/images/grid-img/musica.jpg);
-   background-size:cover; 
+    background-image:url(/public/images/grid-img/dalla.jpg);
+    background-size:100% 100%; 
+   
+  
+
 }
 #box09{
-    background-image:url(/public/images/grid-img/piscina.jpg);
-   background-size:cover; 
+    background-image:url(/public/images/grid-img/piscina2.jpeg);
+   background-size:100% 100%;
+  
 }
 /*why we are the best*/
 .bestbotton{
