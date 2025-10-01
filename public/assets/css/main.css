@@ -30,24 +30,26 @@ html{
 	background-size: 400% 400%;
 	animation: gradient 15s ease infinite;
 }
-@media(max-width: 800px){
-
-#logo{
-    grid-column: 1/16;
-    grid-row: 1/2;
-   
+/*nav-logo taablet*/
+@media(min-width:988px){
+    #write3{
+    display: none;
+ }
 }
-#nav{
-    grid-column: 1/ 16;
-    grid-row: 2/4;
-    
-}
-#center{
-    grid-column: 1/ 16;
-    grid-row: 4/14;
-}
-#bottom{
-    grid-column: 1/16;
-    grid-row: 14/16;
-}
+@media(max-width: 988px){
+    header{
+        text-align: center;
+    }
+    header .text-container{
+        padding-top: 0;
+    }
+    #write2 {
+        display: none;
+    }
+    #write3{
+   display: absolute;
+   margin-right: 30%;
+   margin-left: 30%;
+    color:rgb(42, 5, 143);
+    }
 }

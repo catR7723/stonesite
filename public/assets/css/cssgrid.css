@@ -82,16 +82,16 @@
    background-size:100% 100%; 
 }
 #box08{
-    background-image:url(/public/images/grid-img/dalla.jpg);
-    background-size:100% 100%; 
+    background:url(/public/images/grid-img/dalla.jpg) right bottom no-repeat ;
+    background-size:105% 120%;
+    
    
   
 
 }
 #box09{
-    background-image:url(/public/images/grid-img/piscina2.jpeg);
-   background-size:100% 100%;
-  
+     background:url(/public/images/grid-img/piscina2.jpeg) right bottom no-repeat;
+     background-size: 100% 140%;
 }
 /*why we are the best*/
 .bestbotton{

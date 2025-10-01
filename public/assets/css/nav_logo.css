@@ -73,10 +73,12 @@ fill: var(--text-color);
 #write2{
     display: relative;
     color:rgb(2, 2, 60);
-    margin-right: 53%;
-    margin-top: 3%;
+    margin-right: 30%;
+    margin-left: 20%;
    
 }
+
+
 @property --angle{
     syntax: "<angle>";
     initial-value: 0deg;
@@ -98,11 +100,8 @@ fill: var(--text-color);
 	}
 }
 
-@media(min-width:800px){
-    .mediadiv{
-        display: none;
-    }
-}
+
+
 @media(max-width: 800px){
    .links-container{
         flex-direction: column;
