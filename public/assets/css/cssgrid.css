@@ -5,7 +5,8 @@
 }
 #center-body{
     position: relative;
-   width: 96rem;
+    left:1%;
+   width: 100rem;
    min-width: 100%;
    height: 58rem;
    min-height: 100%;
@@ -40,17 +41,20 @@
     z-index: 14;
    
 }
-.back{
-   min-width: 110%;
-   min-height: 140%;
+@media(min-width: 989px){
+   .back{
+   min-width: 100%;
+   height: 82rem;
    z-index: -2;
    position: absolute;
-   margin-top: -5%;
+   margin-top:1px;
    background: linear-gradient(-90deg, rgba(0,0,0,0), rgba(0,0,0,0.01), rgba(0,0,255,1));
    animation: gradient 25s ease infinite;
    background-size: 200%;
    content: '';
+} 
 }
+
 
 #box01{
     background-image:url(/public/images/grid-img/peschiera2025.png);
@@ -132,13 +136,13 @@
 .bestbotton svg{
      height: 30.5rem;
     position: relative;
-    width: 50rem;
+    width: 5rem;
    cursor: pointer;
     z-index: 9;
     display: flex;
-    margin-top: -35%;
-    left:-48.5%;
-    padding:35% 50% 68% 50%;
+    margin-top: -40%;
+   left:40%;
+    
 }
 
 #sidebar-active-best:checked ~ .links-container-best{
@@ -159,7 +163,7 @@
     width: 20%;
 }
 
-
+@media(min-width: 989px){
 
 #sidebar-active-best:checked ~ #overlay-best{
     background:url(/public/images/lavoratore.png) right bottom no-repeat, url(/public/images/pulmino.png) left bottom no-repeat, url(/public/images/palma.png) center bottom no-repeat ;
@@ -168,26 +172,16 @@
   background-size: 25%;
     height: 30rem;
     position: relative;
-    width: 50rem;
-     margin-top: -122%;
+    width: 51.25rem;
+     margin-top: -117%;
     left:-50%;
     z-index: 9;
     display: flex;
     border-radius: 10px;
    }
+}
 
-@media(max-width:800px){
-   
-#center-body{
-    display: flex;
-    flex-direction: column;
-}
-.center-box{
- min-height: 18em ;
- gap: 25px;
- margin:1rem 1rem 0 1rem;
-}
-}
+
 
  
 

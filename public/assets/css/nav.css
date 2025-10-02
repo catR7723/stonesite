@@ -49,25 +49,22 @@ li::marker {
   color: rgb(151, 234, 42);
 }
 #skill{
-     display: grid;
-    grid-template-columns:repeat(8, 1ft);
-    gap:2%;
+    display: flex;
+    flex-direction: column;
     
     margin-top: 1%;
     margin-bottom: 20%;
 }
 #skill01{
-     grid-column: 1/ 8;
-    grid-row: 1/ 4;
+    
     width: 165vh;
     max-width: 100%;
     height: 40vh;
     
 }
 #skill02{
-     grid-column: 1/ 8;
-    grid-row: 4/ 8;
-    width: 165vh;
+    
+    width: 1vh;
     max-width: 100%;
      height: 45vh;
 }
@@ -129,9 +126,7 @@ background: rgb(151, 234, 42);
     flex-direction: column;
 }
    
-#nav-img{
-    display: none;
-}
+
 .container{
    text-align: center; 
 }
