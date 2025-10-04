@@ -41,12 +41,7 @@ html{
  }
 }
 @media(max-width: 988px){
-    header{
-        text-align: center;
-    }
-    header .text-container{
-        padding-top: 0;
-    }
+   
     #write2 {
         display: none;
     }
@@ -61,53 +56,186 @@ html{
         min-height: 100%;
     }
    
-    #center{
- position: relative;
-    left:0%;
-    
-   width: 4rem;
-   min-width: 100%;
+#center{
+    display: flex;
+    margin-bottom: -2%;
+}
+#center-body{
+    position: relative;
+    width:60em;
+    max-width: 100%;
+   left: 5%;
    height: 58rem;
    min-height: 100%;
+   display: grid;
+   grid-template-columns:repeat(4,24%);
+   grid-template-rows:repeat(4,20%);
+   grid-template-areas:
+    "box-1 box-2 box-3 box-4"
+    "box-1 box-5 box-5 box-4"
+    "box-6 box-5 box-5 box-7"
+    "box-8 box-8 box-9 box-7";
+   
+    z-index: 2;
 }
-.open-sidebar-button-best{
- padding-right: 30%;
- display: flex;
-flex-direction: column;
- 
+#center-body img{
+    height: 100%;
+    width: 100%;
+    border-radius: .5em;
+    transition: 100ms ease;
 }
+.box5 img{
+     min-height: 205%;
+    min-width: 205%;
+    border-radius: .5em;
+    transition: 100ms ease;
+}
+.box5{
+   position: relative;
+}
+#box01:hover, #box02:hover, #box03:hover, #box04:hover, #box06:hover, #box07:hover, #box08:hover, #box09:hover{
+    scale: 1.1;
+    z-index: 14;
+   
+}
+
+   .back{
+   min-width: 100%;
+   height: 58rem;
+   z-index: -2;
+   position: absolute;
+   margin-top:1px;
+   background: linear-gradient(-90deg, rgba(0,0,0,0), rgba(0,0,0,0.01), rgba(0,0,255,1));
+   animation: gradient 25s ease infinite;
+   background-size: 200%;
+   content: '';
+
+}
+
+
+#box01{
+    background-image:url(/public/images/grid-img/peschiera2025.png);
+   background-size:cover; 
+}
+#box02{
+    background-image:url(/public/images/grid-img/cucina.png);
+   background-size:cover; 
+}
+#box03{
+    background-image:url(/public/images/grid-img/chanel.jpg);
+   background-size:100% 100%; 
+}
+#box04{
+    background-image:url(/public/images/grid-img/casacicala2.jpeg);
+   background-size:cover; 
+}
+#box05{
+   background-image:url(/public/images/grid-img/site09.jpg);
+   background-size:cover;
+   filter: grayscale(100%);
+}
+#box06{
+    background-image:url(/public/images/grid-img/gruppomusica.jpeg);
+   background-size:cover; 
+}
+#box07{
+    background-image:url(/public/images/grid-img/ginnastica3.jpg);
+   background-size:100% 100%; 
+}
+#box08{
+    background:url(/public/images/grid-img/dalla.jpg) right bottom no-repeat ;
+    background-size:105% 120%;
+}
+#box09{
+     background:url(/public/images/grid-img/piscina2.jpeg) right bottom no-repeat;
+     background-size: 100% 140%;
+}
+/*why we are the best*/
+.bestbotton{
+    font-size: 1.6vw;
+    display: flex;
+    flex-direction: column;
+    color: rgb(217, 234, 165);
+    font-family: Poppins, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    position: relative;
+    min-width: 200%;
+    min-height: 200%;
+    z-index: 3;
+    text-align: center;
+    top:-190%;
+   }
+
+.bestbh{
+    color:black;
+    font-family: Poppins, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 2.5vw;
+    cursor: pointer;
+    
+    
+}
+   
+.close-sidebar-button-best {
+    position: relative;
+    z-index: -1;
+    display: flex;
+}
+.links-container-best{
+    display: none;
+}
+#sidebar-active-best{
+   display: none;
+}
+.bestbotton svg{
+     height: 30.5rem;
+    position: relative;
+    width: 5rem;
+   cursor: pointer;
+    z-index: 9;
+    display: flex;
+    margin-top: -35%;
+   left:43%;
+    
+}
+
+#sidebar-active-best:checked ~ .links-container-best{
+     flex-direction: column;
+     position: absolute;
+     display: flex;
+     z-index: 10;
+     width: 100%;
+     align-items: center;
+}
+#img{
+    position: relative;
+   display: flex;
+  
+  
+}
+#overlay-best img{
+    width: 20%;
+}
+
+
+
 #sidebar-active-best:checked ~ #overlay-best{
     background:url(/public/images/lavoratore.png) right bottom no-repeat, url(/public/images/pulmino.png) left bottom no-repeat, url(/public/images/palma.png) center bottom no-repeat ;
    cursor: pointer;
   background-color:  rgb(217, 234, 165);
   background-size: 25%;
-    height: 30rem;
+    height: 25rem;
     position: relative;
-    width: 29rem;
-   margin-top: -145%;
-    left:-29%;
+    width: 105%;
+     margin-top: -90%;
+    
     z-index: 9;
     display: flex;
     border-radius: 10px;
    }
-   .bestbh{
-    margin-right: 36%;
-    font-size: 14px;
-   }
-   /*back*/
-     .back{
-   min-width: 100%;
-   height: 72rem;
-   z-index: -2;
-   position: absolute;
-   margin-top: 1px;
-   background: linear-gradient(-90deg, rgba(0,0,0,0), rgba(0,0,0,0.01), rgba(0,0,255,1));
-   animation: gradient 25s ease infinite;
-   background-size: 200%;
-   content: '';
-} 
 progress{
     scroll-padding-right: 30%;
+}
+.some-projects{
+    margin-top: -24%;
 }
 
 
