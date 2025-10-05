@@ -1,13 +1,10 @@
 
 #nav{
    display:flex;
-   
    flex-direction: column;
-    color: var(--text-nav-color);
-   
-  width: 100%;
-  margin-top: 10%;
-   
+   color: var(--text-nav-color);
+   width: 100%;
+   margin-top: 10%;
   }
 #skill-section{
      grid-column: 1/ 8;
@@ -97,17 +94,18 @@ padding-bottom: 30px;
 }
 #casacicala{
   background: url(/public/images/logocicala.jpeg)center no-repeat;
- font-weight:700;
- color: rgb(3, 1, 22);
- font-size: 18px;
-  background-size: 40%;
+  font-weight:700;
+  color: rgb(3, 1, 22);
+  font-size: 18px;
+ 
+  background-size: 6vw;
 }
 #aurora{
   background: url(/public/images/logocentro.png)center no-repeat;
  font-weight:700;
  color: rgb(3, 1, 22);
  font-size: 18px;
-  background-size: 80%;
+  background-size: 9vw;
 }
 #aurora:hover{
 background: rgb(151, 234, 42);
