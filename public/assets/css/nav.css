@@ -38,9 +38,6 @@ li{
     font-size: 18px;
     margin-bottom: 2%;
     margin-top: 5px;
-   
-    
-    
 }
 li::marker {
   color: rgb(151, 234, 42);
@@ -96,7 +93,7 @@ padding-bottom: 30px;
   background: url(/public/images/logocicala.jpeg)center no-repeat;
   font-weight:700;
   color: rgb(3, 1, 22);
-  font-size: 18px;
+ font-size: 1.6vw;
  
   background-size: 6vw;
 }
@@ -104,7 +101,7 @@ padding-bottom: 30px;
   background: url(/public/images/logocentro.png)center no-repeat;
  font-weight:700;
  color: rgb(3, 1, 22);
- font-size: 18px;
+ font-size: 1.6vw;
   background-size: 9vw;
 }
 #aurora:hover{
@@ -118,7 +115,7 @@ background: rgb(151, 234, 42);
 }
 
 
-@media(max-width: 800px){
+@media(max-width: 988px){
     #skill{
     display: flex;
     flex-direction: column;
@@ -133,13 +130,10 @@ background: rgb(151, 234, 42);
    
     
 }
-
-
-
 }
-@media(max-width:450px){
+@media(max-width:466px){
    #skill-section{
-    padding-left: 9%;
+    padding-left: 9%
    }
 }
 
