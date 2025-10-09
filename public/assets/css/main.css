@@ -39,6 +39,9 @@ html{
     #write3{
     display: none;
  }
+ #sfa{
+    display: none;
+}
 }
 @media(max-width: 988px){
     .center-mobile{
@@ -250,11 +253,11 @@ progress{
     width:60em;
     max-width: 100%;
    left: 5%;
-   height: 58rem;
-   margin-bottom: 30%;
-   position: relative;
-   display: grid;
-   grid-template-columns:repeat(auto-fit, minmax(300px, 1fr));
+   height: 350vw;
+   margin-bottom: -60%;
+   
+   display: flex;
+   flex-direction: column;
   gap: 15px;
   justify-content: center;
   
@@ -263,15 +266,15 @@ progress{
 .box03{
      background:url(/public/images/logocicala.jpeg);
    background-size:100% 100%; 
-   width: 100%;
-   height: 20rem;
+    width: 1fr;
+   height: 60vw;
    border-radius: 15px;
 }
 .box02{
-    position: relative;
+    
     z-index: 1;
-    width: 100%;
-   height: 20rem;
+   width: 1fr;
+   height: 60vw;
   background: linear-gradient(10deg,rgb(35, 213, 171),rgba(35, 166, 213), rgba(231, 60, 126), rgb(238, 119, 82)  );
   animation: gradient 10s ease infinite;
    background-size: 400%;
@@ -281,8 +284,8 @@ progress{
 .box01{
    background:url(/public/images/grid-img/site09.jpg) ;
    background-size:100% 100%;
-    width: 100%;
-   height: 20rem;
+    width: 1fr;
+   height: 60vw;
    border-radius: 15px;
    
 }
@@ -356,14 +359,11 @@ progress{
    cursor: pointer;
   background-color:  rgb(101, 115, 222);
   background-size: 25%;
-    height: 57vw;
-   
+    height: 60vw;
     left: -14.5%;
     
     position: absolute;
-    width: 98%;
-   
-   
+    width: 100%;
     z-index: 9;
     display: flex;
     border-radius: 10px;
@@ -376,13 +376,63 @@ progress{
     background: url(/public/images/logostone.png) top left no-repeat;
     background-size: 18%;
     z-index: 2;
+    margin-bottom: -70%;
 }
 #write3{
     margin-top: 5%;
     margin-left: 10%;
 }
 .back{
-   height: 75rem;
+   height: 83rem;
 }
+#sfa{
+    font-family: cursive;
+    top:44%;
+    left: 20%;
+    position: absolute;
+}
+#sfa h1{
+    font-size: 4vw;
+    color: rgb(43, 5, 235);
+}
+/*hidden menu*/
+  .links-container{
+        flex-direction: column;
+        align-items: flex-start;
+        position: fixed;
+        top: 0;
+        right: -100%;
+        z-index: 10;
+        width: 300px;
+        
+        background-color: var(--color-1);
+        box-shadow: -10px 0 5px rgba(7, 53, 163, 1.0);
+        transition: 0.8s ease-out;
+    }
+    nav a{
+        font-size: 5vw;
+        box-sizing: border-box;
+        height:auto;
+        width: 100%;
+       padding: 20px 30px;
+        justify-content: flex-start;
+    }
+    .open-sidebar-button,  .close-sidebar-button{
+    display: block;
+    padding: 20px;
+   }
+   #sidebar-active:checked ~ .links-container{
+    right: 0;
+   }
+   #sidebar-active:checked ~ #overlay{
+    background: rgb(217, 234, 165);
+    height: 100%;
+    position:fixed;
+    width: 100%;
+    top:0;
+    left:0;
+    z-index: 9;
+   }
+  
 
 }

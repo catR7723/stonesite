@@ -6,6 +6,9 @@
 .center-mobile{
     display:none;
 }
+#sfa{
+    display: none;
+}
 #center-body{
     position: relative;
     margin-left: -1%;
