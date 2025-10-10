@@ -2,15 +2,19 @@
 
 #project-bottom-section{
     padding: 100px 20px;
+ 
    
     
 }
+@media(min-width:640px){
+
 
 #projects-bottom-section h2{
     font-size: 2rem;
     text-align: center;
     margin-bottom: 40px;
     margin-top: 40px;
+}
 }
 .flex-bottom-container details{
 margin: 0 0 4% 6%;
@@ -43,9 +47,11 @@ background-image: linear-gradient(to right, rgba(0,0,0,0) 0%, rgba(0,0,0,0.01) 5
     font-size: 1.2rem;
     font-weight: 700;
 }
+@media(min-width:640px){
+
 .flex-bottom-container details h3{
     font-size: 1.75rem;
-    
+}
 }
 .flex-bottom-container details .text-bottom-container{
     padding: 30px;
