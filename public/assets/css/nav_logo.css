@@ -32,6 +32,9 @@ z-index: 11;
     flex-direction: row;
     align-items: center;
 }
+
+
+
 nav a{
     height: 100%;
     padding:0 20px ;
@@ -40,6 +43,7 @@ nav a{
     color:var(--text-color);
     text-decoration: none;
     font-size: 1.6vw;
+
 }
  nav a:hover{
     background-color: var(--accent-color);

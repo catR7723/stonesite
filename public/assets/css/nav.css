@@ -1,4 +1,12 @@
+@media(min-width:640px){
 
+
+#aurora2 {
+  display:none;
+}
+#casacicala2{
+  display:none;
+}
 #nav{
    display:flex;
    flex-direction: column;
@@ -94,8 +102,7 @@ padding-bottom: 30px;
   font-weight:700;
   color: rgb(3, 1, 22);
  font-size: 1.6vw;
- 
-  background-size: 6vw;
+ background-size: 6vw;
 }
 #aurora{
   background: url(/public/images/logocentro.png)center no-repeat;
@@ -112,6 +119,7 @@ background: rgb(151, 234, 42);
 }
 #chisiamo:hover{
 background: rgb(151, 234, 42);
+}
 }
 
 
@@ -131,11 +139,7 @@ background: rgb(151, 234, 42);
     
 }
 }
-@media(max-width:466px){
-   #skill-section{
-    padding-left: 9%
-   }
-}
+
 
 
 

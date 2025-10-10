@@ -47,6 +47,16 @@ html{
     .center-mobile{
         display:none;
     }
+      #skill{
+    display: flex;
+    flex-direction: column;
+}
+.container{
+   text-align: center; 
+}
+.skill-container{
+    height: 350px;
+  }
    
     #write2 {
         display: none;
@@ -247,6 +257,40 @@ progress{
     #center{
         display:none;
     }
+    nav a{
+        font-size: 3vw;
+    }
+    #aurora {
+ display: relative;
+  background: url(/public/images/logocentro.png)right no-repeat;
+ font-weight:700;
+ color: rgb(3, 1, 22);
+ font-size: 3vw;
+  background-size: 20vw;
+}
+#aurora:hover{
+    background-color: #23d5ab;
+     background-image: none;
+}
+#casacicala{
+  display:relative;
+  background: url(/public/images/logocicala.jpeg)right no-repeat;
+  font-weight:700;
+  color: rgb(3, 1, 22);
+ font-size: 3vw;
+ background-size: 10vw;
+
+}
+#casacicala:hover{
+    background-color: #23d5ab;
+    background-image: none;
+}
+#aurora2 {
+  display:none;
+}
+#casacicala2{
+  display:none;
+}
 .center-mobile{
     position: relative;
     display: flex;
@@ -396,43 +440,7 @@ progress{
     color: rgb(43, 5, 235);
 }
 /*hidden menu*/
-  .links-container{
-        flex-direction: column;
-        align-items: flex-start;
-        position: fixed;
-        top: 0;
-        right: -100%;
-        z-index: 10;
-        width: 300px;
-        
-        background-color: var(--color-1);
-        box-shadow: -10px 0 5px rgba(7, 53, 163, 1.0);
-        transition: 0.8s ease-out;
-    }
-    nav a{
-        font-size: 5vw;
-        box-sizing: border-box;
-        height:auto;
-        width: 100%;
-       padding: 20px 30px;
-        justify-content: flex-start;
-    }
-    .open-sidebar-button,  .close-sidebar-button{
-    display: block;
-    padding: 20px;
-   }
-   #sidebar-active:checked ~ .links-container{
-    right: 0;
-   }
-   #sidebar-active:checked ~ #overlay{
-    background: rgb(217, 234, 165);
-    height: 100%;
-    position:fixed;
-    width: 100%;
-    top:0;
-    left:0;
-    z-index: 9;
-   }
-  
+
+
 
 }
