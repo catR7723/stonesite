@@ -1,0 +1,139 @@
+@media(max-width:640px){
+  nav li{
+    display:none;
+  }
+  .labo{
+    display: none;
+  }
+  nav li:first-child, li:last-child{
+    display: block;
+  }
+
+  .mobile-laboratory{
+    font-size: 20px;
+    display: flex;
+    flex-direction: column;
+    color: rgb(37, 50, 228);
+    font-family: Poppins, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    position: relative;
+    min-width: 25rem;
+    min-height: 9rem;
+    z-index: 3;
+    text-align: center;
+    
+}
+
+.close-sidebar-laboratory {
+    position: relative;
+    z-index: -1;
+    display: flex;
+}
+.links-container-laboratory{
+    display: none;
+}
+#sidebar-active-laboratory{
+   display: none;
+}
+.mobile-laboratory svg{
+     height: 30.5rem;
+     
+    position: relative;
+    width: 5rem;
+   cursor: pointer;
+    z-index: 9;
+    display: flex;
+    margin-top: -40%;
+   left:40%;
+}
+
+#sidebar-active-laboratory:checked ~ .links-container-laboratory{
+     flex-direction: column;
+     position: absolute;
+     display: flex;
+     z-index: 10;
+     width: 100%;
+     align-items: center;
+}
+#img{
+    position: relative;
+   display: flex;
+}
+#overlay-laboratory img{
+    width: 20%;
+}
+#sidebar-active-laboratory:checked ~ #overlay-laboratory{
+   
+   cursor: pointer;
+ background-color: aquamarine;
+  background-size: 25%;
+    height: 200vw;
+    margin-top: -75%;
+    position: relative;
+    z-index: 9;
+    display: flex;
+    border-radius: 10px;
+   }
+   .close-sidebar-laboratory{
+    display: flex;
+    flex-direction: column;
+    color: black;
+    z-index: 15;
+    gap:15px;
+    }
+    .mobile-box{
+      width: 15vw;
+      height: 15vw;
+      border-radius: .0,5em;
+    }
+    .mobile-box h1{
+      font-size: 2vw;
+      background-color: aliceblue;
+    }
+   #box01{
+    background-image:url(/public/images/grid-img/site09.jpg);
+   background-size:cover; 
+}
+#box02{
+    background-image:url(/public/images/grid-img/cucina.png);
+   background-size:cover; 
+}
+#box03{
+    background-image:url(/public/images/grid-img/informatica.png);
+   background-size:100px 200px; 
+}
+#box04{
+    background-image:url(/public/images/grid-img/cinema.jpeg);
+   background-size:cover; 
+
+}
+#box05{
+   background-image:url(/public/images/grid-img/site09.jpg);
+   background-size:cover;
+   
+  
+}
+#box06{
+    background-image:url(/public/images/grid-img/gruppomusica.jpeg);
+   background-size:cover; 
+  
+}
+#box07{
+    background-image:url(/public/images/grid-img/gruppomusica.jpeg);
+   background-size:cover; 
+  
+}
+#box08{
+    background-image:url(/public/images/grid-img/gruppomusica.jpeg);
+   background-size:cover; 
+}
+#box09{
+    background-image:url(/public/images/grid-img/gruppomusica.jpeg);
+   background-size:cover; 
+  
+}
+   
+}
+ 
+  
+
+
