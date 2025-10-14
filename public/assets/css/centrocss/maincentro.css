@@ -99,11 +99,12 @@ section p{
    min-height: 100%;
    display: grid;
    grid-template-columns:repeat(3,1fr);
-   grid-template-rows:repeat(3,1fr);
+   grid-template-rows:repeat(4,1fr);
    grid-template-areas:
-    "box-1 box-2 box-3"
+    "box-1 box-1 box-3"
     "box-4 box-5 box-6"
-    "box-7 box-8 box-9";
+    "box-7 box-8 box-9"
+    "box-10 box-11 box-2";
     gap: 1em;
     z-index: 2;
 }
@@ -146,6 +147,16 @@ section p{
    background-size:cover; 
 }
 #box09{
+    background-image:url(/public/images/grid-img/gruppomusica.jpeg);
+   background-size:cover; 
+  
+}
+#box10{
+    background-image:url(/public/images/grid-img/gruppomusica.jpeg);
+   background-size:cover; 
+  
+}
+#box11{
     background-image:url(/public/images/grid-img/gruppomusica.jpeg);
    background-size:cover; 
   

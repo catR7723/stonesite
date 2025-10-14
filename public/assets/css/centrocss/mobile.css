@@ -40,7 +40,7 @@
     position: relative;
     width: 5rem;
    cursor: pointer;
-    z-index: 9;
+    z-index: 7;
     display: flex;
     margin-top: -40%;
    left:40%;
@@ -64,9 +64,9 @@
 #sidebar-active-laboratory:checked ~ #overlay-laboratory{
    
    cursor: pointer;
- background-color: aquamarine;
+ background-color:rgb(243, 213, 168);
   background-size: 25%;
-    height: 200vw;
+    height: 470vw;
     margin-top: -75%;
     position: relative;
     z-index: 9;
@@ -81,13 +81,15 @@
     gap:15px;
     }
     .mobile-box{
-      width: 15vw;
-      height: 15vw;
+      position:relative;
+      width: 80vw;
+      height: 50vw;
       border-radius: .0,5em;
     }
     .mobile-box h1{
-      font-size: 2vw;
+      font-size: 4vw;
       background-color: aliceblue;
+      
     }
    #box01{
     background-image:url(/public/images/grid-img/site09.jpg);
@@ -99,7 +101,7 @@
 }
 #box03{
     background-image:url(/public/images/grid-img/informatica.png);
-   background-size:100px 200px; 
+   background-size:cover; 
 }
 #box04{
     background-image:url(/public/images/grid-img/cinema.jpeg);
@@ -131,6 +133,7 @@
    background-size:cover; 
   
 }
+
    
 }
  
