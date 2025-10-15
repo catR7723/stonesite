@@ -91,22 +91,34 @@ section p{
 .mobile-laboratory{
     display: none;
 }
+
+.box{
+    display: flex;
+    align-items: self-start;
+    border-radius: 10px;
+}
+#box01:hover, #box02:hover, #box03:hover, #box04:hover, #box05:hover, #box06:hover, #box07:hover, #box08:hover, #box09:hover, #box10:hover, #box11:hover{
+    scale:1.1;
+     transition: 500ms ease;
+}
 .labo{
-   position: relative;
-   width: 100%;
-   min-width: 100%;
-   height: 100%;
-   min-height: 100%;
-   display: grid;
-   grid-template-columns:repeat(3,1fr);
-   grid-template-rows:repeat(4,1fr);
-   grid-template-areas:
-    "box-1 box-1 box-3"
-    "box-4 box-5 box-6"
-    "box-7 box-8 box-9"
-    "box-10 box-11 box-2";
-    gap: 1em;
-    z-index: 2;
+ display: grid;
+    grid-template-columns:repeat(4,1fr) ;
+    grid-template-rows:repeat(4,1fr);
+    grid-template-areas:
+    "box-1 box-2 box-3 box-4"
+    "box-1 box-5 box-5 box-4"
+    "box-7 box-8 box-8 box-10"
+    "box-6 box-11 box-9 box-10";
+    gap:1em;
+    height: 70vw;
+.box h1{
+    border-radius: 10px 10px 0 0;
+    font-size: 1.5vw;
+    background-color: aliceblue;
+    padding: 2%;
+    width: 100%;
+}
 }
 }
 #box01{
@@ -119,7 +131,7 @@ section p{
 }
 #box03{
     background-image:url(/public/images/grid-img/informatica.png);
-   background-size:100% 100%; 
+   background-size:cover; 
 }
 #box04{
     background-image:url(/public/images/grid-img/cinema.jpeg);
@@ -161,22 +173,8 @@ section p{
    background-size:cover; 
   
 }
-.labo img{
-    height: 20vw;
-    width: 100%;
-    border-radius: .5em .5em 0 0;
-    transition: 100ms ease;
-}
-.labo h1{
-    font-size: 2vw;
-    background-color: aqua;
-    
-}
-.labo div{
-    display:flex;
-    flex-direction: column;
-    
-}
+
+
 
 
 

@@ -66,12 +66,12 @@
    cursor: pointer;
  background-color:rgb(243, 213, 168);
   background-size: 25%;
-    height: 470vw;
+    height: 570vw;
     margin-top: -75%;
     position: relative;
     z-index: 9;
     display: flex;
-    border-radius: 10px;
+   
    }
    .close-sidebar-laboratory{
     display: flex;
