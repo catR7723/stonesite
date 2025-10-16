@@ -8,26 +8,16 @@
   nav li:first-child, li:last-child{
     display: block;
   }
-
   .mobile-laboratory{
-    font-size: 20px;
+    font-size: 2vw;
     display: flex;
     flex-direction: column;
-    color: rgb(37, 50, 228);
+    color: #2532e4;
     font-family: Poppins, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     position: relative;
-    min-width: 25rem;
-    min-height: 9rem;
     z-index: 3;
     text-align: center;
-    
-}
-
-.close-sidebar-laboratory {
-    position: relative;
-    z-index: -1;
-    display: flex;
-}
+ }
 .links-container-laboratory{
     display: none;
 }
@@ -35,94 +25,74 @@
    display: none;
 }
 .mobile-laboratory svg{
-     height: 30.5rem;
-     
     position: relative;
-    width: 5rem;
+    width:20vw;
    cursor: pointer;
     z-index: 7;
     display: flex;
-    margin-top: -40%;
+    
    left:40%;
 }
-
 #sidebar-active-laboratory:checked ~ .links-container-laboratory{
      flex-direction: column;
-     position: absolute;
+     position: relative;
      display: flex;
      z-index: 10;
      width: 100%;
      align-items: center;
+     margin-top: 10%;
 }
-#img{
-    position: relative;
-   display: flex;
-}
-#overlay-laboratory img{
-    width: 20%;
-}
-#sidebar-active-laboratory:checked ~ #overlay-laboratory{
-   
-   cursor: pointer;
- background-color:rgb(243, 213, 168);
-  background-size: 25%;
-    height: 570vw;
-    margin-top: -75%;
-    position: relative;
-    z-index: 9;
-    display: flex;
-   
-   }
-   .close-sidebar-laboratory{
+
+.close-sidebar-laboratory{
     display: flex;
     flex-direction: column;
     color: black;
     z-index: 15;
     gap:15px;
-    }
-    .mobile-box{
+    cursor: pointer;
+}
+.mobile-box{
       position:relative;
       width: 80vw;
       height: 50vw;
-      border-radius: .0,5em;
-    }
-    .mobile-box h1{
+      border-radius: 10px;
+}
+.mobile-box:hover{
+   scale:1.1;
+   transition: 700ms ease;
+}
+.mobile-box h1{
       font-size: 4vw;
       background-color: aliceblue;
-      
-    }
-   #box01{
-    background-image:url(/public/images/grid-img/site09.jpg);
+      border-radius: 10px 10px 0 0;
+}
+#box01{
+   background-image:url(/public/images/grid-img/site09.jpg);
    background-size:cover; 
 }
 #box02{
-    background-image:url(/public/images/grid-img/cucina.png);
+   background-image:url(/public/images/grid-img/cucina.png);
    background-size:cover; 
 }
 #box03{
-    background-image:url(/public/images/grid-img/informatica.png);
+   background-image:url(/public/images/grid-img/informatica.png);
    background-size:cover; 
 }
 #box04{
-    background-image:url(/public/images/grid-img/cinema.jpeg);
+   background-image:url(/public/images/grid-img/cinema.jpeg);
    background-size:cover; 
-
 }
 #box05{
    background-image:url(/public/images/grid-img/site09.jpg);
    background-size:cover;
-   
-  
 }
 #box06{
     background-image:url(/public/images/grid-img/gruppomusica.jpeg);
    background-size:cover; 
-  
 }
 #box07{
     background-image:url(/public/images/grid-img/gruppomusica.jpeg);
    background-size:cover; 
-  
 }
 #box08{
     background-image:url(/public/images/grid-img/gruppomusica.jpeg);
@@ -131,10 +101,7 @@
 #box09{
     background-image:url(/public/images/grid-img/gruppomusica.jpeg);
    background-size:cover; 
-  
 }
-
-   
 }
  
   

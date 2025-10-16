@@ -99,7 +99,7 @@ section p{
 }
 #box01:hover, #box02:hover, #box03:hover, #box04:hover, #box05:hover, #box06:hover, #box07:hover, #box08:hover, #box09:hover, #box10:hover, #box11:hover{
     scale:1.1;
-     transition: 500ms ease;
+    transition: 500ms ease;
 }
 .labo{
  display: grid;
@@ -112,6 +112,7 @@ section p{
     "box-6 box-11 box-9 box-10";
     gap:1em;
     height: 70vw;
+}
 .box h1{
     border-radius: 10px 10px 0 0;
     font-size: 1.5vw;
@@ -120,7 +121,7 @@ section p{
     width: 100%;
 }
 }
-}
+
 #box01{
     background-image:url(/public/images/grid-img/site09.jpg);
    background-size:cover; 
