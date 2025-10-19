@@ -2,10 +2,8 @@
 
 #project-bottom-section{
     padding: 100px 20px;
- 
-   
-    
 }
+
 @media(min-width:640px){
 #projects-bottom-section h2{
     font-size: 2rem;
@@ -146,6 +144,9 @@ padding-bottom: 30px;
 }
 #medialink{
     display: none;
+}
+#dev{
+font-size: 4vw;
 }
 
 @media(max-width:450px){
