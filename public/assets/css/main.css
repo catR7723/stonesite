@@ -235,23 +235,20 @@ html{
     width: 20%;
 }
 #sidebar-active-best:checked ~ #overlay-best{
-    background:url(/public/images/lavoratore.png) right bottom no-repeat, url(/public/images/pulmino.png) left bottom no-repeat, url(/public/images/palma.png) center bottom no-repeat ;
-   cursor: pointer;
-  background-color:  rgb(217, 234, 165);
-  background-size: 25%;
-    height: 30rem;
-   bottom: 2em;
-    position: absolute;
-    width: 45vw;
-  
-    
-    
-    z-index: 9;
-    display: flex;
-    border-radius: 10px;
+ background:url(/public/images/lavoratore.png) right bottom no-repeat, url(/public/images/pulmino.png) left bottom no-repeat, url(/public/images/palma.png) center bottom no-repeat ;
+ cursor: pointer;
+ background-color:  rgb(217, 234, 165);
+ background-size: 25%;
+ height: 30rem;
+ bottom: 2em;
+ position: absolute;
+ width: 45vw;
+ z-index: 9;
+ display: flex;
+ border-radius: 10px;
 
     
-   }
+}
 progress{
     scroll-padding-right: 30%;
 }
@@ -333,61 +330,54 @@ nav a{
     position: relative;
     display: flex;
     width:100%;
-   
-  
-   height: 350vw;
-   margin-bottom: -60%;
-   
-   display: flex;
-   flex-direction: column;
-  gap: 15px;
-  justify-content: center;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    justify-content: center;
   
    
 }
 .box03{
-     background:url(/public/images/logocicala.jpeg);
-   background-size:100% 100%; 
-    width: 100%;
-   height: 60vw;
-   border-radius: 15px;
+ background:url(/public/images/logocicala.jpeg);
+ background-size:100% 100%; 
+ width: 100%;
+ height: 60vw;
+ border-radius: 15px;
 }
 .box02{
-    
-    z-index: 1;
-   width: 1fr;
-   height: 60vw;
-  background: linear-gradient(10deg,rgb(35, 213, 171),rgba(35, 166, 213), rgba(231, 60, 126), rgb(238, 119, 82)  );
-  animation: gradient 10s ease infinite;
-   background-size: 400%;
-   content: url(/public/images/logocentro2.png);
-   border-radius: 15px;
+ z-index: 1;
+ width: 1fr;
+ height: 60vw;
+ background: linear-gradient(10deg,rgb(35, 213, 171),rgba(35, 166, 213), rgba(231, 60, 126), rgb(238, 119, 82)  );
+ animation: gradient 10s ease infinite;
+ background-size: 400%;
+ content: url(/public/images/logocentro2.png);
+ border-radius: 15px;
 }
 .box01{
-   background:url(/public/images/grid-img/site09.jpg) ;
-   background-size:100% 100%;
-    width: 1fr;
-   height: 60vw;
-   border-radius: 15px;
-   
+ background:url(/public/images/grid-img/site09.jpg) ;
+ background-size:100% 100%;
+ width: 1fr;
+ height: 60vw;
+ border-radius: 15px;
 }
+
 .sfa{
     position: relative;
     z-index: 3;
     color:black;
     font-size: 20px;
-    
 }
-
 .bestbuttom-mobile{
     font-size: 3vw;
     color: rgb(195, 247, 7);
     font-family: Poppins, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-   width: 100%;
-   font-weight: 900;
+    width: 100%;
+    font-weight: 900;
     z-index: 3;
     text-align: center;
-    
+    display: flex;
+    flex-direction: column;
 }
 .bestb-mobile{
     cursor: pointer;
@@ -397,8 +387,11 @@ nav a{
     font-family: Poppins, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     font-size: 3vw;
     cursor: pointer;
-    margin-left: -25%;
-    margin-top: 10%;
+    display: flex;
+}
+.bestbh-mobile{
+    width: 100%;
+
 }
 .close-sidebar-button-best-mobile {
     position: relative;
@@ -412,18 +405,16 @@ nav a{
    display: none;
 }
 #svg-mobile{
-     position: absolute;
-    cursor: pointer;
-    z-index: 9;
+  position: absolute;
+  cursor: pointer;
+  z-index: 9;
 }
 
 #sidebar-active-best-mobile:checked ~ .links-container-best-mobile{
-     flex-direction: column;
-     position: absolute;
-     display: flex;
-     z-index: 10;
-     width: 100%;
-     align-items: center;
+  flex-direction: column;
+  display: flex;
+  z-index: 10;
+  width: 100%;
 }
 #img{
     position: relative;
@@ -433,39 +424,35 @@ nav a{
     width: 20%;
 }
 #sidebar-active-best-mobile:checked ~ #overlay-best-mobile{
-    background:url(/public/images/lavoratore.png) right bottom no-repeat, url(/public/images/pulmino.png) left bottom no-repeat, url(/public/images/palma.png) center bottom no-repeat ;
-   cursor: pointer;
+  background:url(/public/images/lavoratore.png) right bottom no-repeat, url(/public/images/pulmino.png) left bottom no-repeat, url(/public/images/palma.png) center bottom no-repeat ;
+  cursor: pointer;
   background-color:  rgb(101, 115, 222);
   background-size: 25%;
-    height: 65vw;
-    
-   right: 0.1%;
-  top:26em;
-    width: 100%;
-    z-index: 9;
-    position: absolute;
-    
-    border-radius: 10px;
-   }
+  height: 61vw;
+  right: 0.1%;
+  
+  width: 100%;
+  z-index: 9;
+  position: absolute;
+  border-radius: 10px;
+}
    .close-sidebar-button-best-mobile{
     position: relative;
     left: 20%;
    }
    #logo{
-    
     width: 100%;
-    height: 8rem;
+    height: 12rem;
     position: relative;
-    background: url(/public/images/logostone.png) top left no-repeat;
+    background: url(/public/images/logostone.png) left no-repeat;
     background-size: 18%;
     z-index: 2;
-    margin-bottom: -70%;
+    top: 10%;
+    left:3%;
 }
 #write3{
-    margin-top: 5%;
-    margin-left: 10%;
+  margin-top:5rem;
 }
-
 #sfa{
     font-family: cursive;
     top:44%;
@@ -482,7 +469,7 @@ nav a{
 .back{
    border-radius: 0 0 40px 40px;
    width: 100%;
-   height: 407vw;
+   height: 80em;
    z-index: -2;
    position: absolute;
    background: linear-gradient(-90deg, rgba(1, 62, 12, 0), rgba(1,62,12,0.05), rgb(11, 223, 71));
@@ -496,4 +483,12 @@ nav a{
     margin-bottom: 40px;
     margin-top: 29vw;
 }
+}
+.dev{
+    font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-size:2vw;
+    margin-top: 2%;
+    color: white;
+   text-shadow: 10px 8px 8px black;
+   margin-bottom: 5%;
 }

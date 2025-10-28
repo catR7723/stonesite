@@ -38,9 +38,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           <svg xmlns="http://www.w3.org/2000/svg" height="32px" viewBox="0 -960 960 960" width="32px" fill="#1f1f1f"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg>
          </label>
          <a class="home-link" href="#home">Home</a>
-         <a id="aurora2" href="#Centro">Centro L'Aurora</a>
+         <a id="aurora2" href="/views/html/centro.html">Centro L'Aurora</a>
          <a id="casacicala2" href="#Cicala">La Casa della Cicala</a>
-         <a id="aurora" href="#Centro">Centro L'Aurora</a>
+         <a id="aurora" href="/views/html/centro.html">Centro L'Aurora</a>
          <a id="casacicala" href="#Cicala">La Casa della Cicala</a>
          <a id="chisiamo" href="#Chi Siamo">Chi Siamo</a>
          <a href="#Shop">Shop</a>
@@ -222,22 +222,62 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
              <p>Facebook: stonesocial, YouTube: @noneiltitolo</p>
             </div>
             <div class="reference">
-              <div class="powered">
-                <h2 id="dev">DESTINA IL TUO 5 PER MILLE! UN GESTO PREZIOSO CHE NON COSTA NULLA<br>
-                             FAI UNA DONAZIONE E AIUTERAI CONCRETAMENTE LE PERSONE CHE VIVONO ACCANTO A TE C.F.:02842630127<br>
-                            IBAN: IT50S0306909606100000003453 Stone soc coop arl </h2>
-                <h2 id="dev">
-                  <br>Powered by CatRobotics DevSolutions
-                </h2>
-                <a href="https://www.iubenda.com/privacy-policy/44804857" 
+               <div id="come">
+                <input type="checkbox" id="sidebar-come" >
+                  <label for="sidebar-come" class="open-come">
+                    <h1 class="w-come">Unisciti a noi<br>Destina il 5 per mille</h1>
+                    <svg id="svg-mobile" xmlns="http://www.w3.org/2000/svg" height="52px" viewBox="0 -960 960 960" width="52px" fill="#d9eaa5">
+                      <path d="M419-80q-28 0-52.5-12T325-126L107-403l19-20q20-21 48-25t52 11l74 45v-328q0-17 11.5-28.5T340-760q17 0 29 11.5t12 28.5v472l-97-60 104 133q6 7 14 11t17 4h221q33 0 56.5-23.5T720-240v-160q0-17-11.5-28.5T680-440H461v-80h219q50 0 85 35t35 85v160q0 66-47 113T640-80H419ZM167-620q-13-22-20-47.5t-7-52.5q0-83 58.5-141.5T340-920q83 0 141.5 58.5T540-720q0 27-7 52.5T513-620l-69-40q8-14 12-28.5t4-31.5q0-50-35-85t-85-35q-50 0-85 35t-35 85q0 17 4 31.5t12 28.5l-69 40Zm335 280Z"/>
+                    </svg>
+                  </label>
+                  <label for="sidebar-come" id="overlay-come">
+                     <h2 class="bestbh-come">DESTINA IL TUO 5 PER MILLE<br>
+                                       UN GESTO SEMPLICE CHE NON TI COSTA NULLA<br>
+                                       INSERISCI IL CODICE: 02842630127 GRAZIE!
+                      </h2>
+                  </label>
+                  <div class="links-container-come">
+                    <label for="sidebar-come" class="close-come">
+                     
+                    </label>
+                  </div>
+                </div>
+
+               <div id="donation">
+                <input type="checkbox" id="sidebar-donation" >
+                  <label for="sidebar-donation" class="open-donation">
+                    <h1 class="w-donation">UN GESTO UTILE, DONA ORA!</h1>
+                    <svg id="svg-mobile" xmlns="http://www.w3.org/2000/svg" height="52px" viewBox="0 -960 960 960" width="52px" fill="#d9eaa5">
+                      <path d="M419-80q-28 0-52.5-12T325-126L107-403l19-20q20-21 48-25t52 11l74 45v-328q0-17 11.5-28.5T340-760q17 0 29 11.5t12 28.5v472l-97-60 104 133q6 7 14 11t17 4h221q33 0 56.5-23.5T720-240v-160q0-17-11.5-28.5T680-440H461v-80h219q50 0 85 35t35 85v160q0 66-47 113T640-80H419ZM167-620q-13-22-20-47.5t-7-52.5q0-83 58.5-141.5T340-920q83 0 141.5 58.5T540-720q0 27-7 52.5T513-620l-69-40q8-14 12-28.5t4-31.5q0-50-35-85t-85-35q-50 0-85 35t-35 85q0 17 4 31.5t12 28.5l-69 40Zm335 280Z"/>
+                    </svg>
+                  </label>
+                  <label for="sidebar-donation" id="overlay-donation">
+                     <h2 class="bestbh-donation">DONA ORA<br>
+                      AIUTA DAVVERO LE PERSONE<br>
+                      DELLA TUA COMUNITA'!<br>
+                      Stone Soc Coop IBAN: IT4325232454566
+                     </h2>
+                  </label>
+                  <div class="links-container-donation">
+                    <label for="sidebar-donation" class="close-donation">
+                     
+                    </label>
+                  </div>
+                </div>
+            </div>
+            <div class="dev">CatRobotics DevSolutions</div>
+             
+            <a href="https://www.iubenda.com/privacy-policy/44804857" 
                    class="iubenda-white iubenda-noiframe iubenda-embed iubenda-noiframe " 
                    title="Privacy Policy ">Privacy Policy</a>
                 <a href="https://www.iubenda.com/privacy-policy/44804857/cookie-policy" 
                    class="iubenda-white iubenda-noiframe iubenda-embed iubenda-noiframe " 
                    title="Cookie Policy ">Cookie Policy</a>
-              </div>
-            </div>
-          </div>
+            
+          
+          
+          
+        </div>
     </div>
   </body>
   <!-- Google Tag Manager (noscript) -->

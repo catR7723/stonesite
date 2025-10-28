@@ -156,3 +156,119 @@ font-size: 4vw;
        
 } 
 }
+
+/*reference section*/
+.reference{
+    display:flex;
+    width: 100%;
+    position: relative;
+    justify-content:space-evenly;
+    margin: 5% 0 5% 0;
+    
+}
+#donation{
+   background:url(/public/images/marta.png) no-repeat ;
+ background-size:100% 80%;
+ background-color: rgb(16, 216, 79);
+ width: 100%;
+ height: 30vw;
+ border-radius: 15px;
+ position: relative;
+ margin:5%;
+
+}
+#come{
+ background:url(/public/images/autumn.png) no-repeat ;
+ background-size:100% 80%;
+ background-color: aqua;
+ width: 100%;
+ height: 30vw;
+ border-radius: 15px;
+ position: relative;
+ margin: 5%;
+}
+.w-come, .w-donation{
+    font-size: 2vw;
+   position: relative;
+   top:80%;
+  
+   
+}
+.bestbh-come, .bestbh-donation{
+    color:black;
+    font-family: Poppins, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 2.5vw;
+    cursor: pointer;
+    position: relative;
+    z-index: -2;
+    margin: 5%;
+}
+.close-come, .close-donation {
+    position: relative;
+    z-index: -1;
+    display: flex;
+}
+.links-container-come, .links-container-donation{
+    display: none;
+}
+#sidebar-come, #sidebar-donation{
+   display: none;
+}
+#come svg, #donation svg{
+    position: absolute;
+    width: 20vw;
+   cursor: pointer;
+    z-index: 9;
+    display: flex;
+    left:25%;
+}
+#donation svg{
+    position: absolute;
+    width: 20vw;
+   cursor: pointer;
+    z-index: 9;
+    display: flex;
+    left:25%;
+    top: 18%;
+}
+
+#sidebar-come:checked ~ .links-container-come{
+     flex-direction: column;
+     position: absolute;
+     display: flex;
+     z-index: 10;
+     width: 100%;
+     align-items: center;
+}
+#sidebar-donation:checked ~ .links-container-donation{
+     flex-direction: column;
+     position: absolute;
+     display: flex;
+     z-index: 10;
+     width: 100%;
+     align-items: center;
+}
+#sidebar-come:checked ~ #overlay-come{
+   cursor: pointer;
+   background-color:  rgb(43, 167, 6);
+   height: 30vw;
+   position: absolute;
+   width: 100%;
+   bottom:0.1%;
+   z-index: 9;
+   display:flex;
+   border-radius: 10px;
+   }
+   #sidebar-donation:checked ~ #overlay-donation{
+   cursor: pointer;
+   background-color:  rgb(163, 239, 56);
+   height: 30vw;
+   position: absolute;
+   width: 100%;
+   bottom:0.1%;
+   z-index: 9;
+   display:flex;
+   border-radius: 10px;
+   }
+
+  
