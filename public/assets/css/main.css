@@ -295,12 +295,11 @@ nav a{
     #aurora {
         width: 100%;
         position: relative;
-
-  background: url(/public/images/logocentro.png)right no-repeat;
- font-weight:700;
- color: rgb(3, 1, 22);
- font-size: 3vw;
-  background-size: 20vw;
+        background: url(/public/images/logocentro.png)right no-repeat;
+        font-weight:700;
+        color: rgb(3, 1, 22);
+        font-size: 3vw;
+        background-size: 20vw;
 }
 #aurora:hover{
     background-color: #23d5ab;
@@ -353,6 +352,8 @@ nav a{
  background-size: 400%;
  content: url(/public/images/logocentro2.png);
  border-radius: 15px;
+ cursor: pointer;
+ 
 }
 .box01{
  background:url(/public/images/grid-img/site09.jpg) ;
@@ -367,6 +368,13 @@ nav a{
     z-index: 3;
     color:black;
     font-size: 20px;
+}
+#collcentro{
+    position: absolute;
+    width: 100%;
+    height: 60vw;
+    z-index: 5;
+    
 }
 .bestbuttom-mobile{
     font-size: 3vw;
