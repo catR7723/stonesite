@@ -163,6 +163,7 @@ padding-bottom: 30px;
     justify-content:space-evenly;
     margin: 5% 0 0 0;
 }
+
 #donation{
  background:url(/public/images/marta.png) no-repeat ;
  background-size:100% 80%;
@@ -235,6 +236,7 @@ padding-bottom: 30px;
      z-index: 10;
      width: 100%;
      align-items: center;
+    
 }
 #sidebar-donation:checked ~ .links-container-donation{
      flex-direction: column;
@@ -243,6 +245,7 @@ padding-bottom: 30px;
      z-index: 10;
      width: 100%;
      align-items: center;
+     
 }
 #sidebar-come:checked ~ #overlay-come{
    cursor: pointer;
@@ -254,6 +257,8 @@ padding-bottom: 30px;
    z-index: 9;
    display:flex;
    border-radius: 10px;
+    transition: 100ms ease;
+  
    }
    #sidebar-donation:checked ~ #overlay-donation{
    cursor: pointer;
@@ -265,6 +270,8 @@ padding-bottom: 30px;
    z-index: 9;
    display:flex;
    border-radius: 10px;
+   transition: 100ms ease;
+  
    }
    /*how*/
    #howabout{
@@ -312,28 +319,57 @@ padding-bottom: 30px;
    #sidebar-how:checked ~ .open-how{
     display: none;
    }
-   #dev{
-    z-index: 10;
-    font-size: 4vw;
-
-}
+ 
    .tail{
+    
     background-color:black;
     background:url(/public/images/deviltailnoback.png)top right no-repeat ;
-    background-size: 20%;
-    width: 61.8vw;
-    height: 9em;
+    background-size: 15vw;
+    width: 62.7vw;
+    height: 5vw;
     display: flex;
     justify-content: center;
     z-index: 20;
     position: relative;
     bottom: 6.8vw;
-    
-   
-    
-    
-    
-   }
+}
+@property --angle{
+    syntax: "<angle>";
+    initial-value: 0deg;
+    inherits: false;
+}
+@keyframes gradient {
+	0% {
+		background-position: 0% 50%;
+    }
+	50% {
+		background-position: 100% 50%;
+    }
+	100% {
+		background-position: 0% 50%;
+	}
+}
+#bottom{
+    width: 100%;
+   text-align: center;
+   margin-top: 8%;
+  padding: 3%;
+}
+#bottom {
+	background: linear-gradient(-90deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+	background-size: 400% 400%;
+	animation: gradient 25s ease infinite;
+    content:'';
+    border-radius: 1em;
+}
+.dev{
+    font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-size:2vw;
+    margin-top:-6vw;
+    color: white;
+   text-shadow: 10px 8px 8px black;
+   margin-bottom: 5%;
+}
    
 
 

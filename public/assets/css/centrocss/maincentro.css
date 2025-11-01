@@ -17,12 +17,18 @@
 }
 html{
     font-family: Merryweather, Poppins, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: aquamarine;
    
     
 }
 body{
     padding: 1em;
-    background-color: var(--base-color);
+    
+    background: linear-gradient(-90deg, rgba(0,0,0,0), rgba(0,0,0,0.01), rgba(0,0,255,1));
+   animation: gradient 35s ease infinite;
+   background-size: 400%;
+   content: '';
+    
 }
 h1, h2, h3 {
     font-family: Merriweather, Poppins, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -113,6 +119,7 @@ section p{
     gap:1em;
     height: 70vw;
 }
+
 .box h1{
     border-radius: 10px 10px 0 0;
     font-size: 1.5vw;
@@ -173,6 +180,18 @@ section p{
     background-image:url(/public/images/grid-img/gruppomusica.jpeg);
    background-size:cover; 
   
+}
+ .tailcentro{
+    background-color:black;
+    background:url(/public/images/deviltailnoback.png)top right no-repeat ;
+    background-size: 15vw;
+    width: 61.8vw;
+    height: 5vw;
+    display: flex;
+    justify-content: center;
+    z-index: 20;
+    position: relative;
+    bottom: 6.8vw;
 }
 
 
