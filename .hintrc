@@ -28,6 +28,7 @@
           "backdrop-filter"
         ]
       }
-    ]
+    ],
+    "axe/structure": "off"
   }
 }

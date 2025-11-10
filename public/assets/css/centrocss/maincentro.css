@@ -128,7 +128,6 @@ section p{
     width: 100%;
 }
 }
-
 #box01{
     background-image:url(/public/images/grid-img/site09.jpg);
    background-size:cover; 
@@ -144,18 +143,14 @@ section p{
 #box04{
     background-image:url(/public/images/grid-img/cinema.jpeg);
    background-size:cover; 
-
 }
 #box05{
    background-image:url(/public/images/grid-img/site09.jpg);
    background-size:cover;
-   
-  
 }
 #box06{
     background-image:url(/public/images/grid-img/gruppomusica.jpeg);
    background-size:cover; 
-  
 }
 #box07{
     background-image:url(/public/images/grid-img/gruppomusica.jpeg);
@@ -193,13 +188,41 @@ section p{
     position: relative;
     bottom: 6.8vw;
 }
-
-#our-work li:has(>ul)::after{
-    content:"▼";
-    position:absolute;
-    right: -10px;
-    top:0;
-
+/*dinnere and closed*/
+#our-work{
+    display: flex;
+    justify-content: center;
+    gap: 18vw;
+}
+.schedule-menu, .dropdown{
+    background: rgb(107, 219, 227);
+    width: 30vw;
+    height: 8vw;
+    padding-top: 3%;
+    border-radius: .8em;
+}
+/*schedule close*/
+.dropdown {
+  position: relative;
+}
+#overlay-schedule .dropdown-content {
+  text-align: left;
+  display: none;
+  text-decoration: none;
+  position: absolute;
+  background-color: #8eec8e;
+  min-width: 130px;
+  padding: 12px 16px;
+}
+#schedule{
+    display: none;
+}
+#schedule:checked ~ #overlay-schedule .dropdown-content 
+{
+  display: block;
+}
+.dropdown-content li{
+list-style: none;
 }
 
 
