@@ -93,7 +93,7 @@
 
 <section id="our-work">
   <div class="schedule-menu">
-    <div class="menu"><a href="menu.html">Cosa c'è Oggi a Pranzo</a></div>
+    <div class="menu"><a>Cosa c'è Oggi a Pranzo</a></div>
   </div>
   <div class="dropdown">
     <input type="checkbox" id="schedule">
@@ -103,8 +103,34 @@
     <label for="schedule" id="overlay-schedule">
       <div class="dropdown-content">
         <ul>
-          <li>Gennaio</li>
-          <li>Febbraio</li>
+          <li id="january">
+             <input type="checkbox" id="january-schedule">
+             <label for="january-schedule" class="open-january">
+              <a>Gennaio</a>
+             </label>
+             <label for="january-schedule" id="overlay-january">
+              <div class="dropdown-january">
+                <h1 class="january-closed">
+                  dal 01 Gennaio al 06 Gennaio</br>
+                  Buon Anno!!!
+                </h1>
+              </div>
+             </label>
+          </li>
+          <li id="february">
+            <input type="checkbox" id="february-schedule">
+             <label for="february-schedule" class="open-february">
+              <a>Febbraio</a>
+             </label>
+             <label for="february-schedule" id="overlay-february">
+              <div class="dropdown-february">
+                <h1 class="february-closed">
+                  Aperti tutto il mese!</br>
+                  Buon Carnevale il 17!!!
+                </h1>
+              </div>
+             </label>
+          </li>
           <li>Marzo</li>
           <li>Aprile</li>
           <li>Maggio</li>
@@ -115,6 +141,7 @@
           <li>Ottobre</li>
           <li>Novembre</li>
           <li>Dicembre</li>
+          <li><a href="schedule.html">intero calendario anno 2026</a></li>
         </ul>
       </div>
     </label>
