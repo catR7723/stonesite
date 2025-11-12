@@ -1,0 +1,266 @@
+/*dinnere and closed*/
+#our-work{
+    display: flex;
+    justify-content: center;
+    gap: 18vw;
+}
+.schedule-menu, .dropdown{
+    background: #da5e05;
+    width: 30vw;
+    height: 8vw;
+    padding-top: 3%;
+    border-radius: .8em;
+    font-family: Poppins, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
+}
+/*schedule close*/
+.dropdown {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    z-index: 30;
+    
+}
+.open-schedule, .menu {
+    justify-content: center;
+    display: flex;
+    
+    margin-top: -2.7vw;
+    cursor: pointer;
+    height: 8.2vw;
+    width: 30vw;
+    z-index: 2;
+}
+.open-schedule a, .menu a{ 
+    padding-top: 2vw;
+    font-size: 2vw;
+    color: rgb(209, 209, 234);
+    font-weight: 600;
+    text-shadow: 10px 8px 8px black;
+}
+#overlay-schedule .dropdown-content {
+    text-align: center;
+    display: none;
+    position: relative;
+    background-image: linear-gradient(to bottom, #da5e05, #db6801, #db7100, #db7a00, #db8300, #db8b0e, #dc931a, #dc9b24, #dea434, #e0ad42, #e2b650, #e4be5e);
+    z-index: 4;
+    padding: .8vw;
+    border-radius: 0 0 1em 1em;
+    cursor: pointer;
+}
+#schedule{
+    display: none;
+}
+#schedule:checked ~ #overlay-schedule .dropdown-content 
+{
+    display: block;
+    
+}
+/*January*/
+.dropdown-content li{
+padding-top: .6em;
+    list-style: none;
+    font-size: 1.8vw;
+    font-weight: 700;
+    color:white;
+    text-shadow: 3px 2px 2px rgb(170, 170, 180);
+    text-decoration: none;
+    cursor: pointer;
+}
+#overlay-january .dropdown-january {
+    font-size: .9vw;
+    text-align: center;
+    display: none;
+    position: relative;
+    background-image: url(/public/images/mounths/gennaio.jpg);
+    z-index: 4;
+    padding: .8vw;
+    border-radius: 1em;
+}
+#january-schedule{
+    display: none;
+}
+#january-schedule:checked ~ #overlay-january .dropdown-january 
+{
+    display: block;
+    
+}
+#mounth{
+    cursor:pointer;
+}
+/*February*/
+
+#overlay-february .dropdown-february {
+    font-size: .9vw;
+    font-weight: 700;
+    text-align: center;
+    display: none;
+    position: relative;
+    background: url(/public/images/mounths/carnevale.jpeg) no-repeat;
+     filter: opacity(70%);
+    background-size: 100%;
+    
+    z-index: 4;
+    padding: .8vw;
+    border-radius:  1em;
+}
+.february-closed{
+    color:blue;
+}
+#february-schedule{
+    display: none;
+}
+#february-schedule:checked ~ #overlay-february .dropdown-february 
+{
+    display: block;
+    
+}
+/*March*/
+#overlay-march .dropdown-march {
+    font-size: .9vw;
+    font-weight: 700;
+    text-align: center;
+    display: none;
+    position: relative;
+    background: url(/public/images/mounths/marzo.jpg) ;
+   background-size: 100% 116%;
+   
+    
+    z-index: 4;
+    padding: .8vw;
+    border-radius:  1em;
+}
+.march-closed{
+    color:rgb(200, 233, 244);
+}
+#march-schedule{
+    display: none;
+}
+#march-schedule:checked ~ #overlay-march .dropdown-march 
+{
+    display: block;
+    
+}
+/*April*/
+#overlay-april .dropdown-april {
+    font-size: .9vw;
+    font-weight: 700;
+    text-align: center;
+    display: none;
+    position: relative;
+    background: url(/public/images/mounths/aprile.jpg) ;
+    background-size: 50% 170%;
+    z-index: 4;
+    padding: .8vw;
+    border-radius:  1em;
+}
+.april-closed{
+    color:blue;
+}
+#april-schedule{
+    display: none;
+}
+#april-schedule:checked ~ #overlay-april .dropdown-april 
+{
+    display: block;
+    
+}
+/*May*/
+#overlay-may .dropdown-may {
+    font-size: .8vw;
+    
+    text-align: center;
+    display: none;
+    position: relative;
+    background: url(/public/images/mounths/maggio.jpg) ;
+    background-size: 50% 170%;
+    
+    z-index: 4;
+    padding: .8vw;
+    border-radius:  1em;
+    filter: grayscale(100%);
+}
+.may-closed{
+    color:white;
+    font-weight: 900;
+}
+#may-schedule{
+    display: none;
+}
+#may-schedule:checked ~ #overlay-may .dropdown-may 
+{
+    display: block;
+}
+/*June*/
+#overlay-june .dropdown-june {
+    font-size: .8vw;
+    text-align: center;
+    display: none;
+    position: relative;
+    background: url(/public/images/mounths/giugno.jpg) ;
+   background-size: 100% 100%;
+    z-index: 4;
+    padding: .8vw;
+    border-radius:  1em;
+    
+}
+.june-closed{
+    color:white;
+    font-weight: 900;
+}
+#june-schedule{
+    display: none;
+}
+#june-schedule:checked ~ #overlay-june .dropdown-june 
+{
+    display: block;
+}
+/*July*/
+#overlay-july .dropdown-july {
+    font-size: .8vw;
+    text-align: center;
+    display: none;
+    position: relative;
+    background: url(/public/images/mounths/luglio.jpg) ;
+   background-size: 100% 200%;
+    z-index: 4;
+    padding: .8vw;
+    border-radius:  1em;
+    
+}
+.july-closed{
+    color:white;
+    font-weight: 900;
+}
+#july-schedule{
+    display: none;
+}
+#july-schedule:checked ~ #overlay-july .dropdown-july 
+{
+    display: block;
+}
+/*August*/
+#overlay-august .dropdown-august {
+    font-size: .8vw;
+    text-align: center;
+    display: none;
+    position: relative;
+    background: url(/public/images/mounths/agosto.jpg) ;
+   background-size: 100% 210%;
+    z-index: 4;
+    padding: .8vw;
+    border-radius:  1em;
+    
+}
+.august-closed{
+    color:white;
+    font-weight: 900;
+}
+#august-schedule{
+    display: none;
+}
+#august-schedule:checked ~ #overlay-august .dropdown-august 
+{
+    display: block;
+}
+
