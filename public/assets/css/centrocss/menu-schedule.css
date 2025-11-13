@@ -255,6 +255,7 @@ padding-top: .6em;
 .august-closed{
     color:white;
     font-weight: 900;
+    text-shadow: 10px 8px 8px black;
 }
 #august-schedule{
     display: none;
@@ -263,4 +264,101 @@ padding-top: .6em;
 {
     display: block;
 }
+/*September*/
+#overlay-september .dropdown-september {
+    font-size: .8vw;
+    text-align: center;
+    display: none;
+    position: relative;
+    background: url(/public/images/mounths/settembre.jpeg) ;
+    background-size: cover;
+    z-index: 4;
+    padding: .8vw;
+    border-radius:  1em;
+}
+.september-closed{
+    color:rgb(255, 255, 255);
+    font-weight: 900;
+    text-shadow: 10px 8px 8px black;
+}
+#september-schedule{
+    display: none;
+}
+#september-schedule:checked ~ #overlay-september .dropdown-september 
+{
+    display: block;
+}
+/*October*/
+#overlay-october .dropdown-october {
+    font-size: .8vw;
+    text-align: center;
+    display: none;
+    position: relative;
+    background: url(/public/images/mounths/ottobre.png) center bottom ;
+    background-size: 50% 170%;
+    z-index: 4;
+    padding: .8vw;
+    border-radius:  1em;
+}
+.october-closed{
+    color:rgb(255, 255, 255);
+    font-weight: 900;
+    text-shadow: 10px 8px 8px black;
+}
+#october-schedule{
+    display: none;
+}
+#october-schedule:checked ~ #overlay-october .dropdown-october 
+{
+    display: block;
+}
+/*November*/
+#overlay-november .dropdown-november {
+    font-size: .8vw;
+    text-align: center;
+    display: none;
+    position: relative;
+    background: url(/public/images/mounths/novembre.jpg) left bottom ;
+    background-size: 100% 230%;
+    z-index: 4;
+    padding: .8vw;
+    border-radius:  1em;
+}
+.november-closed{
+    color:rgb(255, 255, 255);
+    font-weight: 900;
+    text-shadow: 10px 8px 8px black;
+}
+#november-schedule{
+    display: none;
+}
+#november-schedule:checked ~ #overlay-november .dropdown-november 
+{
+    display: block;
+}
+/*December*/
+#overlay-december .dropdown-december {
+    font-size: .8vw;
+    text-align: center;
+    display: none;
+    position: relative;
+    background: url(/public/images/mounths/dicembre.jpg) left bottom ;
+    background-size: 90% 120%;
+    z-index: 4;
+    padding: .8vw;
+    border-radius:  1em;
+}
+.december-closed{
+    color:rgb(255, 255, 255);
+    font-weight: 900;
+    text-shadow: 10px 8px 8px black;
+}
+#december-schedule{
+    display: none;
+}
+#december-schedule:checked ~ #overlay-december .dropdown-december 
+{
+    display: block;
+}
+
 
