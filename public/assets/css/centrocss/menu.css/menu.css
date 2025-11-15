@@ -1,0 +1,68 @@
+.title{
+    background: linear-gradient(to right, #356f44, #327f46, #2e9046, #28a145, #21b243, #1cbf54, #13cb66, #00d877, #00e29b, #00ebbc, #34f4d9, #5ffbf1);
+    text-align: center;
+    height: 10vw;
+    padding-top: 4%;
+    font-size: 6vw;
+    color:#0905e4;
+    border-radius: .5em;
+    font-family: Poppins, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+}
+
+.filters:has(option[value="lunedì"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .lunedi)) {
+    display: none;
+}
+
+ .dropdown{
+    background: #da5e05;
+    width: 30vw;
+    height: 8vw;
+    padding-top: 3%;
+    border-radius: .8em;
+    font-family: Poppins, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+/*schedule close*/
+.dropdown {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    z-index: 30;
+    
+}
+.open-menu {
+    justify-content: center;
+    display: flex;
+    
+    margin-top: -2.7vw;
+    cursor: pointer;
+    height: 8.2vw;
+    width: 30vw;
+    z-index: 2;
+}
+.open-menu a{ 
+    padding-top: 2vw;
+    font-size: 2vw;
+    color: rgb(209, 209, 234);
+    font-weight: 600;
+    text-shadow: 10px 8px 8px black;
+}
+#overlay-menu{
+    text-align: center;
+    display: none;
+    position: relative;
+    background-image: linear-gradient(to bottom, #da5e05, #db6801, #db7100, #db7a00, #db8300, #db8b0e, #dc931a, #dc9b24, #dea434, #e0ad42, #e2b650, #e4be5e);
+    z-index: 4;
+    padding: .8vw;
+    border-radius: 0 0 1em 1em;
+    cursor: pointer;
+}
+#menu{
+    display: none;
+}
+#menu:checked ~ #overlay-menu 
+{
+    display: block;
+    
+}
+ 
