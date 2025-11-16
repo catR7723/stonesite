@@ -10,7 +10,7 @@
 
 }
 
-.filters:has(option[value="lunedì"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .lunedi)) {
+.filters:has(option[value="orecchiette"]:checked) ~ .daily-menu-januari-list .daily-menu:not(:has(> .orecchiette)) {
     display: none;
 }
 
@@ -45,7 +45,7 @@
     font-size: 2vw;
     color: rgb(209, 209, 234);
     font-weight: 600;
-    text-shadow: 10px 8px 8px black;
+   
 }
 #overlay-menu{
     text-align: center;
