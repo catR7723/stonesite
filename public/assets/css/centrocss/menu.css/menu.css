@@ -10,9 +10,7 @@
 
 }
 
-.filters:has(option[value="orecchiette"]:checked) ~ .daily-menu-januari-list .daily-menu:not(:has(> .orecchiette)) {
-    display: none;
-}
+
 
  .dropdown{
     background: #da5e05;
@@ -64,5 +62,37 @@
 {
     display: block;
     
+}
+.filters:has(option[value="orecchiette"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .orecchiette)) {
+    display: none;
+}
+/*January*/
+#overlay-januari-menu .dropdown-januari-menu {
+    font-size: .9vw;
+    font-weight: 700;
+    text-align: center;
+    display: none;
+    position: relative;
+    background: url(/public/images/mounths/marzo.jpg) ;
+   background-size: 100% 116%;
+   
+    
+    z-index: 4;
+    padding: .8vw;
+    border-radius:  1em;
+}
+#januari-closed{
+    color:rgb(200, 233, 244);
+}
+#januari-schedule-menu{
+    display: none;
+}
+#januari-schedule-menu:checked ~ #overlay-januari-menu .dropdown-januari-menu
+{
+    display: block;
+    
+}
+#mounth{
+    cursor:pointer;
 }
  

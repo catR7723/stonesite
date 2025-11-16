@@ -14,9 +14,94 @@
     </label>
 <label for="menu" id="overlay-menu">
  <div class="dropdown">
-   <ul class="dropdown-content">
-    <li>
-      <a href="/views/html/month-menu/januari-menu.html">Gennaio</a>
+   <ul>
+    <li id="january-menu">
+      <input type="checkbox" id="januari-schedule-menu">
+      <label for="januari-schedule-menu" class="open-januari-menu">
+        <a id="mounth">Gennaio</a>
+      </label>
+      <label for="januari-schedule-menu" id="overlay-januari-menu">
+        <div class="dropdown-januari-menu">
+          <div class="filters" id="january-closed">
+            <select name="day" id="day">
+              <option>Giorno</option>
+              <option value="mercoledì07g"> mercoledì 07 Gennaio </option>
+              <option value="giovedì08g"> Giovedì 08 Gennaio </option>
+              <option value="venerdì09g"> Venerdì 09 Gennaio </option>
+              <option value="lunedì12g"> Lunedì 12 Gennaio </option>
+              <option value="martedì13g"> Martedì 13 Gennaio  </option>
+              <option value="mercoledì14g"> Mercoledì 14 Gennaio </option>
+              <option value="giovedì15g"> Giovedì 15 Gennaio </option>
+              <option value="venerdì16g"> Venerdì 17 Gennaio </option>
+            </select>
+            <select name="type" id="type">
+              <option>Pietanza</option>
+              <option value="orecchiette">Orecchiette con Cime di Rapa</option>
+              <option value="gnocchi-al-pesto"> Gnocchi al Pesto </option>
+              <option value="tortellini-panna-prosciutto"> Tortellini Panna e Prosciutto </option>
+              <option value="croissant"> Croissant </option>
+              <option value="cappuccio-caffè"> Cappuccio o caffè </option>
+              <option value="cotoletta">Cotoletta</option>
+              <option value="verdure-miste">Verdure Miste</option>
+              <option value="rigatoni">Rigatoni all'Amatriciana</option>
+              <option value="piadina">Piadina</option>
+              <option value="riso-piselli">Riso con Piselli</option>
+              <option value="tomino">Tomino</option>
+              <option value="fagioli">Fagioli</option>
+              <option value="hamburger-vegetale">Hamburger Vegetale</option>
+              <option value="patatine">Patatine</option>
+              <option value="yogurt-dessert">Yogurt o Dessert</option>
+              <option value="pnnette-gamberetti">Pennette con Gamberetti</option>
+              <option value="pesce">Pesce al Forno</option>
+              <option value="piselli">Piselli</option>
+              <option value="pasta-ragu">Pasta al Ragù</option>
+              <option value="omlette">Omlette con Formaggio e prosciutto</option>
+              <option value="broccoli">Broccoli</option>
+              <option value="polenta">Polenta</option>
+              <option value="zola">Formaggio Gorgonzola</option>
+              <option value="salamino">Salamino</option>
+              <option value="insalata">Insalata</option>
+              <option value="mozzarella">Mozzarella</option>
+              <option value="cavolfiori">Cavolfiori</option>
+              <option value="cannelloni">Cannelloni Ricotta e Spinaci</option>
+              <option value="frittata">Frittata</option>
+              <option value="taccole">Taccole</option>
+              <option value="riso-basmati">Riso Basmati al Curry con Pollo</option>
+              <option value="patate-novelle">Patate Novelle</option>
+              <option value="zuppa-legumi">Pasta o Zuppa di Legumi</option>
+              <option value="formaggio-philadelphia">Formaggio Philadelphia</option>
+              <option value="finocchi">Finocchi Cotti</option>
+              <option value="vellutata">Vellutata di Verdure con Crostini</option>
+              <option value="rolle">Rollè di Pollo</option>
+              <option value="pure">Purè</option>
+              <option value="pizzocheri">Pizzocheri</option>
+              <option value="spinaci">Spinaci</option>
+              
+
+            </select>
+          </div>
+<!-- Cards Menu Januari -->
+
+        <div class="daily-menu-list">
+         <div class="daily-menu" >
+           <p>Menu Mercoledì 07 Gennaio</p>
+           <img src="/public/images/menu/pasta.jpeg" height="300px">
+             <span class="mercoledì 07 Gennaio"></span>
+             <span class="piadina">Piadina</span>
+             <span class="contorno">Yogurt o Dessert</span>
+         </div>
+
+         <div class="daily-menu">
+           <p> Menu Martedì</p>
+           <img src="/public/images/menu/orecchiette.jpeg" height="300px">
+             <span class="martedi">martedi</span>
+             <span class="orecchiette">Orecchiette</span>
+             <span class="secondo">Pesce</span>
+             <span class="contorno">Patatine</span>
+          </div>
+         </div>
+        </div>
+      </label>
     </li>
     <li>
       <a href="/html/mounth-menu/february-menu.html">Febbraio</a>
