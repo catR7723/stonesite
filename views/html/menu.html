@@ -25,7 +25,7 @@
           <div class="filters" id="january-closed">
             <select name="day" id="day">
               <option>Giorno</option>
-              <option value="mercoledì07g"> mercoledì 07 Gennaio </option>
+              <option value="mercoledì07g"> Mercoledì 07 Gennaio </option>
               <option value="giovedì08g"> Giovedì 08 Gennaio </option>
               <option value="venerdì09g"> Venerdì 09 Gennaio </option>
               <option value="lunedì12g"> Lunedì 12 Gennaio </option>
@@ -35,49 +35,51 @@
               <option value="venerdì16g"> Venerdì 17 Gennaio </option>
             </select>
             <select name="type" id="type">
-              <option>Pietanza</option>
-              <option value="orecchiette">Orecchiette con Cime di Rapa</option>
-              <option value="gnocchi-al-pesto"> Gnocchi al Pesto </option>
-              <option value="tortellini-panna-prosciutto"> Tortellini Panna e Prosciutto </option>
-              <option value="croissant"> Croissant </option>
-              <option value="cappuccio-caffè"> Cappuccio o caffè </option>
-              <option value="cotoletta">Cotoletta</option>
-              <option value="verdure-miste">Verdure Miste</option>
+              <option><h1 class="staff-menu-list">- PRIMI -</h1></option>
               <option value="rigatoni">Rigatoni all'Amatriciana</option>
               <option value="piadina">Piadina</option>
               <option value="riso-piselli">Riso con Piselli</option>
-              <option value="tomino">Tomino</option>
-              <option value="fagioli">Fagioli</option>
-              <option value="hamburger-vegetale">Hamburger Vegetale</option>
-              <option value="patatine">Patatine</option>
-              <option value="yogurt-dessert">Yogurt o Dessert</option>
-              <option value="pnnette-gamberetti">Pennette con Gamberetti</option>
-              <option value="pesce">Pesce al Forno</option>
-              <option value="piselli">Piselli</option>
+              <option value="orecchiette">Orecchiette con Cime di Rapa</option>
+              <option value="gnocchi-al-pesto"> Gnocchi al Pesto </option>
+              <option value="tortellini-panna-prosciutto"> Tortellini Panna e Prosciutto </option>
+               <option value="pnnette-gamberetti">Pennette con Gamberetti e Salmone</option>
+               <option value="polenta">Polenta</option>
               <option value="pasta-ragu">Pasta al Ragù</option>
-              <option value="omlette">Omlette con Formaggio e prosciutto</option>
-              <option value="broccoli">Broccoli</option>
-              <option value="polenta">Polenta</option>
+              <option value="riso-basmati">Riso Basmati al Curry con Pollo</option>
+              <option value="cannelloni">Cannelloni Ricotta e Spinaci</option>
+              <option value="zuppa-legumi">Pasta o Zuppa di Legumi</option>
+              <option value="vellutata">Vellutata di Verdure con Crostini</option>
+              <option value="pizzocheri">Pizzocheri</option>
+              <option><h1 class="staff-menu-list">- SECONDI -</h1></option>
+              <option value="omlette">Omlette con Formaggio e Prosciutto</option>
+              <option value="cotoletta">Cotoletta</option>
+              <option value="tomino">Tomino</option>
+              <option value="hamburger-vegetale">Hamburger Vegetale</option>
+              <option value="pesce">Pesce al Forno</option>
               <option value="zola">Formaggio Gorgonzola</option>
               <option value="salamino">Salamino</option>
-              <option value="insalata">Insalata</option>
               <option value="mozzarella">Mozzarella</option>
-              <option value="cavolfiori">Cavolfiori</option>
-              <option value="cannelloni">Cannelloni Ricotta e Spinaci</option>
               <option value="frittata">Frittata</option>
-              <option value="taccole">Taccole</option>
-              <option value="riso-basmati">Riso Basmati al Curry con Pollo</option>
-              <option value="patate-novelle">Patate Novelle</option>
-              <option value="zuppa-legumi">Pasta o Zuppa di Legumi</option>
-              <option value="formaggio-philadelphia">Formaggio Philadelphia</option>
-              <option value="finocchi">Finocchi Cotti</option>
-              <option value="vellutata">Vellutata di Verdure con Crostini</option>
               <option value="rolle">Rollè di Pollo</option>
+              <option value="formaggio-philadelphia">Formaggio Philadelphia</option>
+              <option><h1 class="staff-menu-list">- CONTORNI -</h1></option>
+              <option value="piselli">Piselli</option>
+              <option value="broccoli">Broccoli</option>
+              <option value="insalata">Insalata</option>
+              <option value="verdure-miste">Verdure Miste</option>
+              <option value="fagiolini">Fagiolini</option>
+              <option value="patatine">Patatine</option>
+              <option value="cavolfiori">Cavolfiori</option>
+              <option value="taccole">Taccole</option>
+              <option value="patate-novelle">Patate Novelle</option>
+              <option value="finocchi">Finocchi Cotti</option>
               <option value="pure">Purè</option>
-              <option value="pizzocheri">Pizzocheri</option>
               <option value="spinaci">Spinaci</option>
-              
-
+              <option><h1 class="staff-menu-list">- DOLCI -</h1></option>
+              <option value="croissant"> Croissant </option>
+              <option value="cappuccio-caffè"> Cappuccio o caffè </option>
+              <option value="yogurt-dessert">Yogurt o Dessert</option>
+              <option value="gruppo-cucina">Gruppo Cucina!</option>
             </select>
           </div>
 <!-- Cards Menu Januari -->
@@ -86,20 +88,74 @@
          <div class="daily-menu" >
            <p>Menu Mercoledì 07 Gennaio</p>
            <img src="/public/images/menu/pasta.jpeg" height="300px">
-             <span class="mercoledì 07 Gennaio"></span>
+             <span id="day-list" class="mercoledì07g"></span>
              <span class="piadina">Piadina</span>
-             <span class="contorno">Yogurt o Dessert</span>
+             <span class="yogurt-dessert">Yogurt o Dessert</span>
          </div>
 
          <div class="daily-menu">
-           <p> Menu Martedì</p>
+           <p> Menu Giovedì 08 Gennaio</p>
            <img src="/public/images/menu/orecchiette.jpeg" height="300px">
-             <span class="martedi">martedi</span>
-             <span class="orecchiette">Orecchiette</span>
-             <span class="secondo">Pesce</span>
-             <span class="contorno">Patatine</span>
+             <span id="day-list" class="giovedì08g"></span>
+             <span class="riso-piselli">Riso con Piselli</span>
+             <span class="tomino">Tomino</span>
+             <span class="fagiolini">Gagiolini</span>
           </div>
-         </div>
+
+           <div class="daily-menu">
+           <p> Menu Venerdì 09 Gennaio</p>
+           <img src="/public/images/menu/orecchiette.jpeg" height="300px">
+             <span id="day-list" class="venerdì09g"></span>
+             <span class="croissant">Colazione con Croissant Cappuccio o Caffè</span>
+             <span id="day-list" class="cappuccio-caffè"></span>
+             <span class="hamburger-vegetale">Hamburger Vegetale</span>
+             <span class="patatine">Patatine</span>
+          </div>
+
+           <div class="daily-menu">
+           <p> Menu Lunedì 12 Gennaio</p>
+           <img src="/public/images/menu/orecchiette.jpeg" height="300px">
+             <span id="day-list" class="lunedì12g"></span>
+             <span class="pennette-gamberetti">Pennette con Gamberetti e Salmone</span>
+             <span class="pesce">Pesce al Forno</span>
+             <span class="piselli">Piselli</span>
+          </div>
+
+          <div class="daily-menu">
+           <p> Menu Martedì 13 Gennaio</p>
+           <img src="/public/images/menu/orecchiette.jpeg" height="300px">
+             <span id="day-list" class="martedì13g"></span>
+             <span class="gruppo-cucina">Gruppo Cucina!</span>
+            </div>
+
+          <div class="daily-menu">
+           <p> Menu Mercoledì 14 Gennaio</p>
+           <img src="/public/images/menu/orecchiette.jpeg" height="300px">
+             <span id="day-list" class="mercoledì14g"></span>
+             <span class="piadina">Piadina</span>
+             <span class="yogurt-dessert">Yogurt o Dessert</span>
+          </div>
+
+          <div class="daily-menu">
+           <p> Menu Giovedì 15 Gennaio</p>
+           <img src="/public/images/menu/orecchiette.jpeg" height="300px">
+             <span id="day-list" class="giovedì15g"></span>
+             <span class="pasta-ragu">Pasta al Ragù</span>
+             <span class="omlette">Omlette con Formaggio e Prosciutto</span>
+             <span class="broccoli">Broccoli</span>
+          </div>
+
+          <div class="daily-menu">
+             <p> Menu Venerdì 16 Gennaio</p>
+             <img src="/public/images/menu/orecchiette.jpeg" height="300px">
+             <span id="day-list" class="venerdì16g"></span>
+             <span class="croissant">Colazione con Croissant Cappuccio o Caffè</span>
+             <span id="day-list" class="cappuccio-caffè"></span>
+             <span class="polenta">Polenta</span>
+             <span class="zola">Gorgonzola</span>
+             <span class="salamino">Salamino</span>
+             <span class="insalata">Insalata</span>
+           </div>
         </div>
       </label>
     </li>

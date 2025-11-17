@@ -63,7 +63,10 @@
     display: block;
     
 }
-.filters:has(option[value="orecchiette"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .orecchiette)) {
+#day-list{
+    display: none;
+}
+.filters:has(option[value="mercoledì07g"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .mercoledì07g)) {
     display: none;
 }
 /*January*/
