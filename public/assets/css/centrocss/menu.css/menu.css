@@ -66,9 +66,195 @@
 #day-list{
     display: none;
 }
+/*mounths filter*/
 .filters:has(option[value="mercoledì07g"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .mercoledì07g)) {
     display: none;
 }
+.filters:has(option[value="giovedì08g"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .giovedì08g)) {
+    display: none;
+}
+.filters:has(option[value="venerdì09g"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .venerdì09g)) {
+    display: none;
+}
+.filters:has(option[value="lunedì12g"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .lunedì12g)) {
+    display: none;
+}
+.filters:has(option[value="martedì13g"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .martedì13g)) {
+    display: none;
+}
+.filters:has(option[value="mercoledì14g"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .mercoledì14g)) {
+    display: none;
+}
+.filters:has(option[value="giovedì15g"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .giovedì15g)) {
+    display: none;
+}
+.filters:has(option[value="venerdì16g"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .venerdì16g)) {
+    display: none;
+}
+.filters:has(option[value="lunedì19g"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .lunedì19g)) {
+    display: none;
+}
+.filters:has(option[value="martedì20g"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .martedì20g)) {
+    display: none;
+}
+.filters:has(option[value="mercoledì21g"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .mercoledì21g)) {
+    display: none;
+}
+.filters:has(option[value="giovedì22g"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .giovedì22g)) {
+    display: none;
+}
+.filters:has(option[value="venerdì23g"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .venerdì23g)) {
+    display: none;
+}
+.filters:has(option[value="lunedì26g"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .mercoledì07g)) {
+    display: none;
+}
+.filters:has(option[value="martedì27g"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .lunedì26g)) {
+    display: none;
+}
+.filters:has(option[value="mercoledì28g"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .mercoledì28g)) {
+    display: none;
+}
+.filters:has(option[value="giovedì29g"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .giovedì29g)) {
+    display: none;
+}
+.filters:has(option[value="venerdì30g"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .venerdì30g)) {
+    display: none;
+}
+/*February filter*/
+.filters:has(option[value="lunedì02f"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .lunedì02f)) {
+    display: none;
+}
+.filters:has(option[value="martedì03f"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .martedì03f)) {
+    display: none;
+}
+.filters:has(option[value="mercoledì04f"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .mercoledì04f)) {
+    display: none;
+}
+.filters:has(option[value="giovedì05f"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .giovedì05f)) {
+    display: none;
+}
+.filters:has(option[value="venerdì06f"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .venerdì06f)) {
+    display: none;
+}
+.filters:has(option[value="lunedì09f"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .lunedì09f)) {
+    display: none;
+}
+.filters:has(option[value="martedì10f"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .martedì10f)) {
+    display: none;
+}
+.filters:has(option[value="mercoledì11f"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .mercoledì11f)) {
+    display: none;
+}
+.filters:has(option[value="giovedì12f"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .giovedì12f)) {
+    display: none;
+}
+.filters:has(option[value="venerdì13f"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .venerdì13f)) {
+    display: none;
+}
+.filters:has(option[value="lunedì16f"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .lunedì16f)) {
+    display: none;
+}
+.filters:has(option[value="martedì17f"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .martedì17f)) {
+    display: none;
+}
+.filters:has(option[value="mercoledì18f"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .mercoledì18f)) {
+    display: none;
+}
+.filters:has(option[value="giovedì19f"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .giovedì19f)) {
+    display: none;
+}
+.filters:has(option[value="venerdì20f"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .venerdì20f)) {
+    display: none;
+}
+.filters:has(option[value="lunedì23f"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .lunedì23f)) {
+    display: none;
+}
+.filters:has(option[value="martedì24f"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .martedì24f)) {
+    display: none;
+}
+.filters:has(option[value="mercoledì25f"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .mercoledì25f)) {
+    display: none;
+}
+.filters:has(option[value="giovedì26f"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .giovedì26f)) {
+    display: none;
+}
+.filters:has(option[value="venerdì27f"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .venerdì27f)) {
+    display: none;
+}
+
+/*March filter*/
+.filters:has(option[value="lunedì02mar"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .lunedì02mar)) {
+    display: none;
+}
+.filters:has(option[value="martedì03mar"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .martedì03mar)) {
+    display: none;
+}
+.filters:has(option[value="mercoledì04mar"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .mercoledì04mar)) {
+    display: none;
+}
+.filters:has(option[value="giovedì05mar"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .giovedì05mar)) {
+    display: none;
+}
+.filters:has(option[value="venerdì06mar"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .venerdì06mar)) {
+    display: none;
+}
+.filters:has(option[value="lunedì09mar"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .lunedì09mar)) {
+    display: none;
+}
+.filters:has(option[value="martedì10mar"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .martedì10mar)) {
+    display: none;
+}
+.filters:has(option[value="mercoledìmar"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .mercoledì11mar)) {
+    display: none;
+}
+.filters:has(option[value="giovedì12mar"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .giovedì12mar)) {
+    display: none;
+}
+.filters:has(option[value="venerdì13mar"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .venerdì13mar)) {
+    display: none;
+}
+.filters:has(option[value="lunedì16mar"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .lunedì16mar)) {
+    display: none;
+}
+.filters:has(option[value="martedì17mar"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .martedì17mar)) {
+    display: none;
+}
+.filters:has(option[value="mercoledì18mar"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .mercoledì18mar)) {
+    display: none;
+}
+.filters:has(option[value="giovedì19mar"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .giovedì19mar)) {
+    display: none;
+}
+.filters:has(option[value="venerdì20mar"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .venerdì20mar)) {
+    display: none;
+}
+.filters:has(option[value="lunedì23mar"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .lunedì23mar)) {
+    display: none;
+}
+.filters:has(option[value="martedì24mar"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .martedì24mar)) {
+    display: none;
+}
+.filters:has(option[value="mercoledì25mar"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .mercoledì25mar)) {
+    display: none;
+}
+.filters:has(option[value="giovedì26mar"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .giovedì26mar)) {
+    display: none;
+}
+.filters:has(option[value="venerdìmar"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .venerdìmar)) {
+    display: none;
+}
+.filters:has(option[value="lunedì30mar"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .lunedì30mar)) {
+    display: none;
+}
+.filters:has(option[value="martedì31mar"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .martedì31mar)) {
+    display: none;
+}
+
+
+
+
+
 /*January*/
 #overlay-januari-menu .dropdown-januari-menu {
     font-size: .9vw;
