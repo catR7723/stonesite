@@ -241,7 +241,7 @@
 .filters:has(option[value="giovedì26mar"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .giovedì26mar)) {
     display: none;
 }
-.filters:has(option[value="venerdìmar"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .venerdìmar)) {
+.filters:has(option[value="venerdì27mar"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .venerdì27mar)) {
     display: none;
 }
 .filters:has(option[value="lunedì30mar"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .lunedì30mar)) {
