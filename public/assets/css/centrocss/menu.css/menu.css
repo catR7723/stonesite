@@ -7,19 +7,8 @@
     color:#0905e4;
     border-radius: .5em;
     font-family: Poppins, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-
 }
 
-
-
- .dropdown{
-    background: #da5e05;
-    width: 30vw;
-    height: 8vw;
-    padding-top: 3%;
-    border-radius: .8em;
-    font-family: Poppins, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
 /*schedule close*/
 .dropdown {
     display: flex;
@@ -250,10 +239,141 @@
 .filters:has(option[value="martedì31mar"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .martedì31mar)) {
     display: none;
 }
+/*Food Filter*/
+/*Primi*/
+.filters:has(option[value="rigatoni"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .rigatoni)) {
+    display: none;
+}
+.filters:has(option[value="piadina"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .piadina)) {
+    display: none;
+}
+.filters:has(option[value="riso-piselli"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .riso-piselli)) {
+    display: none;
+}
+.filters:has(option[value="orecchiette"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .orecchiette)) {
+    display: none;
+}
+.filters:has(option[value="gnocchi-pesto"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .gnocchi-pesto)) {
+    display: none;
+}
+.filters:has(option[value="pennette-gamberetti"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .pennette-gamberetti)) {
+    display: none;
+}
+.filters:has(option[value="polenta"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .polenta)) {
+    display: none;
+}
+.filters:has(option[value="pasta-ragu"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .pasta-ragu)) {
+    display: none;
+}
+.filters:has(option[value="riso-basmati"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .riso-basmati)) {
+    display: none;
+}
+.filters:has(option[value="cannelloni"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .cannelloni)) {
+    display: none;
+}
+.filters:has(option[value="vellutata"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .vellutata)) {
+    display: none;
+}
+.filters:has(option[value="pizzoccheri"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .pizzoccheri)) {
+    display: none;
+}
+.filters:has(option[value="tortellini-panna"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .tortellini-panna)) {
+    display: none;
+}
+/*Secondi*/
 
-
-
-
+.filters:has(option[value="omlette"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .omlette)) {
+    display: none;
+}
+.filters:has(option[value="cotoletta"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .cotoletta)) {
+    display: none;
+}
+.filters:has(option[value="tomino"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .tomino)) {
+    display: none;
+}
+.filters:has(option[value="hamburger-vegetale"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .hamburger-vegetale)) {
+    display: none;
+}
+.filters:has(option[value="pesce"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .pesce)) {
+    display: none;
+}
+.filters:has(option[value="zola"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .zola)) {
+    display: none;
+}
+.filters:has(option[value="salamino"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .salamino)) {
+    display: none;
+}
+.filters:has(option[value="mozzarella"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .mozzarella)) {
+    display: none;
+}
+.filters:has(option[value="frittata"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .frittata)) {
+    display: none;
+}
+.filters:has(option[value="rolle"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .rolle)) {
+    display: none;
+}
+.filters:has(option[value="spinacine"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .spinacine)) {
+    display: none;
+}
+.filters:has(option[value="formaggio-philadelphia"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .formaggio-philadelphia)) {
+    display: none;
+}
+/*Contorni*/
+.filters:has(option[value="piselli"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .piselli)) {
+    display: none;
+}
+.filters:has(option[value="broccoli"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .broccoli)) {
+    display: none;
+}
+.filters:has(option[value="insalata"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .insalata)) {
+    display: none;
+}
+.filters:has(option[value="verdure-miste"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .verdure-miste)) {
+    display: none;
+}
+.filters:has(option[value="fagiolini"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .fagiolini)) {
+    display: none;
+}
+.filters:has(option[value="patatine"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .patatine)) {
+    display: none;
+}
+.filters:has(option[value="cavolfiori"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .cavolfiori)) {
+    display: none;
+}
+.filters:has(option[value="taccole"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .taccole)) {
+    display: none;
+}
+.filters:has(option[value="patate-novelle"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .patate-novelle)) {
+    display: none;
+}
+.filters:has(option[value="finocchi"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .finocchi)) {
+    display: none;
+}
+.filters:has(option[value="pure"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .pure)) {
+    display: none;
+}
+.filters:has(option[value="spinaci"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .spinaci)) {
+    display: none;
+}
+.filters:has(option[value="carote"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .carote)) {
+    display: none;
+}
+.filters:has(option[value="barbabietole"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .barbabietole)) {
+    display: none;
+}
+/*Dolci*/
+.filters:has(option[value="croissant"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .croissant)) {
+    display: none;
+}
+.filters:has(option[value="cappuccio-caffe"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .cappuccio-caffe)) {
+    display: none;
+}
+.filters:has(option[value="yogurt-dessert"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .yogurt-dessert)) {
+    display: none;
+}
+.filters:has(option[value="gruppo-cucina"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .gruppo-cucina)) {
+    display: none;
+}
 
 /*January*/
 #overlay-januari-menu .dropdown-januari-menu {
@@ -263,9 +383,7 @@
     display: none;
     position: relative;
     background: url(/public/images/mounths/marzo.jpg) ;
-   background-size: 100% 116%;
-   
-    
+    background-size: 100% 116%;
     z-index: 4;
     padding: .8vw;
     border-radius:  1em;
@@ -279,7 +397,58 @@
 #januari-schedule-menu:checked ~ #overlay-januari-menu .dropdown-januari-menu
 {
     display: block;
-    
+}
+#mounth{
+    cursor:pointer;
+}
+/*February*/
+#overlay-february-menu .dropdown-february-menu {
+    font-size: .9vw;
+    font-weight: 700;
+    text-align: center;
+    display: none;
+    position: relative;
+    background: url(/public/images/mounths/marzo.jpg) ;
+    background-size: 100% 116%;
+    z-index: 4;
+    padding: .8vw;
+    border-radius:  1em;
+}
+#february-closed{
+    color:rgb(200, 233, 244);
+}
+#february-schedule-menu{
+    display: none;
+}
+#february-schedule-menu:checked ~ #overlay-february-menu .dropdown-february-menu
+{
+    display: block;
+}
+#mounth{
+    cursor:pointer;
+}
+/*March*/
+#overlay-march-menu .dropdown-march-menu {
+    font-size: .9vw;
+    font-weight: 700;
+    text-align: center;
+    display: none;
+    position: relative;
+    background: url() ;
+    background-size: 100% 116%;
+    z-index: 4;
+    padding: .8vw;
+    border-radius:  1em;
+}
+#march-closed{
+    color:rgb(200, 233, 244);
+}
+#march-schedule-menu{
+    display: none;
+}
+#march-schedule-menu:checked ~ #overlay-march-menu .dropdown-march-menu
+{
+    display: block;
 }
 #mounth{
     cursor:pointer;
