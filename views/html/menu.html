@@ -41,7 +41,7 @@
               <option value="lunedì19g"> Lunedì 19</option>
               <option value="martedì20g"> Martedì 20</option>
               <option value="mercoledì21g"> Mercoledì 21</option>
-              <option value="giovedì22g"> Giovedì 22</option>
+              <option value="giovedì22gi"> Giovedì 22</option>
               <option value="venerdì23g"> Venerdì 23</option>
               <option value="lunedì26g"> Lunedì 26</option>
               <option value="martedì27g"> Martedì 27</option>
@@ -50,8 +50,7 @@
               <option value="venerdì30g"> Venerdì 30</option>
             </select>
             <select name="type" id="type">
-             <h1 class="staff-menu-list"></h1>
-              <option>COSA PREFERISCI?</option>
+              <option value="allin"><h1 class="staff">TUTTO!!!</h1></option>
               <option value="rigatoni">Rigatoni all'Amatriciana</option>
               <option value="piadina">Piadina</option>
               <option value="riso-piselli">Riso con Piselli</option>
@@ -66,8 +65,7 @@
               <option value="zuppa-legumi">Pasta o Zuppa di Legumi</option>
               <option value="vellutata">Vellutata di Verdure con Crostini</option>
               <option value="pizzoccheri">Pizzocheri</option>
-  <!--Secondi--><option><h1 class="staff-menu-list"></h1></option>
-              <option value="omlette">Omlette con Formaggio e Prosciutto</option>
+<!--Secondi--><option value="omlette">Omlette con Formaggio e Prosciutto</option>
               <option value="cotoletta">Cotoletta</option>
               <option value="tomino">Tomino</option>
               <option value="hamburger-vegetale">Hamburger Vegetale</option>
@@ -79,8 +77,7 @@
               <option value="rolle">Rollè di Pollo</option>
               <option value="spinacine">Spinacine</option>
               <option value="formaggio-philadelphia">Formaggio Philadelphia</option>
-<!--Contorni--><option><h1 class="staff-menu-list"></h1></option>
-              <option value="piselli">Piselli</option>
+<!--Contorn--><option value="piselli">Piselli</option>
               <option value="broccoli">Broccoli</option>
               <option value="insalata">Insalata</option>
               <option value="verdure-miste">Verdure Miste</option>
@@ -94,8 +91,7 @@
               <option value="spinaci">Spinaci</option>
               <option value="carote">Carote Lesse</option>
               <option value="barbabietole">Barbabietole</option>
-  <!--Dolci--><option><h1 class="staff-menu-list"></h1></option>
-              <option value="croissant"> Croissant </option>
+  <!--Dolci--><option value="croissant"> Croissant </option>
               <option value="cappuccio-caffe"> Cappuccio o caffè </option>
               <option value="yogurt-dessert">Yogurt o Dessert</option>
               <option value="gruppo-cucina">Gruppo Cucina!</option>
@@ -104,12 +100,28 @@
 
 <!-- Cards Menu Januari -->
          <!--Second Week-->
-        <div class="daily-menu-list" >
-          <div id="no-foodg">
-           <h1 id="nofood">Mi Spiace qui non c'è</h1>
-          </div>
-
+        <div id="nolist" >
+          <h1 class="nolisth1">Questo Giorno non ha la Pietanza Selezionata</h1>
+        </div>
+        <div class="daily-menu-list" id="january-list">
           <div id="back">
+            <div class="daily-menu" id="no-food" >
+              <span class="no-food">
+                <h1 id="affamato">Non c'è nulla quì!</h1>
+              </span>
+              <span class="rigatoni" id="no-food-list"></span>
+              <span class="gnocchi-pesto" id="no-food-list"></span>
+              <span class="tortellini-panna" id="no-food-list"></span>
+              <span class="cotoletta" id="no-food-list"></span>
+              <span class="spinacine" id="no-food-list"></span>
+              <span class="verdure-miste" id="no-food-list"></span>
+              <span class="cavolfiori" id="no-food-list"></span>
+              <span class="patate-novelle" id="no-food-list"></span>
+              <span class="carote" id="no-food-list"></span>
+              <span class="barbabietole" id="no-food-list"></span>
+            </div>
+         </div>
+         <div id="back">
             <div class="daily-menu" id="mercoledì07g" >
             <span class="mercoledì07g">
               <h1>Menu Mercoledì 07 Gennaio</h1>
@@ -121,8 +133,8 @@
               <h1>Yogurt o Dessert</h1>
             </span>
           </div>
-        </div>
-        <div id="back">
+         </div>
+         <div id="back">
           <div class="daily-menu" id="giovedì08g">
             <span class="giovedì08g">
               <h1> Menu Giovedì 08 Gennaio</h1>
@@ -137,8 +149,8 @@
                 <h1>Fagiolini</h1>
               </span>
           </div>
-        </div>
-        <div id="back">
+         </div>
+         <div id="back">
           <div class="daily-menu" id="venerdì09g">
               <span class="venerdì09g">
                 <h1> Menu Venerdì 9 Gennaio</h1>
@@ -147,9 +159,6 @@
                 <h1>Colazione con Croissant Cappuccio o Caffè</h1>
               </span>
               <span id="day-list" class="cappuccio-caffe"></span>
-              <span class="polenta">
-                <h1>Polenta</h1>
-              </span>
               <span class="hamburger-vegetale">
                 <h1>hamburger-vegetale</h1>
               </span>
@@ -157,11 +166,11 @@
                 <h1>Patatine</h1>
               </span>
              
+           </div>
           </div>
-        </div>
-      
-          <!--Third Week-->
-        <div id="back">
+         
+<!--Third Week-->
+         <div id="back">
           <div class="daily-menu" id="lunedì12g">
               <span class="lunedì12g">
                 <h1> Menu Lunedì 12 Gennaio</h1>
@@ -280,40 +289,42 @@
           </div>
         </div>
         <div id="back">
-          <div class="daily-menu" id="giovedì22g">
-            <span  class="giovedì22g">
-              <h1> Menu Giovedì 22 Gennaio</h1>
+          <div class="daily-menu" id="giovedì22gi">
+            <span class="giovedì22gi">
+              <h1> Menu Giovedì 26 Febbraio</h1>
             </span>
-              <span class="cannelloni">
-                <h1>cannelloni Ricotta e Spinaci</h1>
-              </span>
-              <span class="frittata">
-                <h1>Frittata</h1>
-              </span>
-              <span class="taccole">
-                <h1>Taccole</h1>
-              </span>
-           </div>
-         </div>
-         <div id="back">
+            <span class="cannelloni">
+              <h1>cannelloni Ricotta e Spinaci</h1>
+            </span>
+            <span class="frittata">
+              <h1>Frittata</h1>
+            </span>
+            <span class="taccole">
+              <h1>Taccole</h1>
+            </span>
+          </div>
+        </div>
+        <div id="back">
           <div class="daily-menu" id="venerdì23g">
             <span class="venerdì23g">
               <h1> Menu Venerdì 23 Gennaio</h1>
             </span>
-              <span class="croissant">
-                <h1>Colazione con Croissant Cappuccio o Caffè</h1>
-              </span>
-              <span id="day-list" class="cappuccio-caffe"></span>
-              <span class="riso-basmati">
-                <h1>Riso Basmati con Pollo al Curry </h1>
-              </span>
-              <span class="zola"><h1>Gorgonzola</h1></span>
-              <span class="pollo" id="day-list"></span>
-              <span class="patate">
-                <h1>Patate Novelle</h1>
-              </span>
-           </div>
+            <span class="croissant">
+              <h1>Colazione con Croissant Cappuccio o Caffè</h1>
+            </span>
+            <span id="day-list" class="cappuccio-caffe"></span>
+            <span class="riso-basmati">
+              <h1>Riso Basmati con Pollo al Curry </h1>
+            </span>
+            <span class="zola">
+              <h1>Gorgonzola</h1>
+            </span>
+            <span class="pollo" id="day-list"></span>
+            <span class="patate">
+              <h1>Patate Novelle</h1>
+            </span>
           </div>
+        </div>
           <!--Fifty Week-->
          <div id="back">
           <div class="daily-menu" id="lunedì26g">
@@ -386,11 +397,11 @@
                 <h1>Spinaci</h1>
               </span>
           </div>
-        </div>
-        </div>
+         </div>
+       </div>
+      </div>
      </label>
     </li>
-
     <li id="february-menu">
        <input type="checkbox" id="february-schedule-menu">
        <label for="february-schedule-menu" class="open-february-menu">
@@ -423,7 +434,7 @@
               <option value="venerdì27f"> Venerdì 27</option>
             </select>
             <select name="type" id="type">
-              <option><h1 class="staff-menu-list">- PRIMI -</h1></option>
+              <option value="allin"><h1 class="staff">TUTTO!!!</h1></option>
               <option value="rigatoni">Rigatoni all'Amatriciana</option>
               <option value="piadina">Piadina</option>
               <option value="riso-piselli">Riso con Piselli</option>
@@ -439,8 +450,7 @@
               <option value="vellutata">Vellutata di Verdure con Crostini</option>
               <option value="pizzoccheri">Pizzocheri</option>
               <option value="pizza">Pizza</option>
-<!--Secondi--><option><h1 class="staff-menu-list"></h1></option>
-              <option value="omlette">Omlette con Formaggio e Prosciutto</option>
+<!--Secondi--><option value="omlette">Omlette con Formaggio e Prosciutto</option>
               <option value="cotoletta">Cotoletta</option>
               <option value="tomino">Tomino</option>
               <option value="hamburger-vegetale">Hamburger Vegetale</option>
@@ -452,8 +462,7 @@
               <option value="rolle">Rollè di Pollo</option>
               <option value="spinacine">Spinacine</option>
               <option value="formaggio-philadelphia">Formaggio Philadelphia</option>
-<!--Contorni--><option><h1 class="staff-menu-list"></h1></option>
-              <option value="piselli">Piselli</option>
+<!--Contorn--><option value="piselli">Piselli</option>
               <option value="broccoli">Broccoli</option>
               <option value="insalata">Insalata</option>
               <option value="verdure-miste">Verdure Miste</option>
@@ -467,20 +476,36 @@
               <option value="spinaci">Spinaci</option>
               <option value="carote">Carote Lesse</option>
               <option value="barbabietole">Barbabietole</option>
-<!--Dolci-->  <option><h1 class="staff-menu-list"></h1></option>
-              <option value="croissant"> Croissant </option>
-              <option value="cappuccio-caffè"> Cappuccio o caffè </option>
+<!--Dolci-->  <option value="croissant"> Croissant </option>
+              <option value="cappuccio-caffe"> Cappuccio o caffè </option>
               <option value="yogurt-dessert">Yogurt o Dessert</option>
               <option value="gruppo-cucina">Gruppo Cucina!</option>
             </select>
           </div>
 <!-- Cards Menu February -->
           <!--First Week-->
-      <div class="daily-menu-list">
-        <div id="no-foodf">
-          <h1 id="nofood">Mi Spiace qui non c'è</h1>
+        <div id="nolistf" >
+          <h1 class="nolisth1">Questo Giorno non ha la Pietanza Selezionata</h1>
         </div>
-
+        <div class="daily-menu-list" id="february-list">
+          <div id="back">
+            <div class="daily-menu" id="no-food" >
+              <span class="no-food">
+                <h1 id="affamato">In Questo Mese non c'è!</h1>
+              </span>
+              <span class="pure" id="no-food-list"></span>
+              <span class="spinaci" id="no-food-list"></span>
+              <span class="finocchi" id="no-food-list"></span>
+              <span class="formaggio-philadelphia" id="no-food-list"></span>
+              <span class="rolle" id="no-food-list"></span>
+              <span class="zuppa-legumi" id="no-food-list"></span>
+              <span class="vellutata" id="no-food-list"></span>
+              <span class="pizzoccheri" id="no-food-list"></span>
+              <span class="cotoletta" id="no-food-list"></span>
+              <span class="cavolfiori" id="no-food-list"></span>
+              <span class="patate-novelle" id="no-food-list"></span>
+            </div>
+          </div>
         <div id="back">
           <div class="daily-menu" id="lunedì02f">
             <span class="lunedì02f">
@@ -497,8 +522,6 @@
             </span>
           </div>
         </div>
-
-      
         <div id="back">
             <div class="daily-menu" id="martedì03f">
               <span class="martedì03f">
@@ -545,7 +568,7 @@
               <span class="croissant">
                 <h1>Colazione con Croissant Cappuccio o Caffè</h1>
               </span>
-              <span class="cappuccio-caffè"></span>
+              <span class="cappuccio-caffe"></span>
               <span class="pizza">
                 <h1>Pizza!</h1>
               </span>
@@ -618,7 +641,7 @@
                 <span class="croissant">
                   <h1>Colazione con Croissant Cappuccio o Caffè</h1>
                 </span>
-                <span class="cappuccio-caffè"></span>
+                <span class="cappuccio-caffe"></span>
                 <span class="hamburger-vegetale">
                   <h1>Hamburger Vegetale</h1>
                 </span>
@@ -691,7 +714,7 @@
               <span class="croissant">
                 <h1>Colazione con Croissant Cappuccio o Caffè</h1>
               </span>
-              <span id="day-list" class="cappuccio-caffè"></span>
+              <span id="day-list" class="cappuccio-caffe"></span>
               <span class="polenta">
                 <h1>Polenta</h1>
               </span>
@@ -770,7 +793,7 @@
               <span class="croissant">
                 <h1>Colazione con Croissant Cappuccio o Caffè</h1>
               </span>
-              <span id="day-list" class="cappuccio-caffè"></span>
+              <span id="day-list" class="cappuccio-caffe"></span>
               <span class="riso-basmati">
                 <h1>Riso Basmati con Pollo al Curry </h1>
               </span>
@@ -819,7 +842,7 @@
               <option value="martedì31mar"> Martedì 31</option>
             </select>
             <select name="type" id="type">
-              <option><h1 class="staff-menu-list">- PRIMI -</h1></option>
+              <option value="allin"><h1 class="staff">TUTTO!!!</h1></option>
               <option value="rigatoni">Rigatoni all'Amatriciana</option>
               <option value="piadina">Piadina</option>
               <option value="riso-piselli">Riso con Piselli</option>
@@ -833,9 +856,9 @@
               <option value="cannelloni">Cannelloni Ricotta e Spinaci</option>
               <option value="zuppa-legumi">Pasta o Zuppa di Legumi</option>
               <option value="vellutata">Vellutata di Verdure con Crostini</option>
-              <option value="pizzocheri">Pizzocheri</option>
-              <option><h1 class="staff-menu-list">- SECONDI -</h1></option>
-              <option value="omlette">Omlette con Formaggio e Prosciutto</option>
+              <option value="pizzoccheri">Pizzocheri</option>
+              <option value="pizza">Pizza</option>
+<!--Secondi--><option value="omlette">Omlette con Formaggio e Prosciutto</option>
               <option value="cotoletta">Cotoletta</option>
               <option value="tomino">Tomino</option>
               <option value="hamburger-vegetale">Hamburger Vegetale</option>
@@ -847,8 +870,7 @@
               <option value="rolle">Rollè di Pollo</option>
               <option value="spinacine">Spinacine</option>
               <option value="formaggio-philadelphia">Formaggio Philadelphia</option>
-              <option><h1 class="staff-menu-list">- CONTORNI -</h1></option>
-              <option value="piselli">Piselli</option>
+<!--Contorn--><option value="piselli">Piselli</option>
               <option value="broccoli">Broccoli</option>
               <option value="insalata">Insalata</option>
               <option value="verdure-miste">Verdure Miste</option>
@@ -862,18 +884,38 @@
               <option value="spinaci">Spinaci</option>
               <option value="carote">Carote Lesse</option>
               <option value="barbabietole">Barbabietole</option>
-              <option><h1 class="staff-menu-list">- DOLCI -</h1></option>
-              <option value="croissant"> Croissant </option>
-              <option value="cappuccio-caffè"> Cappuccio o caffè </option>
+<!--Dolci-->  <option value="croissant"> Croissant </option>
+              <option value="cappuccio-caffe"> Cappuccio o caffè </option>
               <option value="yogurt-dessert">Yogurt o Dessert</option>
               <option value="gruppo-cucina">Gruppo Cucina!</option>
             </select>
           </div>
 <!-- Cards Menu March -->
           <!--First Week-->
+        <div id="nolist" >
+          <h1 class="nolisth1">Questo Giorno non ha la Pietanza Selezionata</h1>
+        </div>
         <div class="daily-menu-list">
           <div id="back">
-            <div class="daily-menu">
+            <div class="daily-menu" id="no-food" >
+              <span class="no-food">
+                <h1 id="affamato">In Questo Mese non c'è!</h1>
+              </span>
+              <span class="pure" id="no-food-list"></span>
+              <span class="spinaci" id="no-food-list"></span>
+              <span class="finocchi" id="no-food-list"></span>
+              <span class="formaggio-philadelphia" id="no-food-list"></span>
+              <span class="rolle" id="no-food-list"></span>
+              <span class="zuppa-legumi" id="no-food-list"></span>
+              <span class="vellutata" id="no-food-list"></span>
+              <span class="pizzoccheri" id="no-food-list"></span>
+              <span class="cotoletta" id="no-food-list"></span>
+              <span class="cavolfiori" id="no-food-list"></span>
+              <span class="patate-novelle" id="no-food-list"></span>
+            </div>
+          </div>
+          <div id="back">
+            <div class="daily-menu" id="lunedì02mar">
               <span id="day-list" class="lunedì02mar">
                 <h1>Lunedì 2 Marzo</h1>
               </span>
@@ -889,7 +931,7 @@
         </div>
         </div>
            <div id="back">
-            <div class="daily-menu">
+            <div class="daily-menu" id="lunedì03mar">
               <span id="day-list" class="martedì03mar">
                 <h1> Menu Martedì 3 Marzo</h1>
               </span>
@@ -899,7 +941,7 @@
             </div>
            </div>
            <div id="back">
-            <div class="daily-menu">
+            <div class="daily-menu" id="mercoledì05mar" >
               <span id="day-list" class="mercoledì05mar">
                 <h1> Menu Mercoledì 5 Marzo</h1>
               </span>
@@ -910,7 +952,7 @@
             </div>
           </div>
           <div id="back">
-            <div class="daily-menu">
+            <div class="daily-menu" id="giovedì06mar">
               <span id="day-list" class="giovedì06mar">
                 <h1> Menu Giovedì 6 Marzo</h1>
               </span>
@@ -926,14 +968,14 @@
             </div>
           </div>
           <div id="back">
-           <div class="daily-menu">
+           <div class="daily-menu" id="venerdì06mar">
               <span id="day-list" class="venerdì06mar">
                 <h1> Menu Venerdì 6 Marzo</h1>
               </span>
               <span class="croissant">
                 <h1>Colazione con Croissant Cappuccio o Caffè</h1>
               </span>
-              <span id="day-list" class="cappuccio-caffè"></span>
+              <span id="day-list" class="cappuccio-caffe"></span>
               <span class="pizza">
                 <h1>Pizza!</h1>
               </span>
@@ -944,7 +986,7 @@
         </div>
            <!--Second Week-->
          <div id="back">
-           <div class="daily-menu">
+           <div class="daily-menu" id="lunedì09mar">
               <span id="day-list" class="lunedì09mar">
                 <h1> Menu Lunedì 9 Marzo</h1>
               </span>
@@ -1008,7 +1050,7 @@
                 <span class="croissant">
                   <h1>Colazione con Croissant Cappuccio o Caffè</h1>
                 </span>
-                <span id="day-list" class="cappuccio-caffè"></span>
+                <span id="day-list" class="cappuccio-caffe"></span>
                 <span class="hamburger-vegetale">
                   <h1>Hamburger Vegetale</h1>
                 </span>
@@ -1081,7 +1123,7 @@
               <span class="croissant">
                 <h1>Colazione con Croissant Cappuccio o Caffè</h1>
               </span>
-              <span id="day-list" class="cappuccio-caffè"></span>
+              <span id="day-list" class="cappuccio-caffe"></span>
               <span class="polenta">
                 <h1>Polenta</h1>
               </span>
@@ -1160,7 +1202,7 @@
               <span class="croissant">
                 <h1>Colazione con Croissant Cappuccio o Caffè</h1>
               </span>
-              <span id="day-list" class="cappuccio-caffè"></span>
+              <span id="day-list" class="cappuccio-caffe"></span>
               <span class="riso-basmati">
                 <h1>Riso Basmati con Pollo al Curry </h1>
               </span>

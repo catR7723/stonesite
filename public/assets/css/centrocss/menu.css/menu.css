@@ -33,7 +33,8 @@ body{
     color: rgb(236, 11, 11);}
     
 .title{
-    background: url(/public/images/mounths/gennaio.jpg);
+    background: url(/public/images/mounths/neve.jpg) no-repeat;
+    background-size: 100%;
     position: absolute;
     text-align: center;
     width: 98%;
@@ -41,9 +42,17 @@ body{
     padding-top: 4%;
     font-size: 4vw;
     color:#0905e4;
-    border-radius: 1em;
+    border-radius: 2rem;
     margin-top: 11vw;
+    border-top: 0.06em solid white;
+    border-bottom:0.06em solid white;
+    box-shadow: 1px 1px 20px 8px rgb(153, 231, 241) inset;
     
+}
+.title:hover{
+    border: 0.06em solid  rgb(153, 231, 241);
+    box-shadow: 1px 1px 20px 15px rgb(153, 231, 241) inset;
+
 }
 
 /*schedule close*/
@@ -56,7 +65,6 @@ body{
 }
 .open-menu {
     justify-content: center;
- 
     display: flex;
     cursor: pointer;
     height: 13vw;
@@ -65,8 +73,16 @@ body{
     background-image: linear-gradient(to bottom, #4eede6, #33dfe5, #16d0e3, #00c1de, #00b2d8, #00a6de, #0099e1, #008ae1, #0076eb, #0060f0, #0045ef, #0a14e7);
     border-radius: 1em;
     width: 98%;
-    border-radius: 1em;
+    border-radius: 2rem;
     z-index: 2;
+    border-top: 0.09em solid white;
+    border-bottom:0.06em solid white;
+
+}
+.open-menu:hover{
+    border: 0.06em solid  rgb(153, 231, 241);
+    box-shadow: 1px 1px 15px 10px rgb(153, 231, 241) inset;
+
 }
 .open-menu a{ 
     padding-top: 4vw;
@@ -74,6 +90,9 @@ body{
    color: rgb(124, 90, 210);
    text-shadow: 10px 8px 8px black;
    font-weight: 700;
+}
+.open-menu a:hover{
+    color: rgb(165, 239, 6);
 }
 @property --angle{
     syntax: "<angle>";
@@ -104,21 +123,17 @@ body{
     content:'';
     border-radius: 1em;
     width: 98%;
-
-    
+    border-top: 0.09em solid white;
+    border-bottom:0.06em solid white;
 }
 #menu{
     display: none;
 }
-#menu:checked ~ #overlay-menu 
-{
+#menu:checked ~ #overlay-menu{
     display: flex;
     position:relative;
-   
-
     top:14vw;
     justify-content: center;
-   
 }
 #day-list{
     display: none;
@@ -130,69 +145,69 @@ ul{
 li{
    list-style: none;
    text-align: center;
-   
    font-size: 4vw;
    color: white;
    text-shadow: 10px 8px 8px black;
    margin: 2vw;
-    
 }
-
-
+li:hover{
+   text-shadow: 10px 8px 8px rgb(242, 244, 245); 
+   color: #000b2f;
+}
 
 /*mounths filter*/
-.filters:has(option[value="mercoledì07g"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .mercoledì07g)) {
+.filters:has(option[value="mercoledì07g"]:checked) ~   #january-list .daily-menu:not(:has(> .mercoledì07g)) {
     display: none;
 }
-.filters:has(option[value="giovedì08g"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .giovedì08g)) {
+.filters:has(option[value="giovedì08g"]:checked) ~   #january-list .daily-menu:not(:has(>.giovedì08g)) {
     display: none;
 }
-.filters:has(option[value="venerdì09g"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .venerdì09g)) {
+.filters:has(option[value="venerdì09g"]:checked) ~   #january-list .daily-menu:not(:has(> .venerdì09g)) {
     display: none;
 }
-.filters:has(option[value="lunedì12g"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .lunedì12g)) {
+.filters:has(option[value="lunedì12g"]:checked) ~  #january-list .daily-menu:not(:has(> .lunedì12g)) {
     display: none;
 }
-.filters:has(option[value="martedì13g"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .martedì13g)) {
+.filters:has(option[value="martedì13g"]:checked) ~  #january-list .daily-menu:not(:has(> .martedì13g)) {
     display: none;
 }
-.filters:has(option[value="mercoledì14g"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .mercoledì14g)) {
+.filters:has(option[value="mercoledì14g"]:checked) ~  #january-list .daily-menu:not(:has(> .mercoledì14g)) {
     display: none;
 }
-.filters:has(option[value="giovedì15g"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .giovedì15g)) {
+.filters:has(option[value="giovedì15g"]:checked) ~  #january-list .daily-menu:not(:has(> .giovedì15g)) {
     display: none;
 }
-.filters:has(option[value="venerdì16g"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .venerdì16g)) {
+.filters:has(option[value="venerdì16g"]:checked) ~  #january-list .daily-menu:not(:has(> .venerdì16g)) {
     display: none;
 }
-.filters:has(option[value="lunedì19g"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .lunedì19g)) {
+.filters:has(option[value="lunedì19g"]:checked) ~  #january-list .daily-menu:not(:has(> .lunedì19g)) {
     display: none;
 }
-.filters:has(option[value="martedì20g"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .martedì20g)) {
+.filters:has(option[value="martedì20g"]:checked) ~  #january-list .daily-menu:not(:has(> .martedì20g)) {
     display: none;
 }
-.filters:has(option[value="mercoledì21g"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .mercoledì21g)) {
+.filters:has(option[value="mercoledì21g"]:checked) ~  #january-list .daily-menu:not(:has(> .mercoledì21g)) {
     display: none;
 }
-.filters:has(option[value="giovedì22g"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .giovedì22g)) {
+.filters:has(option[value="giovedì22gi"]:checked) ~  #january-list .daily-menu:not(:has(> .giovedì22gi)) {
     display: none;
 }
-.filters:has(option[value="venerdì23g"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .venerdì23g)) {
+.filters:has(option[value="venerdì23g"]:checked) ~  #january-list .daily-menu:not(:has(> .venerdì23g)) {
     display: none;
 }
-.filters:has(option[value="lunedì26g"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .lunedì26g)) {
+.filters:has(option[value="lunedì26g"]:checked) ~  #january-list .daily-menu:not(:has(> .lunedì26g)) {
     display: none;
 }
-.filters:has(option[value="martedì27g"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .martedì27g)) {
+.filters:has(option[value="martedì27g"]:checked) ~  #january-list .daily-menu:not(:has(>.martedì27g)) {
     display: none;
 }
-.filters:has(option[value="mercoledì28g"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .mercoledì28g)) {
+.filters:has(option[value="mercoledì28g"]:checked) ~  #january-list .daily-menu:not(:has(> .mercoledì28g)) {
     display: none;
 }
-.filters:has(option[value="giovedì29g"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .giovedì29g)) {
+.filters:has(option[value="giovedì29g"]:checked) ~  #january-list .daily-menu:not(:has(> .giovedì29g)) {
     display: none;
 }
-.filters:has(option[value="venerdì30g"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .venerdì30g)) {
+.filters:has(option[value="venerdì30g"]:checked) ~  #january-list .daily-menu:not(:has(> .venerdì30g)) {
     display: none;
 }
 /*February filter*/
@@ -326,11 +341,17 @@ li{
 }
 /*Food Filter*/
 /*Primi*/
-.filters:has(option[value="rigatoni"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .rigatoni)) {
+.filters:has(option[value="allin"]:checked) ~ .daily-menu-list  .daily-menu:has(> .no-food) {
     display: none;
+
+}
+.filters:has(option[value="rigatoni"]:checked) ~ .daily-menu-list  .daily-menu:not(:has(> .rigatoni)) {
+    display: none;
+
 }
 .filters:has(option[value="piadina"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .piadina)) {
     display: none;
+    
 }
 .filters:has(option[value="riso-piselli"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .riso-piselli)) {
     display: none;
@@ -374,10 +395,10 @@ li{
     
 }
 /*Secondi*/
-
 .filters:has(option[value="omlette"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .omlette)) {
     display: none;
 }
+
 .filters:has(option[value="cotoletta"]:checked) ~ .daily-menu-list .daily-menu:not(:has(> .cotoletta)) {
     display: none;
 }
@@ -493,8 +514,6 @@ li{
 #mounth{
     cursor:pointer;
 }
-
-
 /*February*/
 #overlay-february-menu .dropdown-february-menu {
     font-size: .9vw;
@@ -548,6 +567,10 @@ li{
    margin-bottom: 2vw;
    height: 30vw;
    background-size: 100% 100%;
+   border-top: 0.3em solid white;
+   border-bottom:0.3em solid white;
+   box-shadow: 1px 1px 20px 10px rgb(232, 242, 244) inset;
+   border-radius: 4em 1em 10em 1em;
    
 }
 .daily-menu h1{
@@ -565,48 +588,46 @@ li{
     padding: 2em 0.5em 0 0.5em;
     border-radius: 2em;
     margin-top: 0.5vw;
+    border-top: 0.1em solid white;
+    border-bottom:0.1em solid white;
+}
+.daily-menu span:nth-child(1) h1{
+    color:#1ded77;
 }
 #back{
-   
    background: url(/public/images/menu/food-images/varie/tavolo.jpg) no-repeat bottom center;
    background-size: 100%; 
    z-index: -1; 
    width: 70vw;
-   border-radius: 1em;
+   border-radius: 4em 1em 10em 1em;
+   margin-bottom: 1vw;
+}
+#no-food{
+    background: url(/public/images/menu/affamato.png) no-repeat center bottom;
+    z-index: 1;
+    background-size: 15vw, 10vw; 
+}
+#no-food-list{
+ display:none;
+}
+#nolist{
+    display: block;
+    position: absolute;
+    z-index: -2;
+   width: 100%;
+   text-shadow: none;
+   margin-top: 3.5vw;
+}
+#nolistf{
+    display: block;
+    position: absolute;
+    z-index: -2;
+   width: 100%;
+   text-shadow: none;
+   margin-top: 1.45vw;
 }
 
-#no-foodf{
-z-index: -5;
-display: flex;
-position: absolute;
-width: 100%;
-height: 21vw;
-justify-content: center;
-margin-top: 1.8vw;
-top:15vw;
 
-}
-#no-foodg{
-z-index: -5;
-display: flex;
-position: absolute;
-width: 100%;
-height: 21vw;
-justify-content: center;
-margin-top: 1.8vw;
-
-
-}
-#nofood{
-font-size: 1.8vw;
-font-weight: 100;
-width: 17vw;
-height: 16vw;
-background: url(/public/images/menu/affamato.png) no-repeat bottom;
-background-color: #78cbd8;
-background-size:80% 80%;
-border-radius: 1vw;
-}
 /*Juanuary*/
 #mercoledì07g{
     justify-items: center;
@@ -700,7 +721,7 @@ border-radius: 1vw;
     z-index: 1;
     background-size: 35vw, 30vw;
 }
-#giovedì22{
+#giovedì22gi{
     background: 
     url(/public/images/menu/food-images/primi/tortellini-panna.png) no-repeat bottom left, 
     url(/public/images/menu/food-images/contorni/barbabietole.png) no-repeat bottom right, 
@@ -745,7 +766,6 @@ border-radius: 1vw;
     background-size: 35vw, 30vw;
 }
 #giovedì29g{
-    
     background: url(/public/images/menu/food-images/primi/vellutata-verdure.png) no-repeat bottom left, 
     url(/public/images/menu/food-images/contorni/pure.png) no-repeat center right, 
     url(/public/images/menu/food-images/secondi/roll.png) no-repeat bottom center ;
@@ -913,26 +933,7 @@ border-radius: 1vw;
     z-index: 1;
     background-size: 35vw, 30vw;
 }
-#giovedì22g{
-    background: 
-    url(/public/images/menu/food-images/primi/canelloni.png) no-repeat bottom left, 
-    url(/public/images/menu/food-images/contorni/taccole.png) no-repeat bottom right, 
-    url(/public/images/menu/food-images/secondi/spinacine.png) no-repeat bottom center ;
-    z-index: 1;
-    width: 100%;
-    background-size: 27vw, 20vw, 21vw;
-}
-#venerdì23g{
-  background: 
-    url(/public/images/menu/food-images/dolci/cappuccio-caffe.png) no-repeat bottom left, 
-    url(/public/images/menu/food-images/dolci/croissant.png) no-repeat center left, 
-    url(/public/images/menu/food-images/secondi/zola.png) no-repeat center right,
-    url(/public/images/menu/food-images/primi/riso-basmati.png) no-repeat center, 
-    url(/public/images/menu/food-images/contorni/patate-novelle.png) no-repeat bottom right;
-    z-index: 1;
-    width: 100%;
-    background-size: 25vw, 15vw, 18vw, 26vw, 22vw, 20vw;
-}
+
 #giovedì26f{
     background: 
     url(/public/images/menu/food-images/primi/canelloni.png) no-repeat bottom left, 
@@ -953,5 +954,177 @@ border-radius: 1vw;
     width: 100%;
     background-size: 25vw, 15vw, 18vw, 26vw, 22vw, 20vw;
 }
+/*March*/
+#lunedì02mar{
+    background: 
+    url(/public/images/menu/food-images/primi/gnocchi-pesto.png) no-repeat bottom left, 
+    url(/public/images/menu/food-images/secondi/spinacine.png) no-repeat center, 
+    url(/public/images/menu/food-images/contorni/carote.png) no-repeat bottom right;
+    z-index: 1;
+    width: 100%;
+    background-size: 30vw, 18vw, 25vw;
+}
+#martedì03f{
+   background: 
+    url(/public/images/menu/food-images/varie/gruppo-cucina.png) no-repeat center; 
+    z-index: 1;
+    width: 100%;
+    background-size: 50vw;
+}
+#mercoledì04f{
+    justify-items: center;
+    background: 
+    url(/public/images/menu/food-images/primi/piadina.png) no-repeat bottom left,
+    url(/public/images/menu/food-images/dolci/yogurt.png) no-repeat bottom right;
+    z-index: 1;
+    background-size: 35vw, 30vw;
+}
+#giovedì05f{
+    background: url(/public/images/menu/food-images/primi/tortellini-panna.png) no-repeat bottom left, 
+    url(/public/images/menu/food-images/contorni/barbabietole.png) no-repeat bottom right, 
+    url(/public/images/menu/food-images/secondi/frittata.png) no-repeat center ;
+    z-index: 1;
+    width: 100%;
+    background-size: 25vw, 21vw, 27vw;
+}
+#venerdì06f{
+ background: 
+    url(/public/images/menu/food-images/dolci/cappuccio-caffe.png) no-repeat bottom left, 
+    url(/public/images/menu/food-images/dolci/croissant.png) no-repeat center left, 
+    url(/public/images/menu/food-images/primi/pizza.png) no-repeat bottom center, 
+    url(/public/images/menu/food-images/contorni/insalata.png) no-repeat bottom right;
+    z-index: 1;
+    width: 100%;
+    background-size: 25vw, 18vw, 18vw, 26vw;
+}
+#lunedì09f{
+    background: 
+    url(/public/images/menu/food-images/primi/rigatoni.png) no-repeat bottom left, 
+    url(/public/images/menu/food-images/secondi/cotoletta.png) no-repeat bottom center, 
+    url(/public/images/menu/food-images/contorni/verdure-miste.png) no-repeat bottom right;
+    z-index: 1;
+    width: 100%;
+    background-size: 28vw, 24vw, 27vw;
+}
+#martedì10f{
+   background: 
+    url(/public/images/menu/food-images/varie/gruppo-cucina.png) no-repeat bottom center; 
+    z-index: 1;
+    width: 100%;
+    background-size: 50vw;
+}
+#mercoledì11f{
+    justify-items: center;
+    background: url(/public/images/menu/food-images/primi/piadina.png) no-repeat bottom left, url(/public/images/menu/food-images/dolci/yogurt.png) no-repeat bottom right;
+    z-index: 1;
+    background-size: 35vw, 30vw;
+}
+#giovedì12f{
+    background: 
+    url(/public/images/menu/food-images/primi/riso-piselli.png) no-repeat bottom left, 
+    url(/public/images/menu/food-images/contorni/fagiolini.png) no-repeat bottom right, 
+    url(/public/images/menu/food-images/secondi/tomino.png) no-repeat bottom center ;
+    z-index: 1;
+    width: 100%;
+    background-size: 27vw, 28vw, 30vw;
+}
+#venerdì13f{
+  background: 
+    url(/public/images/menu/food-images/dolci/cappuccio-caffe.png) no-repeat bottom left, 
+    url(/public/images/menu/food-images/dolci/croissant.png) no-repeat center left, 
+    url(/public/images/menu/food-images/secondi/hamburger-vegetale.png) no-repeat center bottom,
+    url(/public/images/menu/food-images/contorni/patatine.png) no-repeat center right;
+    z-index: 1;
+    width: 100%;
+    background-size: 25vw, 15vw, 35vw, 30vw;
+}
+#lunedì16f{
+    background: 
+    url(/public/images/menu/food-images/primi/pennette-gamberetti.png) no-repeat bottom left, 
+    url(/public/images/menu/food-images/secondi/pesce.png) no-repeat center, 
+    url(/public/images/menu/food-images/contorni/piselli.png) no-repeat bottom right;
+    z-index: 1;
+    width: 100%;
+    background-size: 30vw, 20vw, 23vw;
+}
+#martedì17f{
+    background: 
+    url(/public/images/menu/food-images/varie/gruppo-cucina.png) no-repeat bottom center; 
+    z-index: 1;
+    width: 100%;
+    background-size: 50vw;
+}
+#mercoledì18f{
+    
+    background: url(/public/images/menu/food-images/primi/piadina.png) no-repeat bottom left, url(/public/images/menu/food-images/dolci/yogurt.png) no-repeat bottom right;
+    z-index: 1;
+    background-size: 35vw, 30vw;
+}
+#giovedì19f{
+    background: 
+    url(/public/images/menu/food-images/primi/pasta-ragu.png) no-repeat bottom left, 
+    url(/public/images/menu/food-images/contorni/broccoli.png) no-repeat bottom right, 
+    url(/public/images/menu/food-images/secondi/omlette.png) no-repeat bottom center ;
+    z-index: 1;
+    width: 100%;
+    background-size: 25vw, 23vw, 19vw;
+}
+#venerdì20f{
+  background: 
+    url(/public/images/menu/food-images/dolci/cappuccio-caffe.png) no-repeat bottom left, 
+    url(/public/images/menu/food-images/dolci/croissant.png) no-repeat center left, 
+    url(/public/images/menu/food-images/secondi/zola.png) no-repeat center bottom,
+    url(/public/images/menu/food-images/primi/polenta.png) no-repeat center, 
+    url(/public/images/menu/food-images/contorni/insalata.png) no-repeat bottom right,
+    url(/public/images/menu/food-images/secondi/salamino.png) no-repeat center right; 
+    z-index: 1;
+    width: 100%;
+    background-size: 25vw, 15vw, 18vw, 30vw, 22vw, 20vw;
+}
+#lunedì23f{
+    justify-items: center;
+    background: 
+    url(/public/images/menu/food-images/primi/orecchiette.png) no-repeat bottom left, 
+    url(/public/images/menu/food-images/secondi/mozzarella.png) no-repeat center, 
+    url(/public/images/menu/food-images/contorni/cavolfiori.png) no-repeat bottom right;
+    z-index: 1;
+    width: 100%;
+    background-size: 25vw, 22vw, 25vw;
+}
+#martedì24f{
+   background: 
+    url(/public/images/menu/food-images/varie/gruppo-cucina.png) no-repeat bottom center; 
+    z-index: 1;
+    width: 100%;
+    background-size: 50vw;
+}
+#mercoledì25f{
+    justify-items: center;
+    background: url(/public/images/menu/food-images/primi/piadina.png) no-repeat bottom left, url(/public/images/menu/food-images/dolci/yogurt.png) no-repeat bottom right;
+    z-index: 1;
+    background-size: 35vw, 30vw;
+}
+
+#giovedì26f{
+    background: 
+    url(/public/images/menu/food-images/primi/canelloni.png) no-repeat bottom left, 
+    url(/public/images/menu/food-images/contorni/taccole.png) no-repeat bottom right, 
+    url(/public/images/menu/food-images/secondi/frittata.png) no-repeat bottom center ;
+    z-index: 1;
+    width: 100%;
+    background-size: 27vw, 18vw, 26vw;
+}
+#venerdì27f{
+  background: 
+    url(/public/images/menu/food-images/dolci/cappuccio-caffe.png) no-repeat bottom left, 
+    url(/public/images/menu/food-images/dolci/croissant.png) no-repeat center left, 
+    url(/public/images/menu/food-images/secondi/zola.png) no-repeat center right,
+    url(/public/images/menu/food-images/primi/riso-basmati.png) no-repeat center, 
+    url(/public/images/menu/food-images/contorni/patate-novelle.png) no-repeat bottom right;
+    z-index: 1;
+    width: 100%;
+    background-size: 25vw, 15vw, 18vw, 26vw, 22vw, 20vw;
+}
+
 
  
