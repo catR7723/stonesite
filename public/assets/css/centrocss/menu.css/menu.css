@@ -125,6 +125,7 @@ body{
     width: 98%;
     border-top: 0.09em solid white;
     border-bottom:0.06em solid white;
+    
 }
 
 #menu{
@@ -134,8 +135,6 @@ body{
     display: flex;
     flex-direction: column;
     position:relative;
-    top:14vw;
-   
 }
 #day-list{
     display: none;
@@ -507,7 +506,6 @@ li:hover{
     z-index: 4;
     padding: .8vw;
     border-radius:  1em;
-
 }
 #januari-closed{
     color:rgb(200, 233, 244);
