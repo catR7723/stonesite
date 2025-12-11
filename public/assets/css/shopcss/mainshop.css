@@ -6,15 +6,17 @@
 }
 html{
     font-family: Poppins, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-image: linear-gradient(to left top, #325278, #2a4568, #223958, #1a2d48, #122239, #0a1e31, #051a2a, #001522, #00161e, #00161a, #001516, #021412);
-    height: 100%;
+    background: linear-gradient(to left top, #325278, #2a4568, #223958, #1a2d48, #122239, #0a1e31, #051a2a, #001522, #00161e, #00161a, #001516, #021412) no-repeat;
+    height:300vh  ;
 
 }
+
 body{
 
 display: flex;
 flex-direction: column;
 align-items: center;
+
 }
 
 
@@ -84,15 +86,50 @@ align-items: center;
 #overlay-shop{
     display: none;
 }
-#shop:checked ~ #overlay-shop{
-  display:block;
-  position:absolute;
-  top:40vw;
-  left: 0;
-  width: 100%;
-  padding: 2vw;
+#overlay-shop a{
+    color:white;
+    margin-left: -18vw;
+    font-size: 2.5vw;
   
 }
+#shop:checked ~ #overlay-shop{
+  display:flex;
+justify-content: center;
+margin-top: 3vw;
+ 
+  width: 90%;
+  padding: 2vw;
+  
+  
+}
+@keyframes gradient {
+	0% {
+		background-position: 0% 50%;
+    }
+	50% {
+		background-position: 100% 50%;
+    }
+	100% {
+		background-position: 0% 50%;
+	}
+}
+
+#overlay-shop{
+   
+    display: none;
+    background: linear-gradient(90deg, #0a14e7, #0045ef, #0060f0, #0076eb, #008ae1, #009ae3, #00a9e0, #00b6db, #0cc7e3, #28d9ea, #43eaee, #5ffbf1);
+   border-radius:1em;
+   cursor: pointer;
+   background-size: 400% 400%;
+	animation: gradient 30s ease infinite;
+    content:'';
+    width: 100%;
+    border-top: 0.09em solid white;
+    border-bottom:0.06em solid white;
+    
+}
+
+
 
 
 #product-type{
@@ -104,13 +141,12 @@ a{
     color:#00b6db;
 }
 
+
 ul{
     padding: 0;
     margin: 0;
 }
-#our-menu{
-    margin-bottom:5vw;
-}
+
 .dropdown{
    display:flex;
    position: relative;
@@ -140,10 +176,7 @@ ul{
    
 }
 
-#our-closed{
-  margin-top: 4vw;
-    display: flex;
-}
+
 #our-schedule-shop{
     display: none;
 }
@@ -152,18 +185,21 @@ ul{
 }
 #our-schedule-shop:checked ~ #overlay-our-shop .dropdown-our-shop
 {
-  display: block;
+  display: flex;
   margin-top: -4vw;
-  position:absolute;
- 
-  background-color: #00b6db;
- 
-
+  padding-top: 6vw;
+  
 }
-
-
-
-
+#our-closed{
+    display:flex;
+    flex-direction: column;
+    width: 18vw;
+    position: absolute;
+    top:6vw;
+    left: -19vw;
+    border: 5px solid rgb(181, 243, 131);
+    border-radius: 5px;
+}
 /*Them*/
 #overlay-them-shop .dropdown-them-shop{
     font-size: .9vw;
@@ -186,17 +222,104 @@ ul{
     margin-top: -1vw;
 }
 
-
 #them-schedule-shop:checked ~ #overlay-them-shop .dropdown-them-shop
 {
   display: block;
   margin-top: -14vw;
   position:absolute;
   width: 100%;
-  
   background-color: #00b6db;
- 
-   
+   padding-top: 6vw;
+
 }
+#them-closed{
+    display:flex;
+    flex-direction: column;
+    width: 20vw;
+    position: absolute;
+    top:6vw;
+    left:1vw;
+    border: 5px solid rgb(238, 182, 98);
+    border-radius: 5px;
+}
+/*OUR products filter*/
+.filters:has(option[value="stella"]:checked) ~   #our-list .product:not(:has(> .stella)) {
+    display: none;
+}
+.filters:has(option[value="lavoretto"]:checked) ~   #our-list .product:not(:has(> .lavoretto)) {
+    display: none;
+}
+.filters:has(option[value="borsa"]:checked) ~   #our-list .product:not(:has(> .borsa)) {
+    display: none;
+}
+.filters:has(option[value="all"]:checked) ~   #our-list .product:not(:has(> .all)) {
+    display: none;
+}
+/*OUR price filter*/
+.filters:has(option[value="allprice"]:checked) ~   #our-list .product:not(:has(> .allprice)) {
+    display: none;
+}
+.filters:has(option[value="cipper"]:checked) ~   #our-list .product:not(:has(> .cipper)) {
+    display: none;
+}
+.filters:has(option[value="medium"]:checked) ~   #our-list .product:not(:has(> .medium)) {
+    display: none;
+}
+.filters:has(option[value="expensive"]:checked) ~   #our-list .product:not(:has(> .expensive)) {
+    display: none;
+}
+/*THEM products filter*/
+.filters:has(option[value="centro"]:checked) ~   #them-list .product:not(:has(> .centro)) {
+    display: none;
+}
+.filters:has(option[value="vaso"]:checked) ~   #them-list .product:not(:has(> .vaso)) {
+    display: none;
+}
+.filters:has(option[value="tazza"]:checked) ~   #them-list .product:not(:has(> .tazza)) {
+    display: none;
+}
+.filters:has(option[value="all"]:checked) ~   #them-list .product:not(:has(> .all)) {
+    display: none;
+}
+/*OUR price filter*/
+.filters:has(option[value="allprice"]:checked) ~   #them-list .product:not(:has(> .allprice)) {
+    display: none;
+}
+.filters:has(option[value="cipper"]:checked) ~   #them-list .product:not(:has(> .cipper)) {
+    display: none;
+}
+.filters:has(option[value="medium"]:checked) ~   #them-list .product:not(:has(> .medium)) {
+    display: none;
+}
+.filters:has(option[value="expensive"]:checked) ~   #them-list .product:not(:has(> .expensive)) {
+    display: none;
+}
+/*cards style*/
+.product{
+  
+    width: 50vw;
+    height: 30vw;
+    background: url(/public/images/shop-images/sfondo-shop.png)no-repeat;
+    background-size: cover;
+    margin-bottom: 2vw;
+    padding-top: 1vw;
+    border-top: 1em solid white;
+    border-bottom:0.3em solid white;
+    box-shadow: 1px 1px 20px 10px rgb(246, 246, 229) inset;
+    border-radius: 2em 6em 8em 10em;
+}
+
+
+
+
+    
+    
+
+
+
+
+
+
+
 
 

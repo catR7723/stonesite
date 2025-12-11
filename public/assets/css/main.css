@@ -5,6 +5,7 @@
 }
 html{
     background-color:  rgb(15, 175, 154);
+    min-height: 100vh;
    margin-top: 5%;
     
 }
