@@ -12,17 +12,12 @@ html{
 }
 
 body{
-
 display: flex;
 flex-direction: column;
 align-items: center;
-
 }
-
-
 /*Menu*/
 .menu{
-    
     background-color: rgb(12, 2, 85);
     width: 100%;
     height: 6vw;
@@ -77,7 +72,6 @@ align-items: center;
 }
 .open{
     color:aqua;
-
 }
 
 #shop{
@@ -86,12 +80,14 @@ align-items: center;
 #overlay-shop{
     display: none;
 }
+
 #overlay-shop a{
     color:white;
-    margin-left: -18vw;
     font-size: 2.5vw;
+    padding: 2vw;
   
 }
+
 #shop:checked ~ #overlay-shop{
   display:flex;
 justify-content: center;
@@ -118,30 +114,24 @@ margin-top: 3vw;
    
     display: none;
     background: linear-gradient(90deg, #0a14e7, #0045ef, #0060f0, #0076eb, #008ae1, #009ae3, #00a9e0, #00b6db, #0cc7e3, #28d9ea, #43eaee, #5ffbf1);
-   border-radius:1em;
+    border-radius:1em;
    cursor: pointer;
    background-size: 400% 400%;
 	animation: gradient 30s ease infinite;
     content:'';
     width: 100%;
-    border-top: 0.09em solid white;
-    border-bottom:0.06em solid white;
+    border-top: 0.2em solid white;
+    border-bottom:0.1em solid white;
+    
     
 }
-
-
-
-
 #product-type{
    display: flex;
-
+   justify-content: center;
 }
-
 a{
     color:#00b6db;
 }
-
-
 ul{
     padding: 0;
     margin: 0;
@@ -152,16 +142,13 @@ ul{
    position: relative;
 }
 .dropdown li{
-
-   width: 100%;
+    width: 100%;
    list-style: none;
    text-align: center;
    font-size: 3vw;
    color: white;
    text-shadow: 5px 3px 3px black;
-   
 }
-
 .product-shop-list{
   width: 100%;
   justify-items: center;
@@ -173,10 +160,7 @@ ul{
     text-align: center;
     display: none;
     border-radius:  1em;
-   
 }
-
-
 #our-schedule-shop{
     display: none;
 }
@@ -186,7 +170,7 @@ ul{
 #our-schedule-shop:checked ~ #overlay-our-shop .dropdown-our-shop
 {
   display: flex;
-  margin-top: -4vw;
+  margin-top: -2vw;
   padding-top: 6vw;
   
 }
@@ -243,7 +227,7 @@ ul{
     border-radius: 5px;
 }
 /*OUR products filter*/
-.filters:has(option[value="stella"]:checked) ~   #our-list .product:not(:has(> .stella)) {
+.filters:has(option[value="maglietta"]:checked) ~   #our-list .product:not(:has(> .maglietta)) {
     display: none;
 }
 .filters:has(option[value="lavoretto"]:checked) ~   #our-list .product:not(:has(> .lavoretto)) {
@@ -295,8 +279,7 @@ ul{
     display: none;
 }
 /*cards style*/
-.product{
-  
+.back{
     width: 50vw;
     height: 30vw;
     background: url(/public/images/shop-images/sfondo-shop.png)no-repeat;
@@ -308,6 +291,31 @@ ul{
     box-shadow: 1px 1px 20px 10px rgb(246, 246, 229) inset;
     border-radius: 2em 6em 8em 10em;
 }
+/*Our Cards Style*/
+
+#back-clothes{
+  
+    background: url(/public/images/shop-images/negozio.png)no-repeat ;
+    background-size: 100% 100%;
+    margin-bottom: 2vw;
+    padding-top: 1vw;
+    border-top: 1em solid white;
+    border-bottom:0.3em solid white;
+    box-shadow: 1px 1px 20px 10px rgb(246, 246, 229) inset;
+    border-radius: 2em 6em 8em 10em;
+}
+#maglietta{
+     width: 50vw;
+    height: 30vw;
+    background: 
+    url(/public/images/shop-images/products-images/magliettafronte.png) no-repeat center left,
+    url(/public/images/shop-images/products-images/magliettaretro.png) no-repeat center right; 
+    width: 100%;
+    background-size: 30vw, 30vw;
+    cursor: pointer;
+}
+
+
 
 
 
