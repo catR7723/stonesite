@@ -136,8 +136,6 @@ body{
     flex-direction: column;
     position:relative;
     top:9vw;
-
-  
 }
 #day-list{
     display: none;

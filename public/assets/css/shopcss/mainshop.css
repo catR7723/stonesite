@@ -1,4 +1,21 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@property --angle{
+    syntax: "<angle>";
+    initial-value: 0deg;
+    inherits: false;
+}
+@keyframes gradient {
+	0% {
+		background-position: 0% 50%;
+    }
+	50% {
+		background-position: 100% 50%;
+    }
+	100% {
+		background-position: 0% 50%;
+	}
+}
+
 *{
     margin:0;
     padding:0;
@@ -77,257 +94,110 @@ align-items: center;
 #shop{
     display: none;
 }
+
 #overlay-shop{
     display: none;
+    background: linear-gradient(90deg, #0a14e7, #0045ef, #0060f0, #0076eb, #008ae1, #009ae3, #00a9e0, #00b6db, #0cc7e3, #28d9ea, #43eaee, #5ffbf1);
+   border-radius:1em;
+    cursor: pointer;
+   margin-top: 37vw;
+    background-size: 400% 400%;
+	animation: gradient 30s ease infinite;
+    content:'';
+    border-radius: 1em;
+    width: 98%;
+    border-top: 0.09em solid white;
+    border-bottom:0.06em solid white;
 }
 
-#overlay-shop a{
+.what {
     color:white;
     font-size: 2.5vw;
     padding: 2vw;
-  
+    text-shadow: 3px 2px 2px black;
 }
-
-#shop:checked ~ #overlay-shop{
-  display:flex;
-justify-content: center;
-margin-top: 3vw;
- 
-  width: 90%;
-  padding: 2vw;
-  
-  
-}
-@keyframes gradient {
-	0% {
-		background-position: 0% 50%;
-    }
-	50% {
-		background-position: 100% 50%;
-    }
-	100% {
-		background-position: 0% 50%;
-	}
-}
-
-#overlay-shop{
-   
+#shop{
     display: none;
-    background: linear-gradient(90deg, #0a14e7, #0045ef, #0060f0, #0076eb, #008ae1, #009ae3, #00a9e0, #00b6db, #0cc7e3, #28d9ea, #43eaee, #5ffbf1);
-    border-radius:1em;
-   cursor: pointer;
-   background-size: 400% 400%;
-	animation: gradient 30s ease infinite;
-    content:'';
-    width: 100%;
-    border-top: 0.2em solid white;
-    border-bottom:0.1em solid white;
-    
-    
 }
-#product-type{
-   display: flex;
-   justify-content: center;
-}
-a{
-    color:#00b6db;
+#shop:checked ~ #overlay-shop{
+    display: flex;
+    flex-direction: column;
+    position:relative;
 }
 ul{
     padding: 0;
     margin: 0;
 }
-
-.dropdown{
-   display:flex;
-   position: relative;
-}
-.dropdown li{
-    width: 100%;
-   list-style: none;
+li{
+    list-style: none;
    text-align: center;
-   font-size: 3vw;
+   font-size: 2vw;
    color: white;
-   text-shadow: 5px 3px 3px black;
+   text-shadow: 10px 8px 8px black;
+   margin: 2vw;
 }
-.product-shop-list{
-  width: 100%;
+#shirt-schedule-list{
+    display: none;
+}
+li:hover{
+   text-shadow: 10px 8px 8px rgb(242, 244, 245); 
+   color: #000b2f;
+}
+
+.shirt-card-list{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2vw;
+    padding: 2vw;
+     width: 100%;
   justify-items: center;
 }
-/*Our*/
-#overlay-our-shop .dropdown-our-shop{
-    font-size: .9vw;
-    width: 100%;
-    text-align: center;
-    display: none;
-    border-radius:  1em;
-}
-#our-schedule-shop{
+/*filter*/
+.filters:has(option[value="all-color"]:checked) ~  #shirt-card-list .single:not(:has(> .all-color)) {
     display: none;
 }
-#our-list{
-    margin-top: -3vw;
+.filters:has(option[value="blue"]:checked) ~   #shirt-card-list .single:not(:has(> .blue)) {
+    display: none;
 }
-#our-schedule-shop:checked ~ #overlay-our-shop .dropdown-our-shop
-{
-  display: flex;
-  margin-top: -2vw;
-  padding-top: 6vw;
-  
+.filters:has(option[value="green"]:checked) ~   #shirt-card-list .single:not(:has(> .green)) {
+    display: none;
 }
-#our-closed{
-    display:flex;
-    flex-direction: column;
-    width: 18vw;
-    position: absolute;
-    top:6vw;
-    left: -19vw;
-    border: 5px solid rgb(181, 243, 131);
-    border-radius: 5px;
+.filters:has(option[value="pink"]:checked) ~   #shirt-card-list .single:not(:has(> .pink)) {
+    display: none;
 }
-/*Them*/
-#overlay-them-shop .dropdown-them-shop{
-    font-size: .9vw;
+.filters:has(option[value="s"]:checked) ~   #shirt-card-list .single:not(:has(> .s)) {
+    display: none;
+}
+.filters:has(option[value="m"]:checked) ~   #shirt-card-list .single:not(:has(> .m)) {
+    display: none;
+}
+.filters:has(option[value="l"]:checked) ~   #shirt-card-list .single:not(:has(> .l)) {
+    display: none;
+}
+.filters:has(option[value="x"]:checked) ~   #shirt-card-list .single:not(:has(> .x)) {
+    display: none;
+}
+.filters:has(option[value="xl"]:checked) ~   #shirt-card-list .single:not(:has(> .xl)) {
+    display: none;
+}
+
+#overlay-shirt-list .dropdown-shirt-list{
+      font-size: .9vw;
     font-weight: 700;
     text-align: center;
     display: none;
     position: relative;
     z-index: 4;
     padding: .8vw;
-    border-radius:  1em;
+    border-radius:  1em;  
 }
-#them-closed{
-  margin-top: 3vw;
-    display: flex;
+#shirt-closed{
+  color:rgb(200, 233, 244);
 }
-#them-schedule-shop{
+#shirt-schedule-list{
     display: none;
 }
-#them-list{
-    margin-top: -1vw;
+#shirt-schedule-list:checked ~ #overlay-shirt-list .dropdown-shirt-list{
+    display: block;
 }
-
-#them-schedule-shop:checked ~ #overlay-them-shop .dropdown-them-shop
-{
-  display: block;
-  margin-top: -14vw;
-  position:absolute;
-  width: 100%;
-  background-color: #00b6db;
-   padding-top: 6vw;
-
-}
-#them-closed{
-    display:flex;
-    flex-direction: column;
-    width: 20vw;
-    position: absolute;
-    top:6vw;
-    left:1vw;
-    border: 5px solid rgb(238, 182, 98);
-    border-radius: 5px;
-}
-/*OUR products filter*/
-.filters:has(option[value="maglietta"]:checked) ~   #our-list .product:not(:has(> .maglietta)) {
-    display: none;
-}
-.filters:has(option[value="lavoretto"]:checked) ~   #our-list .product:not(:has(> .lavoretto)) {
-    display: none;
-}
-.filters:has(option[value="borsa"]:checked) ~   #our-list .product:not(:has(> .borsa)) {
-    display: none;
-}
-.filters:has(option[value="all"]:checked) ~   #our-list .product:not(:has(> .all)) {
-    display: none;
-}
-/*OUR price filter*/
-.filters:has(option[value="allprice"]:checked) ~   #our-list .product:not(:has(> .allprice)) {
-    display: none;
-}
-.filters:has(option[value="cipper"]:checked) ~   #our-list .product:not(:has(> .cipper)) {
-    display: none;
-}
-.filters:has(option[value="medium"]:checked) ~   #our-list .product:not(:has(> .medium)) {
-    display: none;
-}
-.filters:has(option[value="expensive"]:checked) ~   #our-list .product:not(:has(> .expensive)) {
-    display: none;
-}
-/*THEM products filter*/
-.filters:has(option[value="centro"]:checked) ~   #them-list .product:not(:has(> .centro)) {
-    display: none;
-}
-.filters:has(option[value="vaso"]:checked) ~   #them-list .product:not(:has(> .vaso)) {
-    display: none;
-}
-.filters:has(option[value="tazza"]:checked) ~   #them-list .product:not(:has(> .tazza)) {
-    display: none;
-}
-.filters:has(option[value="all"]:checked) ~   #them-list .product:not(:has(> .all)) {
-    display: none;
-}
-/*OUR price filter*/
-.filters:has(option[value="allprice"]:checked) ~   #them-list .product:not(:has(> .allprice)) {
-    display: none;
-}
-.filters:has(option[value="cipper"]:checked) ~   #them-list .product:not(:has(> .cipper)) {
-    display: none;
-}
-.filters:has(option[value="medium"]:checked) ~   #them-list .product:not(:has(> .medium)) {
-    display: none;
-}
-.filters:has(option[value="expensive"]:checked) ~   #them-list .product:not(:has(> .expensive)) {
-    display: none;
-}
-/*cards style*/
-.back{
-    width: 50vw;
-    height: 30vw;
-    background: url(/public/images/shop-images/sfondo-shop.png)no-repeat;
-    background-size: cover;
-    margin-bottom: 2vw;
-    padding-top: 1vw;
-    border-top: 1em solid white;
-    border-bottom:0.3em solid white;
-    box-shadow: 1px 1px 20px 10px rgb(246, 246, 229) inset;
-    border-radius: 2em 6em 8em 10em;
-}
-/*Our Cards Style*/
-
-#back-clothes{
-  
-    background: url(/public/images/shop-images/negozio.png)no-repeat ;
-    background-size: 100% 100%;
-    margin-bottom: 2vw;
-    padding-top: 1vw;
-    border-top: 1em solid white;
-    border-bottom:0.3em solid white;
-    box-shadow: 1px 1px 20px 10px rgb(246, 246, 229) inset;
-    border-radius: 2em 6em 8em 10em;
-}
-#maglietta{
-     width: 50vw;
-    height: 30vw;
-    background: 
-    url(/public/images/shop-images/products-images/magliettafronte.png) no-repeat center left,
-    url(/public/images/shop-images/products-images/magliettaretro.png) no-repeat center right; 
-    width: 100%;
-    background-size: 30vw, 30vw;
-    cursor: pointer;
-}
-
-
-
-
-
-
-    
-    
-
-
-
-
-
-
-
-
-

@@ -8,23 +8,283 @@
 
 </head>
 <body>
-  <nav>
-    <ul>
-      <li><img src="/public/images/logocentro.png" ></li>
-      <li><a href="about.html">About us</a></li>
-      <li><a href="products.html.html">Products</a>
-        <div class="dropdown">
-          <div class="dropdown-content">
-            <a href="#">Link 1</a>
-            <a href="#">Link 2</a>
-            <a href="#">Link 3</a>
-          </div>
-        </div>
-      </li>
-      <li><a href="login.html">Login</a></li>
-    </ul>
-  
-  </nav>
+            <input type="checkbox" id="t-shirt">
+            <label for="t-shirt">
+                <a>Vestiti Stone!</a>
+                <a>T-Shirt Solidali</a>
+            </label>
+            <label for="t-shirt" id="overlay-shirt-list">
+                <div class="dropdown-shirt-list">
+                    <div class="filter" id="shirt-closed">
+                        <select name="colors" id="colors">
+                            <option value="all-color">TUTTI I COLORI</option>
+                            <option value="blue">BLUE</option>
+                            <option value="green">VERDE</option>
+                            <option value="pink">ROSA</option>
+                        </select>
+                        <select name="tail" id="tail">
+                            <option value="s">S</option>
+                            <option value="m">M</option>
+                            <option value="l">L</option>
+                            <option value="xl">XL</option>
+                        </select>
+                    </div>
+                    <!--Cards T-Shirt  -->
+                    <div class="shirt-card-list" id="shirt-card-list">
+                        <div class="t-back">
+                            <div class="siglet" id="all-tail">
+                                <span class="all-color" >
+                                    <h1>TUTTI I COLORI</h1>
+                                </span>
+                                <span class="green"></span>
+                                <span class="pink"></span>
+                                <span class="blue"></span>
+                                <span class="s" ></span>
+                                <span class="m"></span>
+                                <span class="l"></span>
+                                <span class="x"></span>
+                                <span class="xl"></span>
+                            </div>
+                        </div>
+                        <div class="t-back">
+
+                        </div>
+                        <div class="t-back">
+                            <div class="siglet" id="blue">
+                                <span class="blue" >
+                                    <h1>Colore BLU</h1>
+                                </span>
+                                <span class="s" >
+                                    <h1>TAGLIA "SMALL"</h1>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="t-back">
+                            <div class="siglet" id="blue">
+                                <span class="blue" >
+                                    <h1>Colore BLU</h1>
+                                </span>
+                                <span class="m" >
+                                    <h1>TAGLIA "MEDIUM"</h1>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="t-back">
+                            <div class="siglet" id="blue">
+                                <span class="blue" >
+                                    <h1>Colore BLU</h1>
+                                </span>
+                                <span class="l" >
+                                    <h1>TAGLIA "LARGE"</h1>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="t-back">
+                            <div class="siglet" id="blue">
+                                <span class="blue" >
+                                    <h1>Colore BLU</h1>
+                                </span>
+                                <span class="xl" >
+                                    <h1>TAGLIA "EXTRA-LARGE"</h1>
+                                </span>
+                            </div>
+                        </div>
+                        <!--Green-->
+                        <div class="t-back">
+                            <div class="siglet" id="green">
+                                <span class="green" >
+                                    <h1>Colore VERDE</h1>
+                                </span>
+                                <span class="s" >
+                                    <h1>TAGLIA "SMALL"</h1>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="t-back">
+                            <div class="siglet" id="green">
+                                <span class="green" >
+                                    <h1>Colore VERDE</h1>
+                                </span>
+                                <span class="m" >
+                                    <h1>TAGLIA "MEDIUM"</h1>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="t-back">
+                            <div class="siglet" id="green">
+                                <span class="green" >
+                                    <h1>Colore VERDE</h1>
+                                </span>
+                                <span class="l" >
+                                    <h1>TAGLIA "LARGE"</h1>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="t-back">
+                            <div class="siglet" id="green">
+                                <span class="green" >
+                                    <h1>Colore VERDE</h1>
+                                </span>
+                                <span class="xl" >
+                                    <h1>TAGLIA "EXTRA-LARGE"</h1>
+                                </span>
+                            </div>
+                        </div>
+                        <!--Pink-->
+                        <div class="t-back">
+                            <div class="siglet" id="pink">
+                                <span class="pink" >
+                                    <h1>Colore PINK</h1>
+                                </span>
+                                <span class="s" >
+                                    <h1>TAGLIA "SMALL"</h1>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="t-back">
+                            <div class="siglet" id="pink">
+                                <span class="pink" >
+                                    <h1>Colore PINK</h1>
+                                </span>
+                                <span class="m" >
+                                    <h1>TAGLIA "MEDIUM"</h1>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="t-back">
+                            <div class="siglet" id="pink">
+                                <span class="pink" >
+                                    <h1>Colore PINK</h1>
+                                </span>
+                                <span class="l" >
+                                    <h1>TAGLIA "LARGE"</h1>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="t-back">
+                            <div class="siglet" id="pink">
+                                <span class="pink" >
+                                    <h1>Colore PINK</h1>
+                                </span>
+                                <span class="xl" >
+                                    <h1>TAGLIA "EXTRA-LARGE"</h1>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+
+            </label>
+    <style>
+      .open-shop{
+    margin-top: 5vw;
+    font-size: 3vw;
+    cursor: pointer;
+    background-color: #012b08;
+    width: 40vw;
+    text-align: center;
+    border-radius: .5em;
+    border-top: 1px solid white;
+    border-bottom: 1px solid white;
+}
+.open{
+    color:aqua;
+}
+
+#shop{
+    display: none;
+}
+
+#overlay-shop{
+    display: none;
+    background: linear-gradient(90deg, #0a14e7, #0045ef, #0060f0, #0076eb, #008ae1, #009ae3, #00a9e0, #00b6db, #0cc7e3, #28d9ea, #43eaee, #5ffbf1);
+   border-radius:1em;
+    cursor: pointer;
+   margin-top: 37vw;
+    background-size: 400% 400%;
+	animation: gradient 30s ease infinite;
+    content:'';
+    border-radius: 1em;
+    width: 98%;
+    border-top: 0.09em solid white;
+    border-bottom:0.06em solid white;
+}
+
+.what {
+    color:white;
+    font-size: 2.5vw;
+    padding: 2vw;
+    text-shadow: 3px 2px 2px black;
+}
+#shop{
+    display: none;
+}
+#shop:checked ~ #overlay-shop{
+    display: flex;
+    flex-direction: column;
+    position:relative;
+}
+ul{
+    padding: 0;
+    margin: 0;
+}
+li{
+    list-style: none;
+   text-align: center;
+   font-size: 2vw;
+   color: white;
+   text-shadow: 10px 8px 8px black;
+   margin: 2vw;
+}
+#t-shirt{
+    display: none;
+}
+li:hover{
+   text-shadow: 10px 8px 8px rgb(242, 244, 245); 
+   color: #000b2f;
+}
+.daily-menu-list{
+  width: 100%;
+  justify-items: center;
+}
+.shirt-card-list{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2vw;
+    padding: 2vw;
+}
+/*filter*/
+.filters:has(option[value="all-color"]:checked) ~   #shirt-card-list .siglet:not(:has(> .all-color)) {
+    display: none;
+}
+.filters:has(option[value="blue"]:checked) ~   #shirt-card-list .siglet:not(:has(> .blue)) {
+    display: none;
+}
+.filters:has(option[value="green"]:checked) ~   #shirt-card-list .siglet:not(:has(> .green)) {
+    display: none;
+}
+.filters:has(option[value="pink"]:checked) ~   #shirt-card-list .siglet:not(:has(> .pink)) {
+    display: none;
+}
+.filters:has(option[value="s"]:checked) ~   #shirt-card-list .siglet:not(:has(> .s)) {
+    display: none;
+}
+.filters:has(option[value="m"]:checked) ~   #shirt-card-list .siglet:not(:has(> .m)) {
+    display: none;
+}
+.filters:has(option[value="l"]:checked) ~   #shirt-card-list .siglet:not(:has(> .l)) {
+    display: none;
+}
+.filters:has(option[value="x"]:checked) ~   #shirt-card-list .siglet:not(:has(> .x)) {
+    display: none;
+}
+.filters:has(option[value="xl"]:checked) ~   #shirt-card-list .siglet:not(:has(> .xl)) {
+    display: none;
+}
+
+    </style>
           
 </body>
 </html>

@@ -29,343 +29,190 @@
     <a class="what">Cosa Vuoi Comprare?</a>
   </label>
   <label for="shop" id="overlay-shop">
-    <div class="dropdown">
-        <ul>
-          <li id="our-shop">
-            <input type="checkbox" id="our-schedule-shop">
-            <label for="our-schedule-shop" class="open-our-shop" id="do">
-                <a id="product-type">Fatti da Noi!</a>
+    <ul>
+        <li id="clothes">
+            <input type="checkbox" id="shirt-schedule-list">
+            <label for="shirt-schedule-list" class="open-shirt-menu">
+                <a>Vestiti Stone!</a>
+                <a>T-Shirt Solidali</a>
             </label>
-            <label for="our-schedule-shop" id="overlay-our-shop">
-                <div class="dropdown-our-shop">
-                    <div class="filters" id="our-closed">
-                        <select name="price" id="price">
-                            <option value="allprice">Qualsiasi Prezzo</option>
-                            <option value="cipper">da 5euro a 15euro</option>
-                            <option value="medium">da 16euro a 50euro</option>
-                            <option value="expensive">più di 50euro</option>
+            <label for="shirt-schedule-list" id="overlay-shirt-list">
+                <div class="dropdown-shirt-list">
+                    <div class="filters" id="shirt-closed">
+                        <select name="colors" id="colors">
+                            <option value="all-color">TUTTI I COLORI</option>
+                            <option value="blue">BLUE</option>
+                            <option value="green">VERDE</option>
+                            <option value="pink">ROSA</option>
                         </select>
-                        <select name="type" id="type">
-                            <option value="all">Tutti i Prodotti </option>
-                            <option value="maglietta">Maglietta "fa caldo"</option>
-                            <option value="lavoretto">Decorazione</option>
-                            <option value="borsa">Borsa Shopper</option>
-                        </select>
-                    </div>
-<!-- Cards Our Products -->
-              <div class="product-shop-list" id="our-list">
-                <div class="back" id="back-clothes">
-                    <div class="product-ts" id="maglietta">
-                        <span class="maglietta">
-                            <h1>Maglietta "fa caldo"</h1>
-                        </span>
-                        <span class="all"></span>
-                        <span class="allprice"></span>
-                        <span class="medium">
-                            <h1>Costo: 28,00euro</h1>
-                        </span>
-                        
-                    </div>
-                    <input type="checkbox" id="t-shop">
-                    <label for="t-shop" class="open-t-shop">
-                        <a class="choose">Scegli la tua Maglietta</a>
-                    </label>
-                    <label for="t-shop" id="overlay-t-shop">
-                        <div class="t-dropdown">
-                            <ul>
-                                <li id="tail-shop">
-                                    <input type="checkbox" id="tail-schedule-shop">
-                                    <label for="tail-schedule-shop" class="open-tail-shop" id="open-tail">
-                                        <a id="tail-type">Scegli la Taglia</a>
-                                    </label>
-                                    <label for="tail-schedule-shop" id="overlay-tail-shop">
-                                        <div class="dropdown-tail-shop">
-                                            <div class="t-filters" id="tail-closed">
-                                                <select name="tail" id="tail">
-                                                    <option value="small">Taglia Small "S"</option>
-                                                    <option value="elle">Taglia Elle "L"</option>
-                                                    <option value="x">Taglia Exrta "X"</option>
-                                                    <option value="xl">Taglia Extra Large "XL"</option>
-                                                </select>
-                                                <select name="color" id="color">
-                                                    <option value="all">Tutti i Colori </option>
-                                                    <option value="blue">Blue"</option>
-                                                    <option value="green">Verde</option>
-                                                    <option value="pink">Rosa</option>
-                                                </select>
-                                            </div>
-                                            <div class="tshirt-shop-list" id="t-list">
-                                                <div class="t-back" id="t-back-clothes">
-                                                    <div class="tshirt" id="small-blue">
-                                                        <span class="small-blue">
-                                                            <h1>Maglietta "fa caldo" colore BLUE</h1>
-                                                        </span>
-                                                        <span class="esse">
-                                                            <h1>Taglia Small "S"</h1>
-                                                            <h2>Costo: 28,00Euro</h2>
-                                                            <h1>COMPRA</h1>
-                                                        </span>
-                                                        <span class="bule"></span>
-                                                    </div>
-                                                </div>
-                                                <div class="t-back" id="t-back-clothes">
-                                                    <div class="tshirt" id="elle-blue">
-                                                        <span class="elle-blue">
-                                                            <h1>Maglietta "fa caldo" colore BLUE</h1>
-                                                        </span>
-                                                        <span class="elle">
-                                                            <h1>Taglia Elle "L"</h1>
-                                                            <h2>Costo: 28,00Euro</h2>
-                                                            <h1>COMPRA</h1>
-                                                        </span>
-                                                        <span class="blue"></span>
-                                                    </div>
-                                                </div>
-                                                <div class="t-back" id="t-back-clothes">
-                                                    <div class="tshirt" id="x-blue">
-                                                        <span class="x-blue">
-                                                            <h1>Maglietta "fa caldo" colore BLUE</h1>
-                                                        </span>
-                                                        <span class="x">
-                                                            <h1>Taglia Extra "X"</h1>
-                                                            <h2>Costo: 28,00Euro</h2>
-                                                            <h1>COMPRA</h1>
-                                                        </span>
-                                                        <span class="blue"></span>
-                                                    </div>
-                                                </div>
-                                                <div class="t-back" id="t-back-clothes">
-                                                    <div class="tshirt" id="xl-blue">
-                                                        <span class="xl-blue">
-                                                            <h1>Maglietta "fa caldo" colore BLUE</h1>
-                                                        </span>
-                                                        <span class="xl">
-                                                            <h1>Taglia Extra Large "XL"</h1>
-                                                            <h2>Costo: 28,00Euro</h2>
-                                                            <h1>COMPRA</h1>
-                                                        </span>
-                                                        <span class="blue"></span>
-                                                    </div>
-                                                </div>
-                                        <!--green-->
-                                                <div class="t-back" id="t-back-clothes">
-                                                    <div class="tshirt" id="small-green">
-                                                        <span class="small-green">
-                                                            <h1>Maglietta "fa caldo" colore VERDE</h1>
-                                                        </span>
-                                                        <span class="esse">
-                                                            <h1>Taglia Small "S"</h1>
-                                                            <h2>Costo: 28,00Euro</h2>
-                                                            <h1>COMPRA</h1>
-                                                        </span>
-                                                        <span class="green"></span>
-                                                    </div>
-                                                </div>
-                                                <div class="t-back" id="t-back-clothes">
-                                                    <div class="tshirt" id="elle-green">
-                                                        <span class="elle-green">
-                                                            <h1>Maglietta "fa caldo" colore BLUE</h1>
-                                                        </span>
-                                                        <span class="elle">
-                                                            <h1>Taglia Elle "L"</h1>
-                                                            <h2>Costo: 28,00Euro</h2>
-                                                            <h1>COMPRA</h1>
-                                                        </span>
-                                                        <span class="green"></span>
-                                                    </div>
-                                                </div>
-                                                <div class="t-back" id="t-back-clothes">
-                                                    <div class="tshirt" id="x-green">
-                                                        <span class="x-green">
-                                                            <h1>Maglietta "fa caldo" colore VERDE</h1>
-                                                        </span>
-                                                        <span class="x">
-                                                            <h1>Taglia Extra "X"</h1>
-                                                            <h2>Costo: 28,00Euro</h2>
-                                                            <h1>COMPRA</h1>
-                                                        </span>
-                                                        <span class="green"></span>
-                                                    </div>
-                                                </div>
-                                                <div class="t-back" id="t-back-clothes">
-                                                    <div class="tshirt" id="xl-green">
-                                                        <span class="xl-green">
-                                                            <h1>Maglietta "fa caldo" colore VERDE</h1>
-                                                        </span>
-                                                        <span class="xl">
-                                                            <h1>Taglia Extra Large "XL"</h1>
-                                                            <h2>Costo: 28,00Euro</h2>
-                                                            <h1>COMPRA</h1>
-                                                        </span>
-                                                        <span class="green"></span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </label>
-                                </li>
-            <li id="them-shop">
-                <input type="checkbox" id="them-schedule-shop">
-                <label for="them-schedule-shop" class="open-them-shop" id="them">
-                  <a id="product-type">Dai Nostri Amici</a>
-                </label>
-            <label for="them-schedule-shop" id="overlay-them-shop">
-                <div class="dropdown-them-shop">
-                    <div class="filters" id="them-closed">
-                        <select name="price" id="price">
-                            <option value="allprice">Qualsiasi Prezzo</option>
-                            <option value="cipper">da 5euro a 15euro</option>
-                            <option value="medium">da 16euro a 50euro</option>
-                            <option value="expensive">più di 50euro</option>
-                        </select>
-                        <select name="type" id="type">
-                            <option value="all">Tutti i Prodotti </option>
-                            <option value="centro">Centro Tavola</option>
-                            <option value="vaso">Vaso</option>
-                            <option value="tazza">Tazza</option>
+                        <select name="tail" id="tail">
+                            <option value="s">S</option>
+                            <option value="m">M</option>
+                            <option value="l">L</option>
+                            <option value="xl">XL</option>
                         </select>
                     </div>
-<!-- Cards them Products -->
-              <div class="product-shop-list" id="them-list">
-                 <div class="back">
-                    <div class="product" id="stella">
-                        <span class="centro">
-                            <h1>Centro Tavola</h1>
-                        </span>
-                        <span class="all"></span>
-                        <span class="allprice"></span>
-                        <span class="medium">
-                            <h1>Costo: 30,00euro</h1>
-                        </span>
-                    </div>
-                </div>
-                <div class="back">
-                    <div class="product" id="vaso">
-                        <span class="vaso">
-                            <h1>Vaso</h1>
-                        </span>
-                        <span class="all"></span>
-                        <span class="allprice"></span>
-                        <span class="cipper">
-                            <h1>Costo: 11,00euro</h1>
-                        </span>
-                    </div>
-                </div>
-                <div class="back">
-                    <div class="product" id="borsa">
-                        <span class="tazza">
-                            <h1>Tazza</h1>
-                        </span>
-                        <span class="all"></span>
-                        <span class="allprice"></span>
-                        <span class="expensive">
-                            <h1>Costo: 80,00euro</h1>
-                        </span>
-                    </div>
-                </div>
-            </div>
-                </div>
-            </label>
-            </li>
-        </ul>
-    </div>
+                    <!--Cards T-Shirt  -->
+                    <div class="shirt-card-list" id="shirt-card-list">
+                        <div class="t-back">
+                            <div class="single" id="all-color">
+                                <span class="all-color" >
+                                    <h1>TUTTI I COLORI</h1>
+                                </span>
+    
+                            </div>
+                        </div>
 
-  </label>
-                </div>
-                <div class="back">
-                    <div class="product" id="lavoretto">
-                        <span class="lavoretto">
-                            <h1>Lavoretto</h1>
-                        </span>
-                        <span class="all"></span>
-                        <span class="allprice"></span>
-                        <span class="cipper">
-                            <h1>Costo: 10,00euro</h1>
-                        </span>
-                    </div>
-                </div>
-                <div class="back">
-                    <div class="product" id="borsa">
-                        <span class="borsa">
-                            <h1>Borsa</h1>
-                        </span>
-                        <span class="all"></span>
-                        <span class="allprice"></span>
-                        <span class="expensive">
-                            <h1>Costo: 80,00euro</h1>
-                        </span>
-                    </div>
-                </div>
-            </div>
-               </div>
-             </label>
-          </li>
-            <li id="them-shop">
-                <input type="checkbox" id="them-schedule-shop">
-                <label for="them-schedule-shop" class="open-them-shop" id="them">
-                  <a id="product-type">Dai Nostri Amici</a>
-                </label>
-            <label for="them-schedule-shop" id="overlay-them-shop">
-                <div class="dropdown-them-shop">
-                    <div class="filters" id="them-closed">
-                        <select name="price" id="price">
-                            <option value="allprice">Qualsiasi Prezzo</option>
-                            <option value="cipper">da 5euro a 15euro</option>
-                            <option value="medium">da 16euro a 50euro</option>
-                            <option value="expensive">più di 50euro</option>
-                        </select>
-                        <select name="type" id="type">
-                            <option value="all">Tutti i Prodotti </option>
-                            <option value="centro">Centro Tavola</option>
-                            <option value="vaso">Vaso</option>
-                            <option value="tazza">Tazza</option>
-                        </select>
-                    </div>
-<!-- Cards them Products -->
-              <div class="product-shop-list" id="them-list">
-                 <div class="back">
-                    <div class="product" id="stella">
-                        <span class="centro">
-                            <h1>Centro Tavola</h1>
-                        </span>
-                        <span class="all"></span>
-                        <span class="allprice"></span>
-                        <span class="medium">
-                            <h1>Costo: 30,00euro</h1>
-                        </span>
-                    </div>
-                </div>
-                <div class="back">
-                    <div class="product" id="vaso">
-                        <span class="vaso">
-                            <h1>Vaso</h1>
-                        </span>
-                        <span class="all"></span>
-                        <span class="allprice"></span>
-                        <span class="cipper">
-                            <h1>Costo: 11,00euro</h1>
-                        </span>
-                    </div>
-                </div>
-                <div class="back">
-                    <div class="product" id="borsa">
-                        <span class="tazza">
-                            <h1>Tazza</h1>
-                        </span>
-                        <span class="all"></span>
-                        <span class="allprice"></span>
-                        <span class="expensive">
-                            <h1>Costo: 80,00euro</h1>
-                        </span>
-                    </div>
-                </div>
-            </div>
-                </div>
-            </label>
-            </li>
-        </ul>
-    </div>
+                        <div class="t-back">
+                            <div class="single" id="blue">
+                                <span class="blue" >
+                                    <h1>Colore BLUE</h1>
+                                </span>
+                                <span class="s" >
+                                    <h1>TAGLIA "SMALL"</h1>
+                                </span>
 
+                               
+                            </div>
+                        </div>
+                        <div class="t-back">
+                            <div class="single" id="blue">
+                                <span class="blue" >
+                                    <h1>Colore BLUE</h1>
+                                </span>
+                                <span class="m" >
+                                    <h1>TAGLIA "MEDIUM"</h1>
+                                </span>
+                             
+                            </div>
+                        </div>
+                        <div class="t-back">
+                            <div class="single" id="blue">
+                                <span class="blue" >
+                                    <h1>Colore BLUE</h1>
+                                </span>
+                                <span class="l" >
+                                    <h1>TAGLIA "LARGE"</h1>
+                                </span>
+                               
+                            </div>
+                        </div>
+                        <div class="t-back">
+                            <div class="single" id="blue">
+                                <span class="blue" >
+                                    <h1>Colore BLUE</h1>
+                                </span>
+                                <span class="xl" >
+                                    <h1>TAGLIA "EXTRA-LARGE"</h1>
+                                </span>
+                            </div>
+                          
+                        </div>
+                        <!--Green-->
+                        <div class="t-back">
+                            <div class="single" id="green">
+                                <span class="green" >
+                                    <h1>Colore VERDE</h1>
+                                </span>
+                                <span class="s" >
+                                    <h1>TAGLIA "SMALL"</h1>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="t-back">
+                            <div class="single" id="green">
+                                <span class="green" >
+                                    <h1>Colore VERDE</h1>
+                                </span>
+                                <span class="m" >
+                                    <h1>TAGLIA "MEDIUM"</h1>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="t-back">
+                            <div class="single" id="green">
+                                <span class="green" >
+                                    <h1>Colore VERDE</h1>
+                                </span>
+                                <span class="l" >
+                                    <h1>TAGLIA "LARGE"</h1>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="t-back">
+                            <div class="single" id="green">
+                                <span class="green" >
+                                    <h1>Colore VERDE</h1>
+                                </span>
+                                <span class="xl" >
+                                    <h1>TAGLIA "EXTRA-LARGE"</h1>
+                                </span>
+                            </div>
+                        </div>
+                        <!--Pink-->
+                        <div class="t-back">
+                            <div class="single" id="pink">
+                                <span class="pink" >
+                                    <h1>Colore PINK</h1>
+                                </span>
+                                <span class="s" >
+                                    <h1>TAGLIA "SMALL"</h1>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="t-back">
+                            <div class="single" id="pink">
+                                <span class="pink" >
+                                    <h1>Colore PINK</h1>
+                                </span>
+                                <span class="m" >
+                                    <h1>TAGLIA "MEDIUM"</h1>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="t-back">
+                            <div class="single" id="pink">
+                                <span class="pink" >
+                                    <h1>Colore PINK</h1>
+                                </span>
+                                <span class="l" >
+                                    <h1>TAGLIA "LARGE"</h1>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="t-back">
+                            <div class="single" id="pink">
+                                <span class="pink" >
+                                    <h1>Colore PINK</h1>
+                                </span>
+                                <span class="xl" >
+                                    <h1>TAGLIA "EXTRA-LARGE"</h1>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+
+            </label>
+
+        </li>
+        <li id="home-made">
+            <input type="checkbox" id="home">
+            <label for="home">
+                <a>Fatto da Noi!</a>
+                <a>Oggetti Solidali</a>
+            </label>
+        </li>
+        <li id="donations">
+            <input type="checkbox" id="donate">
+            <label for="donate">
+                <a>Oggetti Nuovi o come Nuovi!</a>
+            </label>
+        </li>
+    </ul>
   </label>
+
+                
  </body>
 </html>
