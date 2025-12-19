@@ -100,16 +100,15 @@ align-items: center;
     background: linear-gradient(90deg, #0a14e7, #0045ef, #0060f0, #0076eb, #008ae1, #009ae3, #00a9e0, #00b6db, #0cc7e3, #28d9ea, #43eaee, #5ffbf1);
    border-radius:1em;
     cursor: pointer;
-   margin-top: 37vw;
+   margin-top: 3vw;
     background-size: 400% 400%;
 	animation: gradient 30s ease infinite;
     content:'';
     border-radius: 1em;
-    width: 98%;
-    border-top: 0.09em solid white;
+    width: 95%;
+    border-top: 0.2em solid white;
     border-bottom:0.06em solid white;
 }
-
 .what {
     color:white;
     font-size: 2.5vw;
@@ -183,13 +182,12 @@ li:hover{
 }
 
 #overlay-shirt-list .dropdown-shirt-list{
-      font-size: .9vw;
+    font-size: .9vw;
     font-weight: 700;
     text-align: center;
     display: none;
     position: relative;
     z-index: 4;
-    padding: .8vw;
     border-radius:  1em;  
 }
 #shirt-closed{
@@ -200,4 +198,24 @@ li:hover{
 }
 #shirt-schedule-list:checked ~ #overlay-shirt-list .dropdown-shirt-list{
     display: block;
+}
+.open-shirt-menu{
+    display: flex;
+    flex-direction: column;
+    padding: 1vw 0 1vw 0;
+    cursor: pointer;
+}
+.open-shirt-menu a{
+    padding-bottom: 1.5vw;
+}
+.single{
+    background-color: rgb(200, 233, 244);
+    width: 100vw;
+    height: 100vw;
+   left: -5vw;
+    
+    padding-top: 10%;
+  
+
+    position: absolute;
 }
