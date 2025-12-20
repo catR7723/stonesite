@@ -63,6 +63,7 @@ align-items: center;
 }
 /*Title*/
 .title{
+    text-align: center;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -133,25 +134,17 @@ li{
    font-size: 2vw;
    color: white;
    text-shadow: 10px 8px 8px black;
-   margin: 2vw;
+
 }
 #shirt-schedule-list{
     display: none;
 }
 li:hover{
-   text-shadow: 10px 8px 8px rgb(242, 244, 245); 
+   
    color: #000b2f;
 }
 
-.shirt-card-list{
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 2vw;
-    padding: 2vw;
-     width: 100%;
-  justify-items: center;
-}
+
 /*filter*/
 .filters:has(option[value="all-color"]:checked) ~  #shirt-card-list .single:not(:has(> .all-color)) {
     display: none;
@@ -188,7 +181,9 @@ li:hover{
     display: none;
     position: relative;
     z-index: 4;
-    border-radius:  1em;  
+    border-radius:  1em;
+
+   
 }
 #shirt-closed{
   color:rgb(200, 233, 244);
@@ -198,6 +193,7 @@ li:hover{
 }
 #shirt-schedule-list:checked ~ #overlay-shirt-list .dropdown-shirt-list{
     display: block;
+   
 }
 .open-shirt-menu{
     display: flex;
@@ -208,14 +204,57 @@ li:hover{
 .open-shirt-menu a{
     padding-bottom: 1.5vw;
 }
-.single{
-    background-color: rgb(200, 233, 244);
-    width: 100vw;
-    height: 100vw;
-   left: -5vw;
-    
-    padding-top: 10%;
-  
 
-    position: absolute;
+.single{
+    width: 50vw;
+    height: 50vw;
+    margin-top: 2vw;;
+    
+}
+
+.shirt-card-list{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+   
+}
+#all-color{
+    background: 
+    url(/public/images/shop-images/products-images/t-shirts/t-shirtrosaftonte.png) no-repeat bottom left, 
+    url(/public/images/shop-images/products-images/t-shirts/t-shirtrosaretro.png) no-repeat center left,  
+    url(/public/images/shop-images/products-images/t-shirts/t-retro.png) no-repeat bottom center,
+    url(/public/images/shop-images/products-images/t-shirts/t-fronte.png) no-repeat center, 
+  url(/public/images/shop-images/products-images/t-shirts/shirtgreenretro.png) no-repeat bottom right,
+    url(/public/images/shop-images/products-images/t-shirts/shirtgreenfronte.png) no-repeat center right; 
+    
+   
+    z-index: 1;
+    background-size: 20vw, 18vw, 18vw, 20vw, 20vw, 18vw;
+}
+
+#blue{
+    background: 
+    url(/public/images/shop-images/products-images/t-shirts/t-fronte.png) no-repeat center left, 
+    url(/public/images/shop-images/products-images/t-shirts/t-retro.png) no-repeat bottom right;
+   
+    z-index: 1;
+   
+    background-size: 30vw, 30vw;
+}
+#green{
+    background: 
+    url(/public/images/shop-images/products-images/t-shirts/shirtgreenfronte.png) no-repeat center left, 
+    url(/public/images/shop-images/products-images/t-shirts/shirtgreenretro.png) no-repeat bottom right;
+   
+    z-index: 1;
+    
+    background-size: 30vw, 30vw;
+}
+#pink{
+    background: 
+    url(/public/images/shop-images/products-images/t-shirts/t-shirtrosaftonte.png) no-repeat center left, 
+    url(/public/images/shop-images/products-images/t-shirts/t-shirtrosaretro.png) no-repeat bottom right;
+    z-index: 1;
+    background-size: 30vw, 30vw;
 }
