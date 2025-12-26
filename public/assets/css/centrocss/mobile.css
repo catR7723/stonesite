@@ -16,6 +16,7 @@ body{
    }
   nav li{
     display:none;
+    
   }
   .labo{
     display: none;
@@ -23,6 +24,23 @@ body{
   nav li:first-child, li:last-child{
     display: block;
     width:100%;
+      text-align: center;
+    
+  }
+  .flex-container{
+    flex-direction: column;
+    align-items: center;
+   
+  }
+  .text-container{
+    padding: 1em;
+    text-align: center;
+    background: url(/public/images/centropictures/logo\ centro\ \(1\).png) no-repeat center bottom;
+      background-size: 35% 66%;
+      height: 30vw;
+  }
+  .social{
+   margin-top: 1%;
   }
   .mobile-laboratory{
     font-size: 2vw;
@@ -48,7 +66,7 @@ body{
     z-index: 7;
     display: flex;
     
-   left:40%;
+  
 }
 #sidebar-active-laboratory:checked ~ .links-container-laboratory{
      flex-direction: column;

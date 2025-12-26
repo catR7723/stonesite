@@ -39,32 +39,41 @@ header, section{
     width: 100%;
     border-radius: 1em;
     background-color: var(--color-1);
-    padding: min(2em, 15%);
+   padding: 1vw;
     border-radius: 1em;
+    border-top: white 0.2em solid;
+    border-bottom: white 0.2em solid;
+}
+header:hover, section:hover{
+    border-top:none;
+    border-bottom:none;
+    border-left: white 0.2em solid;
+    border-right: white 0.2em solid;
+
 }
 .flex-container{
+
  display: flex;
- justify-content: center;
- align-items: center;
- flex-wrap: wrap;
- gap:3em;
- 
 }
-header img{
-    max-width: 100%;
-    border-radius: 1em;
-    object-fit: cover;
-    object-position: bottom;
+.img{
+background: url(/public/images/centropictures/logo\ centro\ \(1\).png)no-repeat left;
+background-size: contain;
+width: 40vw;
+
 }
+
+
 .text-container{
-    flex: 0 1 34em;
+    width: 100%;
+    padding-top: 6vw;
+    padding-right: 20vw;
 }
 h1{
-    font-size: 2em;
+    font-size: 1.6vw;
 }
 .flex-container p{
     margin: .75em 0 1em 0;
-    font-size: 1.1em;
+    font-size: 1vw;
 }
 
 .cta-button{
@@ -75,6 +84,10 @@ h1{
     padding: .75em 1.25em;
     border-radius: .5em;
     font-weight: 600;
+    font-size: 1vw;
+    margin-bottom: 1vw;
+    width: 10vw;
+    height: 5vw;
     
 }
 .secondary{
@@ -86,29 +99,39 @@ section{
     text-align: center;
 }
 h2{
-    font-size: 2rem;
+    font-size: 1.5vw;
 }
 section p{
     margin-top: 1em;
     font-size: 1.25em;
 }
 @media(min-width:640px){
+
+.text-container{
+    width: 100%;
+}
 /*labo-grid*/
 .mobile-laboratory{
     display: none;
 }
-
 .box{
     display: flex;
     align-items: self-start;
     border-radius: 10px;
+    border-top: white 0.2em solid;
+    border-bottom: white 0.2em solid;
+    cursor: pointer;
 }
 #box01:hover, #box02:hover, #box03:hover, #box04:hover, #box05:hover, #box06:hover, #box07:hover, #box08:hover, #box09:hover, #box10:hover, #box11:hover{
     scale:1.1;
     transition: 500ms ease;
+    border-top:none;
+    border-bottom:none;
+    border-left: white 0.2em solid;
+    border-right: white 0.2em solid;
 }
 .labo{
- display: grid;
+    display: grid;
     grid-template-columns:repeat(4,1fr) ;
     grid-template-rows:repeat(4,1fr);
     grid-template-areas:
@@ -122,9 +145,11 @@ section p{
 .box h1{
     border-radius: 10px 10px 0 0;
     font-size: 1.5vw;
-    background-color: aliceblue;
+background-image: linear-gradient(to right, #24ed06, #12ef53, #1eef7b, #3bef9a, #5bedb3, #6eecc0, #81ebcb, #95e9d3, #a0e9d9, #abe9dd, #b6e9e1, #c2e9e4);
     padding: 2%;
     width: 100%;
+       color: white;
+   text-shadow: 10px 8px 8px black;
 }
 }
 #box01{
