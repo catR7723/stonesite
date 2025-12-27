@@ -1,0 +1,37 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+html{
+      font-family: Merryweather, Poppins, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+body{
+    width: 100%;
+    height: 100vh;
+    background: linear-gradient(to right bottom, #010b00, #010a00, #000901, #000701, #000601, #0b1b0e, #0e2c16, #0d3d1d, #04481b, #095a1b, #034503, #123e02, rgb(132, 234, 132))no-repeat;
+}
+.title{
+    display:flex;
+    width: 100%;
+    height: 15vw;
+    background-image: linear-gradient(to right, #73ed60, #7ced6d, #85ed7a, #8eec86, #97ec91, #9deb99, #a2e9a0, #a8e8a7, #ace6ac, #b0e4b1, #b5e2b6, #b9e0bb);
+    justify-content: center;
+  
+}
+.text{    
+    background: url(/public/images/logocicala.jpeg) no-repeat center left,
+    url(/public/images/logocicala.jpeg) no-repeat center right;
+    background-size: 19% 100%;
+    color:rgb(2, 104, 70);
+    text-shadow: #0f100f 2px 2px 1px;
+    text-align: center;
+    width: 100%;
+    height: 100%;
+    padding-top: 2vw;
+    font-size: 2vw;
+}
+.explain{
+    color:white;}

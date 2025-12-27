@@ -47,8 +47,7 @@ header, section{
 header:hover, section:hover{
     border-top:none;
     border-bottom:none;
-    border-left: white 0.2em solid;
-    border-right: white 0.2em solid;
+    box-shadow: 3vw 5vw 10vw 0 white inset;
 
 }
 .flex-container{
@@ -125,10 +124,9 @@ section p{
 #box01:hover, #box02:hover, #box03:hover, #box04:hover, #box05:hover, #box06:hover, #box07:hover, #box08:hover, #box09:hover, #box10:hover, #box11:hover{
     scale:1.1;
     transition: 500ms ease;
-    border-top:none;
     border-bottom:none;
-    border-left: white 0.2em solid;
-    border-right: white 0.2em solid;
+    border-top:none;
+   box-shadow: 1px 1px 20px 8px rgb(198, 241, 241) inset;
 }
 .labo{
     display: grid;
@@ -153,51 +151,53 @@ background-image: linear-gradient(to right, #24ed06, #12ef53, #1eef7b, #3bef9a, 
 }
 }
 #box01{
-    background-image:url(/public/images/grid-img/site09.jpg);
-   background-size:cover; 
+    background:url(/public/images/grid-img/artistico.png)no-repeat center;
+   background-size:100% 100%; 
 }
 #box02{
-    background-image:url(/public/images/grid-img/cucina.png);
-   background-size:cover; 
-}
-#box03{
     background-image:url(/public/images/grid-img/informatica.png);
    background-size:cover; 
 }
+#box03{
+        background-image:url(/public/images/grid-img/passeggiata.jpg);
+   background-size:cover; 
+}
 #box04{
-    background-image:url(/public/images/grid-img/cinema.jpeg);
+    background-image:url(/public/images/grid-img/ginnastica.png);
    background-size:cover; 
 }
 #box05{
-   background-image:url(/public/images/grid-img/site09.jpg);
-   background-size:cover;
+   background-image:url(/public/images/grid-img/cucina.jpg);
+   background-size:100% 100%;
 }
 #box06{
-    background-image:url(/public/images/grid-img/gruppomusica.jpeg);
+   background-image:url(/public/images/grid-img/lettura.jpg);
    background-size:cover; 
 }
 #box07{
-    background-image:url(/public/images/grid-img/gruppomusica.jpeg);
+    background-image:url(/public/images/grid-img/cineforum.jpeg);
    background-size:cover; 
   
 }
 #box08{
-    background-image:url(/public/images/grid-img/gruppomusica.jpeg);
-   background-size:cover; 
+    background:url(/public/images/grid-img/musica.jpg) no-repeat center;
+   background-size:100% 100%; 
 }
 #box09{
-    background-image:url(/public/images/grid-img/gruppomusica.jpeg);
+    background-image:url(/public/images/grid-img/piscina.jpg);
    background-size:cover; 
   
 }
 #box10{
-    background-image:url(/public/images/grid-img/gruppomusica.jpeg);
+    background:url(/public/images/grid-img/scrittura.jpg) no-repeat;
    background-size:cover; 
   
 }
 #box11{
-    background-image:url(/public/images/grid-img/gruppomusica.jpeg);
-   background-size:cover; 
+
+
+       background:url(/public/images/grid-img/musicapassiva.jpg)no-repeat center;
+   background-size:100% 100%; 
   
 }
  .tailcentro{

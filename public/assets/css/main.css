@@ -9,9 +9,6 @@ html{
    margin-top: 5%;
     
 }
-
-
-
 #body{
     width: 100%;
     margin:0;
@@ -118,8 +115,7 @@ html{
     z-index: 14;
    
 }
-
-   .back{
+ .back{
    min-width: 100%;
    height: 140vw;
    z-index: -2;
@@ -135,11 +131,12 @@ html{
 
 
 #box01{
-    background-image:url(/public/images/grid-img/peschiera2025.png);
+    background:url(/public/images/grid-img/gruppomusica.jpg) no-repeat center;
    background-size:cover; 
+   
 }
 #box02{
-    background-image:url(/public/images/grid-img/cucina.png);
+    background-image:url(/public/images/grid-img/cucina.jpg);
    background-size:cover; 
 }
 #box03{
@@ -156,11 +153,11 @@ html{
    filter: grayscale(100%);
 }
 #box06{
-    background-image:url(/public/images/grid-img/gruppomusica.jpeg);
+    background-image:url(/public/images/grid-img/passeggiata.jpg);
    background-size:cover; 
 }
 #box07{
-    background-image:url(/public/images/grid-img/ginnastica3.jpg);
+    background-image:url(/public/images/grid-img/ginnastica.png);
    background-size:100% 100%; 
 }
 #box08{
@@ -168,7 +165,7 @@ html{
     background-size:105% 120%;
 }
 #box09{
-     background:url(/public/images/grid-img/piscina2.jpeg) right bottom no-repeat;
+     background:url(/public/images/grid-img/lettura.jpg) right bottom no-repeat;
      background-size: 100% 140%;
 }
 /*why we are the best*/
