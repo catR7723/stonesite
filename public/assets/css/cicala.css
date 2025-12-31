@@ -151,6 +151,7 @@ body{
 .bottom{
     color:white;
     width: 100%;
+    text-shadow: #0f100f 3px 3px 2px;
    
 }
  .donationtext{
@@ -159,8 +160,9 @@ body{
     width: 100%;
     text-align: center; 
     color:rgb(121, 174, 238);
-    text-shadow: #0f100f 3px 3px 2px;
+    
  }
+ 
  .end{
     width: 100%;
     display: flex;
