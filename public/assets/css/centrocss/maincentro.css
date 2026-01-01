@@ -50,48 +50,7 @@ header:hover, section:hover{
     box-shadow: 3vw 5vw 10vw 0 white inset;
 
 }
-.flex-container{
 
- display: flex;
-}
-.img{
-background: url(/public/images/centropictures/logo\ centro\ \(1\).png)no-repeat left;
-background-size: contain;
-width: 40vw;
-
-}
-
-
-.text-container{
-    width: 100%;
-    padding-top: 6vw;
-    padding-right: 20vw;
-}
-h1{
-    font-size: 1.6vw;
-}
-.flex-container p{
-    margin: .75em 0 1em 0;
-    font-size: 1vw;
-}
-
-.cta-button{
-    display: inline-block;
-    text-decoration: none;
-    color: white;
-    background-color: var(--primary-color);
-    padding: .75em 1.25em;
-    border-radius: .5em;
-    font-weight: 600;
-    font-size: 1vw;
-    margin-bottom: 1vw;
-    width: 10vw;
-    height: 5vw;
-    
-}
-.secondary{
-    background-color: var(--secondary-color);
-}
 section{
     padding: 3em min(2em, 15%);
     background-color: var(--color-2);
