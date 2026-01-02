@@ -23,7 +23,7 @@
 .open-schedule, .menu {
     justify-content: center;
     display: flex;
-    
+   
     margin-top: -2.7vw;
     cursor: pointer;
     height: 8.2vw;
@@ -36,6 +36,7 @@
     color: rgb(209, 209, 234);
     font-weight: 600;
     text-shadow: 10px 8px 8px black;
+     text-decoration: none;
 }
 #overlay-schedule .dropdown-content {
     text-align: center;

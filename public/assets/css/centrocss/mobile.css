@@ -27,19 +27,19 @@ body{
       text-align: center;
     
   }
-  .flex-container{
+  .flex-container-center{
     flex-direction: column;
     align-items: center;
    
   }
-  .text-container{
+  .text-container-center{
     padding: 1em;
     text-align: center;
     background: url(/public/images/centropictures/logo\ centro\ \(1\).png) no-repeat center bottom;
       background-size: 35% 66%;
       height: 30vw;
   }
-  .social{
+  .social-center{
    margin-top: 1%;
   }
   .mobile-laboratory{
@@ -173,6 +173,8 @@ body{
 .cta-button{
    margin-left: 0;
 }
+
+
 }
  
   

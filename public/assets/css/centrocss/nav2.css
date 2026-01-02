@@ -34,16 +34,18 @@ nav a {
 nav a:hover{
     text-decoration: underline;
 }
-.flex-container{
+.flex-container-center{
  display: flex;
 }
 .img{
+margin-right: 1vw;
  background: url(/public/images/centropictures/logo\ centro\ \(1\).png)no-repeat left;
- background-size: contain;
+ background-size: 100% 100%;
  width: 40vw;
+border-radius: 10px;
 
 }
-.text-container{
+.text-container-center{
     width: 100%;
     padding-top: 6vw;
     padding-right: 20vw;
@@ -51,42 +53,44 @@ nav a:hover{
 h1{
     font-size: 1.6vw;
 }
-.flex-container p{
+.flex-container-center p{
     margin: .75em 0 1em 0;
     font-size: 1vw;
 }
-.social{
+.social-center{
+position: block;
+
 
     gap:1vw;
 }
 
-.cta-button{
-   margin-left: 35%;
+.cta-button-center{
+  
     display: inline-block;
     text-decoration: none;
     color: white;
     background-color: var(--primary-color);
-
-    padding: .75em 1.25em;
+   
+   
     border-radius: .5em;
-    font-weight: 600;
-    font-size: 1vw;
+   
+   
     margin-bottom: 1vw;
     width: 10vw;
     height: 5vw;
     
 }
-#facebook{
+#facebook-center{
     background: url(/public/images/socialimages/linkfacebook.png)no-repeat center;
     background-size: 40%;
     background-color: var(--primary-color);
 }
-#istagram{
+#instagram-center{
     background: url(/public/images/socialimages/linkistagram.png)no-repeat center;
     background-size: 60%;
      background-color: var(--secondary-color);
 }
-#youtube{
+#youtube-center{
     background: url(/public/images/socialimages/youtube.png)no-repeat center;
     background-size: 60%;
     background-color: var(--primary-color);

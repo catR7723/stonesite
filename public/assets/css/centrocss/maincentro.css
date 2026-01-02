@@ -65,7 +65,7 @@ section p{
 }
 @media(min-width:640px){
 
-.text-container{
+.text-container-center{
     width: 100%;
 }
 /*labo-grid*/
