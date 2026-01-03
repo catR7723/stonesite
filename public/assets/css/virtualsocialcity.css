@@ -1,0 +1,232 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+html{ 
+      font-family: Merryweather, Poppins, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      min-height: 100%;
+}
+body{
+    background-image: linear-gradient(to right bottom, #070005, #080006, #080008, #090109, #09010b, #0e0211, #130416, #16051a, #1d0822, #240a29, #2c0830, #350537);
+   min-height: 100%;
+}
+.menu{
+    display: absolute;
+  top:0vw;
+    width: 100%;
+    background:linear-gradient(to right, #e7c6d9, #e9bcda, #eab1dc, #e8a7e0, #e59ee5, #e094e7, #da8ae9, #d380ec, #cb72ec, #c164ec, #b756ec, #ac48ed) ;
+    opacity: 0.8;
+    position: fixed;
+    box-shadow: 1px 1px 20px 8px rgb(198, 241, 241) inset;
+    border-bottom: 2px solid white;
+    border-top: 2px solid white;
+    border-radius: 0 0 .5em .5em;
+}
+.menu ul{
+    display: flex;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    gap: 55vw;
+}
+.home{
+    background-color: #c164ec;
+    text-align: center;
+    color: #5b1f83;
+    font-weight: 500;
+    font-size: 3vw;
+    padding:1vw;
+    border-radius: 0.8em;
+    border-bottom: 2px solid white;
+    border-top: 2px solid white;
+}
+.home:hover{
+    border-bottom: none;
+    border-top: none;
+    border-right: 2px solid white;
+    border-left: 2px solid white;
+}
+.menu li{
+list-style: none;
+text-decoration: none;
+width: 50%;
+margin-left: 5vw;
+}
+.menu a{
+    text-decoration: none;
+}
+.cat{
+width: 10vw;
+height: 10vw;
+background: url(/public/images/virtualsocialcity/cat.png) no-repeat right;
+background-size: 50%;
+}
+/*nav*/
+nav{
+    display: flex;
+    flex-direction: column;
+    
+}
+.title{
+    color:white;
+    margin-top: 20vw;
+   text-align: center;
+   font-size: 3vw;
+    text-shadow: 3px 2px 2px rgb(108, 165, 226);
+}
+
+/*idea*/
+.idea{
+    margin-top: 10vw;
+    margin-left: 2vw;
+    width: 98%;
+    background: url(/public/images/virtualsocialcity/virtualcity.png)no-repeat left center ;
+    background-size: 40vw;
+    padding: 0 3vw 0 41vw;
+}
+.idea h1{
+    color:white;
+    font-size: 1.6vw;
+    text-align: justify;
+}
+/*What*/
+.what{
+    margin-top: 10vw;
+    width: 98%;
+    background: url(/public/images/virtualsocialcity/code.jpeg)no-repeat center right ;
+    background-size: 40vw;
+     padding: 0 41vw 0 3vw;
+     height: 50vw;
+
+}
+.what h1{
+   padding-top: 10vw;
+    color:white;
+    font-size: 1.6vw;
+    text-align: justify;
+}
+/*next*/
+.next{
+    margin-top: 10vw;
+    width: 98%;
+    background: url(/public/images/virtualsocialcity/javascript.png)no-repeat left bottom,
+                url(/public/images/virtualsocialcity/node.png)no-repeat center left,
+                url(/public/images/virtualsocialcity/mongodb.png)no-repeat top left;
+    background-size:9vw, 10vw, 20vw;
+    padding: 0 3vw 0 41vw;
+     margin-left: 2vw;
+   
+}
+.next h1{
+    color:white;
+    font-size: 1.6vw;
+    text-align: justify;
+}
+/*future*/
+.future{
+    margin-top: 15vw;
+    width: 98%;
+    background: url(/public/images/virtualsocialcity/unreal-engine.jpg)no-repeat center right,
+                url(/public/images/virtualsocialcity/c-plus-plus-logo.jpg)no-repeat top right ;
+    background-size:15vw 15vw;
+     padding: 0 41vw 0 3vw;
+     height: 50vw;
+
+}
+.future h1{
+   
+    color:white;
+    font-size: 1.6vw;
+    text-align: justify;
+}
+.help{
+    width: 100%;
+ justify-items: center;
+}
+.scrivi{
+    color:yellowgreen;
+    font-size: 2vw;
+    text-decoration: none;
+}
+.dev{
+    font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-size:2vw;
+    width: 100%;
+    height: 10vw;
+    text-align: center;
+    background:url(/public/images/deviltailnoback.png)top center no-repeat ;
+    background-size: 18%;
+    color: white;
+   text-shadow: 10px 8px 8px black;
+   margin-top: 10vw;
+   margin-bottom: 5vw;
+}
+.button{
+text-decoration: none; 
+font-size: 2vw; 
+display: flex;
+flex-direction: column;
+align-items: center;
+margin-top: 2vw;
+margin-bottom: 10vw;
+border-top: 2px solid white;
+border-bottom: 2px solid white;
+padding: 1vw 0 1vw 0;
+width: 20%;
+background: linear-gradient(to left top, #325278, #2a4568, #223958, #1a2d48, #122239, #0a1e31, #051a2a, #001522, #00161e, #00161a, #001516, #021412) no-repeat;
+color: azure;
+border-radius: 1em;
+
+}
+.button:hover{
+   border-top: none;
+border-bottom: none; 
+border-left: 2px solid white;
+border-right: 2px solid white;
+transition: 500ms ease;
+}
+.policy{
+justify-content: center;
+width: 100%;
+display: flex;
+gap:2vw;
+margin-bottom: 10vw;
+}
+
+
+
+@media(max-width:640px){
+    .idea{
+    padding: 0 3vw 15vw 3vw;
+    background: url(/public/images/virtualsocialcity/virtualcity.png)no-repeat bottom center ;
+    background-size: 25%;
+    margin-left: 0;
+  
+    }
+    .what{
+    padding: 0 3vw 15vw 3vw;
+    background: url(/public/images/virtualsocialcity/code.jpeg)no-repeat bottom center ;
+    background-size: 23%; 
+    }
+    .next{
+      padding: 0 3vw 15vw 3vw;
+          background: url(/public/images/virtualsocialcity/javascript.png)no-repeat left bottom,
+                url(/public/images/virtualsocialcity/node.png)no-repeat center bottom,
+                url(/public/images/virtualsocialcity/mongodb.png)no-repeat right bottom;
+    background-size:13vw, 15vw, 30vw;  
+    margin-left: 0;
+ 
+    }
+      .future{
+      padding: 0 3vw 15vw 3vw;
+          background:url(/public/images/virtualsocialcity/unreal-engine.jpg)no-repeat bottom right,
+                url(/public/images/virtualsocialcity/c-plus-plus-logo.jpg)no-repeat bottom left ;
+    background-size:20vw, 20vw;  
+    
+    margin-bottom: 10vw;
+}
+
+}

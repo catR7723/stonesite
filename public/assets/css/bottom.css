@@ -23,6 +23,7 @@ margin: 0 0 4% 6%;
 
 .flex-bottom-container .opinions{
 background-image: linear-gradient(to right, rgba(0,0,0,0) 0%, rgba(0,0,0,0.01) 5%, rgba(0,0,255,1) 100%);
+padding-bottom: 2vw;
 }
 
 .flex-bottom-container details summary{
@@ -156,7 +157,7 @@ li::marker {
     max-width: 100%;
     border: 10px solid var(--secondary-nav-color);
     border-top: none;
-    margin-bottom: 50px;
+    margin-bottom: 10px;
 }
 .skill-container h3{
     background-color: var(--secondary-nav-color);
@@ -165,7 +166,7 @@ li::marker {
 
 }
 .skill-container ul{
-    margin-bottom: -60px;
+    margin-bottom: -10px;
     list-style: none;
 }
 

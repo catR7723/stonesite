@@ -221,18 +221,7 @@ text-align: center;
    #sidebar-how:checked ~ .open-how{
     display: none;
 }
- .tail{
-    background-color:black;
-    background:url(/public/images/deviltailnoback.png)top right no-repeat ;
-    background-size: 15vw;
-    width: 61.8vw;
-    height: 5vw;
-    display: flex;
-    justify-content: center;
-    z-index: 10;
-    position: relative;
-    bottom: 6.8vw;
-}
+
 .dev{
     font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     font-size:2vw;
