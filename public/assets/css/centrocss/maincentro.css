@@ -99,14 +99,15 @@ section p{
     gap:1em;
     height: 70vw;
 }
-.box h1{
+.box a{
     border-radius: 10px 10px 0 0;
     font-size: 1.5vw;
-background-image: linear-gradient(to right, #24ed06, #12ef53, #1eef7b, #3bef9a, #5bedb3, #6eecc0, #81ebcb, #95e9d3, #a0e9d9, #abe9dd, #b6e9e1, #c2e9e4);
+    background-image: linear-gradient(to right, #24ed06, #12ef53, #1eef7b, #3bef9a, #5bedb3, #6eecc0, #81ebcb, #95e9d3, #a0e9d9, #abe9dd, #b6e9e1, #c2e9e4);
     padding: 2%;
     width: 100%;
-       color: white;
-   text-shadow: 10px 8px 8px black;
+    color: white;
+    text-shadow: 10px 8px 8px black;
+    text-decoration: none;
 }
 }
 #box01{

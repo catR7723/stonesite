@@ -10,14 +10,14 @@ html{
       min-height: 100%;
 }
 body{
-    background-image: linear-gradient(to right bottom, #070005, #080006, #080008, #090109, #09010b, #0e0211, #130416, #16051a, #1d0822, #240a29, #2c0830, #350537);
+background-image: linear-gradient(to right bottom, #f08a06, #f19203, #f19a00, #f1a100, #f1a901, #e3b71e, #d6c436, #c9cf4e, #b2dd7c, #a6e8a8, #abeecd, #c1f2e7);
    min-height: 100%;
 }
 .menu{
     display: absolute;
   top:0vw;
     width: 100%;
- background-image: linear-gradient(to right, #242629, #32373e, #414853, #515a6a, #616d82, #697e98, #6f90ae, #73a2c4, #69b8d9, #5ccfe8, #55e5f0, #5ffbf1);
+background-image: linear-gradient(to left, #f08a06, #f19203, #f19a00, #f1a100, #f1a901, #e3b71e, #d6c436, #c9cf4e, #b2dd7c, #a6e8a8, #abeecd, #c1f2e7);
     opacity: 0.8;
     position: fixed;
     box-shadow: 1px 1px 20px 8px rgb(198, 241, 241) inset;
@@ -33,7 +33,7 @@ body{
     gap: 65vw;
 }
 .home{
-    background-color: #32bbe8;
+    background-color: #e89932;
     text-align: center;
     color: #02083e;
     font-weight: 500;
@@ -84,7 +84,7 @@ nav{
     margin-top: 10vw;
     margin-left: 2vw;
     width: 98%;
-    background: url(/public/images/chi_siamo/stone.jpg)no-repeat left center ;
+    background: url(/public/images/laboratori/bancarella.png)no-repeat left center ;
     background-size: 40vw;
     padding: 0 3vw 0 41vw;
     border-radius: 1em 0 0 1em;
@@ -94,40 +94,7 @@ nav{
     font-size: 1.2vw;
     text-align: justify;
 }
-/*What*/
-.what{
-    margin-top: 10vw;
-    width: 98%;
-    background: url(/public/images/chi_siamo/centroingresso.jpg)no-repeat center right ;
-    background-size: 30vw 30vw;
-     padding: 0 32vw 0 3vw;
-     height: 50vw;
-     border-radius: 0 1em 1em 0;
 
-}
-.what h1{
-  padding-top: 9vw;
-    color:white;
-   
-    text-align: justify;
-    font-size: 1.2vw;
-}
-/*next*/
-.next{
-    margin-top: 10vw;
-    width: 98%;
-    background: url(/public/images/chi_siamo/soci/soci.png) no-repeat center left;
-    background-size: 23% 100%;
-    padding: 0 3vw 0 41vw;
-     margin-left: 2vw;
-     margin-bottom: 5vw; 
-   
-}
-.next h1{
-    color:white;
-    font-size: 1.2vw;
-    text-align: justify;
-}
 
 .help{
     width: 100%;
@@ -198,25 +165,8 @@ margin-bottom: 10vw;
     .idea h1{
         font-size: 1.6vw;
     }
-    .what{
-    padding: 0 3vw 15vw 3vw;
-    background: url(/public/images/chi_siamo/centroingresso.jpg)no-repeat center bottom;
-    background-size: 12%; 
-   
-    }
-     .what h1{
-        font-size: 1.6vw;
-    }
-    .next{
-    padding: 0 3vw 4vw 35vw;
-          background:url(/public/images/chi_siamo/soci/soci.png) no-repeat left;
-    background-size: 30%;
-    margin-left: 0;
- 
-    }
-     .next h1{
-        font-size: 1.6vw;
-    }
+
+
 
 
 }
