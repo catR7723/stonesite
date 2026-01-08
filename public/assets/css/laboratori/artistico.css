@@ -81,15 +81,18 @@ nav{
 
 /*idea*/
 .idea{
-    margin-top: 10vw;
-    margin-left: 2vw;
+    margin: 10vw 0 5vw 2vw;
+
     width: 98%;
-    background: url(/public/images/laboratori/bancarella.png)no-repeat left center ;
+    height: 30vw;
+    background: url(/public/images/laboratori/bancarella.png)no-repeat left bottom ;
     background-size: 40vw;
     padding: 0 3vw 0 41vw;
-    border-radius: 1em 0 0 1em;
+    border-radius: 1em 0 0 5em;
+   
 }
 .idea h1{
+    padding-top: 8vw;
     color:white;
     font-size: 1.2vw;
     text-align: justify;
@@ -102,10 +105,11 @@ nav{
 }
 .scrivi{
 
-    color:yellowgreen;
+    color:rgb(34, 50, 2);
     font-size: 2vw;
     text-decoration: none;
     margin-left: 2vw;
+   
 }
 .dev{
     font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
@@ -157,12 +161,17 @@ margin-bottom: 10vw;
 @media(max-width:640px){
     .idea{
     padding: 0 3vw 15vw 3vw;
-     background: url(/public/images/chi_siamo/stone.jpg)no-repeat bottom center;
-    background-size: 10%;
+     background: url(/public/images/laboratori/bancarella.png)no-repeat bottom center;
+    background-size: 100%;
     margin-left: 0;
+    height: 40vw;
+    border-radius: 1em;
+    width: 100%;
+  
   
     }
     .idea h1{
+       
         font-size: 1.6vw;
     }
 

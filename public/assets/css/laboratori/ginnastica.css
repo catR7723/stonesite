@@ -85,13 +85,13 @@ nav{
     margin-left: 2vw;
     width: 98%;
     height: 30vw;
-    background: url(/public/images/laboratori/noneiltitolo.jpg)no-repeat bottom left  ;
+    background: url(/public/images/laboratori/ginnastica2.jpg)no-repeat left center ;
     background-size: 40vw;
     padding: 0 3vw 0 41vw;
-    border-radius: 1em 0 0 5em;
+    border-radius: 1em 0 0 1em;
 }
 .idea h1{
-    padding-top: 4vw;
+    padding-top: 9vw;
     color:white;
     font-size: 1.2vw;
     text-align: justify;
@@ -163,7 +163,7 @@ margin-bottom: 10vw;
 @media(max-width:640px){
     .idea{
     padding: 0 3vw 15vw 3vw;
-    background: url(/public/images/laboratori/noneiltitolo.jpg)no-repeat bottom center;
+    background: url(/public/images/laboratori/ginnastica2.jpg)no-repeat center;
     background-size: 75% 50%;
     margin-left: 0;
     width: 100%;
