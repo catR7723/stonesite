@@ -10,7 +10,7 @@ html{
       min-height: 100%;
 }
 body{
-background-image: linear-gradient(to left top, #060d4e, #003d81, #006b9d, #0097a0, #00c194, #00d48f, #00e685, #00f874, #00fb9f, #00fcc2, #1afcde, #5ffbf1);
+background-image: linear-gradient(to bottom, #e2b6ee, #b3beff, #73c6ff, #1fcbef, #00ccc9, #00d1b2, #1cd391, #57d368, #78de65, #97e862, #b5f260, #d2fb5f);
    min-height: 100%;
 }
 .menu{
@@ -85,15 +85,15 @@ nav{
     margin-left: 2vw;
     width: 98%;
     height: 30vw;
-    background: url(/public/images/laboratori/noneiltitolo.jpg)no-repeat bottom left  ;
+    background: url(/public/images/grid-img/scrittura.jpg)no-repeat bottom left  ;
     background-size: 40vw;
     padding: 0 3vw 0 41vw;
     border-radius: 1em 0 0 5em;
 }
 .idea h1{
-    padding-top: 4vw;
+    padding-top: 10vw;
     color:white;
-    font-size: 1.2vw;
+    font-size: 1.4vw;
     text-align: justify;
 }
 
@@ -163,7 +163,7 @@ margin-bottom: 10vw;
 @media(max-width:640px){
     .idea{
     padding: 0 3vw 15vw 3vw;
-    background: url(/public/images/laboratori/noneiltitolo.jpg)no-repeat bottom center;
+    background: url(/public/images/grid-img/scrittura.jpg)no-repeat bottom center;
     background-size: 75% 50%;
     margin-left: 0;
     width: 100%;
@@ -172,8 +172,7 @@ margin-bottom: 10vw;
   
     }
     .idea h1{
-        font-size: 2vw;
-        color:#003d81;
+        font-size: 2.4vw;
     }
 
 

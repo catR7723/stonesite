@@ -163,7 +163,7 @@ margin-bottom: 10vw;
     .idea{
     padding: 0vw 3vw 15vw 3vw;
      background: url(/public/images/laboratori/passeggiata.jpg)no-repeat bottom center;
-    background-size:70% 50%;
+    background-size:65% 45%;
     margin-left: 0;
     border-radius: 1em;
     width: 100%;
@@ -175,7 +175,8 @@ margin-bottom: 10vw;
     }
     .idea h1{
         font-size: 2.5vw;
-        color:rgb(241, 242, 238);
+        color:rgb(32, 4, 122);
+        
        
     }
 

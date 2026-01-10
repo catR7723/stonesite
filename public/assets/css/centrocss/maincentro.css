@@ -85,7 +85,8 @@ section p{
     transition: 500ms ease;
     border-bottom:none;
     border-top:none;
-   box-shadow: 1px 1px 20px 8px rgb(198, 241, 241) inset;
+    box-shadow: 1px 1px 20px 8px rgb(198, 241, 241) inset;
+   
 }
 .labo{
     display: grid;

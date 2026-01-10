@@ -1158,6 +1158,20 @@ li:hover{
     width: 100%;
     background-size: 50vw;
 }
+.download{
+    display:flex;
+    position: absolute;
+    top:50vw;
+    width: 100%;
+   
+}
+.download a{
+  cursor: pointer;
+    text-decoration: none;
+    color:white;
+    width: 100%;
+     text-align: center;
+}
 
 
  

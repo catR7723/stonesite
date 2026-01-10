@@ -259,3 +259,62 @@ li:hover{
     z-index: 1;
     background-size: 30vw, 30vw;
 }
+.help{
+    width: 100%;
+ justify-items: center;
+}
+.write{
+    margin-top: 10vw;
+}
+
+.scrivi{
+
+    color:rgb(211, 153, 147);
+    font-size: 2vw;
+    text-decoration: none;
+    margin-left: 2vw;
+}
+.dev{
+    font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-size:2vw;
+    width: 100%;
+    height: 10vw;
+    text-align: center;
+    background:url(/public/images/deviltailnoback.png)top center no-repeat ;
+    background-size: 18%;
+    color: white;
+   text-shadow: 10px 8px 8px black;
+   margin-top: 10vw;
+   margin-bottom: 5vw;
+}
+.button{
+text-decoration: none; 
+font-size: 2vw; 
+display: flex;
+flex-direction: column;
+align-items: center;
+margin-top: 2vw;
+margin-bottom: 10vw;
+border-top: 2px solid white;
+border-bottom: 2px solid white;
+padding: 1vw 0 1vw 0;
+width: 20%;
+background: linear-gradient(to left top, #325278, #2a4568, #223958, #1a2d48, #122239, #0a1e31, #051a2a, #001522, #00161e, #00161a, #001516, #021412) no-repeat;
+color: azure;
+border-radius: 1em;
+
+}
+.button:hover{
+   border-top: none;
+border-bottom: none; 
+border-left: 2px solid white;
+border-right: 2px solid white;
+transition: 500ms ease;
+}
+.policy{
+justify-content: center;
+width: 100%;
+display: flex;
+gap:2vw;
+margin-bottom: 10vw;
+}
