@@ -196,7 +196,7 @@ li:hover{
 .filters:has(option[value="mercoledì21g"]:checked) ~  #january-list .daily-menu:not(:has(> .mercoledì21g)) {
     display: none;
 }
-.filters:has(option[value="giovedì22gi"]:checked) ~  #january-list .daily-menu:not(:has(> .giovedì22gi)) {
+.filters:has(option[value="giovedì22g"]:checked) ~  #january-list .daily-menu:not(:has(> .giovedì22g)) {
     display: none;
 }
 .filters:has(option[value="venerdì23g"]:checked) ~  #january-list .daily-menu:not(:has(> .venerdì23g)) {
@@ -739,7 +739,7 @@ li:hover{
     z-index: 1;
     background-size: 35vw, 30vw;
 }
-#giovedì22gi{
+#giovedì22g{
     background: 
     url(/public/images/menu/food-images/primi/tortellini-panna.png) no-repeat bottom left, 
     url(/public/images/menu/food-images/contorni/barbabietole.png) no-repeat bottom right, 
