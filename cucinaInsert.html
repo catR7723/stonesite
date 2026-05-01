@@ -1,0 +1,164 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inserisci la Ricetta</title>
+    <script src="/assets/js/cucinaInsert.js"></script>
+</head>
+<body>
+
+<form action="/cucinaInsert" method="POST" enctype="multipart/form-data">
+  <div>
+    <label>Carica il Primo:</label>
+    <input type="file" name="primo">
+  </div>
+  
+  <div>
+    <label>Carica il Secondo:</label>
+    <input type="file" name="secondo">
+  </div>
+  
+  <div>
+    <label>Carica il Contorno:</label>
+    <input type="file" name="contorno">
+
+  </div>
+
+  <div>
+  <label>Carica pdf della ricetta:</label>
+    <input type="file" name="ricetta">
+  </div>
+
+  <button type="submit">Anteprima Immagini</button>
+</form>
+
+
+
+<div class="Conteiner_Primo">
+
+    <img src="/uploads/primo.jpg" alt="Primo" width="200">
+    <form action="/deletePrimo" method="POST">
+        <button class="btn" type="submit" id="deletePrimo">Elimina Immagine del Primo</button>
+    </form>
+    <div class="Primo">
+      <h1 id="titdef"></h1>
+      <h1 id="ingredientiPrimo"></h1>
+      <h1 id="descrizionePrimo"></h1>
+    </div>
+    <form action="/salvaTitoloPrimo" method="POST">
+        <input type="text" id="inputTitoloPrimo" name="titolo_Primo" placeholder="Inserisci il titolo del Primo" oninput="aggiornaAnteprima()" required="">
+        <button class="btn" type="submit">Anteprima Titolo del Primo</button>
+    </form>
+
+    <form action="/salvaIngredientiPrimo" method="POST">
+        <textarea id="ingredientiPrimo" name="ingredienti_Primo" placeholder="Inserisci gli ingredienti del primo..." rows="10" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc; font-family: sans-serif;" oninput="aggiornaAnteprima()" required=""></textarea>
+
+        <button class="btn" type="submit" style="margin-top: 10px;">
+            Salva Ingredienti
+        </button>   
+    </form>
+
+
+
+    <form action="/salvaDescrizionePrimo" method="POST">
+        <textarea id="descrizionePrimo" name="descrizione_Primo" placeholder="Inserisci qui tutto il procedimento..." rows="10" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc; font-family: sans-serif;" oninput="aggiornaAnteprima()" required=""></textarea>
+        <button class="btn" type="submit" style="margin-top: 10px;">
+            Salva Procedimento
+        </button>
+    </form>
+</div>
+
+
+<div class="Conteiner_Secondo">
+    <img src="/uploads/secondo.jpg" alt="Secondo" width="200">
+    <form action="/deleteSecondo" method="POST">
+        <button class="btn" type="submit" id="deleteSecondo">Elimina Secondo</button>
+    </form>
+
+    <div class="Secondo">
+      <h1 id="titolodefSecondo"></h1>
+      <h1 id="ingredientiSecondo"></h1>
+      <h1 id="descrizioneSecondo"></h1>
+    </div>
+    <form action="/salvaTitoloSecondo" method="POST">
+        <input type="text" id="inputTitoloSecondo" name="titolo_Secondo" placeholder="Inserisci il titolo del Secondo" oninput="aggiornaAnteprima()" required="">
+        <button class="btn" type="submit">Anteprima Titolo del Secondo</button>
+    </form>
+
+    <form action="/salvaIngredientiSecondo" method="POST">
+        <textarea id="ingredientiSecondo" name="ingredienti_Secondo" placeholder="Inserisci gli ingredienti del secondo..." rows="10" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc; font-family: sans-serif;" oninput="aggiornaAnteprima()" required=""></textarea>
+
+        <button class="btn" type="submit" style="margin-top: 10px;">
+            Salva Ingredienti
+        </button>   
+     </form>
+
+    <form action="/salvaDescrizioneSecondo" method="POST">
+        <textarea id="descrizioneSecondo" name="descrizione_Secondo" placeholder="Inserisci qui tutto il procedimento..." rows="10" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc; font-family: sans-serif;" oninput="aggiornaAnteprima()" required=""></textarea>
+        <button class="btn" type="submit" style="margin-top: 10px;">
+            Salva Procedimento
+        </button>
+    </form>
+
+</div>
+
+<div class="Conteiner_Contorno">
+    <img src="/uploads/contorno.jpg" alt="Contorno" width="200">
+    <form action="/deleteContorno" method="POST">
+        <button class="btn" type="submit" id="deleteContorno">Elimina Contorno</button>
+    </form>
+
+    <div class="Contorno">
+      <h1 id="titdefConto"></h1>
+      <h1 id="ingredientiContorno"></h1>
+      <h1 id="descrizioneContorno"></h1>
+    </div>
+    <form action="/salvaTitoloContorno" method="POST">
+        <input type="text" id="titdefConto" name="titolo_Contorno" placeholder="Inserisci il titolo del Contorno" oninput="aggiornaAnteprima()" required="">
+        <button class="btn" type="submit">Anteprima Titolo del Contorno</button>
+    </form>
+
+    <form action="/salvaIngredientiContorno" method="POST">
+        <textarea id="ingredientiContorno" name="ingredienti_Contorno" placeholder="Inserisci gli ingredienti del contorno..." rows="10" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc; font-family: sans-serif;" oninput="aggiornaAnteprima()" required=""></textarea>
+
+        <button class="btn" type="submit" style="margin-top: 10px;">
+            Salva Ingredienti
+        </button>   
+     </form>
+
+    <form action="/salvaDescrizioneContorno" method="POST">
+        <textarea id="descrizioneContorno" name="descrizione_Contorno" placeholder="Inserisci qui tutto il procedimento..." rows="10" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc; font-family: sans-serif;" oninput="aggiornaAnteprima()" required=""></textarea>
+        <button class="btn" type="submit" style="margin-top: 10px;">
+            Salva Procedimento
+        </button>
+    </form>
+</div>
+
+<div class="download">
+   <a id="ricetta" href="uploads/ricetta.pdf" target="_blank" rel="noopener noreferrer">
+      Scarica le Ricette del Menu della settimana
+   </a>
+    <form action="/deleteRicetta" method="POST">
+        <button class="btn" type="submit" id="deleteRicetta">Elimina la Ricetta</button>
+    </form>
+</div>
+<div>
+  <form action="/salvaMenu" method="POST">
+    <button class="btn" type="submit" id="salvaMenu">Invia Tutto alla Cucina</button>
+  </form>
+    <form action="/salvaMenuR" method="POST">
+    <button class="btn" type="submit" id="salvaMenu">Pubblica il Menu!</button>
+  </form>
+</div>
+
+
+
+    
+<!--<input type="text" placeholder="inserisci il titolo">
+    <div class="titolo">
+        <h1 id="titolo"></h1>
+    </div>
+-->
+  
+   
+
+</body></html>

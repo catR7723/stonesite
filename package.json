@@ -1,0 +1,31 @@
+{
+  "name": "stonesite-2",
+  "version": "1.0.0",
+  "description": "",
+  "homepage": "https://github.com/catR7723/stonesite#readme",
+  "bugs": {
+    "url": "https://github.com/catR7723/stonesite/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/catR7723/stonesite.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "server.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "cheerio": "^1.2.0",
+    "express": "^5.2.1",
+    "firebase": "^12.12.0",
+    "morgan": "^1.10.1",
+    "multer": "^2.1.1",
+    "nodemon": "^3.1.14",
+    "sharp": "^0.34.5"
+  }
+}

@@ -1,8 +1,7 @@
 
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
-#project-bottom-section{
-    padding: 100px 20px;
-}
+
 
 @media(min-width:640px){
 #projects-bottom-section h2{
@@ -93,17 +92,17 @@ padding-bottom: 2vw;
     border-radius: 1em;
 }
 #facebook{
-    background: url(/public/images/socialimages/linkfacebook.png)no-repeat center;
+    background: url(/images/socialimages/linkfacebook.png)no-repeat center;
     background-size: 49%;
     
 }
 #instagram{
-    background: url(/public/images/socialimages/linkistagram.png)no-repeat center;
+    background: url(/images/socialimages/linkistagram.png)no-repeat center;
     background-size: 50%;
   
 }
 #youtube{
-    background: url(/public/images/socialimages/youtube.png)no-repeat center;
+    background: url(/images/socialimages/youtube.png)no-repeat center;
     background-size: 60%;
     margin-left: 3%;
    
@@ -196,32 +195,32 @@ padding-bottom: 30px;
 }
 
 #donation{
- background:url(/public/images/marta.png) no-repeat ;
- background-size:100% 80%;
+ background:url(/images/marta.png) no-repeat center bottom ;
+ background-size:100% 78%;
  background-color: rgb(16, 216, 79);
  width: 100%;
  height: 30vw;
  border-radius: 15px;
  position: relative;
  margin:5%;
+  color: blue;
+ padding-top: 2vw;
+ font-size: 1vw;
 }
 #come{
- background:url(/public/images/autumn.png) no-repeat ;
- background-size:100% 80%;
+ background:url(/images/autumn.png) no-repeat center bottom ;
+ background-size:100% 78%;
  background-color: aqua;
  width: 100%;
  height: 30vw;
  border-radius: 15px;
  position: relative;
  margin: 5%;
+ color: blue;
+ padding-top: 0.6vw;
+    font-size: 1vw;
 }
-.w-come, .w-donation{
-   position: relative;
-   top:80%;
-   font-size: 2vw;
-  
-   
-}
+
 .bestbh-come, .bestbh-donation{
     color:black;
     font-family: Poppins, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -246,7 +245,7 @@ padding-bottom: 30px;
     width: 20vw;
    cursor: pointer;
     z-index: 2;
-    display: flex;
+   top:40%;
     left:25%;
 }
 #donation svg{
@@ -256,7 +255,7 @@ padding-bottom: 30px;
    
     display: flex;
     left:25%;
-    top: 18%;
+    top: 40%;
 }
 .button{
 text-decoration: none;  
@@ -370,10 +369,10 @@ border-radius: 1em;
     display: none;
    }
  
-   .tail{
+   .tailcentro{
     
     background-color:black;
-    background:url(/public/images/deviltailnoback.png)top right no-repeat ;
+    background:url(/images/deviltailnoback.png)top right no-repeat ;
     background-size: 15vw;
     width: 62.7vw;
     height: 5vw;
@@ -419,6 +418,7 @@ border-radius: 1em;
     color: white;
    text-shadow: 10px 8px 8px black;
    margin-bottom: 5%;
+   margin-top: 10vw;
 }
    
 

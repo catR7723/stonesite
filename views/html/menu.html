@@ -4,25 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Oggi a Pranzo</title>
-    <link rel="stylesheet" type="text/css" href="/public/assets/css/centrocss/menu.css/menu.css">
-<!-- Google Tag Manager -->
-<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-K5SQ524Z');</script>
-<!-- End Google Tag Manager -->
+    <link rel="stylesheet" type="text/css" href="/assets/css/centrocss/menu.css/menu.css">
+    <script src="/assets/js/menu.js" defer></script>
+
   </head>
 <body>
   <div class="home">
     <h1>
-      <a href="/views/html/centro.html">Home</a>
+      <a href="/centro">Home</a>
     </h1>
     
   </div>
      <div class="download">
-    <a href="https://drive.google.com/file/d/16wUZo70e2l7lEzu1f7C_zXtTPe_NtYsD/view?usp=sharing" target="_blank" rel="noopener noreferrer">
-      Scarica il Menu Invernale
+    <a id="scarica" href="https://drive.google.com/file/d/1BSZLcsONLz8JlFM1pQ8U5ZPbbCKxn2QX/view?usp=sharing" target="_blank" rel="noopener noreferrer">
+      Scarica il Menu Estivo in PDF
     </a>
   </div>
   <h1 class="title"> OGGI A PRANZO </h1>
@@ -32,43 +27,54 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     </label>
     <label for="menu" id="overlay-menu">
      <div class="dropdown">
-      <ul>
+      <ul class="mounthList">
        <li id="january-menu">
        <input type="checkbox" id="januari-schedule-menu">
        <label for="januari-schedule-menu" class="open-januari-menu">
-        <a id="mounth">Gennaio</a>
+        <a id="mounth">Aprile</a>
        </label>
        <label for="januari-schedule-menu" id="overlay-januari-menu">
         <div class="dropdown-januari-menu">
           <div class="filters" id="january-closed">
-            <select name="day" id="day">
-              <option><h1>GENNAIO</h1></option>
-              <option value="mercoledì07g"> Mercoledì 07</option>
-              <option value="giovedì08g"> Giovedì 08</option>
-              <option value="venerdì09g"> Venerdì 09</option>
-              <option value="lunedì12g"> Lunedì 12</option>
-              <option value="martedì13g"> Martedì 13</option>
-              <option value="mercoledì14g"> Mercoledì 14</option>
-              <option value="giovedì15g"> Giovedì 15</option>
-              <option value="venerdì16g"> Venerdì 16</option>
-              <option value="lunedì19g"> Lunedì 19</option>
-              <option value="martedì20g"> Martedì 20</option>
-              <option value="mercoledì21g"> Mercoledì 21</option>
-              <option value="giovedì22g"> Giovedì 22</option>
-              <option value="venerdì23g"> Venerdì 23</option>
-              <option value="lunedì26g"> Lunedì 26</option>
-              <option value="martedì27g"> Martedì 27</option>
-              <option value="mercoledì28g"> Mercoledì 28 </option>
-              <option value="giovedì29g"> Giovedì 29</option>
-              <option value="venerdì30g"> Venerdì 30</option>
+
+            <div class="search-bar">
+              <svg xmlns="http://www.w3.org/2000/svg" height="32px" viewBox="0 -960 960 960" width="32px" fill="var(--secondary-color)"><path d="M380.77-335.39q-102.46 0-173.54-71.07-71.07-71.08-71.07-173.54t71.07-173.54q71.08-71.07 173.54-71.07t173.54 71.07q71.07 71.08 71.07 173.54 0 42.85-14.38 81.85-14.39 39-38.39 67.84l230.16 230.16q8.31 8.3 8.5 20.88.19 12.58-8.5 21.27t-21.08 8.69q-12.38 0-21.07-8.69L530.46-388.16q-30 24.77-69 38.77-39 14-80.69 14Zm0-59.99q77.31 0 130.96-53.66 53.66-53.65 53.66-130.96t-53.66-130.96q-53.65-53.66-130.96-53.66t-130.96 53.66Q196.15-657.31 196.15-580t53.66 130.96q53.65 53.66 130.96 53.66Z"/></svg>
+              <input oninput="search(this)" id="search-input" type="search" placeholder="Giorno o Pietanza">
+            </div>
+            
+          <!-- <select name="day" id="day">
+              <option><h1>APRILE</h1></option>
+              <option value="mercoledì01a"> Mercoledì 01</option>
+              <option value="giovedì02a"> Giovedì 02</option>
+              <option value="venerdì03a"> Venerdì 03</option>
+              <option value="lunedì06a"> Lunedì 06</option>
+              <option value="martedì07a"> Martedì 07</option>
+              <option value="mercoledì08a"> Mercoledì 08</option>
+              <option value="giovedì09a"> Giovedì 09</option>
+              <option value="venerdì10a"> Venerdì 10</option>
+              <option value="lunedì13a"> Lunedì 13</option>
+              <option value="martedì14a"> Martedì 14</option>
+              <option value="mercoledì15a"> Mercoledì 15</option>
+              <option value="giovedì16a"> Giovedì 16</option>
+              <option value="venerdì17a"> Venerdì 17</option>
+              <option value="lunedì20a"> Lunedì 20</option>
+              <option value="martedì21a"> Martedì 21</option>
+              <option value="mercoledì22a"> Mercoledì 22</option>
+              <option value="giovedì23a"> Giovedì 23</option>
+              <option value="venerdì24a"> Venerdì 24</option>
+              <option value="lunedì27a"> Lunedì 27</option>
+              <option value="martedì28a"> Martedì 28</option>
+              <option value="mercoledì29a"> Mercoledì 29</option>
+              <option value="giovedì30a"> Giovedì 30</option>
             </select>
+          
             <select name="type" id="type">
               <option value="allin"><h1 class="staff">TUTTO!!!</h1></option>
-              <option value="rigatoni">Rigatoni all'Amatriciana</option>
-              <option value="piadina">Piadina</option>
+                <option value="rigatoni">Rigatoni all'Amatriciana</option>
+                <option value="piadina">Piadina</option>
               <option value="riso-piselli">Riso con Piselli</option>
               <option value="orecchiette">Orecchiette con Cime di Rapa</option>
-              <option value="gnocchi-pesto"> Gnocchi al Pesto </option>
+               <option value="gnocchi-pesto"> Gnocchi al Pesto </option>
               <option value="tortellini-panna"> Tortellini Panna e Prosciutto </option>
               <option value="pennette-gamberetti">Pennette con Gamberetti e Salmone</option>
               <option value="polenta">Polenta</option>
@@ -77,8 +83,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
               <option value="cannelloni">Cannelloni Ricotta e Spinaci</option>
               <option value="zuppa-legumi">Pasta o Zuppa di Legumi</option>
               <option value="vellutata">Vellutata di Verdure con Crostini</option>
-              <option value="pizzoccheri">Pizzocheri</option>
-<!--Secondi--><option value="omlette">Omlette con Formaggio e Prosciutto</option>
+                <option value="insalata-riso">Insalata di Riso</option>
+          <option value="omlette">Omlette con Formaggio e Prosciutto</option>
+                <option value="crescenza">Crescenza</option>
               <option value="cotoletta">Cotoletta</option>
               <option value="tomino">Tomino</option>
               <option value="hamburger-vegetale">Hamburger Vegetale</option>
@@ -88,9 +95,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
               <option value="mozzarella">Mozzarella</option>
               <option value="frittata">Frittata</option>
               <option value="rolle">Rollè di Pollo</option>
-              <option value="spinacine">Spinacine</option>
+                <option value="spinacine">Spinacine</option>
               <option value="formaggio-philadelphia">Formaggio Philadelphia</option>
-<!--Contorn--><option value="piselli">Piselli</option>
+          <option value="piselli">Piselli</option>
               <option value="broccoli">Broccoli</option>
               <option value="insalata">Insalata</option>
               <option value="verdure-miste">Verdure Miste</option>
@@ -102,42 +109,36 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
               <option value="finocchi">Finocchi Cotti</option>
               <option value="pure">Purè</option>
               <option value="spinaci">Spinaci</option>
-              <option value="carote">Carote Lesse</option>
+                <option value="carote">Carote Lesse</option>
               <option value="barbabietole">Barbabietole</option>
-  <!--Dolci--><option value="croissant"> Croissant </option>
+        <option value="croissant"> Croissant </option>
               <option value="cappuccio-caffe"> Cappuccio o caffè </option>
-              <option value="yogurt-dessert">Yogurt o Dessert</option>
+                <option value="yogurt-dessert">Yogurt o Dessert</option>
               <option value="gruppo-cucina">Gruppo Cucina!</option>
             </select>
+
+          -->
+            
           </div> 
 
 <!-- Cards Menu Januari -->
          <!--Second Week-->
-        <div id="nolist" >
-          <h1 class="nolisth1">Questo Giorno non ha la Pietanza Selezionata</h1>
-        </div>
+
+
         <div class="daily-menu-list" id="january-list">
+          
           <div id="back">
-            <div class="daily-menu" id="no-food" >
+            <div  id="no-food" >
               <span class="no-food">
                 <h1 id="affamato">Non c'è nulla quì!</h1>
               </span>
-              <span class="rigatoni" id="no-food-list"></span>
-              <span class="gnocchi-pesto" id="no-food-list"></span>
-              <span class="tortellini-panna" id="no-food-list"></span>
-              <span class="cotoletta" id="no-food-list"></span>
-              <span class="spinacine" id="no-food-list"></span>
-              <span class="verdure-miste" id="no-food-list"></span>
-              <span class="cavolfiori" id="no-food-list"></span>
-              <span class="patate-novelle" id="no-food-list"></span>
-              <span class="carote" id="no-food-list"></span>
-              <span class="barbabietole" id="no-food-list"></span>
             </div>
-         </div>
+          </div>
+           
          <div id="back">
-            <div class="daily-menu" id="mercoledì07g" >
-            <span class="mercoledì07g">
-              <h1>Menu Mercoledì 07 Gennaio</h1>
+            <div class="daily-menu" id="mercoledì01a" >
+            <span class="mercoledì01a">
+              <h1>Menu Mercoledì 01 Aprile</h1>
             </span>
             <span class="piadina">
               <h1>Piadina</h1>
@@ -148,71 +149,129 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           </div>
          </div>
          <div id="back">
-          <div class="daily-menu" id="giovedì08g">
-            <span class="giovedì08g">
-              <h1> Menu Giovedì 08 Gennaio</h1>
+          <div class="daily-menu" id="giovedì02a">
+            <span class="giovedì02a">
+              <h1> Menu Giovedì 02 Aprile</h1>
             </span>
-              <span class="riso-piselli">
-                <h1>Riso con Piselli</h1>
+              <span class="insalata-riso">
+                <h1>Insalata di Riso</h1>
               </span>
-              <span class="tomino">
-                <h1>Tomino</h1>
+              <span class="crescenza">
+                <h1>Crescenza</h1>
               </span>
-              <span class="fagiolini">
-                <h1>Fagiolini</h1>
+              <span class="barbabietole">
+                <h1>Barbabietole</h1>
               </span>
           </div>
          </div>
          <div id="back">
-          <div class="daily-menu" id="venerdì09g">
-              <span class="venerdì09g">
-                <h1> Menu Venerdì 9 Gennaio</h1>
+          <div class="daily-menu" id="venerdì03a">
+              <span class="venerdì03a">
+                <h1> Menu Venerdì 03 Aprile</h1>
+              </span>
+              <span class="croissant">
+                <h1>Colazione con Croissant Cappuccio o Caffè</h1>
+              </span>
+              <span id="day-list" class="cappuccio-caffe"></span>
+              <span class="pizza">
+                <h1>Pizza</h1>
+              </span>
+              <span class="insalata">
+                <h1>Insalata</h1>
+              </span>
+            </div>
+          </div>
+      <!--Second Week-->
+         
+         <div id="back">
+          <div class="daily-menu" id="martedì07a">
+              <span class="martedì07a">
+                <h1> Menu Martedì 07 Aprile</h1>
+              </span>
+            <span class="gruppo-cucina">
+              <h1>Gruppo Cucina!</h1>
+            </span>
+          </div>
+        </div>
+        <div id="back">
+        <div class="daily-menu" id="mercoledì08a">
+          <span class="mercoledì08a">
+            <h1> Menu Mercoledì 08 Aprile</h1>
+          </span>
+          <span class="piadina">
+              <h1>Piadina</h1>
+          </span>
+          <span class="yogurt-dessert">
+              <h1>Yogurt o Dessert</h1>
+          </span>
+        </div>
+        </div>
+        <div id="back">
+          <div class="daily-menu" id="giovedì09a">
+            <span class="giovedì09a">
+              <h1> Menu Giovedì 09 Aprile</h1>
+            </span>
+            <span class="paella">
+              <h1>Paella</h1>
+            </span>
+            <span class="pesce">
+              <h1>Pesce al Forno</h1>
+            </span>
+            <span class="insalata">
+              <h1>Insalata Verde</h1>
+            </span>
+          </div>
+        </div>
+        <div id="back">
+          <div class="daily-menu" id="venerdì10a">
+            <span  class="venerdì10a">
+                <h1> Menu Venerdì 10 Aprile</h1>
               </span>
               <span class="croissant">
                 <h1>Colazione con Croissant Cappuccio o Caffè</h1>
               </span>
               <span id="day-list" class="cappuccio-caffe"></span>
               <span class="hamburger-vegetale">
-                <h1>hamburger-vegetale</h1>
+                <h1>Hamburger Vegetale</h1>
               </span>
               <span class="patatine">
-                <h1>Patatine</h1>
+                <h1>Patatine Fritte</h1>
               </span>
-             
-           </div>
           </div>
-         
-<!--Third Week-->
-         <div id="back">
-          <div class="daily-menu" id="lunedì12g">
-              <span class="lunedì12g">
-                <h1> Menu Lunedì 12 Gennaio</h1>
+        </div>
+      <!--Third Week-->
+        <div id="back">
+          <div class="daily-menu" id="lunedì13a">
+              <span class="lunedì13a">
+                <h1> Menu Lunedì 13 Aprile</h1>
               </span>
               <span class="pennette-gamberetti">
-                <h1>Pennette con Gamberetti e Salmone</h1>
+                <h1>Pennette con Gamberetti e Salmone<br><br>Pesce al Forno</h1>
               </span>
-              <span class="pesce">
-                <h1>Pesce al Forno</h1>
+              <span id="day-list" class="pesce">
+               
               </span>
               <span class="piselli">
                 <h1>Piselli</h1>
               </span>
+
+          </div>
+        </div>
+ 
+        <div id="back">
+          <div class="daily-menu" id="martedì14a">
+            <span  class="martedì14a">
+                <h1> Menu Martedì 14 Aprile</h1>
+            </span>
+            <span class="gruppo-cucina">
+              <h1>Gruppo Cucina!</h1>
+            </span>
           </div>
         </div>
         <div id="back">
-        <div class="daily-menu" id="martedì13g">
-          <span class="martedì13g">
-            <h1> Menu Martedì 13 Gennaio</h1>
-          </span>
-          <span class="gruppo-cucina">
-            <h1>Gruppo Cucina!</h1>
-          </span>
-        </div>
-        </div>
-        <div id="back">
-          <div class="daily-menu" id="mercoledì14g">
-            <span class="mercoledì14g">
-              <h1> Menu Mercoledì 14 Gennaio</h1>
+          <div class="daily-menu" id="mercoledì15a">
+            <span  class="mercoledì15a">
+              <h1> Menu Mercoledì 15 Aprile</h1>
             </span>
             <span class="piadina">
               <h1>Piadina</h1>
@@ -223,142 +282,61 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           </div>
         </div>
         <div id="back">
-          <div class="daily-menu" id="giovedì15g">
-            <span  class="giovedì15g">
-                <h1> Menu Giovedì 15 Gennaio</h1>
-              </span>
-              <span class="pasta-ragu">
-                <h1>Pasta al Ragù</h1>
-              </span>
+          <div class="daily-menu" id="giovedì16a">
+            <span  class="giovedì16a">
+                <h1> Menu Giovedì 16 Aprile</h1>
+            </span>
+            <span class="pasta-fredda">
+              <h1>Pasta Fredda con Tonno e Zucchine</h1>
+            </span>
               <span class="omlette">
                 <h1>Omlette con Formaggio e Prosciutto</h1>
               </span>
-              <span class="broccoli">
-                <h1>Broccoli</h1>
+              <span class="pomodori">
+                <h1>Pomodori</h1>
               </span>
           </div>
         </div>
         <div id="back">
-          <div class="daily-menu" id="venerdì16g">
-              <span class="venerdì16g">
-                <h1> Menu Venerdì 16 Gennaio</h1>
-              </span>
-              <span class="croissant">
+          <div class="daily-menu" id="venerdì17a">
+            <span class="venerdì17a">
+              <h1> Menu Venerdì 17 Aprile</h1>
+            </span>
+            <span class="croissant">
                 <h1>Colazione con Croissant Cappuccio o Caffè</h1>
               </span>
               <span id="day-list" class="cappuccio-caffe"></span>
-              <span class="polenta">
-                <h1>Polenta</h1>
-              </span>
-              <span class="zola">
-                <h1>Gorgonzola</h1>
-              </span>
-              <span class="salamino">
-                <h1>Salamino</h1>
+              <span class="grigliata">
+                <h1>Grigliata Mista</h1>
               </span>
               <span class="insalata">
-                <h1>Insalata</h1>
+                <h1>Insalata Verde</h1>
               </span>
           </div>
         </div>
-          <!--Fourty Week-->
+    <!--Fourth Week-->
         <div id="back">
-          <div class="daily-menu" id="lunedì19g">
-            <span  class="lunedì19g">
-                <h1> Menu Lunedì 19 Gennaio</h1>
+          <div class="daily-menu" id="lunedì20a">
+            <span class="lunedì20a">
+              <h1> Menu Lunedì 20 Aprile</h1>
             </span>
-              <span class="orecchiette">
-                <h1>Orecchiette con Cime di Rapa</h1>
-              </span>
-              <span class="mozzarella">
-                <h1>Mozzarella</h1>
-              </span>
-              <span class="Cavolfiori">
-                <h1>Cavolfiori</h1>
-              </span>
+            <span class="orecchiette">
+              <h1>Orecchiette con Cime di Rapa<br><br>Mozzarella<br><br>Insalata di Pomodori</h1>
+            </span>
+            <span id="day-list" class="insalata-pomodori">
+              <h1></h1>
+            </span>
+            <span id="day-list" class="mozzarella">
+              <h1></h1>
+            </span>
+
           </div>
         </div>
-        <div id="back">
-          <div class="daily-menu" id="martedì20g">
-            <span  class="martedì20g">
-              <h1> Menu Martedì 20 Gennaio</h1>
-            </span>
-            <span class="gruppo-cucina">
-              <h1>Gruppo Cucina!</h1>
-            </span>
-          </div>
-        </div>
-        <div id="back">
-          <div class="daily-menu" id="mercoledì21g">
-            <span  class="mercoledì21g">
-                <h1> Menu Mercoledì 21 Gennaio</h1>
-            </span>
-            <span class="piadina">
-              <h1>Piadina</h1>
-            </span>
-              <span class="yogurt-dessert">
-                <h1>Yogurt o Dessert</h1>
-              </span>
-          </div>
-        </div>
-        <div id="back">
-          <div class="daily-menu" id="giovedì22g">
-            <span class="giovedì22g">
-              <h1> Menu Giovedì 22 Gennaio</h1>
-            </span>
-            <span class="cannelloni">
-              <h1>cannelloni Ricotta e Spinaci</h1>
-            </span>
-            <span class="frittata">
-              <h1>Frittata</h1>
-            </span>
-            <span class="taccole">
-              <h1>Taccole</h1>
-            </span>
-          </div>
-        </div>
-        <div id="back">
-          <div class="daily-menu" id="venerdì23g">
-            <span class="venerdì23g">
-              <h1> Menu Venerdì 23 Gennaio</h1>
-            </span>
-            <span class="croissant">
-              <h1>Colazione con Croissant Cappuccio o Caffè</h1>
-            </span>
-            <span id="day-list" class="cappuccio-caffe"></span>
-            <span class="riso-basmati">
-              <h1>Riso Basmati con Pollo al Curry </h1>
-            </span>
-            <span class="zola">
-              <h1>Gorgonzola</h1>
-            </span>
-            <span class="pollo" id="day-list"></span>
-            <span class="patate">
-              <h1>Patate Novelle</h1>
-            </span>
-          </div>
-        </div>
-          <!--Fifty Week-->
+         
          <div id="back">
-          <div class="daily-menu" id="lunedì26g">
-            <span  class="lunedì26g">
-              <h1> Menu Lunedì 26 Gennaio</h1>
-            </span>
-            <span class="zuppa-legumi">
-              <h1>Pasta o Zuppa Legumi</h1>
-            </span>
-            <span class="formaggio-philadelphia">
-              <h1>Formaggio Philadelphia</h1>
-            </span>
-            <span class="finocchi">
-              <h1>Finocchi Cotti</h1>
-            </span>
-          </div>
-        </div>
-        <div id="back">
-          <div class="daily-menu" id="martedì27g">
-            <span class="martedì27g">
-              <h1> Menu Martedì 27 Gennaio</h1>
+          <div class="daily-menu" id="martedì21a">
+            <span  class="martedì21a">
+              <h1> Menu Martedì 21 Aprile</h1>
             </span>
             <span class="gruppo-cucina">
               <h1>Gruppo Cucina!</h1>
@@ -366,55 +344,111 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           </div>
         </div>
         <div id="back">
-          <div class="daily-menu" id="mercoledì28g">
-            <span  class="mercoledì28g">
-                <h1>Menu Mercoledì 28 Gennaio</h1>
+          <div class="daily-menu" id="mercoledì22a">
+            <span class="mercoledì22a">
+              <h1> Menu Mercoledì 22 Aprile</h1>
             </span>
             <span class="piadina">
               <h1>Piadina</h1>
             </span>
             <span class="yogurt-dessert">
               <h1>Yogurt o Dessert</h1>
+            </span>
+          </div>
+        </div>
+        <div id="back">
+          <div class="daily-menu" id="giovedì23a">
+            <span  class="giovedì23a">
+                <h1>Menu Giovedì 23 Aprile</h1>
+            </span>
+            <span class="riso-piselli">
+              <h1>Riso con Piselli</h1>
+            </span>
+            <span class="primo-sale">
+              <h1>Primo Sale</h1>
+            </span>
+            <span class="fagiolini">
+              <h1>Fagiolini</h1>
             </span>
            </div>
           </div>
         <div id="back">
-          <div class="daily-menu" id="giovedì29g">
-            <span  class="giovedì29g">
-                <h1> Menù Giovedì 29 Gennaio</h1>
+          <div class="daily-menu" id="venerdì24a">
+            <span  class="venerdì24a">
+                <h1> Menu Venerdì 24 Aprile</h1>
             </span>
-            <span class="vellutata">
-              <h1>Vellutata di Verdure con Crostini</h1>
+              <span class="croissant">
+                <h1>Colazione con Croissant Cappuccio o Caffè</h1>
+              </span>
+              <span id="day-list" class="cappuccio-caffe"></span>
+              <span class="hamburger-carne">
+                <h1>Hamburger di Carne</h1>
+              </span>
+              <span class="insalata-cetrioli-pomodori">
+                <h1>Insalata di Cetrioli e Pomodori</h1>
+              </span>
+          </div>
+        </div>
+  <!--Fifth Week-->
+        <div id="back">
+          <div class="daily-menu" id="lunedì27a">
+              <span class="lunedì27a">
+                <h1> Menu Lunedì 27 Aprile</h1>
+              </span>
+              <span class="insalata-farro">
+                <h1>Insalata di Farro</h1>
+              </span>
+              <span class="ricotta">
+                <h1>Ricotta</h1>
+              </span>
+              <span class="insalata">
+                <h1>Insalata Verde</h1>
+              </span>
+          </div>
+        </div>
+        <div id="back">
+          <div class="daily-menu" id="martedì28a">
+              <span class="martedì28a">
+                <h1> Menu Martedì 28 Aprile</h1>
+              </span>
+            <span class="gruppo-cucina">
+              <h1>Gruppo Cucina!</h1>
             </span>
-            <span class="rolle">
-              <h1>Rollè di Pollo</h1>
+           </div>
+        </div>
+        <div id="back">
+          <div class="daily-menu" id="mercoledì29a">
+              <span class="mercoledì29a">
+                <h1> Menu Mercoledì 29 Aprile</h1>
+              </span>
+               <span class="piadina">
+              <h1>Piadina</h1>
             </span>
-            <span class="pure">
-              <h1>Purè</h1>
+            <span class="yogurt-dessert">
+              <h1>Yogurt o Dessert</h1>
             </span>
           </div>
         </div>
         <div id="back">
-          <div class="daily-menu" id="venerdì30g">
-              <span class="venerdì30g">
-                <h1> Menu Venerdì 30 Gennaio</h1>
+          <div class="daily-menu" id="giovedì30a">
+              <span class="giovedì30a">
+                <h1> Menu Giovedì 30 Aprile</h1>
               </span>
-              <span class="croissant">
-                <h1>Colazione con Croissant Cappuccio o Caffè</h1>
+              <span class="pasta-contadina">
+                <h1>Pasta alla Contadina (con Verdure)</h1>
               </span>
-              <span id="day-list" class="cappuccio-caffè"></span>
-              <span class="pizzoccheri">
-                <h1>Pizzoccheri</h1>
+              <span class="caprese">
+                <h1>Caprese</h1>
               </span>
-              <span class="spinaci">
-                <h1>Spinaci</h1>
-              </span>
+
           </div>
-         </div>
+        </div>
+        
        </div>
       </div>
      </label>
     </li>
+    <!-- 
     <li id="february-menu">
        <input type="checkbox" id="february-schedule-menu">
        <label for="february-schedule-menu" class="open-february-menu">
@@ -463,7 +497,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
               <option value="vellutata">Vellutata di Verdure con Crostini</option>
               <option value="pizzoccheri">Pizzocheri</option>
               <option value="pizza">Pizza</option>
-<!--Secondi--><option value="omlette">Omlette con Formaggio e Prosciutto</option>
+<!--Secondi <option value="omlette">Omlette con Formaggio e Prosciutto</option>
               <option value="cotoletta">Cotoletta</option>
               <option value="tomino">Tomino</option>
               <option value="hamburger-vegetale">Hamburger Vegetale</option>
@@ -475,7 +509,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
               <option value="rolle">Rollè di Pollo</option>
               <option value="spinacine">Spinacine</option>
               <option value="formaggio-philadelphia">Formaggio Philadelphia</option>
-<!--Contorn--><option value="piselli">Piselli</option>
+<!--Contorn <option value="piselli">Piselli</option>
               <option value="broccoli">Broccoli</option>
               <option value="insalata">Insalata</option>
               <option value="verdure-miste">Verdure Miste</option>
@@ -489,14 +523,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
               <option value="spinaci">Spinaci</option>
               <option value="carote">Carote Lesse</option>
               <option value="barbabietole">Barbabietole</option>
-<!--Dolci-->  <option value="croissant"> Croissant </option>
+<!--Dolci <option value="croissant"> Croissant </option>
               <option value="cappuccio-caffe"> Cappuccio o caffè </option>
               <option value="yogurt-dessert">Yogurt o Dessert</option>
               <option value="gruppo-cucina">Gruppo Cucina!</option>
             </select>
           </div>
-<!-- Cards Menu February -->
-          <!--First Week-->
+<!-- Cards Menu February 
+          <!--First Week
         <div id="nolistf" >
           <h1 class="nolisth1">Questo Giorno non ha la Pietanza Selezionata</h1>
         </div>
@@ -590,7 +624,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
               </span>
           </div>
         </div>
-           <!--Second Week-->
+           <!--Second Week
         <div id="back">
           <div class="daily-menu" id="lunedì09f">
               <span class="lunedì09f" >
@@ -663,7 +697,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 </span>
           </div>
         </div>
-<!--Third Week-->
+<!--Third Week
         <div id="back">
           <div class="daily-menu" id="lunedì16f">
               <span class="lunedì16f" >
@@ -742,7 +776,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
               </span>
           </div>
         </div>
-           <!--Fourty Week-->
+           <!--Fourty Week
         <div id="back">
           <div class="daily-menu" id="lunedì23f">
             <span class="lunedì23f">
@@ -820,7 +854,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         </div>
       </label>
     </li>
-      <!--March-->
+      <!--March
     <li>
       <input type="checkbox" id="march-schedule-menu">
       <label for="march-schedule-menu" class="open-march-menu">
@@ -871,7 +905,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
               <option value="vellutata">Vellutata di Verdure con Crostini</option>
               <option value="pizzoccheri">Pizzocheri</option>
               <option value="pizza">Pizza</option>
-<!--Secondi--><option value="omlette">Omlette con Formaggio e Prosciutto</option>
+<!--Secondi<option value="omlette">Omlette con Formaggio e Prosciutto</option>
               <option value="cotoletta">Cotoletta</option>
               <option value="tomino">Tomino</option>
               <option value="hamburger-vegetale">Hamburger Vegetale</option>
@@ -883,7 +917,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
               <option value="rolle">Rollè di Pollo</option>
               <option value="spinacine">Spinacine</option>
               <option value="formaggio-philadelphia">Formaggio Philadelphia</option>
-<!--Contorn--><option value="piselli">Piselli</option>
+<!--Contorn<option value="piselli">Piselli</option>
               <option value="broccoli">Broccoli</option>
               <option value="insalata">Insalata</option>
               <option value="verdure-miste">Verdure Miste</option>
@@ -897,14 +931,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
               <option value="spinaci">Spinaci</option>
               <option value="carote">Carote Lesse</option>
               <option value="barbabietole">Barbabietole</option>
-<!--Dolci-->  <option value="croissant"> Croissant </option>
+<!--Dolci  <option value="croissant"> Croissant </option>
               <option value="cappuccio-caffe"> Cappuccio o caffè </option>
               <option value="yogurt-dessert">Yogurt o Dessert</option>
               <option value="gruppo-cucina">Gruppo Cucina!</option>
             </select>
           </div>
-<!-- Cards Menu March -->
-          <!--First Week-->
+<!-- Cards Menu March 
+          <!--First Week
         <div id="nolistmar" >
           <h1 class="nolisth1">Questo Giorno non ha la Pietanza Selezionata</h1>
         </div>
@@ -994,7 +1028,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
               </span>
           </div>
         </div>
-           <!--Second Week-->
+           <!--Second Week
          <div id="back">
            <div class="daily-menu" id="lunedì09mar">
               <span  class="lunedì09mar">
@@ -1070,7 +1104,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             </span>
           </div>
         </div>
-          <!--Third Week-->
+          <!--Third Week
           <div id="back">
           <div class="daily-menu" id="lunedì16mar">
               <span class="lunedì16mar">
@@ -1149,7 +1183,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
               </span>
           </div>
         </div>
-           <!--Fourty Week-->
+           <!--Fourty Week
         <div id="back">
           <div class="daily-menu" id="lunedì23mar">
             <span class="lunedì23mar">
@@ -1224,7 +1258,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
               </span>
            </div>
          </div>
-<!--Fifty Week-->
+<!--Fifty Week
         <div id="back">
           <div class="daily-menu" id="lunedì30mar">
             <span class="lunedì30mar">
@@ -1253,7 +1287,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
          </div>
         </div>
        </label>
-     </li>
+     </li> 
+     -->
     </ul>
    </div>
   </label>

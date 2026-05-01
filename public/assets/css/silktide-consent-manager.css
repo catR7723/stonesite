@@ -13,12 +13,12 @@
               --focus: 0 0 0 2px #ffffff, 0 0 0 4px #000000, 0 0 0 6px #ffffff;
               --boxShadow: -5px 5px 10px 0px #00000012, 0px 0px 50px 0px #0000001a;
               --fontFamily: Helvetica Neue, Segoe UI, Arial, sans-serif;
-              --primaryColor: #F9D000;
+              --primaryColor: #d44cb4;
               --backgroundColor: #050505;
               --textColor: #F4F0DF;
               --backdropBackgroundColor: #f1f1f333;
               --backdropBackgroundBlur: 0px;
-              --cookieIconColor: #F9D000;
+              --cookieIconColor: #1a7c3b;
               --cookieIconBackgroundColor: #050505;
               position: fixed;
   bottom: 0;
@@ -30,7 +30,8 @@
   border: 0px;
   display: flex;
   justify-content: center;
-  align-items: center
+  align-items: center;
+ 
             }
 
 /* Backdrop (Global) */
@@ -42,23 +43,20 @@
   height: 100%;
   pointer-events: auto;
   border: 0px;
-  display: none;
+
 }
 
 /* --------------------------------
   Links
 -------------------------------- */
 #silktide-wrapper a {
-  all: unset;
-  display: inline-block;
-  color: var(--primaryColor);
-  text-decoration: underline;
+
+display: none;
+ 
+  
 }
 
-#silktide-wrapper a:hover {
-  cursor: pointer;
-  color: var(--textColor);
-}
+
 
 /* --------------------------------
   Focus Styles
@@ -96,6 +94,8 @@
 
 #silktide-wrapper .st-button--primary {
   background-color: var(--primaryColor);
+ 
+  
 }
 
 #silktide-wrapper .st-button--primary:hover {
@@ -106,6 +106,7 @@
 #silktide-wrapper .st-button--secondary {
   background-color: var(--backgroundColor);
   color: var(--primaryColor);
+   
 }
 
 #silktide-wrapper .st-button--secondary:hover {
@@ -201,6 +202,7 @@
 }
 
 #silktide-banner a {
+
   display: inline-block;
   color: var(--primaryColor);
   text-decoration: underline;
@@ -213,13 +215,7 @@
 }
 
 #silktide-banner a.silktide-logo {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  fill: var(--primaryColor); /* passed down to svg > path */
-  margin-left: auto;
-  width: 48px;
-  height: 48px;
+display:none;
 }
 
 
@@ -475,7 +471,7 @@
   display: none;
   position: fixed;
   bottom: 10px;
-  left: 10px;
+  left: 0px;
   justify-content: center;
   align-items: center;
   width: 60px;

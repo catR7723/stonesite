@@ -4,10 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>La Casa della Cicala</title>
-     <link rel="stylesheet" type="text/css" href="/public/assets/css/cicala.css">
-
-    <link rel="stylesheet" id="silktide-consent-manager-css" href="/public/assets/css/silktide-consent-manager.css">
-    <script src="/public/assets/js/silktide-consent-manager.js"></script>
+     <link rel="stylesheet" type="text/css" href="/assets/css/cicala.css">
 
     <script type="text/javascript" src="https://cs.iubenda.com/autoblocking/4252528.js"></script>
     <script type="text/javascript" url="//cdn.iubenda.com/cs/gpp/stub.js"></script>
@@ -16,12 +13,41 @@
 <script 
   src="https://www.paypal.com/sdk/js?client-id=BAAXmcr7di5rPXMv7o5gM_XDhxK6igrd0h-03FPacsBzFndrTlDlefTW4bBFpHBzNGAfJPv8ri95yDbI94&components=hosted-buttons&disable-funding=venmo&currency=EUR">
 </script>
+
+<link rel="stylesheet" id="silktide-consent-manager-css" href="/assets/css/silktide-consent-manager.css">
+<script src="/assets/js/silktide-consent-manager.js" lang="ita"></script>
+<script src="/assets/js/cookies.js" lang="ita"></script>
+ <script>
+/* Cookie Consent Manager */
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+
+if(localStorage.getItem('consentMode') === 'null'){
+    gtag('consent', 'default', {
+        'ad_storage': 'denied',
+        'analytics_storage': 'denied',
+        'personalization_storage': 'denied',
+        'security_storage': 'denied',
+        'functionality_storage': 'denied',
+    });
+} else {
+    gtag('consent', 'default', JSON.parse(localStorage.getItem('consentMode')));}
+
+</script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-6X8KEP5KMG"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-6X8KEP5KMG');
+</script>
 </head>
 <body>
 
     <div class="title">
         <div class="home">
-            <a href="/index.html">Home</a>
+            <a href="/stone">Home</a>
         </div>
 
         <div class="text">
