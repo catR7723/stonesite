@@ -1,22 +1,24 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
+<!DOCTYPE html><html lang="en"><head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cineforum</title>
-    <link rel="stylesheet" id="silktide-consent-manager-css" href="/public/assets/css/laboratori/cineforum.css">
-    <link rel="stylesheet" id="silktide-consent-manager-css" href="/public/assets/css/silktide-consent-manager.css">
-    <script src="/public/assets/js/silktide-consent-manager.js"></script>
+    <link rel="stylesheet" id="silktide-consent-manager-css" href="/assets/css/laboratori/cineforum.css?v=1.1">
+    <link rel="stylesheet" id="silktide-consent-manager-css" href="/assets/css/silktide-consent-manager.css">
+    <script src="/assets/js/silktide-consent-manager.js"></script>
+    <script src="/routes/cineforumInsert.js"></script>
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&amp;icon_names=close">
 
     <script type="text/javascript" src="https://cs.iubenda.com/autoblocking/4252528.js"></script>
     <script type="text/javascript" url="//cdn.iubenda.com/cs/gpp/stub.js"></script>
-    <script type="text/javascript" url="//cdn.iubenda.com/cs/iubenda_cs.js" charset="UTF-8" async></script>
+    <script type="text/javascript" url="//cdn.iubenda.com/cs/iubenda_cs.js" charset="UTF-8" async=""></script>
+
 </head>
 <body>
     <div class="menu">
         <ul>
             <li class="home">
-                <a href="/index.html" >
+                <a href="/stone">
                     Home
                 </a>
             </li>
@@ -29,33 +31,136 @@
     </div>
     <div class="nav">
         <h1 class="title">Cineforum</h1>
+
         <div class="idea">
             <h1 class="ideaexplain">
-CINEFORUM:</br></br>Ogni settimana viene proposta la cvisione di un film. Alla fine si discute della trama cercando di trovare spunti utili </br>
-per la riflessione rispetto le vicende sociali, personali o del nostro gruppo. Un importante momento ludico che stimola la persona a pensare </br>
-se stesso in un contesto più ampio traendo strumenti utili alla propria crescita.
+                CINEFORUM:<br><br>Ogni settimana viene proposta la cvisione di un film. Alla fine si discute della trama cercando di trovare spunti utili <br>
+                    per la riflessione rispetto le vicende sociali, personali o del nostro gruppo. Un importante momento ludico che stimola la persona a pensare <br>
+                    se stesso in un contesto più ampio traendo strumenti utili alla propria crescita.
             </h1>
         </div>
-        <div id="blog">
-            <input type="checkbox" id="sidebar-how">
-               <label for="sidebar-how" class="open-how">
-                 <h1 class="w-how">clicca qui:<br>Il Film della Settimana</h1>
-               </label>
-               <label for="sidebar-how" id="overlay-how">
-                  <div class="bestbh-how">
-                    <h2 class="tittrama">LA TRAMA</h2>
-                    <h2 class="trama">Iris, giornalista inglese, e Amanda, montatrice cinematografica, non potrebbero essere più diverse tra loro ma hanno in comune il fatto di essere state entrambe tradite dai rispettivi fidanzati. Conosciutesi su internet, le due decidono di scambiarsi momentaneamente la residenza, con la prima che si trasferisce così in una lussuosa villa di Los Angeles e la seconda che arriva nella cittadina di Surrey. Entrambe dopo le iniziali difficoltà troveranno molti vantaggi nella loro nuova collocazione, con il destino pronto a regalar loro alcune sorprese</h2>
-                  <h2 class="titdiscussione">DISCUSSIONE</h2>
-                <h2 class="discussione">
-                    Visti gli avvenimenti del film abbiamo fantastico su dove andare a vivere con molte mete differenti: da chi predilige le grandi città come New York oppure Amsterdam a chi invece vorrebbe isolarsi dal caos sulle montagne trentine. Anche il tipo di abitazione varia, infatti se molti andrebbero in hotel altri affitterebbero un appartamento con tutti i confort. Un altro aspetto che abbiamo preso in considerazione è la compagnia: se alcuni andrebbero via con la loro famiglia altri si farebbero accompagnare dai loro amici. Infine abbiamo ragionato sulla durata: molti si trasferirebbero definitivamente mentre altri sarebbero propensi a fare un soggiorno di una settimana per poi ritornare alle loro vite.
+    </div>
 
-Sicuramente il punto centrale della trama è con chi ci vorremmo scambiare dei nostri amici del centro, tutti noi ne abbiamo indicato uno, non tenendo in considerazione che “L’erba del vicino è sempre più verde”.
-                </h2>
-                </div>
-               </label>
+    <div id="blog">
+    <input type="checkbox" id="sidebar-how">
+    
+    <!-- Toggle Button -->
+    <label for="sidebar-how" class="open-how">
+        <h1 class="w-how">clicca qui:<br>Il Film della Settimana</h1>
+    </label>
+    
+    <!-- Overlay Modal -->
+    <label for="sidebar-how" id="overlay-how">
+        <div class="bestbh-how">
+            <!-- Titolo -->
+            <div class="film-section">
+                <h1 id="titoloFilm">
+    <div class="film-section">
+        
+        <p>riso 2</p>
+    </div>
+</h1>
+</div>
+            
+            <!-- Immagine -->
+            <img src="/images/films/locandina.jpg" alt="locandina" width="200">
+            
+            <!-- Contenitore Trama e Discussione -->
+            <div class="spec">
+                <!-- Trama -->
+                <div class="film-section">
+                   
+                    <div id="tramaFilm" class="trama">
+    <label for="toggle-blog" id="toggle-trama" style="cursor: pointer;">
+        <div class="film-section">
+            <h4>📖 Trama</h4>
+            <p>orem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since 1966, when designers at Letraset and James Mosley, the librarian at St Bride Printing Library, took a 1914 Cicero translation and scrambled it to make dummy text for Letraset's Body Type sheets. It has survived not only many decades, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised thanks to these sheets and more recently with desktop publishing software including versions of Lorem Ipsum.</p>
         </div>
-         <div class="write">
-            <a href="mailto:infocoopstone@gmail.com" target="_blank"  class="scrivi">scrivi: infocoopstone@gmail.com</a>
+    </label>
+
+</div>
+                </div>
+                
+                <!-- Discussione -->
+                <div class="film-section">
+                    
+                    <div id="discussione" class="discussione">
+    <label for="toggle-blog" class="toggle-discussione" style="cursor: pointer;">
+        <div class="film-section">
+            <h4>💬 Discussione</h4>
+            <p>orem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since 1966, when designers at Letraset and James Mosley, the librarian at St Bride Printing Library, took a 1914 Cicero translation and scrambled it to make dummy text for Letraset's Body Type sheets. It has survived not only many decades, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised thanks to these sheets and more recently with desktop publishing software including versions of Lorem Ipsum.</p>
+        </div>
+    </label>
+   
+</div>
+                </div>
+            </div>
+        </div>
+    </label>
+</div>
+        
+
+  
+  <input type="checkbox" id="sidebar-archivio">
+               <label for="sidebar-archivio" class="open-archivio">
+                 <h1 class="w-archivio">Archivio</h1>
+                 </label>
+            <label for="sidebar-archivio" id="overlay-archivio">
+                  
+            <div id="archivio">
+               
+                
+                
+    
+<div id="29_05_2026" class="film-archiviato" data-folder="gatto-pazzo2">
+    <h1>gatto pazzo2</h1>
+    <h3>Film del 29/05/2026</h3>
+    <input type="checkbox" id="sidebar-film-14-14-07-192">
+    <label for="sidebar-film-14-14-07-192" class="toggle-img">
+        <img src="/images/films/blog/gatto-pazzo2/29_05_2026.jpg?t=1780056891211" width="100">
+    </label>
+    <br>
+    <div class="film-details">
+        <label for="sidebar-film-14-14-07-192" class="toggle-archivio">
+
+            <div class="film-section">
+                <h4>📖 Trama</h4>
+                <p>orem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since 1966, when designers at Letraset and James Mosley, the librarian at St Bride Printing Library, took a 1914 Cicero translation and scrambled it to make dummy text for Letraset's Body Type sheets. It has survived not only many decades, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised thanks to these sheets and more recently with desktop publishing software including versions of Lorem Ipsum.</p>
+            </div>
+            <div class="film-section">
+                <h4>💬 Discussione</h4>
+                <p>orem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since 1966, when designers at Letraset and James Mosley, the librarian at St Bride Printing Library, took a 1914 Cicero translation and scrambled it to make dummy text for Letraset's Body Type sheets. It has survived not only many decades, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised thanks to these sheets and more recently with desktop publishing software including versions of Lorem Ipsum.</p>
+            </div>
+        </label>
+    </div>
+</div><div id="29_05_2026" class="film-archiviato" data-folder="riso-2">
+    <h1>riso 2</h1>
+    <h3>Film del 29/05/2026</h3>
+    <input type="checkbox" id="sidebar-film-14-16-14-888">
+    <label for="sidebar-film-14-16-14-888" class="toggle-img">
+        <img src="/images/films/blog/riso-2/29_05_2026.jpg" width="100">
+    </label>
+    <br>
+    <div class="film-details">
+        <label for="sidebar-film-14-16-14-888" class="toggle-archivio">
+
+            <div class="film-section">
+                <h4>📖 Trama</h4>
+                <p>orem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since 1966, when designers at Letraset and James Mosley, the librarian at St Bride Printing Library, took a 1914 Cicero translation and scrambled it to make dummy text for Letraset's Body Type sheets. It has survived not only many decades, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised thanks to these sheets and more recently with desktop publishing software including versions of Lorem Ipsum.</p>
+            </div>
+            <div class="film-section">
+                <h4>💬 Discussione</h4>
+                <p>orem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since 1966, when designers at Letraset and James Mosley, the librarian at St Bride Printing Library, took a 1914 Cicero translation and scrambled it to make dummy text for Letraset's Body Type sheets. It has survived not only many decades, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised thanks to these sheets and more recently with desktop publishing software including versions of Lorem Ipsum.</p>
+            </div>
+        </label>
+    </div>
+</div></div>
+                 </label>
+              
+         
+           
+<div class="write">
+            <a href="mailto:infocoopstone@gmail.com" target="_blank" class="scrivi">scrivi: infocoopstone@gmail.com</a>
         </div>
 
         <div class="dev">
@@ -63,24 +168,22 @@ Sicuramente il punto centrale della trama è con chi ci vorremmo scambiare dei n
         </div>
         <div class="help">
             <a class="button" href="https://www.paypal.com/donate/?hosted_button_id=4R8KNTDTP6RKN">DONA CLICCA QUI<br>
-                <img src="/public/images/paypaldonation.png" target="_blank"  rel="noopener noreferrer" width="20%">
+                <img src="/images/paypaldonation.png" target="_blank" rel="noopener noreferrer" width="20%">
             </a>
         </div>
 
         <div class="policy">
             <div>
-                <a href="https://www.iubenda.com/privacy-policy/44804857"
-                   class="iubenda-white iubenda-noiframe iubenda-embed iubenda-noiframe" 
-                   title="Privacy Policy ">Privacy Policy
+                <a href="https://www.iubenda.com/privacy-policy/44804857" class="iubenda-white iubenda-noiframe iubenda-embed iubenda-noiframe" title="Privacy Policy ">Privacy Policy
                 </a>
             </div>
             <div>
-                <a href="https://www.iubenda.com/privacy-policy/44804857/cookie-policy"
-                   class="iubenda-white iubenda-noiframe iubenda-embed iubenda-noiframe" 
-                   title="Cookie Policy ">Cookie Policy
+                <a href="https://www.iubenda.com/privacy-policy/44804857/cookie-policy" class="iubenda-white iubenda-noiframe iubenda-embed iubenda-noiframe" title="Cookie Policy ">Cookie Policy
                 </a>
             </div>
         </div>
-    </div>
-</body>
-</html>
+    
+
+
+
+</body></html>

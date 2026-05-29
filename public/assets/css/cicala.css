@@ -43,8 +43,8 @@ body{
 
 }
 .text{    
-    background: url(/public/images/logocicala.jpeg) no-repeat center left,
-    url(/public/images/logocicala.jpeg) no-repeat center right;
+    background: url(/images/logocicala.jpeg) no-repeat center left,
+    url(/images/logocicala.jpeg) no-repeat center right;
     background-size: 19% 100%;
     color:rgb(2, 104, 70);
     text-shadow: #0f100f 2px 2px 1px;
@@ -67,7 +67,7 @@ body{
 }
 .problem{
    position: relative;
-   background: url(/public/images/casacicala/cicalaproblem.jpg)no-repeat bottom;
+   background: url(/images/casacicala/cicalaproblem.jpg)no-repeat bottom;
    background-size: 100% 80%;
    width: 20vw;
    height: 20vw; 
@@ -83,7 +83,7 @@ body{
 }
 .idea{
    position: relative;
-   background: url(/public/images/casacicala/formicaidea.jpg)no-repeat bottom;
+   background: url(/images/casacicala/formicaidea.jpg)no-repeat bottom;
    background-size: 100% 80%;
    width: 20vw;
    height: 20vw; 
@@ -130,23 +130,23 @@ body{
 }
 
 #box01{
-    background:url(/public/images/casacicala/ddn/cena.jpg);
+    background:url(/images/casacicala/ddn/cena.jpg);
    background-size:100% 100%; 
 }
 #box02{
-    background:url(/public/images/casacicala/ddn/spesa1.jpg);
+    background:url(/images/casacicala/ddn/spesa1.jpg);
     background-size:100% 100%;
 }
 #box03{
-    background:url(/public/images/casacicala/ddn/cenatavola.jpg);
+    background:url(/images/casacicala/ddn/cenatavola.jpg);
     background-size:100% 100%;
 }
 #box04{
-    background:url(/public/images/casacicala/ddn/booling.jpg);
+    background:url(/images/casacicala/ddn/booling.jpg);
     background-size:100% 120%;
 }
 #box05{
-    background:url(/public/images/casacicala/ddn/spesa2.jpg) no-repeat;
+    background:url(/images/casacicala/ddn/spesa2.jpg) no-repeat;
     background-size:100% 190%;
 }
 #box01:hover, #box02:hover, #box03:hover, #box04:hover, #box05:hover{
@@ -243,7 +243,7 @@ text-align: center;
     width: 100%;
     height: 10vw;
     text-align: center;
-    background:url(/public/images/deviltailnoback.png)top center no-repeat ;
+    background:url(/images/deviltailnoback.png)top center no-repeat ;
     background-size: 18%;
     color: white;
    text-shadow: 10px 8px 8px black;

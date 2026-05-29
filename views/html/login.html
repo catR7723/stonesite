@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" id="silktide-consent-manager-css" href="/assets/css/login.css">
+    <title>Login</title>
+</head>
+<body>
+        <div class="login"> 
+                <h1 >Esegui il Tuo Login!</h1>
+        </div>
+         
+        
+    <div id="loginForm">
+      
+        <form action="/auth" method="POST" id="auth" >
+                <h1>Inserisci le Tue Credenziali</h1>
+                <input type="text" name="username" required placeholder="Inserisci il tuo username">
+                <input type="password" name="password" required placeholder="Inserisci la tua password">
+                <button type="submit">Login</button>
+        </form>
+        
+        <form action="/email" method="POST" >
+                <h1>Iscriviti inserisci email</h1>
+                <input type="email" name="email" required placeholder="Inserisci la tua email">
+                <input type="text" name="username" required placeholder="Username Autorizzato">
+                <input type="password" name="password" required placeholder="Crea la tua Password">
+                <button type="submit">invia e-Mail</button>
+        </form>
+
+
+
+        <form action="/forgot-password" method="post">
+                <h1>Password dimenticata?</h1>
+                    <input type="text" name="username" placeholder="Inserisci il tuo username" required>
+                    <input type="email" name="email" placeholder="Inserisci la tua email registrata" required>
+                    <button type="submit">Recupera Password</button>
+        </form>
+
+
+        <form action="/change-password" method="POST">
+                 <h1>Cambia Password</h1>
+                <input type="text" name="username" placeholder="Tuo username" required>
+                <input type="password" name="oldPassword" placeholder="Vecchia Password" required>
+                <input type="password" name="newPassword" placeholder="Nuova Password" required>
+                <button type="submit">Aggiorna Password</button>
+        </form>
+  </div>
+</body>
+</html>

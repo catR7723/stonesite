@@ -163,7 +163,8 @@ class SilktideCookieBanner {
         }
       }
     });
-  }
+}
+
 
   setInitialCookieChoiceMade() {
     window.localStorage.setItem(`silktideCookieBanner_InitialChoice${this.getBannerSuffix()}`, 1);
@@ -845,101 +846,3 @@ class SilktideCookieBanner {
     initCookieBanner();
   }
 })();
-//head part
-silktideCookieBannerManager.updateCookieBannerConfig({
-  background: {
-    showBackground: true
-  },
-  cookieIcon: {
-    position: "bottomLeft"
-  },
-  cookieTypes: [
-    {
-      id: "essential",
-      name: "Essential",
-      description: "<p>These cookies are necessary for the website to function properly and cannot be switched off. They help with things like logging in and setting your privacy preferences.</p>",
-      required: true,
-      onAccept: function() {
-        console.log('Add logic for the required Essential here');
-      }
-    },
-    {
-      id: "functionality",
-      name: "Functionality",
-      description: "<p>These cookies help us improve the site by tracking which pages are most popular and how visitors move around the site.</p>",
-      required: false,
-      onAccept: function() {
-        gtag('consent', 'update', {
-          functionality_storage: 'granted',
-        });
-        dataLayer.push({
-          'event': 'consent_accepted_functionality',
-        });
-      },
-      onReject: function() {
-        gtag('consent', 'update', {
-          functionality_storage: 'denied',
-        });
-      }
-    },
-    {
-      id: "advertising",
-      name: "Advertising",
-      description: "<p>These cookies provide extra features and personalization to improve your experience. They may be set by us or by partners whose services we use.</p>",
-      required: false,
-      onAccept: function() {
-        gtag('consent', 'update', {
-          ad_storage: 'granted',
-          ad_user_data: 'granted',
-          ad_personalization: 'granted',
-        });
-        dataLayer.push({
-          'event': 'consent_accepted_advertising',
-        });
-      },
-      onReject: function() {
-        gtag('consent', 'update', {
-          ad_storage: 'denied',
-          ad_user_data: 'denied',
-          ad_personalization: 'denied',
-        });
-      }
-    }
-  ],
-  text: {
-    banner: {
-      description: "<p>We use cookies on our site to enhance your user experience, provide personalized content, and analyze our traffic. <a href=\"https://your-website.com/cookie-policy\" target=\"_blank\">Cookie Policy.</a></p>",
-      acceptAllButtonText: "Accept all",
-      acceptAllButtonAccessibleLabel: "Accept all cookies",
-      rejectNonEssentialButtonText: "Reject non-essential",
-      rejectNonEssentialButtonAccessibleLabel: "Reject non-essential",
-      preferencesButtonText: "Preferences",
-      preferencesButtonAccessibleLabel: "Toggle preferences"
-    },
-    preferences: {
-      title: "Customize your cookie preferences",
-      description: "<p>We respect your right to privacy. You can choose not to allow some types of cookies. Your cookie preferences will apply across our website.</p>",
-      creditLinkText: ".",
-      creditLinkAccessibleLabel: "ooooo"
-    }
-  },
-
-});
-//end
-
-//policy aut
-var _iub = _iub || [];
-_iub.csConfiguration = {"siteId":4252528,"cookiePolicyId":44804857,"lang":"it","storage":{"useSiteId":true}};
-
-//privacy policy
-(function (w,d) {var loader = function () {var s = d.createElement("script"), 
-        tag = d.getElementsByTagName("script")[0]; s.src="https://cdn.iubenda.com/iubenda.js"; 
-        tag.parentNode.insertBefore(s,tag);}; 
-        if(w.addEventListener){w.addEventListener("load", loader, false);}else if(w.attachEvent){w.attachEvent("onload", loader);}
-        else{w.onload = loader;}})(window, document);
-//coockies policy
-(function (w,d) {var loader = function () {var s = d.createElement("script"), 
-        tag = d.getElementsByTagName("script")[0]; s.src="https://cdn.iubenda.com/iubenda.js"; 
-        tag.parentNode.insertBefore(s,tag);}; 
-        if(w.addEventListener){w.addEventListener("load", loader, false);}
-        else if(w.attachEvent){w.attachEvent("onload", loader);}else{w.onload = loader;}})(window, document);

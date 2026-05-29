@@ -1,0 +1,573 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+*{
+    margin:0;
+    padding:0;
+    box-sizing: border-box;
+}
+html{
+    font-family: Poppins, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+:root{
+    --color-2: rgb(22, 178, 235);
+    --color-1: rgb(72, 91, 236);
+    --text-color: rgb(18, 20, 19);
+    --accent-color: rgb(8, 230, 60);
+
+}
+/*Nav*/
+body{
+    background-color: var(--color-1);
+}
+        nav{
+            position: fixed;
+            width: 100%;
+            padding:2vw 5% 0 0;
+            height: 10vw;
+            background-color: var(--color-2);
+            opacity: 0.8;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            text-align: center;
+            z-index: 12;
+        
+        }
+
+        .open-sidebar-button{
+            display: none;
+        }
+        .close-sidebar-button{
+            display: none;
+        }
+        #sidebar-active{
+            display: none;
+        }
+        .links-container{
+            display: flex;
+            height: 100%;
+            width: 100%;
+        justify-content: right;
+            align-items: center;
+        }
+        .links-container a{
+                height: 100%;
+            padding:0 20px ;
+            display: flex;
+            align-items: center;
+            color:var(--text-color);
+            text-decoration: none;
+            font-size: 1.6vw;
+            cursor: pointer;
+        }
+        nav .home-link{
+            margin-right:auto;
+        }
+        #write3{
+            display: none;
+        }
+        @property --angle{
+            syntax: "<angle>";
+            initial-value: 0deg;
+            inherits: false;
+
+        }
+
+        @keyframes gradient {
+            0% {
+                background-position: 0% 50%;
+            
+            }
+            50% {
+                background-position: 100% 50%;
+                
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+        @media(max-width: 640px){
+          .links-container{
+                flex-direction: column;
+                align-items: flex-start;
+                position: fixed;
+                top: 0;
+                right: -100%;
+                z-index: 10;
+                width: 300px;
+                background-color: var(--color-1);
+                box-shadow: -100px 0 80px var(--color-1);
+                transition: 0.8s ease-out;
+               
+            }
+            .links-container a{
+                font-size: 4vw;
+                font-weight: 800;
+                color: wheat;
+            }
+          
+          nav a{
+                box-sizing: border-box;
+                height:auto;
+                width: 100%;
+            padding: 20px 30px;
+                justify-content: flex-start;
+                
+               
+            }
+            .open-sidebar-button,  .close-sidebar-button{
+            display: block;
+            padding: 20px;
+        }
+         #sidebar-active:checked ~ .links-container{
+            right: 0;
+        }
+         #sidebar-active:checked ~ #overlay{
+            background: rgb(217, 234, 165);
+            height: 100%;
+            position:fixed;
+            width: 100%;
+            top:0;
+            left:0;
+            z-index: 9;
+        }
+         #write3{
+            padding-top: 2%;
+            display: flex; 
+            width: 100%;
+            font-size: 1.8vw;
+            text-align:center ;
+        
+            color:var(--text-color);
+        }
+}
+/*logo*/
+        .logo{
+            
+            align-items: center;
+            padding:18vw 0 2% 0;
+            width: 100%;
+            height: 25vw;
+            
+            background: url(/images/logostone.png) bottom left no-repeat ;
+            background-size: 10%;
+            z-index: 2;
+            text-shadow: 3px 2px 2px rgb(108, 165, 226);
+        
+        }
+
+        #write2{
+            width: 100%;
+            font-size: 1.8vw;
+            text-align:center ;
+            display: relative;
+            color:var(--text-color);
+            position:absolute;
+        }
+        @media(max-width: 640px){
+        #write3 h1{
+            width: 100%;
+            text-align: center;
+            font-size: 6vw;
+        }
+
+        #write2{
+            display: none;
+        }
+        }
+/*grid*/
+        .grid{
+            position: relative;
+            width: 100%;
+            height: 60vw;
+            display: grid;
+        grid-template-columns:repeat(1fr);
+        grid-template-rows:repeat(1fr);
+        grid-template-areas:
+            "box-1 box-2 box-3 box-4"
+            "box-1 box-5 box-5 box-4"
+            "box-6 box-5 box-5 box-7"
+            "box-8 box-8 box-9 box-7";
+            gap: 1vw;
+           padding: 10vw 2vw 0 2vw;
+        }
+        .grid img{
+            height: 100%;
+            width: 100%;
+        }
+        #box01{
+            background:url(/images/grid-img/musica.jpg);
+        background-size:100% 100%; 
+        }
+        #box02{
+            background-image:url(/images/grid-img/cucina.jpg);
+        background-size:100% 100%; 
+        cursor:none;
+        src:none;
+        }
+        #box03{
+            background-image:url(/images/grid-img/chanel.jpg);
+        background-size:100% 100%; 
+        }
+        #box04{
+            background-image:url(/images/grid-img/casacicala2.jpeg);
+        background-size:cover; 
+        }
+
+        #box06{
+            background-image:url(/images/grid-img/passeggiata.jpg);
+        background-size:cover; 
+        }
+        #box07{
+            background-image:url(/images/grid-img/ginnastica.png);
+        background-size:100% 100%; 
+        }
+        #box08{
+            background:url(/images/grid-img/dalla.jpg) right bottom no-repeat ;
+            background-size:105% 120%;
+        }
+        #box09{
+            background:url(/images/grid-img/piscina.jpg) right bottom no-repeat;
+            background-size: 100% 140%;
+        }
+        .collcentro{
+            display: none;
+        }
+        .collcicala{
+            display: none;
+        } 
+    @media(max-width: 640px){
+            .grid{
+            position: relative;
+            width: 100%;
+            height: 200vw;
+            display: grid;
+        grid-template-columns:repeat(40vw);
+        grid-template-rows:repeat(1fr);
+        grid-template-areas:
+            "box-5"
+            "box-2"
+            "box-3";
+            gap: 1vw;
+        }
+        #box01{
+            display: none;
+        }
+        #box02{
+
+            background: url(/images/logocentro.png)right no-repeat;
+            background-size:100% 100%;
+            background-color: aquamarine;
+            width: 1fr;
+            height: 60vw;
+            border-radius: 15px;
+           
+            cursor: pointer;
+
+        }
+        #box03{
+        
+            position: relative;
+            background: url(/images/logocicala.jpeg)right no-repeat;
+            background-size:100% 100%;
+            width: 1fr;
+            height: 60vw;
+            border-radius: 15px;
+        }
+        #box04{
+            display: none;
+        }
+        #box05{
+                   width: 100%;
+            height: 60vw;
+            border-radius: 15px; 
+        }
+
+   
+        #box06{
+            display: none;
+        }
+        #box07{
+            display: none;
+        }
+        #box08{
+            display: none;
+        }
+        #box09{
+            display: none;
+        }
+        .grid img{
+            height: 100%;
+            width: 100%;
+        }
+        .collcentro{
+            display: flex;
+            position:absolute;
+            height: 60vw;
+            width: 100%;
+            cursor: pointer;
+            top:88vw;
+        }
+        .collcentro a{
+            
+            width: 100%;
+            height: 100%;
+        }
+        .collcicala{
+            display: flex;
+            position:absolute;
+            height: 60vw;
+            width: 100%;
+            cursor: pointer;
+
+            top:153vw;
+            cursor: pointer;
+        }
+        .collcicala a{
+            width: 100%;
+            height: 100%;
+        }
+    }
+/*bestbutton*/
+        #best{
+            display: none;
+        }
+        .webest img{
+            cursor: pointer;
+            height: 197%;
+            width: 205%;
+            border-radius: .5em;
+            transition: 100ms ease;
+            background: url(/images/grid-img/diversi.jpg);
+            background-size: 100% 100%;
+        }
+        #best:checked ~ #best_label img{
+        background: url(/images/perche.jpg);
+            background-size: 100% 100%;
+        }
+/* 
+mostra
+
+ 
+        .open{
+            background: url(/public/images/mostra.jpg)no-repeat top;
+            background-size: 100% 130vw;
+            background-color: aquamarine;
+            cursor: pointer;
+            width: 100%;
+           min-height: 8000px;
+            position: absolute;
+            display: flex;
+            top:0vw;
+            z-index: 20;
+        }
+
+
+        .close_mostra{
+            display: none;
+                }
+        #mostra:checked ~ .open_mostra{
+            display: none;
+                }
+                #mostra:checked ~ .close_mostra{
+            display: flex;
+                }
+
+        #mostra{
+            display: none;
+        }
+        .open{
+            cursor: pointer;
+            padding-top: 5vw;
+            padding-left: 2vw;
+            text-align: center;
+        
+        }
+        .open h1{
+            font-size: 1.8vw;
+            background-color: chocolate;
+            height: 8vw;
+            width: 20vw;
+            border-radius: 1em;
+            padding-top: 1.3vw;
+            border-top: 2px solid white;
+            border-bottom: 2px solid white;
+           
+        }
+        .open h1:hover{
+            border-left: 2px solid white;
+            border-right: 2px solid white;
+            border-top:none;
+            border-bottom: none;
+        }
+        .close{
+            display: flex;
+            position: absolute;
+            top:14vw;
+            right: 10vw;
+            cursor: pointer;
+        }
+        .close h1{
+        font-size: 1.5vw;
+        background-color: rgb(242, 149, 82);
+            height: 5vw;
+            width: 20vw;
+            border-radius: 1em;
+            padding-top: 1vw;
+          border-top: 2px solid white;
+        border-bottom: 2px solid white;
+        text-align: center;
+
+        }
+        .close h1:hover{
+        border-left: 2px solid white;
+        border-right: 2px solid white;
+        border-top:none;
+        border-bottom: none;
+        }
+    */
+/*skill*/
+        @media(min-width:640px){
+
+
+        #aurora2 {
+        display:none;
+        }
+        #casacicala2{
+        display:none;
+        }
+        :root{
+            --primary-nav-color: #0a192f;
+            --secondary-nav-color: #112240;
+        }
+        #nav{
+        display:flex;
+        flex-direction: column;
+        color: white;
+        width: 100%;
+        margin-top: 10%;
+        }
+        #skill-section{
+            grid-column: 1/ 8;
+            grid-row: 4/ 8;
+        }
+
+        #skill-section h3{
+        font-size: 2rem;
+        text-align: start;
+        }
+        .say{
+            padding-top: 5%;
+        }
+        .wrapper li{
+            color: aquamarine;
+        }
+        progress {
+        border: none;
+        margin-left: 30px;
+        height: 20px;
+        width: 80%;
+        }
+        progress::-webkit-progress-value {
+        background: rgb(2, 92, 44);
+        }
+        progress::-webkit-progress-bar {
+        background: rgb(162, 162, 211);
+        
+        }
+        li{
+            font-size: 18px;
+            margin-bottom: 2%;
+            margin-top: 5px;
+        }
+        li::marker {
+        color: rgb(151, 234, 42);
+        }
+        #skill{
+            display: flex;
+            flex-direction: column;
+            
+            margin-top: 1%;
+            margin-bottom: 20%;
+        }
+        #skill01{
+            
+            width: 165vh;
+            max-width: 100%;
+            height: 40vh;
+            
+        }
+        #skill02{
+            
+            width: 1vh;
+            max-width: 100%;
+            height: 45vh;
+        }
+        .skill-container{
+            width: 200px;
+            max-width: 100%;
+            border: 10px solid var(--secondary-nav-color);
+            border-top: none;
+            margin-bottom: 50px;
+        }
+        .skill-container h3{
+            background-color: var(--secondary-nav-color);
+            padding: 15px 0;
+            text-align: center;
+
+        }
+        .skill-container ul{
+            margin-bottom: -60px;
+            list-style: none;
+        }
+
+        #skill01 h3{
+        padding-bottom: 30px;
+        }
+        #chisiamo{
+            background: linear-gradient(-30deg, rgb(238, 119, 82), rgba(231, 60, 126), rgba(35, 166, 213), rgb(35, 213, 171));
+        animation: gradient 10s ease infinite;
+        background-size: 200%;
+        content: '';
+        }
+        #casacicala{
+        background: url(/images/logocicala.jpeg)center no-repeat;
+        font-weight:700;
+        color: rgb(3, 1, 22);
+        font-size: 1.6vw;
+        background-size: 6vw;
+        }
+        #aurora{
+        background: url(/images/logocentro.png)center no-repeat;
+        font-weight:700;
+        color: rgb(3, 1, 22);
+        font-size: 1.6vw;
+        background-size: 9vw;
+        }
+        #aurora:hover{
+        background: rgb(151, 234, 42);
+        }
+        #casacicala:hover{
+        background: rgb(151, 234, 42);
+        }
+        #chisiamo:hover{
+        background: rgb(151, 234, 42);
+        }
+        }
+
+
+        @media(max-width: 988px){
+            #skill{
+            display: flex;
+            flex-direction: column;
+        }
+        
+
+        .container{
+        text-align: center; 
+        }
+        .skill-container{
+            height: 350px;
+        
+            
+        }
+        }

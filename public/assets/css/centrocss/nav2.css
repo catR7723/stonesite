@@ -39,7 +39,7 @@ nav a:hover{
 }
 .img{
 margin-right: 1vw;
- background: url(/public/images/centropictures/logo\ centro\ \(1\).png)no-repeat left;
+ background: url(/images/centropictures/logo\ centro\ \(1\).png)no-repeat left;
  background-size: 100% 100%;
  width: 40vw;
 border-radius: 10px;
@@ -81,17 +81,17 @@ position: block;
     
 }
 #facebook-center{
-    background: url(/public/images/socialimages/linkfacebook.png)no-repeat center;
+    background: url(/images/socialimages/linkfacebook.png)no-repeat center;
     background-size: 40%;
     background-color: var(--primary-color);
 }
 #instagram-center{
-    background: url(/public/images/socialimages/linkistagram.png)no-repeat center;
+    background: url(/images/socialimages/linkistagram.png)no-repeat center;
     background-size: 60%;
      background-color: var(--secondary-color);
 }
 #youtube-center{
-    background: url(/public/images/socialimages/youtube.png)no-repeat center;
+    background: url(/images/socialimages/youtube.png)no-repeat center;
     background-size: 60%;
     background-color: var(--primary-color);
 }

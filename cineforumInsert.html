@@ -1,0 +1,282 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inserisci il Film</title>
+    <script src="/routes/cineforumInsert.js"></script>
+    <link rel="stylesheet" href="/assets/css/cineforumInsert.css">
+    <link rel="stylesheet" href="/assets/css/laboratori/cineforum.css">
+    
+
+
+
+</head>
+<body>
+  <div class="locandina">
+    <h1>Carica La Locandina del Film della Settimana</h1>
+    <form action="/cineforumInsert" method="POST" enctype="multipart/form-data" id="locandina">
+<div class="scegli">
+    <label id="carica" for="file-input">Scegli File</label>
+    <input type="file" name="locandina" id="file-input" required="" onchange="mostraBottone(); mostraFileName()">
+    <span id="fileName">Nessun file selezionato</span>
+</div>
+        <button type="submit" id="btn-anteprima" style="display: none;">Anteprima della Locandina</button>
+    </form> 
+</div>
+
+<div class="Conteiner_Film">
+    <div class="imgLoc">
+        
+        <img id="locandina-img" src="/uploads/cineforum/locandina.jpg" alt="locandina" width="200" onerror="this.style.display='none'; document.getElementById('form-cancella').style.display='none';">
+
+        <form action="/deleteLocandina" method="POST" id="form-cancella">
+            <button class="btn" type="submit" id="deleteLocandina">Elimina la Locandina</button>
+        </form>
+        
+    </div>
+   
+
+    <!-- Il div con i testi che arrivano dal server -->
+    <div class="film">
+        <h1 id="titoloFilm"></h1>
+        <h1 id="tramaFilm"></h1>
+        <h1 id="discussione"></h1>
+    </div>
+
+    <!-- Moduli di inserimento (nascosti di default) -->
+    <div class="ins" style="display: none;">
+        <form action="/salvaTitoloLocandina" id="salvaLocandina" method="POST">
+            <input type="text" id="inputTitolo" name="titoloFilm" placeholder="Inserisci il titolo del Film" required="">
+            <button class="btn" id="antTit" type="submit">Anteprima Titolo del Film</button>
+        </form>
+
+        <form action="/salvaTrama" id="salvaTrama" method="POST">
+            <textarea name="tramaFilm" placeholder="Trama" required=""></textarea>
+            <button type="submit" id="salTrama">Salva Trama</button>
+        </form>
+
+        <form action="/salvaDiscussione" id="salvaDiscussione" method="POST">
+            <textarea name="discussione" placeholder="Discussione" required=""></textarea>
+            <button type="submit" id="salDisc">Salva Discussione</button>
+        </form>
+    </div> 
+</div>
+
+<script>
+// 1. Gestisce l'apparizione del tasto "Anteprima" quando l'utente seleziona un file dal PC
+function mostraBottone() {
+    const fileInput = document.getElementById('file-input');
+    const btnAnteprima = document.getElementById('btn-anteprima');
+    
+    if (fileInput && fileInput.files.length > 0) {
+        if (btnAnteprima) btnAnteprima.style.display = 'block'; 
+    } else {
+        if (btnAnteprima) btnAnteprima.style.display = 'none';
+    }
+}
+
+// 2. Controlla AUTOMATICAMENTE se la locandina esiste già sul server all'apertura della pagina
+window.addEventListener('DOMContentLoaded', () => {
+    const img = document.getElementById('locandina-img');
+    const divIns = document.querySelector('.ins');
+
+    if (img && divIns) {
+        // Creiamo un'immagine temporanea in memoria per verificare se il file sul server è valido
+        const testImg = new Image();
+        testImg.src = img.src;
+
+        testImg.onload = function() {
+            // Se l'immagine esiste e viene caricata con successo, mostra i moduli .ins
+            divIns.style.display = 'block';
+        };
+
+        testImg.onerror = function() {
+            // Se l'immagine non esiste (404), i moduli rimangono nascosti
+            divIns.style.display = 'none';
+        };
+    }
+});
+</script>
+
+
+<!-- Contenitore Pulsanti Finali -->
+<div class="azioni-finali">
+  <!-- Form Salva -->
+  <form action="/salvaFilm" method="POST" id="formSalva">
+    <!-- Al click, esegue la funzione mostraPubblica() -->
+    <button class="btn" type="submit" id="salvaFilm" onclick="mostraPubblica()">Salva il Film</button>
+  </form>
+  
+  <!-- Form Pubblica -->
+  <form action="/salvaFilmR" method="POST" id="formPubblica">
+    <button class="btn" type="submit" id="pubblicaFilm">Pubblica il Film!</button>
+  </form>
+</div>
+
+
+  <form action="/logout" method="POST">
+    <button class="btn" type="submit" id="logout">LogOut</button>
+  </form>
+
+  <input type="checkbox" id="sidebar-archivio">
+               <label for="sidebar-archivio" class="open-archivio">
+                 <h1 class="w-archivio">Archivio</h1>
+                 </label>
+            <label for="sidebar-archivio" id="overlay-archivio">
+  <div id="archivio">
+
+    
+
+        
+            <div id="29_05_2026" class="film-archiviato" data-folder="gatto-pazzo2">
+                <form action="/modificaInsert/gatto-pazzo2" method="post">
+                    <button type="submit">Modifica gatto pazzo2</button>
+                </form>
+                
+    <h1>gatto pazzo2</h1>
+    <h3>Film del 29/05/2026</h3>
+    <input type="checkbox" id="sidebar-film-14-14-07-192">
+    <label for="sidebar-film-14-14-07-192" class="toggle-img">
+        <img src="/images/films/blog/gatto-pazzo2/29_05_2026.jpg?t=1780056891211" width="100">
+    </label>
+    <br>
+    <div class="film-details">
+        <label for="sidebar-film-14-14-07-192" class="toggle-archivio">
+
+            <div class="film-section">
+                <h4>📖 Trama</h4>
+                <p>orem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since 1966, when designers at Letraset and James Mosley, the librarian at St Bride Printing Library, took a 1914 Cicero translation and scrambled it to make dummy text for Letraset's Body Type sheets. It has survived not only many decades, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised thanks to these sheets and more recently with desktop publishing software including versions of Lorem Ipsum.</p>
+            </div>
+            <div class="film-section">
+                <h4>💬 Discussione</h4>
+                <p>orem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since 1966, when designers at Letraset and James Mosley, the librarian at St Bride Printing Library, took a 1914 Cicero translation and scrambled it to make dummy text for Letraset's Body Type sheets. It has survived not only many decades, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised thanks to these sheets and more recently with desktop publishing software including versions of Lorem Ipsum.</p>
+            </div>
+        </label>
+    </div>
+
+            </div>
+        
+            <div id="29_05_2026" class="film-archiviato" data-folder="riso-2">
+                <form action="/modificaInsert/riso-2" method="post">
+                    <button type="submit">Modifica riso 2</button>
+                </form>
+                
+    <h1>riso 2</h1>
+    <h3>Film del 29/05/2026</h3>
+    <input type="checkbox" id="sidebar-film-14-16-14-888">
+    <label for="sidebar-film-14-16-14-888" class="toggle-img">
+        <img src="/images/films/blog/riso-2/29_05_2026.jpg" width="100">
+    </label>
+    <br>
+    <div class="film-details">
+        <label for="sidebar-film-14-16-14-888" class="toggle-archivio">
+
+            <div class="film-section">
+                <h4>📖 Trama</h4>
+                <p>orem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since 1966, when designers at Letraset and James Mosley, the librarian at St Bride Printing Library, took a 1914 Cicero translation and scrambled it to make dummy text for Letraset's Body Type sheets. It has survived not only many decades, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised thanks to these sheets and more recently with desktop publishing software including versions of Lorem Ipsum.</p>
+            </div>
+            <div class="film-section">
+                <h4>💬 Discussione</h4>
+                <p>orem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since 1966, when designers at Letraset and James Mosley, the librarian at St Bride Printing Library, took a 1914 Cicero translation and scrambled it to make dummy text for Letraset's Body Type sheets. It has survived not only many decades, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised thanks to these sheets and more recently with desktop publishing software including versions of Lorem Ipsum.</p>
+            </div>
+        </label>
+    </div>
+
+            </div>
+        </div>
+            </label>
+        
+           <script>
+function mostraPubblica() {
+    // Salva lo stato nel browser prima del ricaricamento del server
+    localStorage.setItem('filmSalvato', 'true');
+}
+
+// Al caricamento della pagina, controlla se l'utente ha premuto "Salva" in precedenza
+document.addEventListener("DOMContentLoaded", function() {
+    if (localStorage.getItem('filmSalvato') === 'true') {
+        document.getElementById('formPubblica').classList.add('mostra-pubblica');
+    }
+});
+
+// Opzionale: Se vuoi resettare lo stato quando l'utente clicca su "Pubblica"
+document.getElementById('formPubblica').addEventListener('submit', function() {
+    localStorage.removeItem('filmSalvato');
+});
+function mostraFileName() {
+    const fileInput = document.getElementById('file-input');
+    const fileName = document.getElementById('fileName');
+    
+    if (fileInput.files.length > 0) {
+        fileName.textContent = fileInput.files[0].name;
+    } else {
+        fileName.textContent = 'Nessun file selezionato';
+    }
+}
+</script> 
+        
+        
+  
+
+            
+        
+    
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        </body></html>

@@ -61,7 +61,7 @@ margin-left: 5vw;
 .cat{
 width: 10vw;
 height: 10vw;
-background: url(/public/images/virtualsocialcity/cat.png) no-repeat right;
+background: url(/images/virtualsocialcity/cat.png) no-repeat right;
 background-size: 50%;
 }
 /*nav*/
@@ -84,7 +84,7 @@ nav{
     margin-left: 2vw;
     width: 98%;
     height: 70vw;
-    background: url(/public/images/virtualsocialcity/virtualcity.png)no-repeat left center ;
+    background: url(/images/virtualsocialcity/virtualcity.png)no-repeat left center ;
     background-size: 40vw;
     padding: 0 3vw 0 41vw;
 }
@@ -97,7 +97,7 @@ nav{
 .what{
     margin-top: 10vw;
     width: 98%;
-    background: url(/public/images/virtualsocialcity/code.jpeg)no-repeat center right ;
+    background: url(/images/virtualsocialcity/code.jpeg)no-repeat center right ;
     background-size: 40vw;
      padding: 0 41vw 0 3vw;
      height: 50vw;
@@ -113,9 +113,9 @@ nav{
 .next{
     margin-top: 10vw;
     width: 98%;
-    background: url(/public/images/virtualsocialcity/javascript.png)no-repeat left bottom,
-                url(/public/images/virtualsocialcity/node.png)no-repeat center left,
-                url(/public/images/virtualsocialcity/mongodb.png)no-repeat top left;
+    background: url(/images/virtualsocialcity/javascript.png)no-repeat left bottom,
+                url(/images/virtualsocialcity/node.png)no-repeat center left,
+                url(/images/virtualsocialcity/mongodb.png)no-repeat top left;
     background-size:9vw, 10vw, 20vw;
     padding: 0 3vw 0 41vw;
      margin-left: 2vw;
@@ -130,8 +130,8 @@ nav{
 .future{
     margin-top: 15vw;
     width: 98%;
-    background: url(/public/images/virtualsocialcity/unreal-engine.jpg)no-repeat center right,
-                url(/public/images/virtualsocialcity/c-plus-plus-logo.jpg)no-repeat top right ;
+    background: url(/images/virtualsocialcity/unreal-engine.jpg)no-repeat center right,
+                url(/images/virtualsocialcity/c-plus-plus-logo.jpg)no-repeat top right ;
     background-size:15vw 15vw;
      padding: 0 41vw 0 3vw;
      height: 50vw;
@@ -158,7 +158,7 @@ nav{
     width: 100%;
     height: 10vw;
     text-align: center;
-    background:url(/public/images/deviltailnoback.png)top center no-repeat ;
+    background:url(/images/deviltailnoback.png)top center no-repeat ;
     background-size: 18%;
     color: white;
    text-shadow: 10px 8px 8px black;
@@ -202,7 +202,7 @@ margin-bottom: 10vw;
 @media(max-width:640px){
     .idea{
     padding: 0 3vw 15vw 3vw;
-    background: url(/public/images/virtualsocialcity/virtualcity.png)no-repeat bottom center ;
+    background: url(/images/virtualsocialcity/virtualcity.png)no-repeat bottom center ;
     background-size: 70%;
     margin-left: 0;
     height: 170vw;
@@ -214,7 +214,7 @@ margin-bottom: 10vw;
 }
     .what{
     padding: 0 3vw 15vw 3vw;
-    background: url(/public/images/virtualsocialcity/code.jpeg)no-repeat bottom center ;
+    background: url(/images/virtualsocialcity/code.jpeg)no-repeat bottom center ;
     background-size: 50%; 
     height: 140vw;
     width: 100%;
@@ -224,9 +224,9 @@ margin-bottom: 10vw;
     }
     .next{
       padding: 0 3vw 15vw 3vw;
-          background: url(/public/images/virtualsocialcity/javascript.png)no-repeat left bottom,
-                url(/public/images/virtualsocialcity/node.png)no-repeat center ,
-                url(/public/images/virtualsocialcity/mongodb.png)no-repeat right bottom;
+          background: url(/images/virtualsocialcity/javascript.png)no-repeat left bottom,
+                url(/images/virtualsocialcity/node.png)no-repeat center ,
+                url(/images/virtualsocialcity/mongodb.png)no-repeat right bottom;
     background-size:40%, 40%, 60%;  
     margin-left: 0;
     height: 150vw;
@@ -238,8 +238,8 @@ margin-bottom: 10vw;
     }
       .future{
       padding: 0 3vw 15vw 3vw;
-          background:url(/public/images/virtualsocialcity/unreal-engine.jpg)no-repeat bottom right,
-                url(/public/images/virtualsocialcity/c-plus-plus-logo.jpg)no-repeat bottom left ;
+          background:url(/images/virtualsocialcity/unreal-engine.jpg)no-repeat bottom right,
+                url(/images/virtualsocialcity/c-plus-plus-logo.jpg)no-repeat bottom left ;
     background-size:30%, 30%;  
     height: 100vw;
     width: 100%;

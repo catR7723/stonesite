@@ -12,6 +12,11 @@ html{
 body{
 background-image: linear-gradient(to bottom, #eff508, #d5f53b, #bdf457, #a8f16e, #97ed83, #8aee93, #7feea3, #77edb1, #6df1c2, #65f5d2, #60f8e2, #5ffbf1);
    min-height: 100%;
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+
+    align-items: center;
 }
 .menu{
     display: absolute;
@@ -69,6 +74,7 @@ background-size: 80%;
 nav{
     display: flex;
     flex-direction: column;
+   
     
 }
 .title{
@@ -81,20 +87,26 @@ nav{
 
 /*idea*/
 .idea{
-    margin-top: 10vw;
+    margin-top: 5vw;
     margin-left: 2vw;
     width: 98%;
-    height: 40vw;
-    background:url(/public/images/grid-img/cineforum.jpeg)no-repeat left center ;
-    background-size: 40vw 100%;
-    padding: 0 3vw 0 41vw;
+    min-height: 40vw; 
+    background: url(/images/grid-img/cineforum.jpeg) no-repeat left center;
+    background-size: 35vw 100%; 
+    background-attachment: fixed; 
+    padding: 2vw 3vw 2vw 38vw; 
     border-radius: 0em 0 0 5em;
+    display: flex; 
+    flex-direction: column;
+    justify-content: center;
 }
+
 .idea h1{
-    padding-top: 9vw;
-    color:rgb(20, 2, 62);
+    padding-top: 0; /* ← TOGLI il padding-top */
+    color: rgb(20, 2, 62);
     font-size: 1.2vw;
     text-align: justify;
+    line-height: 1.6;
 }
 .blog{
     margin-top: 5vw;
@@ -114,8 +126,10 @@ nav{
     display:flex;
   width: 100%;
   text-align: center;
-  margin-top: 10vw;
+  
   position: relative;
+
+  
     }
    .w-how{
     width: 100%;
@@ -131,29 +145,127 @@ nav{
   
 
    }
-  .bestbh-how{
-   display: block;
-   position: absolute;
-    color:black;
-    font-family: Poppins, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 1.1vw;
-    cursor: pointer;
-    position: relative;
-    z-index: -2;
-    background: url(/public/images/laboratori/filmamonrenovacanza.jpg)no-repeat left center;
-    background-color: #eb86c4;
-    background-size: 50%;
-    height: 100vw;
-    width: 100%;
-    bottom:40vw;
-    text-align: justify;
-   
 
-  
+
+/* Nascondi checkbox */
+#sidebar-how {
+    display: none;
 }
-.bestbh-how h2{
-    margin: 2vw 2vw 2vw 52vw;
-  
+
+/* Bottone Toggle */
+.open-how {
+    cursor: pointer;
+    display: block;
+    text-align: center;
+    padding: 2rem;
+}
+
+.w-how {
+    font-size: 3vw;
+    text-shadow: 3px 2px 2px rgb(108, 165, 226);
+    color: white;
+}
+
+/* Overlay (nascosto di default) */
+#overlay-how {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 10;
+    overflow-y: auto;
+}
+
+
+#sidebar-how:checked ~ #overlay-how {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.bestbh-how {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    
+    color: black;
+    font-family: Poppins, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: clamp(14px, 1.1vw, 18px); 
+    cursor: default;
+    
+    
+    background-color: #766971;
+    
+   
+    position: relative; 
+    margin: auto;
+    
+    /* Altezze e larghezze fluide */
+    height: auto;
+    max-height: 90vh; 
+    overflow-y: auto; 
+    
+    width: 100%;
+    max-width: 1000px;
+    padding: clamp(1.5rem, 5vw, 3.5rem); 
+   
+    text-align: justify;
+    border-radius: 2rem;
+    box-sizing: border-box; 
+}
+
+
+.film-section {
+    width: 100%;
+    padding: 1.5rem;
+   background-image: linear-gradient(to right, #cbeeed, #9fddea, #79c8ed, #69b0ef, #7894e8);
+    border-radius: 0.5rem;
+    border-left: 4px solid #e89932;
+   
+}
+
+.film-section h1, 
+.film-section h2,
+.film-section h4 {
+    margin-bottom: 1rem;
+    color: #02083e;
+}
+
+.film-section p {
+    line-height: 1.6;
+    color: #333;
+    text-align: justify;
+    
+}
+
+.spec {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    width: 100%;
+}
+
+
+
+.trama,
+.discussione {
+    width: 100%;
+}
+
+.spec h2,
+.spec h4 {
+    width: 100%;
+    text-align: justify;
+    margin: 0;
+    font-size: 1.5em;
+
+   
 }
 
   #overlay-how{
@@ -174,6 +286,88 @@ nav{
    #sidebar-how:checked ~ .open-how{
     display: none;
    }
+
+#archivio input[type="checkbox"][id^="sidebar-"] {
+    display: none;
+}
+
+
+
+#archivio .toggle-img {
+    cursor: pointer;
+    display: inline-block;
+    transition: transform 0.3s ease;
+}
+
+#archivio .toggle-img:hover {
+    transform: scale(1.05);
+}
+
+
+#archivio .film-details {
+    display: none;
+    margin-top: 15px;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 8px;
+}
+#archivio .film-section {
+   margin-bottom: 20px;
+}
+
+/* Quando il checkbox è checked, mostra i dettagli */
+#archivio input[type="checkbox"][id^="sidebar-"]:checked ~ .film-details {
+    display: block;
+    animation: slideDown 0.3s ease;
+}
+
+#overlay-archivio {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 10;
+    overflow-y: auto;
+    color: whitesmoke;
+    
+}
+#sidebar-archivio{
+    display: none;
+}
+.w-archivio{
+    margin-top: 10vw;
+    font-size: 2vw;
+    text-shadow: 3px 2px 2px rgb(108, 165, 226);
+    color: white;
+    cursor: pointer;
+    margin-left: 3%;
+}
+
+
+#sidebar-archivio:checked ~ #overlay-archivio {
+    display: flex;
+    flex-direction: column; 
+    align-items: center;    
+    justify-content: flex-start; 
+    padding-top: 5vw;       
+    padding-bottom: 10vw;   
+}
+
+
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
 .write{
     margin-top:20vw;
 }
@@ -229,6 +423,204 @@ display: flex;
 gap:2vw;
 margin-bottom: 10vw;
 }
+.film-archiviato{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+        gap: 20px;
+    width: 100%;
+}
+/* Ingrandisce le immagini dei film in archivio */
+#archivio .toggle-img img {
+    width: 40vw;          
+    max-width: 85vw;       
+    height: auto;          
+    border-radius: 8px;    
+    box-shadow: 0 4px 15px rgba(245, 245, 64, 0.8); 
+}
+
+
+
+/*cineforumInsert*/
+
+.locandina {
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center; 
+    height: fit-content;
+    color: azure;
+    border-radius: 1em;
+    margin-top: 3vw;
+    margin-left: auto;  
+    margin-right: auto; 
+    padding: 2vw;
+    gap: 2vw;
+    margin-bottom: 4vw;
+    
+    /* SFONDO CON EFFETTO FUMO DENTRO IL GRADIENTE */
+    position: relative;
+    overflow: hidden; /* Evita che il fumo esca dai bordi arrotondati */
+    background: 
+        radial-gradient(circle at 50% 50%, rgba(255,255,255,0.5), transparent 100%),
+        linear-gradient(to left top, #325278, #2a4568, #223958, #1a2d48, #122239, #0a1e31, #051a2a, #001522, #00161e, #00161a, #001516, #021412);
+    background-size: 200% 200%; /* Ingrandito per permettere il movimento dello sfondo */
+    animation: smokeMovement 20s ease-in-out infinite alternate;
+}
+
+.locandina > * {
+    position: relative;
+    z-index: 2;
+}
+
+@keyframes smokeMovement {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 50% 100%;
+    }
+}
+
+.locandina h1{
+    font-size: 2vw;
+    text-shadow: 3px 2px 2px rgb(108, 165, 226);
+}
+#locandina div {
+    font-size: 1.5vw;
+    color: white;
+    margin-bottom: 5vw;
+    
+}
+/* Di default nascondiamo entrambi i moduli finali */
+#formSalva, #formPubblica {
+    display: none;
+}
+
+/* Mostra "Salva il Film" SOLO SE tutti e tre gli h1 contengono testo */
+body:has(#titoloFilm:not(:empty)):has(#tramaFilm:not(:empty)):has(#discussione:not(:empty)) #formSalva {
+    display: block;
+}
+
+/* Questa classe verrà aggiunta via JavaScript al click su Salva */
+.mostra-pubblica {
+    display: block !important;
+}
+
+.ins{
+    margin-top: 5vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+    width: 100%;
+}
+#salvaLocandina, #salvaTrama, #salvaDiscussione, #salvaFilm {
+    padding: 3vw;
+    border-radius: 1em;
+   background-image: linear-gradient(to right, #030a26, #193756, #316789, #4c9bbb, #6ed3ea);
+    color: azure;
+    border: none;
+    font-size: 1.5vw;
+    cursor: pointer;
+    margin-bottom: 5vw;
+}
+
+#logout{
+    padding: 1vw;
+    border-radius: 1em;
+   background-image: linear-gradient(to right, #36030c, #672b24, #98583a, #c48a51, #eac26e);
+    border: none;
+    font-size: 1.5vw;
+    cursor: pointer;
+    margin-bottom: 5vw;
+    color: bisque;
+    margin-top: 5vw;
+}
+
+#salvaTrama textarea, #salvaDiscussione textarea {
+    width: 100%;
+    height: 10vw;
+    padding: 1vw;
+    border-radius: 1em;
+    border: 2px solid #ccc;
+    font-size: 1.2vw;
+    resize: none;
+}
+
+#deleteLocandina {
+    padding: 1vw;
+    border-radius: 1em;
+    background: linear-gradient(to left top, #325278, #2a4568, #223958, #1a2d48, #122239, #0a1e31, #051a2a, #001522, #00161e, #00161a, #001516, #021412) no-repeat;
+    color: azure;
+    border: none;
+    font-size: 1.5vw;
+    cursor: pointer;
+    
+}
+.scegli{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    
+}
+#file-input {
+    display: none;  /* Nascondi l'input di default */
+}
+
+#carica, #btn-anteprima, #antTit, #salTrama, #salDisc, #pubblicaFilm  {
+    display: inline-block;
+    padding: 10px 20px;
+    background: linear-gradient(to left top, #325278, #2a4568, #223958, #1a2d48, #122239, #0a1e31, #051a2a, #001522, #00161e, #00161a, #001516, #021412);
+    color: azure;
+    border-radius: 1em;
+    cursor: pointer;
+}
+
+#fileName {
+    margin-left: 10px;
+    color: white;
+}
+.imgLoc{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.imgLoc img {
+    width: 50vw;
+    border-radius: 1em;
+    margin-bottom: 2vw;
+    box-shadow: 0 4px 15px rgba(90, 2, 40, 1);
+}
+.film{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+text-align: justify;
+font-size: 0.6em;
+padding: 3vw;
+}
+
+.film-archiviato button{
+    padding: 1.2vw;
+    border-radius: 0.8em;
+    background-image: linear-gradient(to left top, #5b0202, #6b0210, #7c021a, #8d0225, #9f0231, #ac0b3a, #ba1444, #c71c4e, #d42956, #e1345f, #ef3e67, #fc4870);
+    color: azure;
+    border: none;
+    font-size: 2.5vw;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(209, 216, 225, 0.8);
+}
 
 
 
@@ -236,7 +628,7 @@ margin-bottom: 10vw;
     .idea{
     padding: 0vw 3vw 15vw 3vw;
      background: url(/public/images/grid-img/cineforum.jpeg)no-repeat bottom center;
-    background-size:45% 40%;
+    background-size:55% 50%;
     margin-left: 0;
     border-radius: 1em;
     width: 100%;
@@ -276,8 +668,5 @@ margin-bottom: 10vw;
     margin: 0;
   
 }
-
-
-
 
 }

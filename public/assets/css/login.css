@@ -1,0 +1,174 @@
+/* 1. CARATTERI E RESET */
+@import url('https://googleapis.com');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    font-family: Poppins, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+
+:root {
+    --color-2: rgb(23, 8, 158);
+    --color-1: rgb(11, 33, 199);
+    --text-color: rgb(29, 180, 231);
+    --accent-color: rgb(8, 230, 60);
+}
+
+
+body {
+    display: flex;
+    flex-direction: column; 
+    justify-content: flex-start;
+    align-items: center;
+    min-height: 100vh; 
+    padding: 40px 20px;
+    background-image: linear-gradient(to right top, #000104, #0c0816, #1b0d1e, #2c0d21, #3c091c, #501d1e, #5f3321, #6a4b28, #7d7651, #93a085, #b5c9bc, #e5f0ee);
+}
+
+
+.login {
+    color: var(--text-color);
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); 
+    padding: 20px;
+    border-radius: 10px 10px 50px 10px;
+    width: 100%;
+    max-width: 450px;
+    margin-bottom: 30px; 
+}
+
+
+#loginForm {
+    background-image: linear-gradient(to right top, #000309, #192a37, #1f5165, #177b90, #00a9b6, #00bfc2, #0cd4cb, #33ead0, #45ecc9, #55edc2, #63efba, #71f0b3);
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 8px 8px 8px #67F2CD;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    align-items: center;
+    width: 100%;
+    max-width: 500px; 
+}
+
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+    background-color: rgba(9, 132, 157, 0.1); 
+    border-radius: 50px;
+    padding: 30px 20px;
+    align-items: center;
+}
+
+form h1 {
+    color: var(--color-1);
+    text-align: center;
+    font-size: 1.4rem; 
+}
+
+
+form input {
+    color: var(--color-2);
+    background-image: linear-gradient(to top, #000309, #1e2c33, #335359, #517e78, #7eaa90, #96be9d, #b0d2aa, #cce6b8, #c8e9c1, #c6ebca, #c5edd2, #c5eeda);
+    padding: 12px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    width: 300px;
+    outline: none; 
+}
+
+form input::placeholder {
+    color: rgba(8, 3, 135, 0.6); 
+    opacity: 1;
+    text-align: center;
+}
+
+
+button {
+    padding: 12px;
+    border: none;
+    background-color: var(--accent-color);
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 10px;
+    width: 65%;
+    align-self: center;
+    box-shadow: #000104 0px 4px 8px;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease; 
+    will-change: transform; 
+}
+
+button:hover {
+    background-color: var(--color-1);
+    box-shadow: #ef0404 0px 6px 12px;
+    transform: scale(1.05) translateZ(0); 
+}
+
+
+@media (min-width: 992px) {
+    #loginForm {
+        grid-template-columns: 1fr 1fr; 
+        max-width: 1000px;
+    }
+    body {
+        justify-content: center; 
+    }
+}
+
+
+
+@media (max-width: 767px) {
+    body {
+        flex-direction: column;
+        justify-content: flex-start;
+        height: auto; 
+        min-height: 100vh;
+        padding: 20px 10px;
+    }
+
+    .login {
+        position: static; 
+        margin-bottom: 20px;
+        width: 90%;
+        max-width: 400px;
+    }
+
+    #loginForm {
+        width: 95%; 
+        max-width: 450px;
+        margin-top: 0; 
+        margin-bottom: 20px;
+        padding: 20px 15px; 
+        gap: 25px;
+    }
+
+    form {
+        padding: 20px 10px;
+        border-radius: 25px; 
+    }
+
+    form h1 {
+        font-size: 1.2rem; 
+    }
+
+    form input {
+        width: 95%; 
+        font-size: 16px; 
+    }
+
+    button {
+        width: 85%; 
+        padding: 12px;
+    }
+}

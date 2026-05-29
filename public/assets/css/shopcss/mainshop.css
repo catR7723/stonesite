@@ -222,12 +222,12 @@ li:hover{
 }
 #all-color{
     background: 
-    url(/public/images/shop-images/products-images/t-shirts/t-shirtrosaftonte.png) no-repeat bottom left, 
-    url(/public/images/shop-images/products-images/t-shirts/t-shirtrosaretro.png) no-repeat center left,  
-    url(/public/images/shop-images/products-images/t-shirts/t-retro.png) no-repeat bottom center,
-    url(/public/images/shop-images/products-images/t-shirts/t-fronte.png) no-repeat center, 
-  url(/public/images/shop-images/products-images/t-shirts/shirtgreenretro.png) no-repeat bottom right,
-    url(/public/images/shop-images/products-images/t-shirts/shirtgreenfronte.png) no-repeat center right; 
+    url(/images/shop-images/products-images/t-shirts/t-shirtrosaftonte.png) no-repeat bottom left, 
+    url(/images/shop-images/products-images/t-shirts/t-shirtrosaretro.png) no-repeat center left,  
+    url(/images/shop-images/products-images/t-shirts/t-retro.png) no-repeat bottom center,
+    url(/images/shop-images/products-images/t-shirts/t-fronte.png) no-repeat center, 
+  url(/images/shop-images/products-images/t-shirts/shirtgreenretro.png) no-repeat bottom right,
+    url(/images/shop-images/products-images/t-shirts/shirtgreenfronte.png) no-repeat center right; 
     
    
     z-index: 1;
@@ -236,8 +236,8 @@ li:hover{
 
 #blue{
     background: 
-    url(/public/images/shop-images/products-images/t-shirts/t-fronte.png) no-repeat center left, 
-    url(/public/images/shop-images/products-images/t-shirts/t-retro.png) no-repeat bottom right;
+    url(/images/shop-images/products-images/t-shirts/t-fronte.png) no-repeat center left, 
+    url(/images/shop-images/products-images/t-shirts/t-retro.png) no-repeat bottom right;
    
     z-index: 1;
    
@@ -245,8 +245,8 @@ li:hover{
 }
 #green{
     background: 
-    url(/public/images/shop-images/products-images/t-shirts/shirtgreenfronte.png) no-repeat center left, 
-    url(/public/images/shop-images/products-images/t-shirts/shirtgreenretro.png) no-repeat bottom right;
+    url(/images/shop-images/products-images/t-shirts/shirtgreenfronte.png) no-repeat center left, 
+    url(/images/shop-images/products-images/t-shirts/shirtgreenretro.png) no-repeat bottom right;
    
     z-index: 1;
     
@@ -254,8 +254,8 @@ li:hover{
 }
 #pink{
     background: 
-    url(/public/images/shop-images/products-images/t-shirts/t-shirtrosaftonte.png) no-repeat center left, 
-    url(/public/images/shop-images/products-images/t-shirts/t-shirtrosaretro.png) no-repeat bottom right;
+    url(/images/shop-images/products-images/t-shirts/t-shirtrosaftonte.png) no-repeat center left, 
+    url(/images/shop-images/products-images/t-shirts/t-shirtrosaretro.png) no-repeat bottom right;
     z-index: 1;
     background-size: 30vw, 30vw;
 }

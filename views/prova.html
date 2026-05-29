@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+  <input type="text" id="myInput" placeholder="Scrivi qualcosa">
+
+<div id="myDiv">
+  Questo è un testo di esempio
+</div>
+
+<script>
+const input = document.getElementById("myInput");
+const div = document.getElementById("myDiv");
+
+input.addEventListener("input", function () {
+  const inputValue = input.value;
+  const divText = div.textContent;
+
+  let existing = document.getElementById("notFound");
+
+  if (!divText.includes(inputValue) && inputValue !== "") {
+    if (!existing) {
+      const h1 = document.createElement("h1");
+      h1.textContent = "no find";
+      h1.id = "notFound";
+      document.body.appendChild(h1);
+    }
+  } else {
+    // se il testo viene trovato o input è vuoto, rimuove l'h1
+    if (existing) {
+      existing.remove();
+    }
+  }
+});
+</script>
+</body>
+</html>

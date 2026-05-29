@@ -7,18 +7,43 @@
     <script type="text/javascript" src="https://cs.iubenda.com/autoblocking/4252528.js"></script>
 <script type="text/javascript" url="//cdn.iubenda.com/cs/gpp/stub.js"></script>
 <script type="text/javascript" url="//cdn.iubenda.com/cs/iubenda_cs.js" charset="UTF-8" async></script>
-<link rel="stylesheet" type="text/css" href="/main.css">
-<link rel="stylesheet" id="silktide-consent-manager-css" href="/public/assets/css/silktide-consent-manager.css">
-<script src="/public/assets/js/silktide-consent-manager.js"></script>
-<!-- Google Tag Manager -->
-<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-K5SQ524Z');</script>
-<!-- End Google Tag Manager -->
+<link rel="stylesheet" type="text/css" href="/assets/css/main.css">
+<link rel="stylesheet" type="text/css" href="/assets/css/bottom.css">
+
+<link rel="stylesheet" id="silktide-consent-manager-css" href="/assets/css/silktide-consent-manager.css">
+<script src="/assets/js/silktide-consent-manager.js" lang="ita"></script>
+<script src="/assets/js/cookies.js" lang="ita"></script>
+ <script>
+/* Cookie Consent Manager */
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+
+if(localStorage.getItem('consentMode') === 'null'){
+    gtag('consent', 'default', {
+        'ad_storage': 'denied',
+        'analytics_storage': 'denied',
+        'personalization_storage': 'denied',
+        'security_storage': 'denied',
+        'functionality_storage': 'denied',
+    });
+} else {
+    gtag('consent', 'default', JSON.parse(localStorage.getItem('consentMode')));}
+
+</script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-6X8KEP5KMG"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-6X8KEP5KMG');
+</script>
+ 
+
 </head>
 <body>
+  
+
     <nav>
          <input type="checkbox" id="sidebar-active" >
          <label for="sidebar-active" class="open-sidebar-button">
@@ -30,12 +55,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           <svg xmlns="http://www.w3.org/2000/svg" height="32px" viewBox="0 -960 960 960" width="32px" fill="#1f1f1f"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg>
          </label>
          <a class="home-link" href="#">Top!</a>
-         <a id="aurora2" href="/views/html/centro.html" target="_blank">Centro L'Aurora</a>
-         <a id="aurora" href="/views/html/centro.html" target="_blank">Centro L'Aurora</a>
-         <a id="casacicala" href="/views/html/cicala.html" target="_blank">La Casa della Cicala</a>
-         <a id="chisiamo" href="/views/html/chi_siamo.html" target="_blank">Chi Siamo</a>
-         <a href="/views/html/soon_ava.html" target="_blank">Shop</a>
-         <a href="/views/html/soon_ava.html" target="_blank">Login</a>
+         <a  href="/centro" target="_blank">Centro L'Aurora</a>
+         <a  href="/cicala" target="_blank">La Casa della Cicala</a>
+         <a  href="/chi_siamo" target="_blank">Chi Siamo</a>
+         <a href="/soon_ava" target="_blank">Shop</a>
+         <a href="/soon_ava" target="_blank">Login</a>
          </div>
      </nav>
      <div class="logo">
@@ -65,10 +89,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
               <img style="grid-area: box-9"  class="center-box"id="box09">
       </div>
       <div class="collcentro">
-        <a href="/views/html/centro.html"></a>
+        <a href="/centro"></a>
       </div>
       <div class="collcicala">
-        <a href="/views/html/cicala.html"></a>
+        <a href="/cicala"></a>
       </div>
         <!-- progetti e quesiti -->
                <div id="nav" class="box">
@@ -89,7 +113,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
               </summary>
               <div class="text-bottom-container">
                 <p>La Cicala ha bisogno di più spazio, magari con il tuo aiuto! Progetto: Residenzialià Leggera. La Cicala sta cercando un posto dove poter creare tre o quattro mini appartamenti. Qui, in piccoli gruppi, persone con disabilità, potranno vivere assieme, condividendo i servizi di cui hanno bisogno, come per esempio un assistente ASA o un educatore. Lo spazio è inserito in un normale contesto sociale ed è pensato per valorizzare, potenziare, le capacità individuali, migliorando la qualità della vita. La Cicala potrà finalmente invitare un amico a passare un pomeriggio in compagnia, o potrà decidere come arredare la propria casa, insomma, finalmente una semplice "normalità"! </p>
-                <a href="/views/html/cicala.html"  class="project-bottom-link">Visita la Pagina</a>
+                <a href="/cicala"  class="project-bottom-link">Visita la Pagina</a>
               </div>
              </details>
              <details class="attività">
@@ -113,7 +137,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
               </summary>
               <div class="text-bottom-container">
                 <p>Cosa pensate se su internet potreste trovare uno spazio in cui socializzare, fare dei giochi, conoscere persone, in modo divertente, piacevole e sicuro? Ti sembrerà incredibile ma la Stone lo ha già ideato e sta lavorando per realizzarlo. Un progetto molto ambizioso che vede impegnata la Stone attraverso gli elementi più avanzati del laboratorio di informatica. Una specie di "Centro Socio Educativo Virtuale" rivolto  a persone disabili, ragazzini, ma non solo, un luogo nel quale chi ha delle difficoltà puù trovare un reale aiuto, perchè guidati e aiutati nella relazione con l'altro, ed ascoltati. Qui troverai personale qualificato che attraverso competenze innovative, riesce a cogliere i bisogni e veicolare a soluzioni attinenti. Un servizio dalle enormi potenzialità, ci si diverte, ci si incontra, ma anche se è un luogo virtuale è sicuro. I genitori di figli minorenni troveranno un aiuto all'educazione dei figli, o le persone con particolari bisogni che non trovano risorse nei classici social, potrenno finalmente essere valorizzate. Siamo solo agli inizi, ma non agli arbori, seguite gli sviluppi!</p>
-                <a href="/views/html/virtualcity.html" target="_blank" class="project-bottom-link">Visita la Pagina</a>
+                <a href="/virtualCity" target="_blank" class="project-bottom-link">Visita la Pagina</a>
               </div>
              </details>
             </div>
@@ -158,7 +182,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
            </section> 
         </div>
     <!-- bottom -->
-              <div id="bottom">
+<div id="bottom">
            <div class="reference">
                <div id="come">
                 <input type="checkbox" id="sidebar-come" >
@@ -174,11 +198,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                        INSERISCI IL CODICE: 02842630127 GRAZIE!
                       </h2>
                   </label>
-                  <div class="links-container-come">
-                    <label for="sidebar-come" class="close-come">
-                     
-                    </label>
-                  </div>
+          
                 </div>
 
                <div id="donation">
@@ -195,7 +215,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                       DELLA TUA COMUNITA'!<br>
                       Stone Soc Coop IBAN: IT50S0306909606100000003453<br>
                       <a class="button" href="https://www.paypal.com/donate/?hosted_button_id=4R8KNTDTP6RKN">DONA CLICCA QUI<br>
-                         <img src="/public/images/paypaldonation.png" width="20%">
+                         <img src="/images/paypaldonation.png" width="20%">
                       </a>
                     </h2>
                   </label>
@@ -220,28 +240,30 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                     Iscritta Registro Unico Terzo Settore<br>
                     Scrivici: infocoopstone@gmail.com<br>
                     tel.: 0332-1808064<br>
-                    Facebook: stonesocial, YouTube: @noneiltitolo
+                    Facebook: stonesocial,<br>
+                     YouTube: @noneiltitolo
                   </h2>
                </label>
-               
             </div>
-
-            <div class="dev">
+              <div class="policy">
+                <a href="https://www.iubenda.com/privacy-policy/44804857"
+                   class="iubenda-white iubenda-noiframe iubenda-embed iubenda-noiframe" 
+                   title="Privacy Policy ">Privacy Policy
+                </a>
+                <a href="https://www.iubenda.com/privacy-policy/44804857/cookie-policy"
+                   class="iubenda-white iubenda-noiframe iubenda-embed iubenda-noiframe" 
+                   title="Cookie Policy ">Cookie Policy
+                </a>
+              </div>
+              <div class="dev">
               CatRobotics DevSolutions
-              
             </div>
-            <div class="tail"></div>
-             
-            <a href="https://www.iubenda.com/privacy-policy/44804857" 
-                   class="iubenda-white iubenda-noiframe iubenda-embed iubenda-noiframe " 
-                   title="Privacy Policy ">Privacy Policy</a>
-                <a href="https://www.iubenda.com/privacy-policy/44804857/cookie-policy" 
-                   class="iubenda-white iubenda-noiframe iubenda-embed iubenda-noiframe " 
-                   title="Cookie Policy ">Cookie Policy</a>
-          </div>
+            <div class="tailcentro"></div>
+  </div>
 
 
     </body>
+    <!--
     <div class="mostra">
       <input type="checkbox" id="mostra" />
       <label for="mostra" class="open_mostra">
@@ -256,4 +278,5 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         </div>
       </label>
     </div>
+  -->
   </html>
