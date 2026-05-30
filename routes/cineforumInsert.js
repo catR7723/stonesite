@@ -72,7 +72,10 @@ router.post('/cineforumInsert', uploadFilm, async (req, res) => {
           });
 
           console.log(`✅ Upload Cloudinary: ${fileName} - ${result.secure_url}`);
-          return result.secure_url; // Ritorna l'URL Cloudinary
+          return {
+            url: result.secure_url,
+            publicId: result.public_id
+          };
         } catch (err) {
           console.error(`❌ Errore Cloudinary ${fileName}:`, err.message);
           throw err;
@@ -84,14 +87,17 @@ router.post('/cineforumInsert', uploadFilm, async (req, res) => {
     };
 
     // Eseguiamo l'upload su Cloudinary
-    const locandanaUrl = await uploadToCloudinary(files['locandina'], 'locandina.jpg');
+    const locandinaData = await uploadToCloudinary(files['locandina'], 'locandina');
 
-    // ✅ SALVA L'URL NEL FILE UPLOADS (temporaneo)
+    // ✅ SALVA ENTRAMBI URL E PUBLIC_ID NEL FILE
     const uploadsDir = path.join(__dirname, '../uploads/cineforum');
     await fs.mkdir(uploadsDir, { recursive: true });
     await fs.writeFile(
-      path.join(uploadsDir, 'locandina_url.txt'),
-      locandanaUrl || ''
+      path.join(uploadsDir, 'locandina_data.json'),
+      JSON.stringify({
+        url: locandinaData.url,
+        publicId: locandinaData.publicId
+      })
     );
 
     res.sendFile(path.join(__dirname, '../cineforumInsert.html'));
@@ -102,30 +108,35 @@ router.post('/cineforumInsert', uploadFilm, async (req, res) => {
   }
 });
 
-// ✅ ELIMINAZIONE DA CLOUDINARY
+// ✅ ELIMINAZIONE DA CLOUDINARY (CORRETTO)
 const deleteFromCloudinary = async (publicId) => {
   try {
+    if (!publicId) {
+      console.warn('⚠️ Public ID mancante, skip eliminazione');
+      return;
+    }
     const result = await cloudinary.uploader.destroy(publicId);
-    console.log(`✅ Immagine eliminata da Cloudinary: ${publicId}`);
+    console.log(`✅ Immagine eliminata da Cloudinary: ${publicId}`, result);
     return result;
   } catch (err) {
-    console.error(`❌ Errore eliminazione Cloudinary: ${err.message}`);
+    console.error(`❌ Errore eliminazione Cloudinary (${publicId}):`, err.message);
   }
 };
 
 // Eliminazione locandina
 router.post('/deleteLocandina', async (req, res) => {
   try {
-    // Leggi l'URL dal file temporaneo
-    const urlPath = path.join(__dirname, '../uploads/cineforum/locandina_url.txt');
+    // Leggi i dati dal file JSON
+    const dataPath = path.join(__dirname, '../uploads/cineforum/locandina_data.json');
     try {
-      const url = await fs.readFile(urlPath, 'utf-8');
-      if (url) {
-        const publicId = 'cineforum/locandina'; // Estrai il public_id
-        await deleteFromCloudinary(publicId);
-      }
+      const data = await fs.readFile(dataPath, 'utf-8');
+      const { publicId } = JSON.parse(data);
+      console.log(`Eliminando public_id: ${publicId}`);
+      await deleteFromCloudinary(publicId);
+      // Cancella il file JSON dopo aver eliminato
+      await fs.unlink(dataPath);
     } catch (e) {
-      console.warn('File URL non trovato');
+      console.warn('⚠️ File dati non trovato');
     }
 
     res.send(`
@@ -140,7 +151,7 @@ router.post('/deleteLocandina', async (req, res) => {
   }
 });
 
-// ✅ SALVATAGGIO FILM (con URL Cloudinary)
+// ✅ SALVATAGGIO FILM (con URL Cloudinary - AGGIORNATO PER VISUALIZZARE)
 router.post('/salvaFilm', async (req, res) => {
   const cartellaSorgente = path.join(__dirname, '../uploads/cineforum');
   const cartellaDestinazioneBase = path.join(__dirname, '../public/images/films');
@@ -162,12 +173,16 @@ router.post('/salvaFilm', async (req, res) => {
 
     const dataOggi = getDataFormattata();
 
-    // ✅ LEGGI URL CLOUDINARY DAL FILE TEMPORANEO
+    // ✅ LEGGI DATI CLOUDINARY DAL FILE JSON
     let locandinaUrl = '';
+    let locandinaPublicId = '';
     try {
-      locandinaUrl = await fs.readFile(path.join(cartellaSorgente, 'locandina_url.txt'), 'utf-8');
+      const data = await fs.readFile(path.join(cartellaSorgente, 'locandina_data.json'), 'utf-8');
+      const parsed = JSON.parse(data);
+      locandinaUrl = parsed.url;
+      locandinaPublicId = parsed.publicId;
     } catch (e) {
-      console.warn('URL Cloudinary non trovato');
+      console.warn('⚠️ Dati Cloudinary non trovati');
     }
 
     // Mappa file di testo (NON immagini, quelle sono su Cloudinary)
@@ -192,11 +207,14 @@ router.post('/salvaFilm', async (req, res) => {
       }
     }
 
-    // ✅ SALVA L'URL CLOUDINARY NEL FILE
-    if (locandinaUrl) {
+    // ✅ SALVA DATI CLOUDINARY (URL + PUBLIC_ID)
+    if (locandinaUrl && locandinaPublicId) {
       await fs.writeFile(
-        path.join(cartellaBlogSpecifico, `locandina_url_${dataOggi}.txt`),
-        locandinaUrl
+        path.join(cartellaBlogSpecifico, `locandina_data_${dataOggi}.json`),
+        JSON.stringify({
+          url: locandinaUrl,
+          publicId: locandinaPublicId
+        })
       );
     }
 
@@ -328,6 +346,87 @@ async function salvaDatiFilm(req, res, fileName, bodyField, htmlSelector) {
   }
 }
 
+// ✅ ROTTA PER VISUALIZZARE ARCHIVIO CON IMMAGINI DA CLOUDINARY
+router.get('/caricaArchivio', async (req, res) => {
+  try {
+    const cartellaDestinazioneBase = path.join(__dirname, '../public/images/films');
+    const cartellaBlog = path.join(cartellaDestinazioneBase, 'blog');
+
+    const filmFolders = await fs.readdir(cartellaBlog);
+    let html = '';
+
+    for (const folder of filmFolders) {
+      if (folder === 'modify') continue;
+
+      const cartellaFilm = path.join(cartellaBlog, folder);
+      const stats = await fs.stat(cartellaFilm);
+
+      if (!stats.isDirectory()) continue;
+
+      const files = await fs.readdir(cartellaFilm);
+      
+      let titolo = folder;
+      let trama = '';
+      let discussione = '';
+      let locandinaUrl = '';
+
+      // ✅ LEGGI DATI CLOUDINARY
+      for (const file of files) {
+        if (file.startsWith('titolo_film_')) {
+          try {
+            titolo = await fs.readFile(path.join(cartellaFilm, file), 'utf-8');
+          } catch (e) {}
+        } else if (file.startsWith('tramaFilm_')) {
+          try {
+            trama = await fs.readFile(path.join(cartellaFilm, file), 'utf-8');
+          } catch (e) {}
+        } else if (file.startsWith('discussione_')) {
+          try {
+            discussione = await fs.readFile(path.join(cartellaFilm, file), 'utf-8');
+          } catch (e) {}
+        } else if (file.startsWith('locandina_data_')) {
+          try {
+            const dataJson = await fs.readFile(path.join(cartellaFilm, file), 'utf-8');
+            const parsed = JSON.parse(dataJson);
+            locandinaUrl = parsed.url;
+          } catch (e) {}
+        }
+      }
+
+      if (locandinaUrl) {
+        const idUnico = `film-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+        html += `
+          <div class="film-archiviato" data-folder="${folder}">
+            <h1>${titolo}</h1>
+            <input type="checkbox" id="sidebar-${idUnico}">
+            <label for="sidebar-${idUnico}" class="toggle-img">
+              <img src="${locandinaUrl}?w=100&h=150&c=fill" width="100" alt="${titolo}">
+            </label>
+            <br>
+            <div class="film-details">
+              <label for="sidebar-${idUnico}" class="toggle-archivio">
+                <div class="film-section">
+                  <h4>📖 Trama</h4>
+                  <p>${trama.replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\n/g, '<br>')}</p>
+                </div>
+                <div class="film-section">
+                  <h4>💬 Discussione</h4>
+                  <p>${discussione.replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\n/g, '<br>')}</p>
+                </div>
+              </label>
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    res.json({ html });
+  } catch (error) {
+    console.error("Errore caricamento archivio:", error);
+    res.status(500).json({ error: "Errore nel caricamento dell'archivio" });
+  }
+});
+
 router.post('/salvaFilmR', async (req, res) => {
   try {
     const pathTitolo = path.join(__dirname, '..', 'public', 'images', 'films', 'titolo_film.txt');
@@ -435,6 +534,7 @@ router.post('/modificaInsert/:folderName', async (req, res) => {
     let tTrama = "";
     let tDiscussione = "";
     let tLocandinaUrl = "";
+    let tLocandinaPublicId = "";
 
     for (const file of files) {
       const sorgente = path.join(cartellaOriginale, file);
@@ -443,7 +543,7 @@ router.post('/modificaInsert/:folderName', async (req, res) => {
       if (file.startsWith('titolo_film_')) nomeDest = 'titolo_modify.txt';
       else if (file.startsWith('tramaFilm_')) nomeDest = 'trama_modify.txt';
       else if (file.startsWith('discussione_')) nomeDest = 'discussione_modify.txt';
-      else if (file.startsWith('locandina_url_')) nomeDest = 'locandina_url_modify.txt';
+      else if (file.startsWith('locandina_data_')) nomeDest = 'locandina_data_modify.json';
 
       if (nomeDest) {
         await fs.copyFile(sorgente, path.join(cartellaDestinazione, nomeDest));
@@ -462,10 +562,15 @@ router.post('/modificaInsert/:folderName', async (req, res) => {
       tDiscussione = await fs.readFile(path.join(cartellaDestinazione, 'discussione_modify.txt'), 'utf-8');
     } catch (e) { tDiscussione = "Discussione non trovata."; }
 
-    // ✅ LEGGI L'URL CLOUDINARY
+    // ✅ LEGGI I DATI CLOUDINARY (URL + PUBLIC_ID)
     try {
-      tLocandinaUrl = await fs.readFile(path.join(cartellaDestinazione, 'locandina_url_modify.txt'), 'utf-8');
-    } catch (e) { tLocandinaUrl = ""; }
+      const dataJson = await fs.readFile(path.join(cartellaDestinazione, 'locandina_data_modify.json'), 'utf-8');
+      const parsed = JSON.parse(dataJson);
+      tLocandinaUrl = parsed.url;
+      tLocandinaPublicId = parsed.publicId;
+    } catch (e) { 
+      console.warn('⚠️ Dati Cloudinary non trovati in modifica');
+    }
 
     const htmlInsert = await fs.readFile(pathHtmlInsert, 'utf-8');
     const $ = cheerio.load(htmlInsert);
@@ -511,7 +616,7 @@ router.post('/modificaInsert/:folderName', async (req, res) => {
   }
 });
 
-// Eliminazione Film
+// ✅ ELIMINAZIONE FILM (con Cloudinary)
 router.post('/eliminaFilm/:folderName', async (req, res) => {
   try {
     const folderName = req.params.folderName;
@@ -523,28 +628,27 @@ router.post('/eliminaFilm/:folderName', async (req, res) => {
     try {
       const files = await fs.readdir(cartellaBlog);
       for (const file of files) {
-        if (file.startsWith('locandina_url_')) {
+        if (file.startsWith('locandina_data_')) {
           try {
-            const urlFile = await fs.readFile(path.join(cartellaBlog, file), 'utf-8');
-            if (urlFile) {
-              const publicId = 'cineforum/locandina';
-              await deleteFromCloudinary(publicId);
-            }
+            const dataJson = await fs.readFile(path.join(cartellaBlog, file), 'utf-8');
+            const parsed = JSON.parse(dataJson);
+            console.log(`📸 Trovato public_id: ${parsed.publicId}`);
+            await deleteFromCloudinary(parsed.publicId);
           } catch (e) {
-            console.warn('Errore lettura URL file:', e.message);
+            console.warn('⚠️ Errore lettura file JSON:', e.message);
           }
         }
       }
     } catch (e) {
-      console.warn('Errore accesso cartella:', e.message);
+      console.warn('⚠️ Errore accesso cartella:', e.message);
     }
 
     // Elimina cartella dal disco
     try {
       await fs.rm(cartellaBlog, { recursive: true, force: true });
-      console.log(`Cartella del blog eliminata: ${folderName}`);
+      console.log(`✅ Cartella del blog eliminata: ${folderName}`);
     } catch (dirErr) {
-      console.error(`Nota: Impossibile eliminare la cartella: ${dirErr.message}`);
+      console.error(`⚠️ Impossibile eliminare la cartella: ${dirErr.message}`);
     }
 
     // Rimuovi da HTML
@@ -563,10 +667,10 @@ router.post('/eliminaFilm/:folderName', async (req, res) => {
           }
 
           await fs.writeFile(percorsoFile, $.html());
-          console.log(`Film rimosso con successo da: ${percorsoFile}`);
+          console.log(`✅ Film rimosso da: ${percorsoFile}`);
         }
       } catch (htmlErr) {
-        console.error(`Errore durante la rimozione HTML:`, htmlErr);
+        console.error(`❌ Errore durante la rimozione HTML:`, htmlErr);
       }
     };
 
@@ -577,13 +681,13 @@ router.post('/eliminaFilm/:folderName', async (req, res) => {
 
     res.send(`
       <script>
-        alert("Film eliminato definitivamente dall'archivio e dalle pagine del sito!");
+        alert("Film eliminato definitivamente dall'archivio, dalle pagine del sito e da Cloudinary!");
         window.location.href = "/cineforumInsert";
       </script>
     `);
 
   } catch (err) {
-    console.error("Errore critico durante l'eliminazione:", err);
+    console.error("❌ Errore critico durante l'eliminazione:", err);
     res.status(500).send("Errore interno durante il processo di eliminazione.");
   }
 });
@@ -619,7 +723,9 @@ router.post('/salvaModifiche/:folderName', upload.single('nuovaLocandina'), asyn
     await fs.mkdir(cartellaBlogVecchia, { recursive: true });
     const filesBlog = await fs.readdir(cartellaBlogVecchia);
 
-    let trovatotitolo = false, trovatotrama = false, trovatodiscussione = false, locandinaUrl = null;
+    let trovatotitolo = false, trovatotrama = false, trovatodiscussione = false;
+    let locandinaUrl = null;
+    let locandinaPublicId = null;
 
     for (const file of filesBlog) {
       if (file.startsWith('titolo_film_')) {
@@ -631,9 +737,12 @@ router.post('/salvaModifiche/:folderName', upload.single('nuovaLocandina'), asyn
       } else if (file.startsWith('discussione_')) {
         await fs.writeFile(path.join(cartellaBlogVecchia, file), nuovaDiscussione || "");
         trovatodiscussione = true;
-      } else if (file.startsWith('locandina_url_')) {
+      } else if (file.startsWith('locandina_data_')) {
         try {
-          locandinaUrl = await fs.readFile(path.join(cartellaBlogVecchia, file), 'utf-8');
+          const dataJson = await fs.readFile(path.join(cartellaBlogVecchia, file), 'utf-8');
+          const parsed = JSON.parse(dataJson);
+          locandinaUrl = parsed.url;
+          locandinaPublicId = parsed.publicId;
         } catch (e) { }
       }
     }
@@ -645,7 +754,7 @@ router.post('/salvaModifiche/:folderName', upload.single('nuovaLocandina'), asyn
 
     // ✅ UPLOAD NUOVA LOCANDINA SU CLOUDINARY
     if (req.file) {
-      console.log('Nuovo file caricato:', req.file.originalname);
+      console.log('📸 Nuovo file caricato:', req.file.originalname);
 
       try {
         const jpegBuffer = await sharp(req.file.buffer)
@@ -653,12 +762,18 @@ router.post('/salvaModifiche/:folderName', upload.single('nuovaLocandina'), asyn
           .jpeg({ quality: 90 })
           .toBuffer();
 
+        // ✅ ELIMINA VECCHIA IMMAGINE DA CLOUDINARY SE ESISTE
+        if (locandinaPublicId) {
+          console.log(`🗑️ Eliminando vecchia immagine: ${locandinaPublicId}`);
+          await deleteFromCloudinary(locandinaPublicId);
+        }
+
         // Upload su Cloudinary
         const result = await new Promise((resolve, reject) => {
           cloudinary.uploader.upload_stream(
             {
               folder: 'cineforum',
-              public_id: `locandina_${oldFolderName}`,
+              public_id: `locandina_${nuovoFolderName}`,
               resource_type: 'auto',
               overwrite: true
             },
@@ -670,22 +785,29 @@ router.post('/salvaModifiche/:folderName', upload.single('nuovaLocandina'), asyn
         });
 
         locandinaUrl = result.secure_url;
+        locandinaPublicId = result.public_id;
         console.log(`✅ Locandina aggiornata su Cloudinary: ${locandinaUrl}`);
 
-        // Salva nuovo URL
+        // Salva nuovi dati
         await fs.writeFile(
-          path.join(cartellaBlogVecchia, `locandina_url_${timestamp}.txt`),
-          locandinaUrl
+          path.join(cartellaBlogVecchia, `locandina_data_${timestamp}.json`),
+          JSON.stringify({
+            url: locandinaUrl,
+            publicId: locandinaPublicId
+          })
         );
       } catch (err) {
         console.error('❌ Errore upload Cloudinary:', err.message);
       }
     } else {
-      console.log('Nessun file caricato - mantiene l\'immagine originale');
-      if (locandinaUrl) {
+      console.log('ℹ️ Nessun file caricato - mantiene l\'immagine originale');
+      if (locandinaUrl && locandinaPublicId) {
         await fs.writeFile(
-          path.join(cartellaModify, 'locandina_url_modify.txt'),
-          locandinaUrl
+          path.join(cartellaModify, 'locandina_data_modify.json'),
+          JSON.stringify({
+            url: locandinaUrl,
+            publicId: locandinaPublicId
+          })
         );
       }
     }
@@ -775,7 +897,7 @@ router.post('/salvaModifiche/:folderName', upload.single('nuovaLocandina'), asyn
       } catch {}
 
       await fs.rename(cartellaBlogVecchia, cartellaBlogNuova);
-      console.log(`Cartella rinominata: ${oldFolderName} → ${nuovoFolderName}`);
+      console.log(`📁 Cartella rinominata: ${oldFolderName} → ${nuovoFolderName}`);
     }
 
     res.send(`
@@ -786,9 +908,10 @@ router.post('/salvaModifiche/:folderName', upload.single('nuovaLocandina'), asyn
     `);
 
   } catch (err) {
-    console.error("Errore durante il salvataggio:", err);
+    console.error("❌ Errore durante il salvataggio:", err);
     res.status(500).send("Errore nel salvataggio delle modifiche.");
   }
 });
 
 module.exports = router;
+
