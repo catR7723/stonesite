@@ -56,16 +56,25 @@ router.post('/cineforumInsert', uploadFilm, async (req, res) => {
       `);
     }
 
- const locandina = req.files.locandina?.[0];
- const metadata = {
+ console.log('LOCANDINA:', locandina);
+
+const metadata = {
     public_id: locandina.filename,
     url: locandina.path
 };
 
+console.log('METADATA:', metadata);
+
+const uploadDir = path.join(__dirname, '../uploads/cineforum');
+
+await fs.mkdir(uploadDir, { recursive: true });
+
 await fs.writeFile(
-    path.join(__dirname, '../uploads/cineforum/locandina.json'),
+    path.join(uploadDir, 'locandina.json'),
     JSON.stringify(metadata, null, 2)
 );
+
+console.log('locandina.json salvato');
 
 if (!locandina) {
    return res.send("Errore durante il salvataggio dei file.");
