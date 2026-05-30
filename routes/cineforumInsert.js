@@ -34,7 +34,7 @@ router.post('/cineforumInsert', uploadFilm, async (req, res) => {
   try {
     const files = req.files;
 
-    if (!files) {
+    if (!files || !files.locandina) {
       return res.send(`
         <script>
           alert("Errore: Inserisci la Locandina");
@@ -60,18 +60,25 @@ router.post('/cineforumInsert', uploadFilm, async (req, res) => {
             cloudinary.uploader.upload_stream(
               {
                 folder: 'cineforum',
-                public_id: fileName.replace('.jpg', ''),
+                public_id: `locandina_temp`,
                 resource_type: 'auto',
                 overwrite: true
               },
               (error, result) => {
-                if (error) reject(error);
-                else resolve(result);
+                if (error) {
+                  console.error('Cloudinary error:', error);
+                  reject(error);
+                } else {
+                  resolve(result);
+                }
               }
             ).end(jpegBuffer);
           });
 
-          console.log(`✅ Upload Cloudinary: ${fileName} - ${result.secure_url}`);
+          console.log(`✅ Upload Cloudinary: ${fileName}`);
+          console.log(`   URL: ${result.secure_url}`);
+          console.log(`   Public ID: ${result.public_id}`);
+          
           return {
             url: result.secure_url,
             publicId: result.public_id
@@ -89,22 +96,53 @@ router.post('/cineforumInsert', uploadFilm, async (req, res) => {
     // Eseguiamo l'upload su Cloudinary
     const locandinaData = await uploadToCloudinary(files['locandina'], 'locandina');
 
+    if (!locandinaData) {
+      return res.status(500).send("Errore durante l'upload su Cloudinary");
+    }
+
     // ✅ SALVA ENTRAMBI URL E PUBLIC_ID NEL FILE
     const uploadsDir = path.join(__dirname, '../uploads/cineforum');
     await fs.mkdir(uploadsDir, { recursive: true });
+    
+    const dataPath = path.join(uploadsDir, 'locandina_data.json');
     await fs.writeFile(
-      path.join(uploadsDir, 'locandina_data.json'),
+      dataPath,
       JSON.stringify({
         url: locandinaData.url,
         publicId: locandinaData.publicId
-      })
+      }, null, 2)
     );
 
-    res.sendFile(path.join(__dirname, '../cineforumInsert.html'));
+    console.log(`✅ Dati salvati in: ${dataPath}`);
+
+    // ✅ RISPOSTA CON L'URL PER VISUALIZZARE L'IMMAGINE
+    res.send(`
+      <script>
+        // Aggiorna l'immagine nel DOM
+        const img = document.getElementById('locandina-img');
+        if (img) {
+          img.src = '${locandinaData.url}?w=200&h=300&c=fill&t=${Date.now()}';
+          img.style.display = 'block';
+        }
+        
+        const formCancella = document.getElementById('form-cancella');
+        if (formCancella) {
+          formCancella.style.display = 'block';
+        }
+        
+        const divIns = document.querySelector('.ins');
+        if (divIns) {
+          divIns.style.display = 'block';
+        }
+        
+        alert('Locandina caricata con successo!');
+        window.location.href = '/cineforumInsert';
+      </script>
+    `);
 
   } catch (error) {
-    console.error(error);
-    res.status(500).send("Errore durante il salvataggio dei file.");
+    console.error('❌ Errore critico:', error);
+    res.status(500).send(`Errore durante il salvataggio dei file: ${error.message}`);
   }
 });
 
@@ -115,8 +153,10 @@ const deleteFromCloudinary = async (publicId) => {
       console.warn('⚠️ Public ID mancante, skip eliminazione');
       return;
     }
+    
+    console.log(`🗑️ Eliminando da Cloudinary: ${publicId}`);
     const result = await cloudinary.uploader.destroy(publicId);
-    console.log(`✅ Immagine eliminata da Cloudinary: ${publicId}`, result);
+    console.log(`✅ Immagine eliminata:`, result);
     return result;
   } catch (err) {
     console.error(`❌ Errore eliminazione Cloudinary (${publicId}):`, err.message);
@@ -126,22 +166,29 @@ const deleteFromCloudinary = async (publicId) => {
 // Eliminazione locandina
 router.post('/deleteLocandina', async (req, res) => {
   try {
-    // Leggi i dati dal file JSON
     const dataPath = path.join(__dirname, '../uploads/cineforum/locandina_data.json');
+    
     try {
       const data = await fs.readFile(dataPath, 'utf-8');
-      const { publicId } = JSON.parse(data);
-      console.log(`Eliminando public_id: ${publicId}`);
+      const parsed = JSON.parse(data);
+      const { publicId } = parsed;
+      
+      console.log(`🗑️ Trovato public_id: ${publicId}`);
       await deleteFromCloudinary(publicId);
+      
       // Cancella il file JSON dopo aver eliminato
       await fs.unlink(dataPath);
+      console.log('✅ File JSON cancellato');
     } catch (e) {
-      console.warn('⚠️ File dati non trovato');
+      console.warn('⚠️ File dati non trovato o errore:', e.message);
     }
 
     res.send(`
       <script>
         alert("Locandina eliminata con successo!");
+        document.getElementById('locandina-img').style.display = 'none';
+        document.getElementById('form-cancella').style.display = 'none';
+        document.querySelector('.ins').style.display = 'none';
         window.location.href = "/cineforumInsert";
       </script>
     `);
@@ -151,7 +198,7 @@ router.post('/deleteLocandina', async (req, res) => {
   }
 });
 
-// ✅ SALVATAGGIO FILM (con URL Cloudinary - AGGIORNATO PER VISUALIZZARE)
+// ✅ SALVATAGGIO FILM (con URL Cloudinary)
 router.post('/salvaFilm', async (req, res) => {
   const cartellaSorgente = path.join(__dirname, '../uploads/cineforum');
   const cartellaDestinazioneBase = path.join(__dirname, '../public/images/films');
@@ -177,15 +224,17 @@ router.post('/salvaFilm', async (req, res) => {
     let locandinaUrl = '';
     let locandinaPublicId = '';
     try {
-      const data = await fs.readFile(path.join(cartellaSorgente, 'locandina_data.json'), 'utf-8');
+      const dataPath = path.join(cartellaSorgente, 'locandina_data.json');
+      const data = await fs.readFile(dataPath, 'utf-8');
       const parsed = JSON.parse(data);
       locandinaUrl = parsed.url;
       locandinaPublicId = parsed.publicId;
+      console.log(`✅ Letti dati Cloudinary: ${locandinaUrl}`);
     } catch (e) {
-      console.warn('⚠️ Dati Cloudinary non trovati');
+      console.warn('⚠️ Dati Cloudinary non trovati:', e.message);
     }
 
-    // Mappa file di testo (NON immagini, quelle sono su Cloudinary)
+    // Mappa file di testo
     const fileMappa = [
       { orig: 'titolo_film.txt', blog: `titolo_film_${dataOggi}.txt` },
       { orig: 'tramaFilm.txt', blog: `tramaFilm_${dataOggi}.txt` },
@@ -207,15 +256,17 @@ router.post('/salvaFilm', async (req, res) => {
       }
     }
 
-    // ✅ SALVA DATI CLOUDINARY (URL + PUBLIC_ID)
+    // ✅ SALVA DATI CLOUDINARY CON TIMESTAMP UNIVOCO
     if (locandinaUrl && locandinaPublicId) {
+      const dataFilePath = path.join(cartellaBlogSpecifico, `locandina_data_${dataOggi}.json`);
       await fs.writeFile(
-        path.join(cartellaBlogSpecifico, `locandina_data_${dataOggi}.json`),
+        dataFilePath,
         JSON.stringify({
           url: locandinaUrl,
           publicId: locandinaPublicId
-        })
+        }, null, 2)
       );
+      console.log(`✅ Dati Cloudinary salvati: ${dataFilePath}`);
     }
 
     // Leggi contenuti
@@ -246,13 +297,13 @@ router.post('/salvaFilm', async (req, res) => {
 
     const idUnico = generaIdUnico();
 
-    // ✅ USA L'URL CLOUDINARY INVECE DEL PERCORSO LOCALE
+    // ✅ USA L'URL CLOUDINARY CON CACHE BUSTING
     const contenutoComune = `
       <h1>${titoloContenuto}</h1>
       <h3>Film del ${dataOggi.replace(/_/g, '/')}</h3>
       <input type="checkbox" id="sidebar-${idUnico}">
       <label for="sidebar-${idUnico}" class="toggle-img">
-        <img src="${locandinaUrl}?w=100&h=150&c=fill" width="100" alt="Locandina">
+        <img src="${locandinaUrl}?w=100&h=150&c=fill&t=${Date.now()}" width="100" alt="Locandina">
       </label>
       <br>
       <div class="film-details">
@@ -345,87 +396,6 @@ async function salvaDatiFilm(req, res, fileName, bodyField, htmlSelector) {
     res.status(500).send("Errore");
   }
 }
-
-// ✅ ROTTA PER VISUALIZZARE ARCHIVIO CON IMMAGINI DA CLOUDINARY
-router.get('/caricaArchivio', async (req, res) => {
-  try {
-    const cartellaDestinazioneBase = path.join(__dirname, '../public/images/films');
-    const cartellaBlog = path.join(cartellaDestinazioneBase, 'blog');
-
-    const filmFolders = await fs.readdir(cartellaBlog);
-    let html = '';
-
-    for (const folder of filmFolders) {
-      if (folder === 'modify') continue;
-
-      const cartellaFilm = path.join(cartellaBlog, folder);
-      const stats = await fs.stat(cartellaFilm);
-
-      if (!stats.isDirectory()) continue;
-
-      const files = await fs.readdir(cartellaFilm);
-      
-      let titolo = folder;
-      let trama = '';
-      let discussione = '';
-      let locandinaUrl = '';
-
-      // ✅ LEGGI DATI CLOUDINARY
-      for (const file of files) {
-        if (file.startsWith('titolo_film_')) {
-          try {
-            titolo = await fs.readFile(path.join(cartellaFilm, file), 'utf-8');
-          } catch (e) {}
-        } else if (file.startsWith('tramaFilm_')) {
-          try {
-            trama = await fs.readFile(path.join(cartellaFilm, file), 'utf-8');
-          } catch (e) {}
-        } else if (file.startsWith('discussione_')) {
-          try {
-            discussione = await fs.readFile(path.join(cartellaFilm, file), 'utf-8');
-          } catch (e) {}
-        } else if (file.startsWith('locandina_data_')) {
-          try {
-            const dataJson = await fs.readFile(path.join(cartellaFilm, file), 'utf-8');
-            const parsed = JSON.parse(dataJson);
-            locandinaUrl = parsed.url;
-          } catch (e) {}
-        }
-      }
-
-      if (locandinaUrl) {
-        const idUnico = `film-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-        html += `
-          <div class="film-archiviato" data-folder="${folder}">
-            <h1>${titolo}</h1>
-            <input type="checkbox" id="sidebar-${idUnico}">
-            <label for="sidebar-${idUnico}" class="toggle-img">
-              <img src="${locandinaUrl}?w=100&h=150&c=fill" width="100" alt="${titolo}">
-            </label>
-            <br>
-            <div class="film-details">
-              <label for="sidebar-${idUnico}" class="toggle-archivio">
-                <div class="film-section">
-                  <h4>📖 Trama</h4>
-                  <p>${trama.replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\n/g, '<br>')}</p>
-                </div>
-                <div class="film-section">
-                  <h4>💬 Discussione</h4>
-                  <p>${discussione.replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\n/g, '<br>')}</p>
-                </div>
-              </label>
-            </div>
-          </div>
-        `;
-      }
-    }
-
-    res.json({ html });
-  } catch (error) {
-    console.error("Errore caricamento archivio:", error);
-    res.status(500).json({ error: "Errore nel caricamento dell'archivio" });
-  }
-});
 
 router.post('/salvaFilmR', async (req, res) => {
   try {
@@ -568,8 +538,9 @@ router.post('/modificaInsert/:folderName', async (req, res) => {
       const parsed = JSON.parse(dataJson);
       tLocandinaUrl = parsed.url;
       tLocandinaPublicId = parsed.publicId;
+      console.log(`✅ Letti dati modifica: ${tLocandinaUrl}`);
     } catch (e) { 
-      console.warn('⚠️ Dati Cloudinary non trovati in modifica');
+      console.warn('⚠️ Dati Cloudinary non trovati in modifica:', e.message);
     }
 
     const htmlInsert = await fs.readFile(pathHtmlInsert, 'utf-8');
@@ -588,7 +559,7 @@ router.post('/modificaInsert/:folderName', async (req, res) => {
           <textarea name="nuovaDiscussione" rows="6" style="width: 100%;">${tDiscussione}</textarea>
           <div style="margin: 15px 0;">
             <p>Locandina attuale:</p>
-            ${tLocandinaUrl ? `<img src="${tLocandinaUrl}?w=120&h=180&c=fill" width="120" style="border: 1px solid #000" alt="Locandina">` : '<p>Nessuna locandina</p>'}
+            ${tLocandinaUrl ? `<img src="${tLocandinaUrl}?w=120&h=180&c=fill&t=${Date.now()}" width="120" style="border: 1px solid #000" alt="Locandina">` : '<p>Nessuna locandina</p>'}
             <br><br>
             <label>Sostituisci Locandina (opzionale):</label>
             <input type="file" name="nuovaLocandina" accept="image/*">
@@ -623,6 +594,8 @@ router.post('/eliminaFilm/:folderName', async (req, res) => {
     const cartellaBlog = path.join(__dirname, '..', 'public', 'images', 'films', 'blog', folderName);
     const pathHtmlInsert = path.join(__dirname, '..', 'cineforumInsert.html');
     const pathHtmlPubblico = path.join(__dirname, '..', 'views', 'html', 'laboratori', 'cineforum.html');
+
+    console.log(`\n🗑️ ELIMINAZIONE FILM: ${folderName}\n`);
 
     // ✅ ELIMINA IMMAGINI DA CLOUDINARY
     try {
@@ -668,6 +641,8 @@ router.post('/eliminaFilm/:folderName', async (req, res) => {
 
           await fs.writeFile(percorsoFile, $.html());
           console.log(`✅ Film rimosso da: ${percorsoFile}`);
+        } else {
+          console.warn(`⚠️ Film non trovato in: ${percorsoFile}`);
         }
       } catch (htmlErr) {
         console.error(`❌ Errore durante la rimozione HTML:`, htmlErr);
@@ -678,6 +653,8 @@ router.post('/eliminaFilm/:folderName', async (req, res) => {
       rimuoviDaHtml(pathHtmlInsert),
       rimuoviDaHtml(pathHtmlPubblico)
     ]);
+
+    console.log(`✅ ELIMINAZIONE COMPLETATA\n`);
 
     res.send(`
       <script>
@@ -706,6 +683,8 @@ router.post('/salvaModifiche/:folderName', upload.single('nuovaLocandina'), asyn
 
     const pathHtmlInsert = path.join(__dirname, '..', 'cineforumInsert.html');
     const pathHtmlPubblico = path.join(__dirname, '..', 'views', 'html', 'laboratori', 'cineforum.html');
+
+    console.log(`\n📝 MODIFICA FILM: ${oldFolderName} → ${nuovoFolderName}\n`);
 
     // 1. Aggiorna file di testo
     try {
@@ -794,7 +773,7 @@ router.post('/salvaModifiche/:folderName', upload.single('nuovaLocandina'), asyn
           JSON.stringify({
             url: locandinaUrl,
             publicId: locandinaPublicId
-          })
+          }, null, 2)
         );
       } catch (err) {
         console.error('❌ Errore upload Cloudinary:', err.message);
@@ -807,7 +786,7 @@ router.post('/salvaModifiche/:folderName', upload.single('nuovaLocandina'), asyn
           JSON.stringify({
             url: locandinaUrl,
             publicId: locandinaPublicId
-          })
+          }, null, 2)
         );
       }
     }
@@ -832,7 +811,7 @@ router.post('/salvaModifiche/:folderName', upload.single('nuovaLocandina'), asyn
           // ✅ AGGIORNA IMMAGINE CLOUDINARY
           bloccoFilm.find('img').each((i, imgEl) => {
             const srcAttuale = $(imgEl).attr('src');
-            if (srcAttuale && srcAttuale.includes('cloudinary')) {
+            if (srcAttuale && (srcAttuale.includes('cloudinary') || srcAttuale.includes('res.cloudinary'))) {
               if (locandinaUrl) {
                 $(imgEl).attr('src', `${locandinaUrl}?w=100&h=150&c=fill&t=${timestamp}`);
               }
@@ -877,8 +856,6 @@ router.post('/salvaModifiche/:folderName', upload.single('nuovaLocandina'), asyn
 
         } else {
           console.warn(`⚠️ Blocco film NON trovato in ${percorsoFile}`);
-          const htmlOutput = $.html();
-          await fs.writeFile(percorsoFile, htmlOutput);
         }
 
       } catch (htmlErr) {
@@ -900,6 +877,8 @@ router.post('/salvaModifiche/:folderName', upload.single('nuovaLocandina'), asyn
       console.log(`📁 Cartella rinominata: ${oldFolderName} → ${nuovoFolderName}`);
     }
 
+    console.log(`✅ MODIFICA COMPLETATA\n`);
+
     res.send(`
       <script>
         alert("Modifiche salvate con successo!");
@@ -914,4 +893,5 @@ router.post('/salvaModifiche/:folderName', upload.single('nuovaLocandina'), asyn
 });
 
 module.exports = router;
+
 
