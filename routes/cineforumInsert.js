@@ -163,7 +163,7 @@ const deleteFromCloudinary = async (publicId) => {
   }
 };
 
-// Eliminazione locandina
+// ✅ ELIMINAZIONE LOCANDINA (CORRETTO - REDIRECT INVECE DI SCRIPT)
 router.post('/deleteLocandina', async (req, res) => {
   try {
     const dataPath = path.join(__dirname, '../uploads/cineforum/locandina_data.json');
@@ -183,18 +183,86 @@ router.post('/deleteLocandina', async (req, res) => {
       console.warn('⚠️ File dati non trovato o errore:', e.message);
     }
 
-    res.send(`
-      <script>
-        alert("Locandina eliminata con successo!");
-        document.getElementById('locandina-img').style.display = 'none';
-        document.getElementById('form-cancella').style.display = 'none';
-        document.querySelector('.ins').style.display = 'none';
-        window.location.href = "/cineforumInsert";
-      </script>
-    `);
+    // ✅ REDIRECT CORRETTO INVECE DI SCRIPT
+    res.redirect('/cineforumInsert?success=deleted');
+
   } catch (err) {
     console.error(err);
     res.status(500).send("Errore nel server");
+  }
+});
+
+// ✅ API PER CARICARE I FILM CON CLOUDINARY
+router.get('/api/caricalibri', async (req, res) => {
+  try {
+    const cartellaDestinazioneBase = path.join(__dirname, '../public/images/films');
+    const cartellaBlog = path.join(cartellaDestinazioneBase, 'blog');
+
+    const filmFolders = await fs.readdir(cartellaBlog);
+    const films = [];
+
+    for (const folder of filmFolders) {
+      if (folder === 'modify') continue;
+
+      const cartellaFilm = path.join(cartellaBlog, folder);
+      const stats = await fs.stat(cartellaFilm);
+
+      if (!stats.isDirectory()) continue;
+
+      const files = await fs.readdir(cartellaFilm);
+      
+      let titolo = folder;
+      let trama = '';
+      let discussione = '';
+      let locandinaUrl = '';
+      let dataOggi = '';
+
+      // ✅ LEGGI DATI CLOUDINARY E FILE
+      for (const file of files) {
+        if (file.startsWith('titolo_film_')) {
+          try {
+            titolo = await fs.readFile(path.join(cartellaFilm, file), 'utf-8');
+          } catch (e) {}
+        } else if (file.startsWith('tramaFilm_')) {
+          try {
+            trama = await fs.readFile(path.join(cartellaFilm, file), 'utf-8');
+          } catch (e) {}
+        } else if (file.startsWith('discussione_')) {
+          try {
+            discussione = await fs.readFile(path.join(cartellaFilm, file), 'utf-8');
+          } catch (e) {}
+        } else if (file.startsWith('locandina_data_')) {
+          try {
+            const dataJson = await fs.readFile(path.join(cartellaFilm, file), 'utf-8');
+            const parsed = JSON.parse(dataJson);
+            locandinaUrl = parsed.url;
+            // Estrai la data dal nome del file
+            const match = file.match(/locandina_data_(\d{2}_\d{2}_\d{4})/);
+            if (match) dataOggi = match[1];
+          } catch (e) {
+            console.warn(`⚠️ Errore lettura JSON per ${folder}:`, e.message);
+          }
+        }
+      }
+
+      // Aggiungi il film solo se ha l'URL Cloudinary
+      if (locandinaUrl) {
+        films.push({
+          folder,
+          titolo: titolo.trim(),
+          trama: trama.trim(),
+          discussione: discussione.trim(),
+          locandinaUrl,
+          dataOggi: dataOggi || getDataFormattata()
+        });
+        console.log(`✅ Film caricato: ${titolo}`);
+      }
+    }
+
+    res.json({ films });
+  } catch (error) {
+    console.error("❌ Errore caricamento archivio:", error);
+    res.status(500).json({ error: "Errore nel caricamento dell'archivio", films: [] });
   }
 });
 
