@@ -1,14 +1,10 @@
-require('dotenv').config(); 
 
+require('dotenv').config(); 
 const cloudinary = require('cloudinary').v2;
 
-console.log("TEST ENV");
-console.log("CLOUD_NAME =", process.env.CLOUDINARY_CLOUD_NAME);
-console.log("API_KEY =", process.env.CLOUDINARY_API_KEY);
-console.log(
-  "API_SECRET =",
-  process.env.CLOUDINARY_API_SECRET ? "PRESENTE" : "MANCANTE"
-);
+// Rimuovi o mantieni i log per sicurezza
+console.log("CONFIGURAZIONE CLOUDINARY IN CORSO...");
+console.log("API_KEY PRESENTE?", process.env.CLOUDINARY_API_KEY ? "SÌ" : "NO");
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -17,3 +13,4 @@ cloudinary.config({
 });
 
 module.exports = cloudinary;
+
