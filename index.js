@@ -1,6 +1,11 @@
+
+require('dotenv').config();
+
+console.log(process.env.CLOUDINARY_CLOUD_NAME);
+console.log(process.env.CLOUDINARY_API_KEY);
+console.log(process.env.CLOUDINARY_API_SECRET ? 'OK' : 'MANCANTE');
 const express = require('express');
 const path = require('path');
-
 const app = express();
 const fs = require('fs').promises;
 const uploadRoutes = require('./routes/cucinaInsert');
