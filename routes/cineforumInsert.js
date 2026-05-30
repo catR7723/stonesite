@@ -14,11 +14,10 @@ const getDataFormattata = () => {
   const anno = d.getFullYear();
   return `${giorno}_${mese}_${anno}`;
   };
-
-const { CloudinaryStorage } = require('multer-storage-cloudinary');
-
 const cloudinary = require('../config/cloudinary');
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
+
+
 
 const storage = new CloudinaryStorage({
   cloudinary,
@@ -81,8 +80,6 @@ if (!locandina) {
 });
 
 
-const cloudinaryUrl = locandina.path;
-const publicId = locandina.filename;
 
 
 // Funzione universale per eliminare e reindirizzare
@@ -178,7 +175,7 @@ router.post('/salvaFilm', async (req, res) => {
         }
 
         // 5. Aggiornamento HTML con i contenuti INCORPORATI (non link)
-        const baseWebPath = `/images/films/blog/${nomeCartellaFilm}`;
+      
         
   
         // ✅ Genera ID unico basato su timestamp
@@ -514,65 +511,125 @@ router.post('/modificaInsert/:folderName', async (req, res) => {
 
 
 router.post('/eliminaFilm/:folderName', async (req, res) => {
-   try {
 
-    const locandinaData = JSON.parse(
-        await fs.readFile(
-            path.join(cartellaBlog, 'locandina.json'),
-            'utf8'
-        )
+    const folderName = req.params.folderName;
+
+    const cartellaBlog = path.join(
+        __dirname,
+        '..',
+        'public',
+        'images',
+        'films',
+        'blog',
+        folderName
     );
 
-    await cloudinary.uploader.destroy(
-        locandinaData.public_id
-    );
-
-} catch (e) {
-    console.warn(
-        'Impossibile eliminare immagine Cloudinary:',
-        e.message
-    );
-}
-   
     try {
-        const folderName = req.params.folderName;
 
-        const cartellaBlog = path.join(__dirname, '..', 'public', 'images', 'films', 'blog', folderName);
-        const pathHtmlInsert = path.join(__dirname, '..', 'cineforumInsert.html');
-        const pathHtmlPubblico = path.join(__dirname, '..', 'views', 'html', 'laboratori', 'cineforum.html');
+        const locandinaData = JSON.parse(
+            await fs.readFile(
+                path.join(cartellaBlog, 'locandina.json'),
+                'utf8'
+            )
+        );
 
-        // 1. DELETE FOLDER FROM DISK
+        await cloudinary.uploader.destroy(
+            locandinaData.public_id
+        );
+
+        console.log('Locandina eliminata da Cloudinary');
+
+    } catch (e) {
+
+        console.warn(
+            'Impossibile eliminare immagine Cloudinary:',
+            e.message
+        );
+
+    }
+
+    try {
+
+        const pathHtmlInsert = path.join(
+            __dirname,
+            '..',
+            'cineforumInsert.html'
+        );
+
+        const pathHtmlPubblico = path.join(
+            __dirname,
+            '..',
+            'views',
+            'html',
+            'laboratori',
+            'cineforum.html'
+        );
+
+        // Elimina la cartella del film
         try {
-            await fs.rm(cartellaBlog, { recursive: true, force: true });
-            console.log(`Cartella del blog eliminata: ${folderName}`);
+
+            await fs.rm(
+                cartellaBlog,
+                {
+                    recursive: true,
+                    force: true
+                }
+            );
+
+            console.log(
+                `Cartella del blog eliminata: ${folderName}`
+            );
+
         } catch (dirErr) {
-            console.error(`Nota: Impossibile eliminare la cartella o già inesistente: ${dirErr.message}`);
+
+            console.error(
+                `Nota: Impossibile eliminare la cartella: ${dirErr.message}`
+            );
+
         }
 
-        // 2. REMOVE FROM BOTH HTML FILES
         const rimuoviDaHtml = async (percorsoFile) => {
+
             try {
-                const contenuto = await fs.readFile(percorsoFile, 'utf-8');
+
+                const contenuto = await fs.readFile(
+                    percorsoFile,
+                    'utf-8'
+                );
+
                 const $ = cheerio.load(contenuto);
-                
-                // Search by data-folder attribute first (more reliable)
-                let bloccoFilm = $(`.film-archiviato[data-folder="${folderName}"]`);
-                
+
+                const bloccoFilm =
+                    $(`.film-archiviato[data-folder="${folderName}"]`);
+
                 if (bloccoFilm.length > 0) {
+
                     bloccoFilm.remove();
-                    
+
                     if (percorsoFile === pathHtmlInsert) {
                         $('#modify').remove();
                     }
-                    
-                    await fs.writeFile(percorsoFile, $.html());
-                    console.log(`Film rimosso con successo da: ${percorsoFile}`);
-                } else {
-                    console.log(`Nessun blocco film trovato per lo slug "${folderName}" in: ${percorsoFile}`);
+
+                    await fs.writeFile(
+                        percorsoFile,
+                        $.html()
+                    );
+
+                    console.log(
+                        `Film rimosso da ${percorsoFile}`
+                    );
+
                 }
+
             } catch (htmlErr) {
-                console.error(`Errore durante la rimozione HTML su ${percorsoFile}:`, htmlErr);
+
+                console.error(
+                    `Errore HTML ${percorsoFile}:`,
+                    htmlErr
+                );
+
             }
+
         };
 
         await Promise.all([
@@ -582,15 +639,24 @@ router.post('/eliminaFilm/:folderName', async (req, res) => {
 
         res.send(`
             <script>
-                alert("Film eliminato definitivamente dall'archivio e dalle pagine del sito!");
-                window.location.href = "/cineforumInsert";
+                alert("Film eliminato definitivamente!");
+                window.location.href="/cineforumInsert";
             </script>
         `);
 
     } catch (err) {
-        console.error("Errore critico durante l'eliminazione:", err);
-        res.status(500).send("Errore interno durante il processo di eliminazione.");
+
+        console.error(
+            "Errore critico durante l'eliminazione:",
+            err
+        );
+
+        res.status(500).send(
+            "Errore interno durante il processo di eliminazione."
+        );
+
     }
+
 });
 
 
@@ -628,8 +694,11 @@ router.post('/salvaModifiche/:folderName', upload.single('nuovaLocandina'), asyn
         // 2. Sync blog folder files
         await fs.mkdir(cartellaBlogVecchia, { recursive: true });
         const filesBlog = await fs.readdir(cartellaBlogVecchia);
+        let trovatotitolo = false;
+let trovatotrama = false;
+let trovatodiscussione = false;
         
-        let trovatotitolo = false, trovatotrama = false, trovatodiscussione = false, locandinaOriginale = null;
+        
 
         for (const file of filesBlog) {
             if (file.startsWith('titolo_film_')) {
@@ -641,9 +710,7 @@ router.post('/salvaModifiche/:folderName', upload.single('nuovaLocandina'), asyn
             } else if (file.startsWith('discussione_')) {
                 await fs.writeFile(path.join(cartellaBlogVecchia, file), nuovaDiscussione || "");
                 trovatodiscussione = true;
-            } else if (file.endsWith('.jpg')) {
-                locandinaOriginale = file;
-            }
+            } 
         }
 
         const timestamp = Date.now();
