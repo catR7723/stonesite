@@ -1,221 +1,282 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
+<!DOCTYPE html><html lang="en"><head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inserisci il Film</title>
     <script src="/routes/cineforumInsert.js"></script>
     <link rel="stylesheet" href="/assets/css/cineforumInsert.css">
     <link rel="stylesheet" href="/assets/css/laboratori/cineforum.css">
+    
+
+
+
 </head>
 <body>
-  <!-- 📸 SEZIONE UPLOAD LOCANDINA -->
   <div class="locandina">
     <h1>Carica La Locandina del Film della Settimana</h1>
     <form action="/cineforumInsert" method="POST" enctype="multipart/form-data" id="locandina">
-      <div class="scegli">
-        <label id="carica" for="file-input">Scegli File</label>
-        <input type="file" name="locandina" id="file-input" required onchange="mostraBottone(); mostraFileName()">
-        <span id="fileName">Nessun file selezionato</span>
-      </div>
-      <button type="submit" id="btn-anteprima" style="display: none;">Anteprima della Locandina</button>
+<div class="scegli">
+    <label id="carica" for="file-input">Scegli File</label>
+    <input type="file" name="locandina" id="file-input" required="" onchange="mostraBottone(); mostraFileName()">
+    <span id="fileName">Nessun file selezionato</span>
+</div>
+        <button type="submit" id="btn-anteprima" style="display: none;">Anteprima della Locandina</button>
     </form> 
-  </div>
+</div>
 
-  <!-- 🎬 SEZIONE FILM -->
-  <div class="Conteiner_Film">
+<div class="Conteiner_Film">
     <div class="imgLoc">
-      <!-- 📷 IMMAGINE CLOUDINARY -->
-      <img id="locandina-img" src="" alt="locandina" width="200" style="display: none;" onerror="this.style.display='none'; document.getElementById('form-cancella').style.display='none';">
+        
+        <img id="locandina-img" src="/uploads/cineforum/locandina.jpg" alt="locandina" width="200" onerror="this.style.display='none'; document.getElementById('form-cancella').style.display='none';">
 
-      <!-- ❌ PULSANTE ELIMINA -->
-      <form action="/deleteLocandina" method="POST" id="form-cancella" style="display: none;">
-        <button class="btn" type="submit" id="deleteLocandina">Elimina la Locandina</button>
-      </form>
+        <form action="/deleteLocandina" method="POST" id="form-cancella">
+            <button class="btn" type="submit" id="deleteLocandina">Elimina la Locandina</button>
+        </form>
+        
     </div>
    
-    <!-- 📝 SEZIONE TESTI ANTEPRIMA -->
+
+    <!-- Il div con i testi che arrivano dal server -->
     <div class="film">
-      <h1 id="titoloFilm"></h1>
-      <h1 id="tramaFilm"></h1>
-      <h1 id="discussione"></h1>
+        <h1 id="titoloFilm"></h1>
+        <h1 id="tramaFilm"></h1>
+        <h1 id="discussione"></h1>
     </div>
 
-    <!-- ✏️ MODULI DI INSERIMENTO (nascosti di default) -->
+    <!-- Moduli di inserimento (nascosti di default) -->
     <div class="ins" style="display: none;">
-      <form action="/salvaTitoloLocandina" id="salvaLocandina" method="POST">
-        <input type="text" id="inputTitolo" name="titoloFilm" placeholder="Inserisci il titolo del Film" required>
-        <button class="btn" id="antTit" type="submit">Anteprima Titolo del Film</button>
-      </form>
+        <form action="/salvaTitoloLocandina" id="salvaLocandina" method="POST">
+            <input type="text" id="inputTitolo" name="titoloFilm" placeholder="Inserisci il titolo del Film" required="">
+            <button class="btn" id="antTit" type="submit">Anteprima Titolo del Film</button>
+        </form>
 
-      <form action="/salvaTrama" id="salvaTrama" method="POST">
-        <textarea name="tramaFilm" placeholder="Trama" required></textarea>
-        <button type="submit" id="salTrama">Salva Trama</button>
-      </form>
+        <form action="/salvaTrama" id="salvaTrama" method="POST">
+            <textarea name="tramaFilm" placeholder="Trama" required=""></textarea>
+            <button type="submit" id="salTrama">Salva Trama</button>
+        </form>
 
-      <form action="/salvaDiscussione" id="salvaDiscussione" method="POST">
-        <textarea name="discussione" placeholder="Discussione" required></textarea>
-        <button type="submit" id="salDisc">Salva Discussione</button>
-      </form>
+        <form action="/salvaDiscussione" id="salvaDiscussione" method="POST">
+            <textarea name="discussione" placeholder="Discussione" required=""></textarea>
+            <button type="submit" id="salDisc">Salva Discussione</button>
+        </form>
     </div> 
-  </div>
+</div>
 
-  <!-- 🎯 PULSANTI FINALI -->
-  <div class="azioni-finali">
-    <!-- 💾 SALVA IL FILM -->
-    <form action="/salvaFilm" method="POST" id="formSalva">
-      <button class="btn" type="submit" id="salvaFilm" onclick="mostraPubblica()">Salva il Film</button>
-    </form>
+<script>
+// 1. Gestisce l'apparizione del tasto "Anteprima" quando l'utente seleziona un file dal PC
+function mostraBottone() {
+    const fileInput = document.getElementById('file-input');
+    const btnAnteprima = document.getElementById('btn-anteprima');
     
-    <!-- 📢 PUBBLICA IL FILM -->
-    <form action="/salvaFilmR" method="POST" id="formPubblica" style="display: none;">
-      <button class="btn" type="submit" id="pubblicaFilm">Pubblica il Film!</button>
-    </form>
-  </div>
-
-  <!-- 🚪 LOGOUT -->
-  <form action="/logout" method="POST">
-    <button class="btn" type="submit" id="logout">LogOut</button>
-  </form>
-
-  <!-- 📚 ARCHIVIO CON CHECKBOX -->
-  <input type="checkbox" id="sidebar-archivio">
-  <label for="sidebar-archivio" class="open-archivio">
-    <h1 class="w-archivio">Archivio</h1>
-  </label>
-  <label for="sidebar-archivio" id="overlay-archivio">
-    <div id="archivio">
-      <!-- I film verranno caricati qui -->
-    </div>
-  </label>
-
-  <!-- 📜 JAVASCRIPT -->
-  <script>
-    // 1️⃣ Gestisce l'apparizione del tasto "Anteprima" quando l'utente seleziona un file
-    function mostraBottone() {
-      const fileInput = document.getElementById('file-input');
-      const btnAnteprima = document.getElementById('btn-anteprima');
-      
-      if (fileInput && fileInput.files.length > 0) {
+    if (fileInput && fileInput.files.length > 0) {
         if (btnAnteprima) btnAnteprima.style.display = 'block'; 
-      } else {
+    } else {
         if (btnAnteprima) btnAnteprima.style.display = 'none';
-      }
     }
+}
 
-    // 2️⃣ Controlla AUTOMATICAMENTE se la locandina esiste già al caricamento della pagina
-    window.addEventListener('DOMContentLoaded', () => {
-      const img = document.getElementById('locandina-img');
-      const divIns = document.querySelector('.ins');
-      const formCancella = document.getElementById('form-cancella');
+// 2. Controlla AUTOMATICAMENTE se la locandina esiste già sul server all'apertura della pagina
+window.addEventListener('DOMContentLoaded', () => {
+    const img = document.getElementById('locandina-img');
+    const divIns = document.querySelector('.ins');
 
-      if (img && divIns) {
-        // Verifica se il file sul server è valido
+    if (img && divIns) {
+        // Creiamo un'immagine temporanea in memoria per verificare se il file sul server è valido
         const testImg = new Image();
         testImg.src = img.src;
 
         testImg.onload = function() {
-          // Se l'immagine esiste, mostra i moduli
-          divIns.style.display = 'block';
-          if (formCancella) formCancella.style.display = 'block';
+            // Se l'immagine esiste e viene caricata con successo, mostra i moduli .ins
+            divIns.style.display = 'block';
         };
 
         testImg.onerror = function() {
-          // Se l'immagine non esiste, nasconde i moduli
-          divIns.style.display = 'none';
-          if (formCancella) formCancella.style.display = 'none';
+            // Se l'immagine non esiste (404), i moduli rimangono nascosti
+            divIns.style.display = 'none';
         };
-      }
-
-      // Carica l'archivio
-      caricaArchivio();
-    });
-
-    // 3️⃣ Mostra il nome del file selezionato
-    function mostraFileName() {
-      const fileInput = document.getElementById('file-input');
-      const fileName = document.getElementById('fileName');
-      
-      if (fileInput.files.length > 0) {
-        fileName.textContent = fileInput.files[0].name;
-      } else {
-        fileName.textContent = 'Nessun file selezionato';
-      }
     }
+});
+</script>
 
-    // 4️⃣ Gestisce la visibilità del pulsante "Pubblica"
-    function mostraPubblica() {
-      localStorage.setItem('filmSalvato', 'true');
-    }
 
-    document.addEventListener("DOMContentLoaded", function() {
-      if (localStorage.getItem('filmSalvato') === 'true') {
-        document.getElementById('formPubblica').style.display = 'block';
-      }
-    });
+<!-- Contenitore Pulsanti Finali -->
+<div class="azioni-finali">
+  <!-- Form Salva -->
+  <form action="/salvaFilm" method="POST" id="formSalva">
+    <!-- Al click, esegue la funzione mostraPubblica() -->
+    <button class="btn" type="submit" id="salvaFilm" onclick="mostraPubblica()">Salva il Film</button>
+  </form>
+  
+  <!-- Form Pubblica -->
+  <form action="/salvaFilmR" method="POST" id="formPubblica">
+    <button class="btn" type="submit" id="pubblicaFilm">Pubblica il Film!</button>
+  </form>
+</div>
 
-    document.getElementById('formPubblica').addEventListener('submit', function() {
-      localStorage.removeItem('filmSalvato');
-    });
 
-    // 5️⃣ CARICA I FILM DALL'ARCHIVIO
-    async function caricaArchivio() {
-      try {
-        const response = await fetch('/api/caricalibri');
-        if (!response.ok) throw new Error('Errore nel caricamento archivio');
+  <form action="/logout" method="POST">
+    <button class="btn" type="submit" id="logout">LogOut</button>
+  </form>
+
+  <input type="checkbox" id="sidebar-archivio">
+               <label for="sidebar-archivio" class="open-archivio">
+                 <h1 class="w-archivio">Archivio</h1>
+                 </label>
+            <label for="sidebar-archivio" id="overlay-archivio">
+  <div id="archivio">
+
+    
+
         
-        const data = await response.json();
-        const archivioDiv = document.getElementById('archivio');
-        
-        if (!archivioDiv) {
-          console.error('❌ Elemento #archivio non trovato');
-          return;
-        }
-        
-        if (data.films && data.films.length > 0) {
-          console.log(`✅ Caricati ${data.films.length} film`);
-          
-          let htmlFilms = data.films.reverse().map(film => {
-            const idUnico = `film-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-            
-            return `
-              <div id="${film.dataOggi}" class="film-archiviato" data-folder="${film.folder}">
-                <form action="/modificaInsert/${film.folder}" method="post">
-                  <button type="submit">Modifica ${film.titolo}</button>
+            <div id="29_05_2026" class="film-archiviato" data-folder="gatto-pazzo2">
+                <form action="/modificaInsert/gatto-pazzo2" method="post">
+                    <button type="submit">Modifica gatto pazzo2</button>
                 </form>
                 
-                <h1>${film.titolo}</h1>
-                <h3>Film del ${film.dataOggi.replace(/_/g, '/')}</h3>
-                <input type="checkbox" id="sidebar-${idUnico}">
-                <label for="sidebar-${idUnico}" class="toggle-img">
-                  <img src="${film.locandinaUrl}?w=100&h=150&c=fill" width="100" alt="${film.titolo}">
-                </label>
-                <br>
-                <div class="film-details">
-                  <label for="sidebar-${idUnico}" class="toggle-archivio">
-                    <div class="film-section">
-                      <h4>📖 Trama</h4>
-                      <p>${film.trama.replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\n/g, '<br>')}</p>
-                    </div>
-                    <div class="film-section">
-                      <h4>💬 Discussione</h4>
-                      <p>${film.discussione.replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\n/g, '<br>')}</p>
-                    </div>
-                  </label>
-                </div>
-              </div>
-            `;
-          }).join('');
-          
-          archivioDiv.innerHTML = htmlFilms;
-        } else {
-          archivioDiv.innerHTML = '<p>Nessun film disponibile</p>';
-        }
-      } catch (error) {
-        console.error('❌ Errore caricamento archivio:', error);
-      }
-    }
-  </script>
+    <h1>gatto pazzo2</h1>
+    <h3>Film del 29/05/2026</h3>
+    <input type="checkbox" id="sidebar-film-14-14-07-192">
+    <label for="sidebar-film-14-14-07-192" class="toggle-img">
+        <img src="/images/films/blog/gatto-pazzo2/29_05_2026.jpg?t=1780056891211" width="100">
+    </label>
+    <br>
+    <div class="film-details">
+        <label for="sidebar-film-14-14-07-192" class="toggle-archivio">
 
-</body>
-</html>
+            <div class="film-section">
+                <h4>📖 Trama</h4>
+                <p>orem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since 1966, when designers at Letraset and James Mosley, the librarian at St Bride Printing Library, took a 1914 Cicero translation and scrambled it to make dummy text for Letraset's Body Type sheets. It has survived not only many decades, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised thanks to these sheets and more recently with desktop publishing software including versions of Lorem Ipsum.</p>
+            </div>
+            <div class="film-section">
+                <h4>💬 Discussione</h4>
+                <p>orem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since 1966, when designers at Letraset and James Mosley, the librarian at St Bride Printing Library, took a 1914 Cicero translation and scrambled it to make dummy text for Letraset's Body Type sheets. It has survived not only many decades, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised thanks to these sheets and more recently with desktop publishing software including versions of Lorem Ipsum.</p>
+            </div>
+        </label>
+    </div>
+
+            </div>
+        
+            <div id="29_05_2026" class="film-archiviato" data-folder="riso-2">
+                <form action="/modificaInsert/riso-2" method="post">
+                    <button type="submit">Modifica riso 2</button>
+                </form>
+                
+    <h1>riso 2</h1>
+    <h3>Film del 29/05/2026</h3>
+    <input type="checkbox" id="sidebar-film-14-16-14-888">
+    <label for="sidebar-film-14-16-14-888" class="toggle-img">
+        <img src="/images/films/blog/riso-2/29_05_2026.jpg" width="100">
+    </label>
+    <br>
+    <div class="film-details">
+        <label for="sidebar-film-14-16-14-888" class="toggle-archivio">
+
+            <div class="film-section">
+                <h4>📖 Trama</h4>
+                <p>orem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since 1966, when designers at Letraset and James Mosley, the librarian at St Bride Printing Library, took a 1914 Cicero translation and scrambled it to make dummy text for Letraset's Body Type sheets. It has survived not only many decades, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised thanks to these sheets and more recently with desktop publishing software including versions of Lorem Ipsum.</p>
+            </div>
+            <div class="film-section">
+                <h4>💬 Discussione</h4>
+                <p>orem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since 1966, when designers at Letraset and James Mosley, the librarian at St Bride Printing Library, took a 1914 Cicero translation and scrambled it to make dummy text for Letraset's Body Type sheets. It has survived not only many decades, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised thanks to these sheets and more recently with desktop publishing software including versions of Lorem Ipsum.</p>
+            </div>
+        </label>
+    </div>
+
+            </div>
+        </div>
+            </label>
+        
+           <script>
+function mostraPubblica() {
+    // Salva lo stato nel browser prima del ricaricamento del server
+    localStorage.setItem('filmSalvato', 'true');
+}
+
+// Al caricamento della pagina, controlla se l'utente ha premuto "Salva" in precedenza
+document.addEventListener("DOMContentLoaded", function() {
+    if (localStorage.getItem('filmSalvato') === 'true') {
+        document.getElementById('formPubblica').classList.add('mostra-pubblica');
+    }
+});
+
+// Opzionale: Se vuoi resettare lo stato quando l'utente clicca su "Pubblica"
+document.getElementById('formPubblica').addEventListener('submit', function() {
+    localStorage.removeItem('filmSalvato');
+});
+function mostraFileName() {
+    const fileInput = document.getElementById('file-input');
+    const fileName = document.getElementById('fileName');
+    
+    if (fileInput.files.length > 0) {
+        fileName.textContent = fileInput.files[0].name;
+    } else {
+        fileName.textContent = 'Nessun file selezionato';
+    }
+}
+</script> 
+        
+        
+  
+
+            
+        
+    
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        </body></html>
