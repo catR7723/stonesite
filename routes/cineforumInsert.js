@@ -437,7 +437,7 @@ router.post('/logout', (req, res)=>{
 // ✅ MODIFIED: Takes folderName (slug) as parameter, not title
 router.post('/modificaInsert/:folderName', async (req, res) => {
     try {
-        const folderName = req.params.folderName; // This is already the slug!
+        const folderName = req.params.folderName; 
 
         const cartellaOriginale = path.join(__dirname, '..', 'public', 'images', 'films', 'blog', folderName);
         const cartellaDestinazione = path.join(__dirname, '..', 'public', 'images', 'films', 'blog', 'modify');
@@ -453,14 +453,12 @@ router.post('/modificaInsert/:folderName', async (req, res) => {
             </script>`);
         }
 
-        // Clear modify folder
+        // Svuota e ricrea la cartella modify per i file di testo (.txt)
         try {
             await fs.rm(cartellaDestinazione, { recursive: true, force: true });
         } catch (e) {
             console.warn('Impossibile svuotare modify:', e.message);
         }
-
-        // Create fresh modify folder
         await fs.mkdir(cartellaDestinazione, { recursive: true });
 
         const files = await fs.readdir(cartellaOriginale);
@@ -468,21 +466,33 @@ router.post('/modificaInsert/:folderName', async (req, res) => {
         let tTitolo = folderName; 
         let tTrama = "";
         let tDiscussione = "";
+        let urlLocandinaCloudinary = ""; // <-- Variabile per memorizzare il link Cloudinary
 
+        // 1. Copia i file di testo e gestisci il file JSON di Cloudinary
         for (const file of files) {
             const sorgente = path.join(cartellaOriginale, file);
             let nomeDest = "";
-            if (file.endsWith('.jpg')) nomeDest = 'locandina_modify.jpg';
-            else if (file.startsWith('titolo_film_')) nomeDest = 'titolo_modify.txt';
+            
+            if (file.startsWith('titolo_film_')) nomeDest = 'titolo_modify.txt';
             else if (file.startsWith('tramaFilm_')) nomeDest = 'trama_modify.txt';
             else if (file.startsWith('discussione_')) nomeDest = 'discussione_modify.txt';
+            else if (file === 'locandina.json') {
+                // Se nella cartella del film c'è il file JSON dei metadati, lo leggiamo subito
+                try {
+                    const jsonContenuto = await fs.readFile(sorgente, 'utf-8');
+                    const metadati = JSON.parse(jsonContenuto);
+                    urlLocandinaCloudinary = metadati.url; // Estraiamo il link https://res.cloudinary...
+                } catch (jsonErr) {
+                    console.error("Errore lettura locandina.json:", jsonErr.message);
+                }
+            }
 
             if (nomeDest) {
                 await fs.copyFile(sorgente, path.join(cartellaDestinazione, nomeDest));
             }
         }
 
-        // Lettura sicura dei file
+        // Lettura sicura dei file di testo
         try {
             tTitolo = await fs.readFile(path.join(cartellaDestinazione, 'titolo_modify.txt'), 'utf-8');
         } catch (e) { /* Resta il folderName */ }
@@ -495,11 +505,16 @@ router.post('/modificaInsert/:folderName', async (req, res) => {
             tDiscussione = await fs.readFile(path.join(cartellaDestinazione, 'discussione_modify.txt'), 'utf-8');
         } catch (e) { tDiscussione = "Discussione non trovata."; }
 
+        // Se non è stato trovato un link JSON nel blocco precedente, usiamo un'immagine di backup
+        if (!urlLocandinaCloudinary) {
+            urlLocandinaCloudinary = "/images/placeholder-locandina.jpg"; // Cambialo con un tuo placeholder se vuoi
+        }
+
         const htmlInsert = await fs.readFile(pathHtmlInsert, 'utf-8');
         const $ = cheerio.load(htmlInsert);
         $('#modify').remove();
 
-        // ✅ FIXED: Pass folderName (slug) to salvaModifiche, not title
+        // 2. MODIFICATO: Il tag img punta ora direttamente a urlLocandinaCloudinary
         const nuovoBloccoModify = `
             <div id="modify" style="background: #f0f0f0; padding: 20px; border: 2px solid #333; margin-top: 30px;">
                 <h2>✏️ Area Modifica: ${tTitolo}</h2>
@@ -512,7 +527,8 @@ router.post('/modificaInsert/:folderName', async (req, res) => {
                     <textarea name="nuovaDiscussione" rows="6" style="width: 100%;">${tDiscussione}</textarea>
                     <div style="margin: 15px 0;">
                         <p>Locandina attuale:</p>
-                        <img src="/images/films/blog/modify/locandina_modify.jpg?t=${Date.now()}" width="120" style="border: 1px solid #000">
+                        <!-- Inietta direttamente il link Cloudinary estratto -->
+                        <img src="${urlLocandinaCloudinary}" width="120" style="border: 1px solid #000">
                         <br><br>
                         <label>Sostituisci Locandina (opzionale):</label>
                         <input type="file" name="nuovaLocandina" accept="image/*">
@@ -539,6 +555,7 @@ router.post('/modificaInsert/:folderName', async (req, res) => {
         res.status(500).send("Errore nel caricamento della modifica.");
     }
 });
+
 
 
 
