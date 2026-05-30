@@ -42,12 +42,31 @@ const uploadFilm = upload.fields([
   { name: 'locandina', maxCount: 1 },
 
 ]);
+const deleteAndRedirect = async (filename, res) => {
+    try {
+        const filePath = path.join(__dirname, '../uploads/cineforum', filename);
+        await fs.unlink(filePath);
+        console.log(`Successo: ${filename} rimosso.`);
+    } catch (err) {
+        if (err.code !== 'ENOENT') {
+            console.error(`Errore eliminazione ${filename}:`, err);
+            return res.status(500).send("Errore nel server");
+        }
+    }
+    res.send(`
+    <script>
+      alert("Locandina eliminata con successo!");
+      window.location.href = "/cineforumInsert";
+    </script>
+    `);
+};
 
 router.post('/cineforumInsert', uploadFilm, async (req, res) => {
   try {
-    const files = req.files;
+    // Con upload.fields, il file si trova dentro req.files['nome_campo'][0]
+    const locandina = req.files && req.files['locandina'] ? req.files['locandina'][0] : null;
 
-        if (!files) {
+    if (!locandina) {
       return res.send(`
         <script>
           alert("Errore: Inserisci la Locandina");
@@ -56,31 +75,57 @@ router.post('/cineforumInsert', uploadFilm, async (req, res) => {
       `);
     }
 
- console.log('LOCANDINA:', locandina);
+    console.log('LOCANDINA:', locandina);
 
-const metadata = {
-    public_id: locandina.filename,
-    url: locandina.path
-};
+    const metadata = {
+        public_id: locandina.filename,
+        url: locandina.path
+    };
 
-console.log('METADATA:', metadata);
+    console.log('METADATA:', metadata);
 
-const uploadDir = path.join(__dirname, '../uploads/cineforum');
+    // 1. Salva il file JSON (manteniamo la tua logica esistente)
+    const uploadDir = path.join(__dirname, '../uploads/cineforum');
+    await fs.mkdir(uploadDir, { recursive: true });
 
-await fs.mkdir(uploadDir, { recursive: true });
+    await fs.writeFile(
+        path.join(uploadDir, 'locandina.json'),
+        JSON.stringify(metadata, null, 2)
+    );
+    console.log('locandina.json salvato');
 
-await fs.writeFile(
-    path.join(uploadDir, 'locandina.json'),
-    JSON.stringify(metadata, null, 2)
-);
+            // ============================================================
+    // AGGIORNA DIRETTAMENTE IL FILE IN VIEWS CON CHEERIO
+    // ============================================================
+    try {
+        // PERCORSO ESATTO: Sale da routes e scende in views/html/laboratori
+        const htmlPath = path.join(__dirname, '../views/html/laboratori/cineforum.html');
+        let htmlContent = await fs.readFile(htmlPath, 'utf-8');
 
-console.log('locandina.json salvato');
+        const $ = cheerio.load(htmlContent);
 
-if (!locandina) {
-   return res.send("Errore durante il salvataggio dei file.");
-}
+        // Trova il tag dell'immagine usando l'ID o l'attributo alt
+        const imgTag = $('#locandina-film-settimana').length ? $('#locandina-film-settimana') : $('img[alt="locandina"]');
 
- res.sendFile(path.join(__dirname, '../cineforumInsert.html'));
+        if (imgTag.length) {
+            imgTag.attr('src', metadata.url);       // Inietta l'URL di Cloudinary
+            imgTag.removeAttr('style');              // Rimuove eventuali display: none
+            imgTag.css('display', 'block');          // Si assicura che sia visibile
+            
+            // Scrive le modifiche nel file fisico dentro views
+            await fs.writeFile(htmlPath, $.html(), 'utf-8');
+            console.log("HTML in views aggiornato! Link Cloudinary scritto nel file:", metadata.url);
+        } else {
+            console.log("Attenzione: Non ho trovato il tag img dentro views/html/laboratori/cineforum.html");
+        }
+    } catch (htmlError) {
+        console.error("Errore durante la lettura o scrittura del file in views:", htmlError);
+    }
+    // ============================================================
+
+    
+
+    res.sendFile(path.join(__dirname, '../cineforumInsert.html'));
 
   } catch (error) {
     console.error(error);
@@ -88,32 +133,10 @@ if (!locandina) {
   }
 });
 
-
-
-
-// Funzione universale per eliminare e reindirizzare
-const deleteAndRedirect = async (filename, res) => {
-    try {
-        const filePath = path.join(__dirname, '../uploads/cineforum', filename);
-        await fs.unlink(filePath);
-        console.log(`Successo: ${filename} rimosso.`);
-    } catch (err) {
-        // Ignoriamo solo se il file non esiste già (ENOENT)
-        if (err.code !== 'ENOENT') {
-            console.error(`Errore eliminazione ${filename}:`, err);
-            return res.status(500).send("Errore nel server");
-        }
-    }
-        res.send(`
-        <script>
-          alert("${filename} eliminato con successo!");
-          window.location.href = "/cineforumInsert";
-        </script>
-        `);
-    };
+    
 
 // Rotte specifiche
-router.post('/deleteLocandina', (req, res) => deleteAndRedirect('locandina.jpg', res));
+router.post('/deleteLocandina', (req, res) => deleteAndRedirect('locandina.json', res));
 
 
 //sposta i file da uploads 
