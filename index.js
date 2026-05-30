@@ -48,6 +48,12 @@ app.get('/cineforumInsert', (req, res) => {
 // Usa le rotte definite nel file esterno
 app.use('/', uploadRoutes);
 app.use('/', cineforumRoutes); 
+// Rotta per mostrare la pagina iniziale index.html
+
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
+});
+
 
 // MODIFICATO PER RENDER: Ascolta sulla porta dinamica assegnata dal server
 const PORT = process.env.PORT || 3000;
