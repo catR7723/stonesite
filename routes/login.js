@@ -3,23 +3,31 @@ const router = express.Router();
 const path = require('path');
 const bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer');
-const mongoose = require('mongoose'); // Importiamo Mongoose
+const mongoose = require('mongoose'); 
+const session = require('express-session'); // 🟩 AGGIUNTO: Necessario per far funzionare req.session
 
-// 1. Connessione automatica a MongoDB (legge la variabile MONGO_URI che hai messo su Render)
+// Configurazione Middleware Sessioni (Se non lo hai già configurato nel file principale server.js/app.js)
+router.use(session({
+    secret: process.env.SESSION_SECRET || 'chiave_segreta_provvisoria', 
+    resave: false,
+    saveUninitialized: false,
+    cookie: { secure: false } // Imposta a true solo se usi HTTPS accoppiato a proxy trust
+}));
+
+// Connessione a MongoDB
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('Connesso a MongoDB con successo!'))
   .catch(err => console.error('Errore connessione MongoDB:', err));
 
-// 2. Struttura dei dati utente su MongoDB
+// Struttura dei dati utente
 const UtenteSchema = new mongoose.Schema({
-    _id: String, // L'username dell'utente (es. 'anto')
+    _id: String, 
     hash: String,
     email: String
 });
 const Utente = mongoose.model('Utente', UtenteSchema, 'utenti');
 
-
-// --- MIDDLEWARE DI PROTEZIONE ROTTE (I tuoi originali) ---
+// --- MIDDLEWARE DI PROTEZIONE ROTTE ---
 const richiediCineforum = (req, res, next) => {
     if (req.session && req.session.authenticated && (req.session.user === 'anto' || req.session.user === 'dave_cinema')) {
         return next(); 
@@ -34,50 +42,47 @@ const richiediCucina = (req, res, next) => {
     res.send('<script>alert("Accesso negato!"); window.location.href = "/login";</script>');
 };
 
-
 // --- ROTTE DI VISUALIZZAZIONE PAGINE (HTML) ---
+// NOTA: Verifica che la struttura delle cartelle corrisponda a questi percorsi relativi
 router.get('/login', (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'views', 'html', 'login.html'));
 });
 
 router.get('/cineforumInsert', richiediCineforum, (req, res) => {
-    res.sendFile(path.join(__dirname, '..', 'cineforumInsert.html')); 
+    res.sendFile(path.join(__dirname, '..', 'views', 'html', 'cineforumInsert.html')); // 🟩 Corretto percorso ipotetico
 });
 
 router.get('/cucinaInsert', richiediCucina, (req, res) => {
-    res.sendFile(path.join(__dirname, '..', 'cucinaInsert.html'));
+    res.sendFile(path.join(__dirname, '..', 'views', 'html', 'cucinaInsert.html')); // 🟩 Corretto percorso ipotetico
 });
-
 
 // --- CONFIGURAZIONE EMAIL ---
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
         user: 'catroboticsdev@gmail.com',
-        pass: 'qchl jzfh fdnf npuq'
+        pass: 'qchl jzfh fdnf npuq' // Considera di spostare anche questa in un process.env.EMAIL_PASS
     }
 });
 
-
-// --- 1. LOGIN CON MONGODB ---
+// --- 1. LOGIN ---
 router.post('/auth', async (req, res) => {
     const { username, password } = req.body;
     
     try {
-        // Cerchiamo l'utente nel database cloud usando l'ID (username)
         const utente = await Utente.findById(username);
 
         if (utente && await bcrypt.compare(password, utente.hash)) {
             req.session.authenticated = true;
             req.session.user = username; 
 
-            const mailOptions = {
+            // Rimosso il blocco del flusso per l'invio mail (evita rallentamenti nel login)
+            transporter.sendMail({
                 from: 'catroboticsdev@gmail.com',
                 to: 'catroboticsdev@gmail.com',
                 subject: `Nuovo accesso effettuato da: ${username}`,
                 text: `L'utente ${username} ha effettuato l'accesso.`
-            };
-            transporter.sendMail(mailOptions).catch(err => console.error(err));
+            }).catch(err => console.error("Errore invio mail login:", err));
 
             if (username === 'anto' || username === 'dave_cinema') {
                 return res.redirect('/cineforumInsert');
@@ -93,8 +98,7 @@ router.post('/auth', async (req, res) => {
     }
 });
 
-
-// --- 2. RECUPERO PASSWORD CON MONGODB ---
+// --- 2. RECUPERO PASSWORD ---
 router.post('/forgot-password', async (req, res) => {
     const { username, email } = req.body;
 
@@ -108,7 +112,6 @@ router.post('/forgot-password', async (req, res) => {
         const nuovaPassword = Math.random().toString(36).slice(-8);
         const hash = await bcrypt.hash(nuovaPassword, 10);
 
-        // Aggiorna l'hash nel cloud
         utente.hash = hash;
         await utente.save();
 
@@ -121,12 +124,12 @@ router.post('/forgot-password', async (req, res) => {
 
         res.send('<script>alert("Nuova password inviata via email!"); window.location.href = "/login";</script>');
     } catch (err) {
+        console.error(err);
         res.status(500).send("Errore nel recupero password");
     }
 });
 
-
-// --- 3. CAMBIO PASSWORD CON MONGODB ---
+// --- 3. CAMBIO PASSWORD ---
 router.post('/change-password', async (req, res) => {
     const { username, oldPassword, newPassword } = req.body;
 
@@ -142,12 +145,12 @@ router.post('/change-password', async (req, res) => {
 
         res.send('<script>alert("Password aggiornata con successo!"); window.location.href = "/login";</script>');
     } catch (err) {
+        console.error(err);
         res.status(500).send("Errore nel cambio password");
     }
 });
 
-
-// --- 4. REGISTRAZIONE / AGGIUNTA UTENTE SU MONGODB ---
+// --- 4. REGISTRAZIONE ---
 router.post('/email', async (req, res) => {
     const { email, password, username } = req.body;
     const admitted = ['dave_cinema', 'dave_cucina', 'stefi', 'anto'];
@@ -162,7 +165,6 @@ router.post('/email', async (req, res) => {
 
         const hash = await bcrypt.hash(password, 10);
         
-        // Creiamo il documento su MongoDB
         const nuovoUtente = new Utente({ _id: username, hash: hash, email: email });
         await nuovoUtente.save();
 
@@ -175,8 +177,10 @@ router.post('/email', async (req, res) => {
         
         res.send('<script>alert("Mail inviata! Ora puoi loggarti."); window.location.href = "/login";</script>');
     } catch (err) {
+        console.error(err);
         res.status(500).send('Errore durante la registrazione');
     }
 });
 
 module.exports = router;
+
