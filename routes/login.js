@@ -173,6 +173,7 @@ router.post('/email', async (req, res) => {
         
         res.send('<script>alert("Mail inviata! Ora puoi loggarti."); window.location.href = "/login";</script>');
     } catch (err) {
+        console.error("ERRORE REGISTRAZIONE:", err); // 🟩 AGGIUNGI QUESTO per vederlo nei log di Render
         res.status(500).send('Errore durante la registrazione');
     }
 });
