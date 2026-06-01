@@ -18,6 +18,7 @@
     "start": "node index.js"
   },
   "dependencies": {
+    "@sendgrid/mail": "^8.1.6",
     "accepts": "^2.0.0",
     "ansi-regex": "^5.0.1",
     "ansi-styles": "^4.3.0",

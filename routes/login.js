@@ -2,7 +2,8 @@ const express = require('express');
 const router = express.Router();
 const path = require('path');
 const bcrypt = require('bcrypt');
-const nodemailer = require('nodemailer');
+const sgMail = require('@sendgrid/mail');
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 const mongoose = require('mongoose');
 const crypto = require('crypto');
 
@@ -17,13 +18,21 @@ const UtenteSchema = new mongoose.Schema({
 const Utente = mongoose.model('Utente', UtenteSchema, 'utenti');
 
 // --- CONFIGURAZIONE EMAIL ---
-const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS
+const transporter = {
+    sendMail: async (mailOptions) => {
+        try {
+            await sgMail.send({
+                to: mailOptions.to,
+                from: mailOptions.from || process.env.EMAIL_USER,
+                subject: mailOptions.subject,
+                html: mailOptions.html
+            });
+        } catch (error) {
+            console.error('❌ Errore SendGrid:', error);
+            throw error;
+        }
     }
-});
+};
 
 // Verifica connessione email all'avvio
 transporter.verify((error, success) => {
