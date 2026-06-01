@@ -2,9 +2,17 @@ require('dotenv').config();
 const express = require('express');
 const path = require('path');
 const session = require('express-session');
-const MongoStore = require('connect-mongo'); // 🟩 AGGIUNTO: Per non perdere il login su Render
+const mongoose = require('mongoose'); // 🟩 AGGIUNTO
+const { default: MongoStore } = require('connect-mongo'); 
 
 const app = express();
+
+// 🟩 1. CONNESSIONE UNICA A MONGO (Prende la stringa dal file .env)
+const mongoStringa = process.env.MONGO_URI;
+
+mongoose.connect(mongoStringa)
+  .then(() => console.log('Connesso a MongoDB con successo!'))
+  .catch(err => console.error('Errore connessione MongoDB:', err));
 
 // Middleware di base
 app.use(express.static(path.join(__dirname, 'public')));
@@ -12,46 +20,36 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// 🟩 CONFIGURAZIONE SESSIONE PERSISTENTE SU MONGO
+// 🟩 2. CONFIGURAZIONE SESSIONE PERSISTENTE
 app.use(session({
     secret: process.env.SESSION_SECRET || 'chiave-segreta-molto-sicura',
     resave: false,
     saveUninitialized: false,
-    store: MongoStore.create({
-        mongoUrl: process.env.MONGO_URI, 
-        ttl: 14 * 24 * 60 * 60 // 14 giorni di validità
+    store: MongoStore.create({ 
+        mongoUrl: mongoStringa, 
+        ttl: 14 * 24 * 60 * 60 
     }),
     cookie: { 
-        secure: false, // Lascia false su Render 
-        maxAge: 1000 * 60 * 60 * 24 // 1 giorno
+        secure: false, 
+        maxAge: 1000 * 60 * 60 * 24 
     }
 }));
 
 // --- CARICAMENTO ROTTE ---
-
-// 1. Rotte di autenticazione (Login, Registrazione, Password)
 const loginRouter = require('./routes/login'); 
 app.use('/', loginRouter);
 
-// 2. Altre rotte del tuo sito (Cucina e Cineforum gestione upload/dati)
 const uploadRoutes = require('./routes/cucinaInsert');
 const cineforumRoutes = require('./routes/cineforumInsert');
 app.use('/', uploadRoutes);
 app.use('/', cineforumRoutes); 
 
-// NOTA: Le rotte GET /cucinaInsert e GET /cineforumInsert le gestisce già il tuo file delle rotte!
-// Le abbiamo rimosse da qui per evitare conflitti di codice.
-
-// 3. Pagina iniziale del sito
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-// Avvio del server sulla porta di Render
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server in esecuzione sulla porta ${PORT}`));
-
-
 
 
 

@@ -5,10 +5,7 @@ const bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer');
 const mongoose = require('mongoose'); 
 
-// Connessione automatica a MongoDB
-mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log('Connesso a MongoDB con successo!'))
-  .catch(err => console.error('Errore connessione MongoDB:', err));
+
 
 // Struttura dei dati utente su MongoDB
 const UtenteSchema = new mongoose.Schema({
@@ -59,7 +56,7 @@ const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
         user: 'catroboticsdev@gmail.com',
-        pass: 'qchl jzfh fdnf npuq'
+        pass: 'ovqgwjjhfhjaioii'
     }
 });
 
