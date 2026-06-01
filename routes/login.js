@@ -3,9 +3,11 @@ const router = express.Router();
 const path = require('path');
 const bcrypt = require('bcrypt');
 const sgMail = require('@sendgrid/mail');
-sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 const mongoose = require('mongoose');
 const crypto = require('crypto');
+
+// Configura SendGrid
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 // --- SCHEMA UTENTE ---
 const UtenteSchema = new mongoose.Schema({
@@ -17,31 +19,8 @@ const UtenteSchema = new mongoose.Schema({
 });
 const Utente = mongoose.model('Utente', UtenteSchema, 'utenti');
 
-// --- CONFIGURAZIONE EMAIL ---
-const transporter = {
-    sendMail: async (mailOptions) => {
-        try {
-            await sgMail.send({
-                to: mailOptions.to,
-                from: mailOptions.from || process.env.EMAIL_USER,
-                subject: mailOptions.subject,
-                html: mailOptions.html
-            });
-        } catch (error) {
-            console.error('❌ Errore SendGrid:', error);
-            throw error;
-        }
-    }
-};
-
-// Verifica connessione email all'avvio
-transporter.verify((error, success) => {
-    if (error) {
-        console.error('❌ Errore Email Config:', error);
-    } else {
-        console.log('✅ Email configurata correttamente');
-    }
-});
+// Verifica SendGrid all'avvio
+console.log('✅ SendGrid configurato');
 
 // --- MIDDLEWARE DI PROTEZIONE ROTTE ---
 const richiediCineforum = (req, res, next) => {
@@ -96,9 +75,9 @@ router.post('/auth', async (req, res) => {
             req.session.email = utente.email;
 
             // Invia email di notifica (non blocca il login)
-            transporter.sendMail({
-                from: `"Stone Site" <${process.env.EMAIL_USER}>`,
+            sgMail.send({
                 to: process.env.EMAIL_USER,
+                from: process.env.EMAIL_USER,
                 subject: `🔓 Accesso: ${username}`,
                 html: `<p><b>${username}</b> ha effettuato l'accesso il ${new Date().toLocaleString('it-IT')}</p>`
             }).catch(err => console.error('❌ Errore invio email login:', err));
@@ -137,9 +116,9 @@ router.post('/forgot-password', async (req, res) => {
         await utente.save();
 
         // Invia email con password temporanea
-        await transporter.sendMail({
-            from: `"Stone Site" <${process.env.EMAIL_USER}>`,
+        await sgMail.send({
             to: email,
+            from: process.env.EMAIL_USER,
             subject: '🔑 Recupero Password - Stone Site',
             html: `
                 <div style="font-family: Arial, sans-serif; padding: 20px; background: #f5f5f5; border-radius: 8px;">
@@ -186,9 +165,9 @@ router.post('/change-password', async (req, res) => {
         await utente.save();
 
         // Notifica cambio password
-        await transporter.sendMail({
-            from: `"Stone Site" <${process.env.EMAIL_USER}>`,
+        await sgMail.send({
             to: utente.email,
+            from: process.env.EMAIL_USER,
             subject: '🔐 Password Modificata',
             html: `<p>La tua password è stata modificata con successo il ${new Date().toLocaleString('it-IT')}</p>`
         }).catch(err => console.error('❌ Errore notifica cambio password:', err));
@@ -239,9 +218,9 @@ router.post('/email', async (req, res) => {
         await nuovoUtente.save();
 
         // Invia email di benvenuto
-        await transporter.sendMail({
-            from: `"Stone Site" <${process.env.EMAIL_USER}>`,
+        await sgMail.send({
             to: email,
+            from: process.env.EMAIL_USER,
             subject: '👋 Benvenuto su Stone Site!',
             html: `
                 <div style="font-family: Arial, sans-serif; padding: 20px; background: #f5f5f5; border-radius: 8px;">
@@ -270,4 +249,5 @@ router.post('/email', async (req, res) => {
 });
 
 module.exports = router;
+
 
