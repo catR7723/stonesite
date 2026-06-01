@@ -44,6 +44,7 @@
     "color-convert": "^2.0.1",
     "color-name": "^1.1.4",
     "concat-stream": "^2.0.0",
+    "connect-mongo": "^6.0.0",
     "content-disposition": "^1.1.0",
     "content-type": "^1.0.5",
     "cookie": "^0.7.2",
