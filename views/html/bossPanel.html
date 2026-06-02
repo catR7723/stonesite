@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pannello Boss - Stone Site</title>
+    <link rel="stylesheet" type="text/css" href="/assets/css/bossPanel.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><span class="emoji">👑</span>Pannello Boss</h1>
+            <p>Gestisci gli utenti del sistema Stone Site</p>
+        </div>
+
+        <div id="message" class="message" style="display: none;"></div>
+
+        <!-- SEZIONE ELIMINA UTENTE -->
+        <div class="section">
+            <h2><span class="emoji">🗑️</span>Elimina Utente</h2>
+            <p style="color: #666; margin-bottom: 15px;">Seleziona un utente per eliminarlo definitivamente dal sistema.</p>
+            
+            <div class="form-group">
+                <label for="userSelect">Scegli utente:</label>
+                <select id="userSelect">
+                    <option value="">-- Carica utenti --</option>
+                </select>
+            </div>
+
+            <div id="userDetailsDelete" style="margin-top: 15px;"></div>
+
+            <button class="btn-delete" onclick="eliminaUtente()" style="width: 100%; margin-top: 15px;">
+                🗑️ Elimina Utente Selezionato
+            </button>
+        </div>
+
+        <!-- SEZIONE CREA UTENTE -->
+        <div class="section">
+            <h2><span class="emoji">➕</span>Crea Nuovo Utente</h2>
+            <p style="color: #666; margin-bottom: 15px;">Aggiungi un nuovo utente al sistema.</p>
+
+            <form id="createUserForm" onsubmit="creaUtente(event)">
+                <div class="form-group">
+                    <label for="newUsername">Username:</label>
+                    <input type="text" id="newUsername" placeholder="es. mario_rossi" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="newEmail">Email:</label>
+                    <input type="email" id="newEmail" placeholder="es. mario@example.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="newPassword">Password:</label>
+                    <input type="password" id="newPassword" placeholder="Almeno 6 caratteri" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="newRole">Ruolo:</label>
+                    <select id="newRole" required>
+                        <option value="">-- Seleziona ruolo --</option>
+                        <option value="cineforum">Cineforum</option>
+                        <option value="cucina">Cucina</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn-create" style="width: 100%;">
+                    ➕ Crea Utente
+                </button>
+            </form>
+        </div>
+
+        <div class="loading" id="loading">⏳ Caricamento...</div>
+
+        <!-- LISTA UTENTI -->
+        <div class="section">
+            <h2><span class="emoji">👥</span>Utenti Registrati</h2>
+            <div class="user-list" id="userList">
+                <p style="text-align: center; color: #999;">Caricamento utenti...</p>
+            </div>
+        </div>
+
+        <!-- LOGOUT -->
+        <a href="/logout" style="display: block; text-align: center; margin-top: 30px;">
+            <button class="btn-logout" style="width: 100%;">🚪 Logout</button>
+        </a>
+    </div>
+
+    <script>
+        // Carica lista utenti
+        async function caricaUtenti() {
+            try {
+                setLoading(true);
+                const response = await fetch('/api/utenti');
+                
+                if (!response.ok) {
+                    throw new Error('Errore nel caricamento utenti');
+                }
+
+                const utenti = await response.json();
+                setLoading(false);
+
+                // Popola il select
+                const select = document.getElementById('userSelect');
+                select.innerHTML = '<option value="">-- Seleziona utente --</option>';
+                utenti.forEach(u => {
+                    const option = document.createElement('option');
+                    option.value = u._id;
+                    option.textContent = `${u._id} (${u.role})`;
+                    select.appendChild(option);
+                });
+
+                // Popola la lista visiva
+                const userList = document.getElementById('userList');
+                if (utenti.length === 0) {
+                    userList.innerHTML = '<p style="text-align: center; color: #999;">Nessun utente registrato</p>';
+                    return;
+                }
+
+                userList.innerHTML = utenti.map(u => `
+                    <div class="user-item">
+                        <div class="user-info">
+                            <div class="user-username">👤 ${u._id}</div>
+                            <div class="user-email">✉️ ${u.email}</div>
+                            <span class="user-role ${u.role}">${u.role.toUpperCase()}</span>
+                        </div>
+                        <button class="btn-select" onclick="selezionaUtente('${u._id}')">Seleziona</button>
+                    </div>
+                `).join('');
+
+            } catch (err) {
+                setLoading(false);
+                mostraMessaggio('Errore nel caricamento utenti: ' + err.message, 'error');
+                console.error(err);
+            }
+        }
+
+        // Seleziona utente dal bottone
+        function selezionaUtente(username) {
+            document.getElementById('userSelect').value = username;
+            mostraDettagliUtente();
+            document.querySelector('.section:first-child').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Mostra dettagli utente selezionato
+        function mostraDettagliUtente() {
+            const username = document.getElementById('userSelect').value;
+            const detailsDiv = document.getElementById('userDetailsDelete');
+
+            if (!username) {
+                detailsDiv.innerHTML = '';
+                return;
+            }
+
+            detailsDiv.innerHTML = `
+                <div style="background: #fff3cd; padding: 12px; border-radius: 6px; border-left: 4px solid #ff6b6b;">
+                    <strong>⚠️ Attenzione:</strong> Eliminerai l'utente <strong>${username}</strong> permanentemente.
+                </div>
+            `;
+        }
+
+        // Elimina utente
+        async function eliminaUtente() {
+            const username = document.getElementById('userSelect').value;
+
+            if (!username) {
+                mostraMessaggio('Seleziona un utente da eliminare', 'error');
+                return;
+            }
+
+            if (!confirm(`⚠️ Sei sicuro di voler eliminare ${username}? L'operazione è irreversibile!`)) {
+                return;
+            }
+
+            try {
+                setLoading(true);
+                const response = await fetch(`/api/utenti/${username}`, {
+                    method: 'DELETE'
+                });
+
+                if (!response.ok) {
+                    const data = await response.json();
+                    throw new Error(data.error || 'Errore nell\'eliminazione');
+                }
+
+                const data = await response.json();
+                setLoading(false);
+                mostraMessaggio('✅ ' + data.success, 'success');
+                
+                // Ricarica la lista
+                setTimeout(() => {
+                    document.getElementById('userSelect').value = '';
+                    document.getElementById('userDetailsDelete').innerHTML = '';
+                    caricaUtenti();
+                }, 1000);
+
+            } catch (err) {
+                setLoading(false);
+                mostraMessaggio('Errore: ' + err.message, 'error');
+                console.error(err);
+            }
+        }
+
+        // Crea nuovo utente
+        async function creaUtente(event) {
+            event.preventDefault();
+
+            const username = document.getElementById('newUsername').value.trim();
+            const email = document.getElementById('newEmail').value.trim();
+            const password = document.getElementById('newPassword').value;
+            const role = document.getElementById('newRole').value;
+
+            if (!username || !email || !password || !role) {
+                mostraMessaggio('Tutti i campi sono richiesti', 'error');
+                return;
+            }
+
+            if (password.length < 6) {
+                mostraMessaggio('La password deve avere almeno 6 caratteri', 'error');
+                return;
+            }
+
+            try {
+                setLoading(true);
+                const response = await fetch('/api/utenti', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username, email, password, role })
+                });
+
+                if (!response.ok) {
+                    const data = await response.json();
+                    throw new Error(data.error || 'Errore nella creazione');
+                }
+
+                const data = await response.json();
+                setLoading(false);
+                mostraMessaggio('✅ ' + data.success, 'success');
+                
+                // Resetta form
+                document.getElementById('createUserForm').reset();
+                
+                // Ricarica lista
+                setTimeout(() => caricaUtenti(), 1000);
+
+            } catch (err) {
+                setLoading(false);
+                mostraMessaggio('Errore: ' + err.message, 'error');
+                console.error(err);
+            }
+        }
+
+        // Utility: Mostra messaggio
+        function mostraMessaggio(testo, tipo) {
+            const msgDiv = document.getElementById('message');
+            msgDiv.textContent = testo;
+            msgDiv.className = `message ${tipo}`;
+            msgDiv.style.display = 'block';
+
+            if (tipo === 'success' || tipo === 'info') {
+                setTimeout(() => {
+                    msgDiv.style.display = 'none';
+                }, 4000);
+            }
+        }
+
+        // Utility: Loading
+        function setLoading(active) {
+            document.getElementById('loading').classList.toggle('active', active);
+        }
+
+        // Event listener per select
+        document.getElementById('userSelect').addEventListener('change', mostraDettagliUtente);
+
+        // Carica utenti al caricamento pagina
+        window.addEventListener('load', caricaUtenti);
+    </script>
+</body>
+</html>

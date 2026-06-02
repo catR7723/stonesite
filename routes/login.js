@@ -14,7 +14,7 @@ const UtenteSchema = new mongoose.Schema({
     _id: String, // Username
     hash: String,
     email: String,
-    role: { type: String, enum: ['cineforum', 'cucina'], default: 'cucina' },
+    role: { type: String, enum: ['cineforum', 'cucina', 'boss'], default: 'cucina' },
     createdAt: { type: Date, default: Date.now }
 });
 const Utente = mongoose.model('Utente', UtenteSchema, 'utenti');
@@ -37,6 +37,13 @@ const richiediCucina = (req, res, next) => {
     return res.redirect('/login');
 };
 
+const richiediBoss = (req, res, next) => {
+    if (req.session?.authenticated && req.session.role === 'boss') {
+        return next();
+    }
+    return res.redirect('/login');
+};
+
 // --- ROTTE DI VISUALIZZAZIONE PAGINE ---
 router.get('/login', (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'views', 'html', 'login.html'));
@@ -48,6 +55,10 @@ router.get('/cineforumInsert', richiediCineforum, (req, res) => {
 
 router.get('/cucinaInsert', richiediCucina, (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'cucinaInsert.html'));
+});
+
+router.get('/bossPanel', richiediBoss, (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'views', 'html', 'bossPanel.html'));
 });
 
 router.get('/logout', (req, res) => {
@@ -85,8 +96,10 @@ router.post('/auth', async (req, res) => {
             // Redirect in base al ruolo
             if (utente.role === 'cineforum') {
                 return res.redirect('/cineforumInsert');
-            } else {
+            } else if (utente.role === 'cucina') {
                 return res.redirect('/cucinaInsert');
+            } else if (utente.role === 'boss') {
+                return res.redirect('/bossPanel');
             }
         }
 
@@ -186,7 +199,8 @@ router.post('/email', async (req, res) => {
         'dave_cinema': 'cineforum',
         'anto': 'cineforum',
         'dave_cucina': 'cucina',
-        'stefi': 'cucina'
+        'stefi': 'cucina',
+        'boss': 'boss'
     };
 
     if (!email || !password || !username) {
@@ -248,8 +262,106 @@ router.post('/email', async (req, res) => {
     }
 });
 
+// --- 5. LISTA UTENTI (PER BOSS) ---
+router.get('/api/utenti', richiediBoss, async (req, res) => {
+    try {
+        const utenti = await Utente.find({ role: { $ne: 'boss' } }, '_id email role createdAt');
+        res.json(utenti);
+    } catch (err) {
+        console.error('❌ Errore lettura utenti:', err);
+        res.status(500).json({ error: 'Errore nel recupero utenti' });
+    }
+});
 
+// --- 6. ELIMINA UTENTE (SOLO BOSS) ---
+router.delete('/api/utenti/:username', richiediBoss, async (req, res) => {
+    const { username } = req.params;
+
+    if (username === 'boss') {
+        return res.status(403).json({ error: 'Non puoi eliminare l\'admin!' });
+    }
+
+    try {
+        const utente = await Utente.findByIdAndDelete(username);
+        if (!utente) {
+            return res.status(404).json({ error: 'Utente non trovato' });
+        }
+
+        // Notifica eliminazione
+        await sgMail.send({
+            to: process.env.EMAIL_USER,
+            from: process.env.EMAIL_USER,
+            subject: `🗑️ Utente Eliminato: ${username}`,
+            html: `<p>L'utente <b>${username}</b> è stato eliminato dal sistema il ${new Date().toLocaleString('it-IT')}</p>`
+        }).catch(err => console.error('❌ Errore notifica eliminazione:', err));
+
+        console.log(`✅ Utente ${username} eliminato`);
+        res.json({ success: `Utente ${username} eliminato definitivamente` });
+    } catch (err) {
+        console.error('❌ Errore eliminazione utente:', err);
+        res.status(500).json({ error: 'Errore nell\'eliminazione utente' });
+    }
+});
+
+// --- 7. CREA NUOVO UTENTE (SOLO BOSS) ---
+router.post('/api/utenti', richiediBoss, async (req, res) => {
+    const { username, email, password, role } = req.body;
+
+    if (!username || !email || !password || !role) {
+        return res.status(400).json({ error: 'Tutti i campi sono richiesti' });
+    }
+
+    if (!['cineforum', 'cucina'].includes(role)) {
+        return res.status(400).json({ error: 'Ruolo non valido' });
+    }
+
+    try {
+        const utenteEsistente = await Utente.findById(username);
+        if (utenteEsistente) {
+            return res.status(409).json({ error: 'Username già esistente' });
+        }
+
+        const hash = await bcrypt.hash(password, 10);
+        const nuovoUtente = new Utente({
+            _id: username,
+            hash: hash,
+            email: email,
+            role: role
+        });
+        await nuovoUtente.save();
+
+        // Invia email di benvenuto
+        await sgMail.send({
+            to: email,
+            from: process.env.EMAIL_USER,
+            subject: '👋 Benvenuto su Stone Site!',
+            html: `
+                <div style="font-family: Arial, sans-serif; padding: 20px; background: #f5f5f5; border-radius: 8px;">
+                    <h2>Benvenuto su Stone Site! 🎉</h2>
+                    <p>Sei stato aggiunto al sistema da un amministratore.</p>
+                    <h3>I tuoi dati di accesso:</h3>
+                    <ul style="background: #fff; padding: 15px; border-left: 4px solid #28a745; border-radius: 4px;">
+                        <li><b>Username:</b> ${username}</li>
+                        <li><b>Password:</b> ${password}</li>
+                        <li><b>Ruolo:</b> ${role}</li>
+                    </ul>
+                    <p>⚠️ <b>Ti consigliamo di cambiarla dopo il primo accesso!</b></p>
+                    <p><a href="${process.env.APP_URL || 'http://localhost:3000'}/login" style="display: inline-block; padding: 10px 20px; background: #007bff; color: white; text-decoration: none; border-radius: 4px;">Accedi Ora</a></p>
+                    <hr>
+                    <p style="color: #666; font-size: 12px;">Se non sei stato aggiunto, ignora questo messaggio.</p>
+                </div>
+            `
+        }).catch(err => console.error('❌ Errore invio email:', err));
+
+        console.log(`✅ Utente ${username} creato da boss`);
+        res.json({ success: 'Utente creato con successo!' });
+    } catch (err) {
+        console.error('❌ Errore creazione utente:', err);
+        res.status(500).json({ error: 'Errore nella creazione utente' });
+    }
+});
 
 module.exports = router;
+
 
 
