@@ -19,8 +19,43 @@ const UtenteSchema = new mongoose.Schema({
 });
 const Utente = mongoose.model('Utente', UtenteSchema, 'utenti');
 
+// --- SCHEMA UTENTI AUTORIZZATI ---
+const UtenteAutorizzatoSchema = new mongoose.Schema({
+    _id: String, // Username
+    role: { type: String, enum: ['cineforum', 'cucina', 'boss'], required: true },
+    createdAt: { type: Date, default: Date.now }
+});
+const UtenteAutorizzato = mongoose.model('UtenteAutorizzato', UtenteAutorizzatoSchema, 'utenti_autorizzati');
+
 // Verifica SendGrid all'avvio
 console.log('✅ SendGrid configurato');
+
+// --- INIZIALIZZAZIONE UTENTI AUTORIZZATI ---
+const initializeAuthorizedUsers = async () => {
+    try {
+        const authorizedUsers = [
+            { _id: 'dave_cinema', role: 'cineforum' },
+            { _id: 'anto', role: 'cineforum' },
+            { _id: 'dave_cucina', role: 'cucina' },
+            { _id: 'stefi', role: 'cucina' },
+            { _id: 'boss', role: 'boss' }
+        ];
+
+        for (const user of authorizedUsers) {
+            await UtenteAutorizzato.findByIdAndUpdate(
+                user._id,
+                user,
+                { upsert: true }
+            );
+        }
+        console.log('✅ Utenti autorizzati inizializzati');
+    } catch (err) {
+        console.error('❌ Errore inizializzazione utenti autorizzati:', err);
+    }
+};
+
+// Chiama l'inizializzazione
+initializeAuthorizedUsers();
 
 // --- MIDDLEWARE DI PROTEZIONE ROTTE ---
 const richiediCineforum = (req, res, next) => {
@@ -195,21 +230,15 @@ router.post('/change-password', async (req, res) => {
 // --- 4. REGISTRAZIONE / AGGIUNTA UTENTE SU MONGODB ---
 router.post('/email', async (req, res) => {
     const { email, password, username } = req.body;
-    const admittedUsers = {
-        'dave_cinema': 'cineforum',
-        'anto': 'cineforum',
-        'dave_cucina': 'cucina',
-        'stefi': 'cucina',
-        'boss': 'boss'
-    };
 
     if (!email || !password || !username) {
         return res.status(400).json({ error: 'Tutti i campi sono richiesti' });
     }
 
     try {
-        // Verifica autorizzazione
-        if (!admittedUsers[username]) {
+        // Verifica autorizzazione dalla collezione utenti_autorizzati
+        const utenteAutorizzato = await UtenteAutorizzato.findById(username);
+        if (!utenteAutorizzato) {
             return res.status(403).json({ error: 'Username non autorizzato!' });
         }
 
@@ -227,7 +256,7 @@ router.post('/email', async (req, res) => {
             _id: username,
             hash: hash,
             email: email,
-            role: admittedUsers[username]
+            role: utenteAutorizzato.role
         });
         await nuovoUtente.save();
 
@@ -282,10 +311,14 @@ router.delete('/api/utenti/:username', richiediBoss, async (req, res) => {
     }
 
     try {
+        // Elimina dalla collezione utenti
         const utente = await Utente.findByIdAndDelete(username);
         if (!utente) {
             return res.status(404).json({ error: 'Utente non trovato' });
         }
+
+        // Elimina dalla collezione utenti_autorizzati
+        await UtenteAutorizzato.findByIdAndDelete(username);
 
         // Notifica eliminazione
         await sgMail.send({
@@ -295,7 +328,7 @@ router.delete('/api/utenti/:username', richiediBoss, async (req, res) => {
             html: `<p>L'utente <b>${username}</b> è stato eliminato dal sistema il ${new Date().toLocaleString('it-IT')}</p>`
         }).catch(err => console.error('❌ Errore notifica eliminazione:', err));
 
-        console.log(`✅ Utente ${username} eliminato`);
+        console.log(`✅ Utente ${username} eliminato definitivamente`);
         res.json({ success: `Utente ${username} eliminato definitivamente` });
     } catch (err) {
         console.error('❌ Errore eliminazione utente:', err);
@@ -316,12 +349,29 @@ router.post('/api/utenti', richiediBoss, async (req, res) => {
     }
 
     try {
-        const utenteEsistente = await Utente.findById(username);
-        if (utenteEsistente) {
-            return res.status(409).json({ error: 'Username già esistente' });
+        // Verifica se username esiste già nella collezione utenti_autorizzati
+        const utenteAutorizzatoEsistente = await UtenteAutorizzato.findById(username);
+        if (utenteAutorizzatoEsistente) {
+            return res.status(409).json({ error: 'Username già autorizzato' });
         }
 
+        // Verifica se utente esiste nella collezione utenti
+        const utenteEsistente = await Utente.findById(username);
+        if (utenteEsistente) {
+            return res.status(409).json({ error: 'Username già registrato' });
+        }
+
+        // Crea nella collezione utenti_autorizzati
+        const nuovoUtenteAutorizzato = new UtenteAutorizzato({
+            _id: username,
+            role: role
+        });
+        await nuovoUtenteAutorizzato.save();
+
+        // Hash della password
         const hash = await bcrypt.hash(password, 10);
+
+        // Crea nella collezione utenti
         const nuovoUtente = new Utente({
             _id: username,
             hash: hash,
@@ -362,6 +412,7 @@ router.post('/api/utenti', richiediBoss, async (req, res) => {
 });
 
 module.exports = router;
+
 
 
 
