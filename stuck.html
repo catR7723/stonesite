@@ -1,0 +1,70 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inserisci la Ricetta</title>
+    <script src="/assets/js/cucinaInsert.js"></script>
+    <link rel="stylesheet" href="/assets/css/centrocss/cucinaInsert.css">
+</head>
+<body>
+
+<div id="recipe-title-section">
+  <input type="text" id="recipeTitle" placeholder="Inserisci il titolo del menu della settimana" value="">
+  <p id="titleStatus">Titolo: <strong id="currentTitle">-</strong></p>
+</div>
+
+<form action="/cucinaInsert" method="POST" enctype="multipart/form-data" id="topForm">
+  <input type="hidden" name="recipeTitle" id="recipeTitle_hidden">
+  
+  <div>
+    <label>Carica il Primo:</label>
+    <input type="file" name="primo">
+  </div>
+  
+  <div>
+    <label>Carica il Secondo:</label>
+    <input type="file" name="secondo">
+  </div>
+  
+  <div>
+    <label>Carica il Contorno:</label>
+    <input type="file" name="contorno">
+  </div>
+
+  <div>
+    <label>Carica pdf della ricetta:</label>
+    <input type="file" name="ricetta">
+  </div>
+
+  <button type="submit">Anteprima Immagini</button>
+</form>
+
+
+
+<script>
+const recipeTitle = document.getElementById('recipeTitle');
+const titleStatus = document.getElementById('currentTitle');
+const hiddenField = document.getElementById('recipeTitle_hidden');
+
+recipeTitle.addEventListener('input', (e) => {
+  const title = e.target.value || 'menu_' + Date.now();
+  titleStatus.textContent = title;
+  
+  // Aggiorna tutti i form nascosti
+  document.querySelectorAll('input[name="recipeTitle"]').forEach(input => {
+    input.value = title;
+  });
+});
+
+// Inizializza il titolo
+document.addEventListener('DOMContentLoaded', () => {
+  const initialTitle = 'menu_' + Date.now();
+  recipeTitle.value = initialTitle;
+  titleStatus.textContent = initialTitle;
+  document.querySelectorAll('input[name="recipeTitle"]').forEach(input => {
+    input.value = initialTitle;
+  });
+});
+</script>
+
+</body>
+</html>

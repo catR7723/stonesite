@@ -1,45 +1,61 @@
-
 const express = require('express');
 const router = express.Router();
 const multer = require('multer');
 const sharp = require('sharp');
 const path = require('path');
-const cheerio = require ('cheerio'); 
+const cheerio = require('cheerio'); 
 const fs = require('fs/promises');
+const cloudinary = require('cloudinary').v2;
+const Recipe = require('../models/Recipe');
 
+// Configurazione Cloudinary
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET
+});
 
-
-
+// ===== ROTTE DI VISUALIZZAZIONE =====
 router.get('/centro', (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'views', 'html', 'centro.html'));
 });
+
 router.get('/cucinaInsert', (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'cucinaInsert.html'));
 });
+
 router.get('/cineforumInsert', (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'cineforumInsert.html'));
 });
+
 router.get('/stone', (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'index.html'));
 });
+
 router.get('/cucina', (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'views', 'html', 'cucina.html'));
 });
+
 router.get('/chi_siamo', (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'views', 'html', 'chi_siamo.html'));
 });
+
 router.get('/cicala', (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'views', 'html', 'cicala.html'));
 });
+
 router.get('/menu', (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'views', 'html', 'menu.html'));
 });
+
 router.get('/soliShop', (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'views', 'html', 'solishop.html'));
 });
+
 router.get('/soon_ava', (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'views', 'html', 'soon_ava.html'));
 });
+
 router.get('/virtualCity', (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'views', 'html', 'virtualcity.html'));
 });
@@ -47,36 +63,45 @@ router.get('/virtualCity', (req, res) => {
 router.get('/artistico', (req, res) => {
     res.sendFile(path.join(__dirname, '../views/html/laboratori/artistico.html'));
 });
+
 router.get('/cineforum', (req, res) => {
     res.sendFile(path.join(__dirname, '../views/html/laboratori/cineforum.html'));
 });
+
 router.get('/ginnastica', (req, res) => {
     res.sendFile(path.join(__dirname, '../views/html/laboratori/ginnastica.html'));
 });
+
 router.get('/informatica', (req, res) => {
     res.sendFile(path.join(__dirname, '../views/html/laboratori/informatica.html'));
 });
+
 router.get('/lettura', (req, res) => {
     res.sendFile(path.join(__dirname, '../views/html/laboratori/lettura.html'));
 });
+
 router.get('/musica_passiva', (req, res) => {
     res.sendFile(path.join(__dirname, '../views/html/laboratori/musica_passiva.html'));
 });
+
 router.get('/musicoterapia', (req, res) => {
     res.sendFile(path.join(__dirname, '../views/html/laboratori/musicoterapia.html'));
 });
+
 router.get('/piscina', (req, res) => {
     res.sendFile(path.join(__dirname, '../views/html/laboratori/piscina.html'));
 });
+
 router.get('/scrittura', (req, res) => {
     res.sendFile(path.join(__dirname, '../views/html/laboratori/scrittura.html'));
 });
+
 router.get('/walking', (req, res) => {
     res.sendFile(path.join(__dirname, '../views/html/laboratori/walking.html'));
 });
 
+// ===== UPLOAD IMMAGINI =====
 
-// Usiamo la memoria per elaborare il file prima di salvarlo
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
@@ -90,389 +115,587 @@ const uploadCucina = upload.fields([
 router.post('/cucinaInsert', uploadCucina, async (req, res) => {
   try {
     const files = req.files;
+    const recipeTitle = req.body.recipeTitle || 'menu_' + Date.now();
 
-        if (!files || !files['primo'] || !files['secondo'] || !files['contorno'] || !files['ricetta']) {
-      return res.send(`
-        <script>
-          alert("Errore: Tutti i campi (primo, secondo, contorno e ricetta) sono obbligatori!");
-          window.history.back();
-        </script>
-      `);
+    if (!files || !files['primo'] || !files['secondo'] || !files['contorno'] || !files['ricetta']) {
+      return res.status(400).json({ success: false, error: 'Tutti i campi sono obbligatori' });
     }
 
     const ricettaFile = files['ricetta'][0];
     const isPdf = ricettaFile.mimetype === 'application/pdf' || ricettaFile.originalname.toLowerCase().endsWith('.pdf');
 
     if (!isPdf) {
+      return res.status(400).json({ success: false, error: 'Il file della ricetta deve essere un PDF' });
+    }
+
+    const uploadToCloudinary = async (fileBuffer, fileName, resourceType = 'image') => {
+      return new Promise((resolve, reject) => {
+        const uploadStream = cloudinary.uploader.upload_stream({
+          resource_type: resourceType,
+          public_id: `cucina/${recipeTitle}/${fileName.replace(/\.[^.]+$/, '')}`,
+          folder: `cucina/${recipeTitle}`
+        }, (error, result) => {
+          if (error) reject(error);
+          else resolve(result);
+        });
+        
+        uploadStream.end(fileBuffer);
+      });
+    };
+
+    const [primoResult, secondoResult, contornoResult, ricettaResult] = await Promise.all([
+      uploadToCloudinary(files['primo'][0].buffer, 'primo.jpg', 'image'),
+      uploadToCloudinary(files['secondo'][0].buffer, 'secondo.jpg', 'image'),
+      uploadToCloudinary(files['contorno'][0].buffer, 'contorno.jpg', 'image'),
+      uploadToCloudinary(files['ricetta'][0].buffer, 'ricetta.pdf', 'raw')
+    ]);
+
+    let recipe = await Recipe.findOne({ title: recipeTitle });
+    
+    if (!recipe) {
+      recipe = new Recipe({
+        title: recipeTitle,
+        primo: { imageUrl: primoResult.secure_url },
+        secondo: { imageUrl: secondoResult.secure_url },
+        contorno: { imageUrl: contornoResult.secure_url },
+        ricetta: { pdfUrl: ricettaResult.secure_url }
+      });
+    } else {
+      recipe.primo.imageUrl = primoResult.secure_url;
+      recipe.secondo.imageUrl = secondoResult.secure_url;
+      recipe.contorno.imageUrl = contornoResult.secure_url;
+      recipe.ricetta.pdfUrl = ricettaResult.secure_url;
+    }
+    
+    await recipe.save();
+
+    res.json({ success: true });
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// ===== LOGOUT =====
+
+router.post('/logout', (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      console.log('errore', err);
+      return res.redirect('/cucinaInsert');
+    }
+    res.clearCookie('connect.sid');
+    res.redirect('/login');
+  });
+});
+
+// ===== GET RECIPE =====
+
+router.get('/api/recipe/:title', async (req, res) => {
+  try {
+    const title = req.params.title;
+    const recipe = await Recipe.findOne({ title: title });
+    
+    if (!recipe) {
+      return res.status(404).json({ error: 'Ricetta non trovata' });
+    }
+    
+    res.json(recipe);
+  } catch (error) {
+    console.error('Errore nel recupero della ricetta:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// ===== SALVA PRIMO =====
+
+router.post('/salvaPrimo', async (req, res) => {
+  try {
+    const { recipeTitle, titolo_Primo, ingredienti_Primo, descrizione_Primo } = req.body;
+
+    let recipe = await Recipe.findOne({ title: recipeTitle });
+    if (!recipe) {
+      recipe = new Recipe({ 
+        title: recipeTitle,
+        primo: {},
+        secondo: {},
+        contorno: {},
+        ricetta: {}
+      });
+    }
+
+    recipe.primo = {
+      ...recipe.primo,
+      titolo: titolo_Primo,
+      ingredienti: ingredienti_Primo,
+      descrizione: descrizione_Primo
+    };
+    recipe.updatedAt = new Date();
+    await recipe.save();
+
+    res.json({ success: true });
+  } catch (error) {
+    console.error('Errore:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// ===== SALVA SECONDO =====
+
+router.post('/salvaSecondo', async (req, res) => {
+  try {
+    const { recipeTitle, titolo_Secondo, ingredienti_Secondo, descrizione_Secondo } = req.body;
+
+    let recipe = await Recipe.findOne({ title: recipeTitle });
+    if (!recipe) {
+      recipe = new Recipe({ 
+        title: recipeTitle,
+        primo: {},
+        secondo: {},
+        contorno: {},
+        ricetta: {}
+      });
+    }
+
+    recipe.secondo = {
+      ...recipe.secondo,
+      titolo: titolo_Secondo,
+      ingredienti: ingredienti_Secondo,
+      descrizione: descrizione_Secondo
+    };
+    recipe.updatedAt = new Date();
+    await recipe.save();
+
+    res.json({ success: true });
+  } catch (error) {
+    console.error('Errore:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// ===== SALVA CONTORNO =====
+
+router.post('/salvaContorno', async (req, res) => {
+  try {
+    const { recipeTitle, titolo_Contorno, ingredienti_Contorno, descrizione_Contorno } = req.body;
+
+    let recipe = await Recipe.findOne({ title: recipeTitle });
+    if (!recipe) {
+      recipe = new Recipe({ 
+        title: recipeTitle,
+        primo: {},
+        secondo: {},
+        contorno: {},
+        ricetta: {}
+      });
+    }
+
+    recipe.contorno = {
+      ...recipe.contorno,
+      titolo: titolo_Contorno,
+      ingredienti: ingredienti_Contorno,
+      descrizione: descrizione_Contorno
+    };
+    recipe.updatedAt = new Date();
+    await recipe.save();
+
+    res.json({ success: true });
+  } catch (error) {
+    console.error('Errore:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// ===== DELETE IMMAGINE PRIMO =====
+
+router.post('/deleteImmaginePrimo', async (req, res) => {
+  try {
+    const { recipeTitle } = req.body;
+    
+    try {
+      await cloudinary.uploader.destroy(`cucina/${recipeTitle}/primo`, { resource_type: 'image' });
+    } catch (err) {
+      console.log('Immagine primo non trovata');
+    }
+    
+    let recipe = await Recipe.findOne({ title: recipeTitle });
+    if (recipe) {
+      recipe.primo = {
+        ...recipe.primo,
+        imageUrl: ''
+      };
+      await recipe.save();
+    }
+    
+    res.json({ success: true, message: 'Immagine primo eliminata!' });
+  } catch (error) {
+    console.error('Errore:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// ===== DELETE IMMAGINE SECONDO =====
+
+router.post('/deleteImmmagineSecondo', async (req, res) => {
+  try {
+    const { recipeTitle } = req.body;
+    
+    try {
+      await cloudinary.uploader.destroy(`cucina/${recipeTitle}/secondo`, { resource_type: 'image' });
+    } catch (err) {
+      console.log('Immagine secondo non trovata');
+    }
+    
+    let recipe = await Recipe.findOne({ title: recipeTitle });
+    if (recipe) {
+      recipe.secondo = {
+        ...recipe.secondo,
+        imageUrl: ''
+      };
+      await recipe.save();
+    }
+    
+    res.json({ success: true, message: 'Immagine secondo eliminata!' });
+  } catch (error) {
+    console.error('Errore:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// ===== DELETE IMMAGINE CONTORNO =====
+
+router.post('/deleteImmmagineContorno', async (req, res) => {
+  try {
+    const { recipeTitle } = req.body;
+    
+    try {
+      await cloudinary.uploader.destroy(`cucina/${recipeTitle}/contorno`, { resource_type: 'image' });
+    } catch (err) {
+      console.log('Immagine contorno non trovata');
+    }
+    
+    let recipe = await Recipe.findOne({ title: recipeTitle });
+    if (recipe) {
+      recipe.contorno = {
+        ...recipe.contorno,
+        imageUrl: ''
+      };
+      await recipe.save();
+    }
+    
+    res.json({ success: true, message: 'Immagine contorno eliminata!' });
+  } catch (error) {
+    console.error('Errore:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// ===== UPLOAD SINGOLA IMMAGINE =====
+
+const uploadSingleImage = upload.single('immagine');
+
+// Upload nuova immagine Primo
+router.post('/uploadNuovaImmaginePrimo', uploadSingleImage, async (req, res) => {
+  try {
+    const { recipeTitle } = req.body;
+
+    if (!req.file) {
+      return res.status(400).json({ error: 'Nessuna immagine fornita' });
+    }
+
+    const uploadToCloudinary = async (fileBuffer, fileName) => {
+      return new Promise((resolve, reject) => {
+        const uploadStream = cloudinary.uploader.upload_stream({
+          resource_type: 'image',
+          public_id: `cucina/${recipeTitle}/${fileName.replace(/\.[^.]+$/, '')}`,
+          folder: `cucina/${recipeTitle}`
+        }, (error, result) => {
+          if (error) reject(error);
+          else resolve(result);
+        });
+        
+        uploadStream.end(fileBuffer);
+      });
+    };
+
+    const result = await uploadToCloudinary(req.file.buffer, 'primo.jpg');
+
+    let recipe = await Recipe.findOne({ title: recipeTitle });
+    if (recipe) {
+      recipe.primo = {
+        ...recipe.primo,
+        imageUrl: result.secure_url
+      };
+      await recipe.save();
+    }
+
+    res.json({ success: true, imageUrl: result.secure_url });
+  } catch (error) {
+    console.error('Errore:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Upload nuova immagine Secondo
+router.post('/uploadNuovaImmmagineSecondo', uploadSingleImage, async (req, res) => {
+  try {
+    const { recipeTitle } = req.body;
+
+    if (!req.file) {
+      return res.status(400).json({ error: 'Nessuna immagine fornita' });
+    }
+
+    const uploadToCloudinary = async (fileBuffer, fileName) => {
+      return new Promise((resolve, reject) => {
+        const uploadStream = cloudinary.uploader.upload_stream({
+          resource_type: 'image',
+          public_id: `cucina/${recipeTitle}/${fileName.replace(/\.[^.]+$/, '')}`,
+          folder: `cucina/${recipeTitle}`
+        }, (error, result) => {
+          if (error) reject(error);
+          else resolve(result);
+        });
+        
+        uploadStream.end(fileBuffer);
+      });
+    };
+
+    const result = await uploadToCloudinary(req.file.buffer, 'secondo.jpg');
+
+    let recipe = await Recipe.findOne({ title: recipeTitle });
+    if (recipe) {
+      recipe.secondo = {
+        ...recipe.secondo,
+        imageUrl: result.secure_url
+      };
+      await recipe.save();
+    }
+
+    res.json({ success: true, imageUrl: result.secure_url });
+  } catch (error) {
+    console.error('Errore:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Upload nuova immagine Contorno
+router.post('/uploadNuovaImmmagineContorno', uploadSingleImage, async (req, res) => {
+  try {
+    const { recipeTitle } = req.body;
+
+    if (!req.file) {
+      return res.status(400).json({ error: 'Nessuna immagine fornita' });
+    }
+
+    const uploadToCloudinary = async (fileBuffer, fileName) => {
+      return new Promise((resolve, reject) => {
+        const uploadStream = cloudinary.uploader.upload_stream({
+          resource_type: 'image',
+          public_id: `cucina/${recipeTitle}/${fileName.replace(/\.[^.]+$/, '')}`,
+          folder: `cucina/${recipeTitle}`
+        }, (error, result) => {
+          if (error) reject(error);
+          else resolve(result);
+        });
+        
+        uploadStream.end(fileBuffer);
+      });
+    };
+
+    const result = await uploadToCloudinary(req.file.buffer, 'contorno.jpg');
+
+    let recipe = await Recipe.findOne({ title: recipeTitle });
+    if (recipe) {
+      recipe.contorno = {
+        ...recipe.contorno,
+        imageUrl: result.secure_url
+      };
+      await recipe.save();
+    }
+
+    res.json({ success: true, imageUrl: result.secure_url });
+  } catch (error) {
+    console.error('Errore:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// ===== CANCELLA PRIMO DAL FORM (Step 3) =====
+
+router.post('/deletePrimoFinal', async (req, res) => {
+  try {
+    const { recipeTitle } = req.body;
+    
+    let recipe = await Recipe.findOne({ title: recipeTitle });
+    if (recipe) {
+      recipe.primo = {
+        titolo: '',
+        ingredienti: '',
+        descrizione: '',
+        imageUrl: recipe.primo?.imageUrl || ''
+      };
+      await recipe.save();
+    }
+    
+    res.json({ success: true, step: 3 });
+  } catch (error) {
+    console.error('Errore:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// ===== CANCELLA SECONDO DAL FORM (Step 4) =====
+
+router.post('/deleteSecondoFinal', async (req, res) => {
+  try {
+    const { recipeTitle } = req.body;
+    
+    let recipe = await Recipe.findOne({ title: recipeTitle });
+    if (recipe) {
+      recipe.secondo = {
+        titolo: '',
+        ingredienti: '',
+        descrizione: '',
+        imageUrl: recipe.secondo?.imageUrl || ''
+      };
+      await recipe.save();
+    }
+    
+    res.json({ success: true, step: 4 });
+  } catch (error) {
+    console.error('Errore:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// ===== CANCELLA CONTORNO DAL FORM (Step 5) =====
+
+router.post('/deleteContornoFinal', async (req, res) => {
+  try {
+    const { recipeTitle } = req.body;
+    
+    let recipe = await Recipe.findOne({ title: recipeTitle });
+    if (recipe) {
+      recipe.contorno = {
+        titolo: '',
+        ingredienti: '',
+        descrizione: '',
+        imageUrl: recipe.contorno?.imageUrl || ''
+      };
+      await recipe.save();
+    }
+    
+    res.json({ success: true, step: 5 });
+  } catch (error) {
+    console.error('Errore:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// ===== DELETE RICETTA PDF =====
+
+router.post('/deleteRicettaFinal', async (req, res) => {
+  try {
+    const { recipeTitle } = req.body;
+    
+    try {
+      await cloudinary.uploader.destroy(`cucina/${recipeTitle}/ricetta`, { resource_type: 'raw' });
+    } catch (err) {
+      console.log('PDF ricetta non trovato');
+    }
+    
+    let recipe = await Recipe.findOne({ title: recipeTitle });
+    if (recipe) {
+      recipe.ricetta = {
+        pdfUrl: ''
+      };
+      await recipe.save();
+    }
+    
+    res.json({ success: true, message: 'Ricetta eliminata con successo!' });
+  } catch (error) {
+    console.error('Errore:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// ===== SALVA MENU =====
+
+router.post('/salvaMenu', async (req, res) => {
+  try {
+    const recipeTitle = req.body.recipeTitle || 'menu_' + Date.now();
+    
+    const recipe = await Recipe.findOne({ title: recipeTitle });
+    
+    if (!recipe) {
       return res.send(`
         <script>
-          alert("Errore: Il file della ricetta deve essere un PDF!");
+          alert("Errore: Ricetta non trovata!");
           window.history.back();
         </script>
       `);
     }
 
+    recipe.savedAt = new Date();
+    await recipe.save();
 
-        // Gestione PDF: mantiene nome originale completo (es. ricetta-nonna.pdf)
-    const saveAsPdf = async (fileArray, fileName) => {
-      if (fileArray && fileArray[0]) {
-        const file = fileArray[0];
-        // Usiamo il nome originale completo fornito dal browser
-        const finalPath = path.join('uploads', fileName);
-        // Scrittura diretta del buffer (usa fs.promises.writeFile)
-        await fs.writeFile(finalPath, file.buffer);
-        return finalPath;
-      }
-      return null;
-    };
-
-        // Gestione Immagini: mantiene nome originale + .jpg
-const saveAsJpeg = async (fileArray, fileName) => {
-   
-    if (fileArray && fileArray[0]) {
-        const file = fileArray[0]; // Estraiamo il singolo file dall'array di Multer
-        
-        // 2. Costruiamo il percorso ASSOLUTO (importante!)
-       
-        const finalPath = path.join(__dirname, '../uploads', fileName);
-
-        try {
-            
-            await sharp(file.buffer)
-                .toFormat('jpeg')
-                .jpeg({ quality: 90 }) // Opzionale: garantisce la compressione corretta
-                .toFile(finalPath);
-            
-            console.log(`Successo: ${fileName} salvato in JPEG`);
-            return finalPath;
-        } catch (err) {
-            console.error(`Errore Sharp su ${fileName}:`, err.message);
-            throw err;
-        }
-    } else {
-        console.log(`Avviso: fileArray per ${fileName} è vuoto o non definito`);
-        return null;
-    }
-};
-
-
-
-    // Eseguiamo le operazioni per tutti i campi
-    await Promise.all([
-      saveAsJpeg(files['primo'], 'primo.jpg'),
-      saveAsJpeg(files['secondo'], 'secondo.jpg'),
-      saveAsJpeg(files['contorno'], 'contorno.jpg'),
-      saveAsPdf(files['ricetta'], 'ricetta.pdf')
-    ]);
-  
-    res.sendFile(path.join(__dirname, '../cucinaInsert.html'));
+    res.send(`
+      <script>
+        alert("Menu salvato con successo in cucina/${recipeTitle}!");
+        window.location.href = "/cucinaInsert";
+      </script>
+    `);
 
   } catch (error) {
-    console.error(error);
-    res.status(500).send("Errore durante il salvataggio dei file.");
+    console.error("Errore durante il salvataggio del menu:", error);
+    res.send(`
+      <script>
+        alert("Errore: ${error.message}");
+        window.history.back();
+      </script>
+    `);
   }
 });
 
-// Funzione universale per eliminare e reindirizzare
-const deleteAndRedirect = async (filename, res) => {
-    try {
-        const filePath = path.join(__dirname, '../uploads', filename);
-        await fs.unlink(filePath);
-        console.log(`Successo: ${filename} rimosso.`);
-    } catch (err) {
-        // Ignoriamo solo se il file non esiste già (ENOENT)
-        if (err.code !== 'ENOENT') {
-            console.error(`Errore eliminazione ${filename}:`, err);
-            return res.status(500).send("Errore nel server");
-        }
-    }
-        res.send(`
-        <script>
-          alert("${filename} eliminato con successo!");
-          window.location.href = "/cucinaInsert";
-        </script>
-        `);
-    };
-
-// Rotte specifiche
-router.post('/deletePrimo', (req, res) => deleteAndRedirect('primo.jpg', res));
-router.post('/deleteSecondo', (req, res) => deleteAndRedirect('secondo.jpg', res));
-router.post('/deleteContorno', (req, res) => deleteAndRedirect('contorno.jpg', res));
-router.post('/deleteRicetta', (req, res) => deleteAndRedirect('ricetta.pdf', res));
-
-
-
-
-//sposta i file da uploads a menu_settimanale
-
-router.post('/salvaMenu', async (req, res) => {
-    const cartellaSorgente = path.join(__dirname, '../uploads');
-    const cartellaDestinazione = path.join(__dirname, '../public/images/menu_settimanale');
-    const pathHtmlCucinaInsert = path.join(__dirname, '../cucinaInsert.html');
-    
-    const filesDaSpostare = [
-        'primo.jpg',
-        'secondo.jpg',
-        'contorno.jpg',
-        'ricetta.pdf',
-        'titolo_primo.txt',
-        'ingredienti_primo.txt',
-        'descrizione_primo.txt',
-        'titolo_secondo.txt',
-        'ingredienti_secondo.txt',
-        'descrizione_secondo.txt',
-        'titolo_contorno.txt',
-        'ingredienti_contorno.txt',
-        'descrizione_contorno.txt'
-    ];
-
-    try {
-        // Assicurati che la cartella di destinazione esista
-        await fs.mkdir(cartellaDestinazione, { recursive: true });
-
-        // Sposta ogni file
-        for (const nomeFile of filesDaSpostare) {
-            const percorsoVecchio = path.join(cartellaSorgente, nomeFile);
-            const percorsoNuovo = path.join(cartellaDestinazione, nomeFile);
-
-            // Verifichiamo se il file esiste prima di spostarlo
-            await fs.access(percorsoVecchio); 
-            
- 
-            await fs.rename(percorsoVecchio, percorsoNuovo);
-        }
-        // 2. Svuotamento tag HTML con Cheerio
-        const htmlContent = await fs.readFile(pathHtmlCucinaInsert, 'utf-8');
-        const $ = cheerio.load(htmlContent);
-
-        // Elenco degli ID da svuotare (ho corretto i ref in base alla tua richiesta)
-        const idsToEmpty = [
-            '#titdef', 
-            '#ingredientiPrimo', 
-            '#descrizionePrimo', 
-            '#titolodefSecondo', 
-            '#ingredientiSecondo', 
-            '#descrizioneSecondo',
-            '#titdefConto', 
-            '#ingredientiContorno', 
-            '#descrizioneContorno'
-        ];
-
-                // Svuota il testo e nascondi gli elementi
-        idsToEmpty.forEach(id => {
-            $(id).text('');
-        });
-
-        // Salva le modifiche nel file cucinaInsert.html
-        await fs.writeFile(pathHtmlCucinaInsert, $.html());
-
-        res.send(`
-            <script>
-                alert("Menu salvato con successo nella cartella settimanale!");
-                window.location.href = "/cucinaInsert";
-            </script>
-        `);
-
-        
-
-    } catch (error) {
-        console.error("Errore durante il salvataggio del menu:", error);
-        res.send(`
-            <script>
-                alert("Errore: Assicurati di aver caricato tutti i file prima di salvare il menu.");
-                window.history.back();
-            </script>
-        `);
-    }
-
-});
-//testi
-
-
-//salva cucina.html
-// Percorsi centralizzati per evitare errori di battitura
-const UPLOADS_DIR = path.join(__dirname, '../uploads');
-const HTML_FILE = path.join(__dirname, '../cucinaInsert.html');
-
-// Funzione riutilizzabile per evitare codice duplicato
-async function salvaDatiCucina(req, res, fileName, bodyField, htmlSelector) {
-    try {
-        const contenuto = req.body[bodyField];
-        const txtPath = path.join(UPLOADS_DIR, fileName);
-
-        // 1. Assicura che la cartella esista e scrive il TXT
-        await fs.mkdir(UPLOADS_DIR, { recursive: true });
-        await fs.writeFile(txtPath, contenuto, 'utf-8');
-
-        // 2. Legge e aggiorna l'HTML
-        const htmlRaw = await fs.readFile(HTML_FILE, 'utf-8');
-        const $ = cheerio.load(htmlRaw, { decodeEntities: false }); // Mantiene le lettere accentate
-        
-        $(htmlSelector).text(contenuto);
-
-        // 3. Salva l'HTML aggiornato
-        await fs.writeFile(HTML_FILE, $.html());
-
-        res.redirect('/cucinaInsert');
-    } catch (err) {
-        console.error(`Errore nel salvataggio di ${fileName}:`, err);
-        res.status(500).send("Errore durante l'elaborazione dei dati.");
-    }
-}
-
-// --- ROTTE ---
-
-router.post('/salvaTitoloPrimo', (req, res) => {
-    salvaDatiCucina(req, res, 'titolo_primo.txt', 'titolo_Primo', '#titdef');
-});
-
-router.post('/salvaIngredientiPrimo', (req, res) => {
-    salvaDatiCucina(req, res, 'ingredienti_primo.txt', 'ingredienti_Primo', '#ingredientiPrimo');
-});
-
-router.post('/salvaDescrizionePrimo', (req, res) => {
-    salvaDatiCucina(req, res, 'descrizione_primo.txt', 'descrizione_Primo', '#descrizionePrimo');
-});
-
-router.post('/salvaTitoloSecondo', (req, res) => {
-    salvaDatiCucina(req, res, 'titolo_secondo.txt', 'titolo_Secondo', '#titolodefSecondo');
-});
-
-router.post('/salvaIngredientiSecondo', (req, res) => {
-    salvaDatiCucina(req, res, 'ingredienti_secondo.txt', 'ingredienti_Secondo', '#ingredientiSecondo');
-});
-
-router.post('/salvaDescrizioneSecondo', (req, res) => {
-    salvaDatiCucina(req, res, 'descrizione_secondo.txt', 'descrizione_Secondo', '#descrizioneSecondo');
-});
-
-router.post('/salvaTitoloContorno', (req, res) => {
-    salvaDatiCucina(req, res, 'titolo_contorno.txt', 'titolo_Contorno', '#titdefConto');
-});
-
-router.post('/salvaIngredientiContorno', (req, res) => {
-    salvaDatiCucina(req, res, 'ingredienti_contorno.txt', 'ingredienti_Contorno', '#ingredientiContorno');
-});
-
-router.post('/salvaDescrizioneContorno', (req, res) => {
-    salvaDatiCucina(req, res, 'descrizione_contorno.txt', 'descrizione_Contorno', '#descrizioneContorno');
-});
-
-
-
-// Rotta per salvare il file e aggiornare l'HTML della pagina cucina.html
-const pathUploads = path.join(__dirname, '../uploads');
-const pathHtml = path.join(__dirname, '..', 'views', 'html', 'cucina.html');
-
-const pathTitoloPrimo = path.join(__dirname, '..', 'public', 'images', 'menu_settimanale', 'titolo_primo.txt');
-const pathIngredientiPrimo = path.join(__dirname, '..', 'public', 'images', 'menu_settimanale', 'ingredienti_primo.txt');
-const pathDescrizionePrimo = path.join(__dirname, '..', 'public', 'images', 'menu_settimanale', 'descrizione_primo.txt');
-
-const pathTitoloSecondo = path.join(__dirname, '..', 'public', 'images', 'menu_settimanale', 'titolo_secondo.txt');
-const pathIngredientiSecondo = path.join(__dirname, '..', 'public', 'images', 'menu_settimanale', 'ingredienti_secondo.txt');
-const pathDescrizioneSecondo = path.join(__dirname, '..', 'public', 'images', 'menu_settimanale', 'descrizione_secondo.txt');
-
-const pathTitoloContorno = path.join(__dirname, '..', 'public', 'images', 'menu_settimanale', 'titolo_contorno.txt');
-const pathIngredientiContorno = path.join(__dirname, '..', 'public', 'images', 'menu_settimanale', 'ingredienti_contorno.txt');
-const pathDescrizioneContorno = path.join(__dirname, '..', 'public', 'images', 'menu_settimanale', 'descrizione_contorno.txt');
-
-
-// salvataggio su cucina.html
-
+// ===== PUBBLICA MENU =====
 
 router.post('/salvaMenuR', async (req, res) => {
-    try {
-        const filesUploaded = await fs.readdir(pathUploads);
-       
-        // Controllo presenza file
-        const mancaQualcosa = !filesUploaded.includes('primo.jpg') || 
-                              !filesUploaded.includes('secondo.jpg') || 
-                              !filesUploaded.includes('contorno.jpg') || 
-                              !filesUploaded.includes('ricetta.pdf');
-
-        if (mancaQualcosa) {
-            // Leggiamo tutto in parallelo per massime prestazioni
-            const [titoloPrimo,
-                   ingredientiPrimo,
-                   descrizionePrimo,
-                   titoloSecondo,
-                   ingredientiSecondo,
-                   descrizioneSecondo,
-                   titoloContorno,
-                   ingredientiContorno,
-                   descrizioneContorno,
-                    htmlContent] = await Promise.all([
-                fs.readFile(pathTitoloPrimo, 'utf-8'),
-                fs.readFile(pathIngredientiPrimo, 'utf-8'),
-                fs.readFile(pathDescrizionePrimo, 'utf-8'),
-
-                fs.readFile(pathTitoloSecondo, 'utf-8'),
-                fs.readFile(pathIngredientiSecondo, 'utf-8'),
-                fs.readFile(pathDescrizioneSecondo, 'utf-8'),
-
-                fs.readFile(pathTitoloContorno, 'utf-8'),
-                fs.readFile(pathIngredientiContorno, 'utf-8'),
-                fs.readFile(pathDescrizioneContorno, 'utf-8'),
-
-                fs.readFile(pathHtml, 'utf-8')
-            ]);
-
-            // Carichiamo Cheerio una sola volta
-            const $ = cheerio.load(htmlContent);
-
-            // Aggiorniamo i testi nell'HTML
-            $('#titolop').text(titoloPrimo.trim());
-            $('#ingredientiPrimo').text(ingredientiPrimo.trim());
-            $('#descrizionePrimo').text(descrizionePrimo.trim());
-
-            $('#titolodefSecondo').text(titoloSecondo.trim());
-            $('#ingredientiSecondo').text(ingredientiSecondo.trim());
-            $('#descrizioneSecondo').text(descrizioneSecondo.trim());
-
-            $('#titdefConto').text(titoloContorno.trim());
-            $('#ingredientiContorno').text(ingredientiContorno.trim());
-            $('#descrizioneContorno').text(descrizioneContorno.trim());
-
-
-            
-            // Salviamo solo il file HTML (NON sovrascrivere i .txt con l'HTML!)
-            await fs.writeFile(pathHtml, $.html());
-           
-            return res.redirect('/cucina');
-
-        } else {
-            return res.send(`
-                <script>c
-                    alert("Prima di Pubblicare il Menu devi inviare tutto alla Cucina!");
-                    window.history.back();
-                </script>
-            `);
-        }
-    } catch (err) {
-        console.error("Errore durante l'operazione:", err);
-        if (!res.headersSent) {
-            res.status(500).send("Errore critico durante il salvataggio.");
-        }
+  try {
+    const recipeTitle = req.body.recipeTitle || 'menu_' + Date.now();
+    
+    const recipe = await Recipe.findOne({ title: recipeTitle });
+    
+    if (!recipe) {
+      return res.send(`
+        <script>
+          alert("Errore: Ricetta non trovata!");
+          window.history.back();
+        </script>
+      `);
     }
+
+    recipe.published = true;
+    recipe.publishedAt = new Date();
+    await recipe.save();
+
+    res.send(`
+      <script>
+        alert("Menu pubblicato con successo!");
+        window.location.href = "/cucinaInsert";
+      </script>
+    `);
+
+  } catch (error) {
+    console.error("Errore durante la pubblicazione del menu:", error);
+    res.send(`
+      <script>
+        alert("Errore: ${error.message}");
+        window.history.back();
+      </script>
+    `);
+  }
 });
-
-router.post('/logout', (req, res)=>{
-    req.session.destroy((err)=>{
-        if(err){
-            console.log ('errore', err);
-            return res.redirect('/cucinaInsert');
-        }
-        res.clearCookie('connect.sid'); // Pulisce il cookie della sessione nel browser
-        res.redirect('/login');
-
-    })
-})
-
-
-
-
-
-
 
 module.exports = router;
 
@@ -480,27 +703,6 @@ module.exports = router;
 
 
 
-/*
-// Aspetta che la pagina sia caricata
-document.addEventListener('DOMContentLoaded', () => {
-    const input = document.querySelector('input[type="text"]');
-    const titoloAnteprima = document.getElementById('titolo');
-
-    if (input) {
-        input.addEventListener('input', () => {
-            const valore = input.value;
-            
-            // 1. Salva per l'altra pagina
-            localStorage.setItem('testoCondiviso', valore);
-            
-            // 2. Aggiorna l'anteprima locale (nella pagina A stessa)
-            if (titoloAnteprima) {
-                titoloAnteprima.textContent = valore;
-            }
-        });
-    }
-});
-*/
 
 
 

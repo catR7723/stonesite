@@ -1,0 +1,125 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+html{ 
+      font-family: Merryweather, Poppins, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      min-height: 100%;
+}
+body{
+background-image: linear-gradient(to bottom, #eff508, #d5f53b, #bdf457, #a8f16e, #97ed83, #8aee93, #7feea3, #77edb1, #6df1c2, #65f5d2, #60f8e2, #5ffbf1);
+   min-height: 100%;
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+
+    align-items: center;
+}
+
+#topForm{
+    margin: 5vw;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    align-items: center;
+}
+#topForm div{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    margin-bottom: 20px;
+}
+#topForm label{
+    font-size: 1.2em;
+    font-weight: bold;
+}
+#topForm input[type="file"]{
+    padding: 10px;
+    border: 1px solid #935555;
+    border-radius: 5px;
+}
+#topForm input[type="submit"]{
+    padding: 10px 20px;
+    background-color: #935555;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.2em;
+}
+#topForm button[type="submit"]{
+    background-color: #ecd149;
+    padding: 5px 15px;
+}
+#topForm button[type="submit"]:hover{
+    background-color: #d5f53b;
+}
+
+.Conteiner_Primo, .Conteiner_Secondo, .Conteiner_Contorno{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 80%;
+    margin:10px;
+    align-self: center;
+    align-items: center;
+
+    
+}
+
+#container {
+     display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+    align-items: center;}
+
+#deletePrimo, #deleteSecondo, #deleteContorno {
+    background-color: #935555;
+    padding: 5px 15px;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.primo, .secondo, .contorno {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+}
+.Primo #ingredientiPrimo {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    line-height: 1.6;
+    font-size: 0.8em;
+    margin: 15px 0 15px 0;
+    font-family: 'Courier New', Courier, monospace;
+}
+.Secondo #ingredientiSecondo {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    line-height: 1.6;
+    font-size: 0.8em;
+    margin: 15px 0 15px 0;
+    font-family: 'Courier New', Courier, monospace;
+}
+.Contorno #ingredientiContorno {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    line-height: 1.6;
+    font-size: 0.8em;
+    margin: 15px 0 15px 0;
+    font-family: 'Courier New', Courier, monospace;
+}
+    

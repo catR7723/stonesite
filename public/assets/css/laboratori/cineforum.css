@@ -624,49 +624,55 @@ padding: 3vw;
 
 
 
-@media(max-width:640px){
-    .idea{
-    padding: 0vw 3vw 15vw 3vw;
-     background: url(/public/images/grid-img/cineforum.jpeg)no-repeat bottom center;
-    background-size:55% 50%;
-    margin-left: 0;
-    border-radius: 1em;
-    width: 100%;
-    height: 100vw;
-    padding-top: 15vw;
-    
-
-  
+@media (max-width: 640px) {
+    /* Contenitore Idea */
+    .idea {
+        width: 100%;
+        height: auto; /* Rimosso 100vw fisso per evitare tagli di contenuto */
+        min-height: 100vw; 
+        margin-left: 0;
+        padding: 15vw 3vw 15vw 3vw; /* Unificato il padding-top */
+        background: url(/images/grid-img/cineforum.jpeg) no-repeat bottom center;
+        background-size: 55% 50%;
+        border-radius: 1em;
+        box-sizing: border-box; /* Evita che il padding sballi la larghezza */
     }
-    .idea h1{
-        font-size: 2.5vw;
-        color:rgb(12, 8, 236);
-       
+
+    /* Titolo Idea */
+    .idea h1 {
+        font-size: 3vw; /* Aumentato per leggibilità su mobile (circa 21px) */
+        color: rgb(12, 8, 236);
+       display: block;
+        text-align: justify;
     }
-     .bestbh-how{
-   display: block;
-   position: absolute;
-    color:black;
-    
-    font-size: 2vw;
-    cursor: pointer;
-    position: relative;
-    z-index: -2;
-    background: url(/public/images/laboratori/filmamonrenovacanza.jpg)no-repeat bottom center;
-    background-color: #eb86c4;
-    background-size: 48%;
-    height: 200vw;
-    width: 100%;
-    bottom:40vw;
-    text-align: justify;
-    padding:4vw;
-   
 
-  
-}
-.bestbh-how h2{
-    margin: 0;
-  
+    /* Contenitore How */
+    .bestbh-how {
+        display: block;
+        position: relative; /* Rimossa la doppia posizione */
+        z-index: 1; /* Portato in primo piano per rendere testo e click attivi */
+        margin-top: 5vw; /* Sostituito bottom negativo con un margine standard */
+        width: 100%;
+        height: auto; /* Rimosso 200vw fisso per adattarsi al testo */
+        min-height: 120vw;
+        padding: 6vw;
+        box-sizing: border-box;
+        text-align: justify;
+        cursor: pointer;
+        background: #eb86c4 url(/images/laboratori/filmamonrenovacanza.jpg) no-repeat bottom center;
+        background-size: 48%;
+    }
+
+    /* Testo How */
+    .bestbh-how {
+        font-size: 4.5vw; /* Aumentato per renderlo leggibile (circa 16px) */
+        color: black;
+    }
+
+    /* Titolo How */
+    .bestbh-how h2 {
+        margin: 0 0 4vw 0;
+        font-size: 5.5vw;
+    }
 }
 
-}
