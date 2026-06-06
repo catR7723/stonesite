@@ -8,6 +8,7 @@ const fs = require('fs/promises');
 const cloudinary = require('cloudinary').v2;
 const Recipe = require('../models/Recipe');
 
+
 // Configurazione Cloudinary
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -21,9 +22,8 @@ router.get('/centro', (req, res) => {
 });
 
 router.get('/cucinaInsert', (req, res) => {
-    res.sendFile(path.join(__dirname, '..', 'cucinaInsert.html'));
+  res.sendFile(path.join(__dirname, '..', 'cucinaInsert.html'));
 });
-
 router.get('/cineforumInsert', (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'cineforumInsert.html'));
 });
@@ -98,6 +98,23 @@ router.get('/scrittura', (req, res) => {
 
 router.get('/walking', (req, res) => {
     res.sendFile(path.join(__dirname, '../views/html/laboratori/walking.html'));
+});
+
+// ===== API RICETTA =====
+router.get('/api/recipe/:title', async (req, res) => {
+  try {
+    const title = req.params.title;
+    const recipe = await Recipe.findOne({ title: title });
+    
+    if (!recipe) {
+      return res.status(404).json({ error: 'Ricetta non trovata' });
+    }
+    
+    res.json(recipe);
+  } catch (error) {
+    console.error('Errore nel recupero della ricetta:', error);
+    res.status(500).json({ error: error.message });
+  }
 });
 
 // ===== UPLOAD IMMAGINI =====
@@ -188,24 +205,6 @@ router.post('/logout', (req, res) => {
     res.clearCookie('connect.sid');
     res.redirect('/login');
   });
-});
-
-// ===== GET RECIPE =====
-
-router.get('/api/recipe/:title', async (req, res) => {
-  try {
-    const title = req.params.title;
-    const recipe = await Recipe.findOne({ title: title });
-    
-    if (!recipe) {
-      return res.status(404).json({ error: 'Ricetta non trovata' });
-    }
-    
-    res.json(recipe);
-  } catch (error) {
-    console.error('Errore nel recupero della ricetta:', error);
-    res.status(500).json({ error: error.message });
-  }
 });
 
 // ===== SALVA PRIMO =====
@@ -640,12 +639,8 @@ router.post('/salvaMenu', async (req, res) => {
     recipe.savedAt = new Date();
     await recipe.save();
 
-    res.send(`
-      <script>
-        alert("Menu salvato con successo in cucina/${recipeTitle}!");
-        window.location.href = "/cucinaInsert";
-      </script>
-    `);
+    // Torna a cucinaInsert ma con flag di menu salvato
+    res.redirect('/cucinaInsert?menuSalvato=true&recipeTitle=' + encodeURIComponent(recipeTitle));
 
   } catch (error) {
     console.error("Errore durante il salvataggio del menu:", error);
@@ -698,6 +693,7 @@ router.post('/salvaMenuR', async (req, res) => {
 });
 
 module.exports = router;
+
 
 
 

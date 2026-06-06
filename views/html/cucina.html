@@ -39,7 +39,7 @@
         <div id="blog">
             <input type="checkbox" id="sidebar">
             <label for="sidebar" class="open">
-                <h1>La Ricetta della Settimana: Clicca Qui!</h1>
+                <h1 id="main_title">La Ricetta della Settimana: Clicca Qui!</h1>
             </label>
             <label for="sidebar" id="overlay">
              <div class="ricetta">
@@ -99,6 +99,7 @@
 
 
         </div>
+        </label>
             
             
         </div>
@@ -126,9 +127,94 @@
             </div>
         </div>
 
-        </label></div>
+        </div>
 
     
 
      
-        </div></body></html>
+        </div>
+        <script>
+  // Carica i dati della ricetta della settimana
+  async function loadWeeklyRecipe() {
+    try {
+      // Prendi il titolo salvato in localStorage o dalla URL
+      const recipeTitle = localStorage.getItem('recipeTitle');
+      
+      if (!recipeTitle) {
+        console.log('Nessuna ricetta salvata');
+        return;
+      }
+
+    // ✅ PULISCI IL DIV OVERLAY
+    const overlayDiv = document.getElementById('overlay');
+    overlayDiv.innerHTML = ''; // Elimina il vecchio contenuto
+
+    // Fetch i dati dalla API
+    const response = await fetch(`/api/recipe/${encodeURIComponent(recipeTitle)}`);
+    if (!response.ok) return;
+    
+    const recipe = await response.json();
+
+      // ===== PRIMO =====
+      if (recipe.primo?.titolo) {
+        document.getElementById('titolop').textContent = recipe.primo.titolo;
+      }
+      if (recipe.primo?.ingredienti) {
+        document.getElementById('ingredientiPrimo').textContent = recipe.primo.ingredienti;
+      }
+      if (recipe.primo?.descrizione) {
+        document.getElementById('descrizionePrimo').textContent = recipe.primo.descrizione;
+      }
+      if (recipe.primo?.imageUrl) {
+        const primoDiv = document.getElementById('primo');
+        primoDiv.innerHTML = `<img src="${recipe.primo.imageUrl}" alt="Primo" width="300" style="margin: 20px 0; border-radius: 8px;">`;
+      }
+
+      // ===== SECONDO =====
+      if (recipe.secondo?.titolo) {
+        document.getElementById('titolodefSecondo').textContent = recipe.secondo.titolo;
+      }
+      if (recipe.secondo?.ingredienti) {
+        document.getElementById('ingredientiSecondo').textContent = recipe.secondo.ingredienti;
+      }
+      if (recipe.secondo?.descrizione) {
+        document.getElementById('descrizioneSecondo').textContent = recipe.secondo.descrizione;
+      }
+      if (recipe.secondo?.imageUrl) {
+        const secondoDiv = document.getElementById('secondo');
+        secondoDiv.innerHTML = `<img src="${recipe.secondo.imageUrl}" alt="Secondo" width="300" style="margin: 20px 0; border-radius: 8px;">`;
+      }
+
+      // ===== CONTORNO =====
+      if (recipe.contorno?.titolo) {
+        document.getElementById('titdefConto').textContent = recipe.contorno.titolo;
+      }
+      if (recipe.contorno?.ingredienti) {
+        document.getElementById('ingredientiContorno').textContent = recipe.contorno.ingredienti;
+      }
+      if (recipe.contorno?.descrizione) {
+        document.getElementById('descrizioneContorno').textContent = recipe.contorno.descrizione;
+      }
+      if (recipe.contorno?.imageUrl) {
+        const contornoDiv = document.getElementById('contorno');
+        contornoDiv.innerHTML = `<img src="${recipe.contorno.imageUrl}" alt="Contorno" width="300" style="margin: 20px 0; border-radius: 8px;">`;
+      }
+
+      // ===== PDF RICETTA =====
+      if (recipe.ricetta?.pdfUrl) {
+        const downloadLink = document.querySelector('.download a');
+        if (downloadLink) {
+          downloadLink.href = recipe.ricetta.pdfUrl;
+        }
+      }
+
+    } catch (error) {
+      console.error('Errore nel caricamento della ricetta:', error);
+    }
+  }
+
+  // Esegui quando la pagina è caricata
+  document.addEventListener('DOMContentLoaded', loadWeeklyRecipe);
+</script>
+
+</body></html>

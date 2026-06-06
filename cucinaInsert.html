@@ -212,19 +212,16 @@
     <button class="btn btn-delete" type="button" id="deleteContornoFinalBtn">Elimina Contorno</button>
   </div>
 
-  <!-- DOWNLOAD E PUBBLICAZIONE -->
+<!-- DOWNLOAD E PUBBLICAZIONE -->
+<div id="pubblicazione" style="display:none;">
   <div class="download">
-     <a id="ricetta" href="" target="_blank" rel="noopener noreferrer">
-        Scarica le Ricette del Menu della settimana
-     </a>
-      <button class="btn btn-delete" type="button" id="deleteRicettaBtn">Elimina la Ricetta</button>
+    <a id="ricetta" href="" target="_blank" rel="noopener noreferrer">
+      Scarica le Ricette del Menu della settimana
+    </a>
+    <button class="btn btn-delete" type="button" id="deleteRicettaBtn">Elimina la Ricetta</button>
   </div>
   
   <div>
-    <form action="/salvaMenu" method="POST">
-      <input type="hidden" name="recipeTitle" id="recipeTitle_salvaMenu">
-      <button class="btn" type="submit" id="salvaMenu">Invia Tutto alla Cucina</button>
-    </form>
     <form action="/salvaMenuR" method="POST">
       <input type="hidden" name="recipeTitle" id="recipeTitle_salvaMenuR">
       <button class="btn" type="submit" id="salvaMenuR">Pubblica il Menu!</button>
@@ -239,6 +236,22 @@
 </div>
 
 <script>
+    // Controlla se il menu è stato salvato
+    const urlParams = new URLSearchParams(window.location.search);
+    const menuSalvato = urlParams.get('menuSalvato');
+    const recipeTitleFromUrl = urlParams.get('recipeTitle');  // ← CAMBIA QUI
+
+    if (menuSalvato === 'true' && recipeTitleFromUrl) {
+      // Mostra la sezione di pubblicazione
+      document.getElementById('pubblicazione').style.display = 'block';
+      document.getElementById('recipeTitle_salvaMenuR').value = recipeTitleFromUrl;  // ← CAMBIA QUI
+      
+      // Opzionale: mostra il link per scaricare la ricetta
+      document.getElementById('ricetta').href = `/download/${recipeTitleFromUrl}`;  // ← CAMBIA QUI
+      
+      alert("Menu salvato con successo in cucina/" + recipeTitleFromUrl + "!");  // ← CAMBIA QUI
+    }
+
 const recipeTitle = document.getElementById('recipeTitle');
 const titleStatus = document.getElementById('currentTitle');
 const btnCreateTitle = document.getElementById('btnCreateTitle');
@@ -1003,6 +1016,40 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 });
+
+// Step 6: Salva Contorno e mostra anteprima finale
+document.getElementById('formContorno').addEventListener('submit', function(e) {
+  e.preventDefault();
+  
+  fetch('/salvaContorno', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      recipeTitle: currentRecipeTitle,
+      titolo_Contorno: document.getElementById('inputTitoloContorno').value,
+      ingredienti_Contorno: document.getElementById('ingredientiContornoInput').value,
+      descrizione_Contorno: document.getElementById('descrizioneContornoInput').value
+    })
+  })
+  .then(() => {
+    if (checkContornoCompletion()) {
+      document.getElementById('contorno-completato').style.display = 'block';
+      setTimeout(() => {
+        loadFinalPreview(currentRecipeTitle);
+        showStep('step-finale');
+        // ✅ AGGIUNGI QUI
+        document.getElementById('pubblicazione').style.display = 'block';
+        document.getElementById('recipeTitle_salvaMenuR').value = currentRecipeTitle;
+        document.getElementById('ricetta').href = `/download/${currentRecipeTitle}`;
+      }, 1500);
+    }
+  })
+  .catch(error => console.error('Errore:', error));
+});
+
 </script>
+
 
 </body></html>
