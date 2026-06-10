@@ -37,72 +37,71 @@
             </h1>
         </div>
         <div id="blog">
-            <input type="checkbox" id="sidebar">
-            <label for="sidebar" class="open">
-                <h1 id="main_title">La Ricetta della Settimana: Clicca Qui!</h1>
-            </label>
-            <label for="sidebar" id="overlay">
-             <div class="ricetta">
-               <div class="intro">
-                    <br class="intro1">Questa Settimana poroniamo:<br><br>
-                    <h1 id="titolop">riso bianco</h1>
-                    <h1 id="titolodefSecondo">frittata</h1>
-                    <h1 id="titdefConto">insalata verde</h1>
-                    <p class="description">
-                        Questi piatti sono molto buoni per un pranzo della domenica in compagnia di amici e parenti 
-                    </p>
-               </div>
-               
-               <div class="svolgimento">
-
+    <input type="checkbox" id="sidebar">
+    
+    <!-- Label per aprire l'overlay -->
+    <label for="sidebar" class="open">
+        <h1 id="main_title">Questa Settimana:</h1>
+   
+    
+    <!-- ✅ AGGIUNGI QUI IL TITOLO DELLA RICETTA -->
+    <h1 id="recipe_title_display" style="text-align: center; font-size: 2.5vw; color: #333; margin-top: 2vw; margin-bottom: 3vw;">
+        Caricamento ricetta...
+    </h1>
+   </label>
+    
+    <!-- ✅ OVERLAY DEVE ESSERE UN DIV, NON UNA LABEL -->
+    <div id="overlay">
+        <!-- Chiudi cliccando fuori -->
+        <label for="sidebar" style="position: absolute; width: 100%; height: 100%; top: 0; left: 0; cursor: pointer;"></label>
+        
+        <!-- Contenuto ricetta -->
+        <div class="ricetta">
+            <div class="intro">
+                <br class="intro1">Questa Settimana proponiamo:<br><br>
+                <h1 id="titolop">riso bianco</h1>
+                <h1 id="titolodefSecondo">frittata</h1>
+                <h1 id="titdefConto">insalata verde</h1>
+                <p class="description">
+                    Questi piatti sono molto buoni per un pranzo della domenica in compagnia di amici e parenti 
+                </p>
+            </div>
+            
+            <div class="svolgimento">
                 <div id="primo"></div>
-
                 <h1 id="titolop">riso bianco</h1> 
-
-                <p>INGREDIENTI PER 4 PERSONE</p>
+                <p><strong>INGREDIENTI PER 4 PERSONE</strong></p>
                 <p id="ingredientiPrimo">riso sale acqua</p>
-                
-                <p>PREPARAZIONE</p>
-         
+                <p><strong>PREPARAZIONE</strong></p>
                 <p id="descrizionePrimo">prendi butta mescola</p>
-
-               
-               
+                
+                <hr style="margin: 30px 0;">
+                
                 <h1 id="titolodefSecondo">frittata</h1>               
- 
                 <div id="secondo"></div>
+                <p><strong>INGREDIENTI PER 4 PERSONE</strong></p>
+                <p id="ingredientiSecondo">uova sale burro</p>
+                <p><strong>PREPARAZIONE</strong></p>
+                <p id="descrizioneSecondo">rompi le uova sbatti</p>
 
-               <p>INGREDIENTI PER 4 PERSONE</p>
-               <p id="ingredientiSecondo">uova sale burro</p>
-
-               <p>PREPARAZIONE </p>
-               <p id="descrizioneSecondo">rompi le uova sbatti</p>
-
+                <hr style="margin: 30px 0;">
 
                 <h1 id="titdefConto">insalata verde</h1>  
-
                 <div id="contorno"></div>
-
-                <p>INGREDIENTI PER 4 PERSONE</p>
+                <p><strong>INGREDIENTI PER 4 PERSONE</strong></p>
                 <p id="ingredientiContorno">insalata pomodori cipolla</p>
-               
-                <p>PREPARAZIONE</p>
-
+                <p><strong>PREPARAZIONE</strong></p>
                 <p id="descrizioneContorno">taglia e lettili li</p>
                 
                 <div class="download">
                     <a href="/images/menu_settimanale/ricetta.pdf" target="_blank" rel="noopener noreferrer">
-                        Scarica le Ricette del Menu della settimana
+                        📥 Scarica le Ricette del Menu della settimana
                     </a>
-                   </div>
-
-
-
+                </div>
+            </div>
         </div>
-        </label>
-            
-            
-        </div>
+    </div>
+</div>
          <div class="write">
             <a href="mailto:infocoopstone@gmail.com" target="_blank" class="scrivi">scrivi: infocoopstone@gmail.com</a>
         </div>
@@ -133,71 +132,128 @@
 
      
         </div>
-        <script>
-  // Carica i dati della ricetta della settimana
+<script>
   async function loadWeeklyRecipe() {
     try {
-      // Prendi il titolo salvato in localStorage o dalla URL
-      const recipeTitle = localStorage.getItem('recipeTitle');
+      console.log('Inizio caricamento ricetta...');
       
-      if (!recipeTitle) {
-        console.log('Nessuna ricetta salvata');
+      // ✅ PROVA PRIMA DA LOCALSTORAGE
+      let recipeTitle = localStorage.getItem('recipeTitle');
+      console.log('RecipeTitle da localStorage:', recipeTitle);
+      let recipe = null;
+
+      if (recipeTitle) {
+        console.log('Caricamento ricetta da localStorage:', recipeTitle);
+        try {
+          const response = await fetch(`/api/recipe/${encodeURIComponent(recipeTitle)}`);
+          if (response.ok) {
+            recipe = await response.json();
+            console.log('Ricetta caricata da localStorage:', recipe);
+          } else {
+            console.log('Ricetta non trovata in DB');
+          }
+        } catch (err) {
+          console.error('Errore nel fetch da localStorage:', err);
+        }
+      }
+
+      // ✅ SE NON TROVATA, CARICA L'ULTIMO MENU PUBBLICATO
+      if (!recipe) {
+        console.log('Caricamento ultimo menu pubblicato...');
+        try {
+          const response = await fetch('/api/recipe/latest/published');
+          
+          if (!response.ok) {
+            console.error('Errore API:', response.status);
+            const titleDisplay = document.getElementById('recipe_title_display');
+            if (titleDisplay) {
+              titleDisplay.textContent = 'Nessun menu pubblicato';
+            }
+            return;
+          }
+          
+          recipe = await response.json();
+          recipeTitle = recipe.title;
+          localStorage.setItem('recipeTitle', recipeTitle);
+          console.log('Ricetta caricata da API:', recipe);
+        } catch (err) {
+          console.error('Errore nel fetch API:', err);
+          return;
+        }
+      }
+
+      if (!recipe || !recipeTitle) {
+        console.error('Ricetta o titolo non trovati');
         return;
       }
 
-    // ✅ PULISCI IL DIV OVERLAY
-    const overlayDiv = document.getElementById('overlay');
-    overlayDiv.innerHTML = ''; // Elimina il vecchio contenuto
-
-    // Fetch i dati dalla API
-    const response = await fetch(`/api/recipe/${encodeURIComponent(recipeTitle)}`);
-    if (!response.ok) return;
-    
-    const recipe = await response.json();
+      // ✅ AGGIORNA IL TITOLO DELLA RICETTA
+      const titleDisplay = document.getElementById('recipe_title_display');
+      if (titleDisplay) {
+        titleDisplay.textContent = recipeTitle;
+        console.log('Titolo aggiornato:', recipeTitle);
+      } else {
+        console.error('Elemento recipe_title_display non trovato!');
+      }
 
       // ===== PRIMO =====
       if (recipe.primo?.titolo) {
-        document.getElementById('titolop').textContent = recipe.primo.titolo;
+        const elem = document.getElementById('titolop');
+        if (elem) elem.textContent = recipe.primo.titolo;
       }
       if (recipe.primo?.ingredienti) {
-        document.getElementById('ingredientiPrimo').textContent = recipe.primo.ingredienti;
+        const elem = document.getElementById('ingredientiPrimo');
+        if (elem) elem.textContent = recipe.primo.ingredienti;
       }
       if (recipe.primo?.descrizione) {
-        document.getElementById('descrizionePrimo').textContent = recipe.primo.descrizione;
+        const elem = document.getElementById('descrizionePrimo');
+        if (elem) elem.textContent = recipe.primo.descrizione;
       }
       if (recipe.primo?.imageUrl) {
         const primoDiv = document.getElementById('primo');
-        primoDiv.innerHTML = `<img src="${recipe.primo.imageUrl}" alt="Primo" width="300" style="margin: 20px 0; border-radius: 8px;">`;
+        if (primoDiv) {
+          primoDiv.innerHTML = `<img src="${recipe.primo.imageUrl}" alt="Primo" width="300" style="margin: 20px 0; border-radius: 8px;">`;
+        }
       }
 
       // ===== SECONDO =====
       if (recipe.secondo?.titolo) {
-        document.getElementById('titolodefSecondo').textContent = recipe.secondo.titolo;
+        const elem = document.getElementById('titolodefSecondo');
+        if (elem) elem.textContent = recipe.secondo.titolo;
       }
       if (recipe.secondo?.ingredienti) {
-        document.getElementById('ingredientiSecondo').textContent = recipe.secondo.ingredienti;
+        const elem = document.getElementById('ingredientiSecondo');
+        if (elem) elem.textContent = recipe.secondo.ingredienti;
       }
       if (recipe.secondo?.descrizione) {
-        document.getElementById('descrizioneSecondo').textContent = recipe.secondo.descrizione;
+        const elem = document.getElementById('descrizioneSecondo');
+        if (elem) elem.textContent = recipe.secondo.descrizione;
       }
       if (recipe.secondo?.imageUrl) {
         const secondoDiv = document.getElementById('secondo');
-        secondoDiv.innerHTML = `<img src="${recipe.secondo.imageUrl}" alt="Secondo" width="300" style="margin: 20px 0; border-radius: 8px;">`;
+        if (secondoDiv) {
+          secondoDiv.innerHTML = `<img src="${recipe.secondo.imageUrl}" alt="Secondo" width="300" style="margin: 20px 0; border-radius: 8px;">`;
+        }
       }
 
       // ===== CONTORNO =====
       if (recipe.contorno?.titolo) {
-        document.getElementById('titdefConto').textContent = recipe.contorno.titolo;
+        const elem = document.getElementById('titdefConto');
+        if (elem) elem.textContent = recipe.contorno.titolo;
       }
       if (recipe.contorno?.ingredienti) {
-        document.getElementById('ingredientiContorno').textContent = recipe.contorno.ingredienti;
+        const elem = document.getElementById('ingredientiContorno');
+        if (elem) elem.textContent = recipe.contorno.ingredienti;
       }
       if (recipe.contorno?.descrizione) {
-        document.getElementById('descrizioneContorno').textContent = recipe.contorno.descrizione;
+        const elem = document.getElementById('descrizioneContorno');
+        if (elem) elem.textContent = recipe.contorno.descrizione;
       }
       if (recipe.contorno?.imageUrl) {
         const contornoDiv = document.getElementById('contorno');
-        contornoDiv.innerHTML = `<img src="${recipe.contorno.imageUrl}" alt="Contorno" width="300" style="margin: 20px 0; border-radius: 8px;">`;
+        if (contornoDiv) {
+          contornoDiv.innerHTML = `<img src="${recipe.contorno.imageUrl}" alt="Contorno" width="300" style="margin: 20px 0; border-radius: 8px;">`;
+        }
       }
 
       // ===== PDF RICETTA =====
@@ -208,12 +264,18 @@
         }
       }
 
+      console.log('Ricetta caricata con successo!');
+
     } catch (error) {
       console.error('Errore nel caricamento della ricetta:', error);
+      const titleDisplay = document.getElementById('recipe_title_display');
+      if (titleDisplay) {
+        titleDisplay.textContent = 'Errore nel caricamento';
+      }
     }
   }
 
-  // Esegui quando la pagina è caricata
+  // ✅ ESEGUI QUANDO LA PAGINA È CARICATA
   document.addEventListener('DOMContentLoaded', loadWeeklyRecipe);
 </script>
 

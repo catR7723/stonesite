@@ -24,6 +24,7 @@ background-image: linear-gradient(to left, #f08a06, #f19203, #f19a00, #f1a100, #
     border-bottom: 2px solid white;
     border-top: 2px solid white;
     border-radius: 0 0 .5em .5em;
+    z-index: 50;
 }
 .menu ul{
     display: flex;
@@ -42,7 +43,6 @@ background-image: linear-gradient(to left, #f08a06, #f19203, #f19a00, #f1a100, #
     border-radius: 0.8em;
     border-bottom: 2px solid white;
     border-top: 2px solid white;
-   
 }
 .home:hover{
     border-bottom: none;
@@ -69,7 +69,6 @@ background-size: 80%;
 nav{
     display: flex;
     flex-direction: column;
-    
 }
 .title{
     color:white;
@@ -101,7 +100,6 @@ nav{
     margin-left: 2vw;
 }
 
-
 .help{
     width: 100%;
  justify-items: center;
@@ -111,7 +109,6 @@ nav{
 }
 
 .scrivi{
-
     color:rgb(193, 20, 5);
     font-size: 2vw;
     text-decoration: none;
@@ -145,7 +142,6 @@ width: 20%;
 background: linear-gradient(to left top, #325278, #2a4568, #223958, #1a2d48, #122239, #0a1e31, #051a2a, #001522, #00161e, #00161a, #001516, #021412) no-repeat;
 color: azure;
 border-radius: 1em;
-
 }
 .button:hover{
    border-top: none;
@@ -161,151 +157,248 @@ display: flex;
 gap:2vw;
 margin-bottom: 10vw;
 }
-#blog{
-  display:flex;
-  width: 100%;
-  text-align: center;
-  position: relative; 
+
+/* ===== ✅ OVERLAY STYLING ===== */
+#blog {
+    display: flex;
+    width: 100%;
+    text-align: center;
+    position: relative;
 }
-.open h1{
-       width: 100%;
-    font-size: 3vw;
-    text-shadow: 3px 2px 2px rgb(108, 165, 226);
+
+/* Checkbox hidden */
+#sidebar {
+    display: none;
 }
-  .open{
+
+/* ✅ OVERLAY - FIXED POSITION (Modal Style) */
+#overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    z-index: 999;
+}
+
+/* ✅ Mostra overlay quando checkbox è checked */
+#sidebar:checked ~ #overlay {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* ✅ Abilita/disabilita click fuori */
+#sidebar:not(:checked) ~ #overlay {
+    pointer-events: none;
+}
+
+#sidebar:checked ~ #overlay {
+    pointer-events: auto;
+}
+
+/* ✅ Contenuto ricetta */
+.ricetta {
+    position: relative;
+    background: linear-gradient(to right bottom, #040518, #0b1738, #09245b, #033080, #003da7, #0156c4, #0170e2, #008bff, #00b2ff, #00cff6, #00e29f, #11ed07);
+    color: white;
+    padding: 40px 30px;
+    border-radius: 16px;
+    max-width: 800px;
+    max-height: 85vh;
+    overflow-y: auto;
+    z-index: 1001;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    font-size: 1.8vw;
+    text-align: justify;
+}
+
+/* Scrollbar styling */
+.ricetta::-webkit-scrollbar {
+    width: 10px;
+}
+
+.ricetta::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+}
+
+.ricetta::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+}
+
+.ricetta::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.5);
+}
+
+/* ✅ Label per chiudere overlay (click fuori) */
+#overlay > label {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    cursor: pointer;
+    z-index: 0;
+}
+
+/* Open button styling */
+.open {
     display: flex;
     width: 100%;
     cursor: pointer;
     margin-top: 6vw;
 }
-.ricetta{
-    background: linear-gradient(to right bottom, #040518, #0b1738, #09245b, #033080, #003da7, #0156c4, #0170e2, #008bff, #00b2ff, #00cff6, #00e29f, #11ed07);
-    font-size: 1.8vw;
-    cursor: pointer;
-    position: absolute;
-    z-index: 2;
-    color:white;
-    padding: 5vw 2vw 2vw 2vw;
-   top:-38vw;
+
+.open h1 {
     width: 100%;
-    text-align: justify;
-}
-@media(max-width:640px){
-    .ricetta{
-        top: -105vw;
-    }
+    font-size: 3vw;
+    text-shadow: 3px 2px 2px rgb(108, 165, 226);
 }
 
-.intro1{
+/* Hide open button when overlay is shown */
+#sidebar:checked ~ .open {
+    display: none;
+}
+
+/* Intro section */
+.intro {
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.intro1 {
     font-size: 1.8vw;
     text-align: center;
     margin-bottom: 2vw;
 }
-.description{
+
+.description {
     margin-top: 5vw;
     font-size: 1.8vw;
     text-align: justify;
 }
- #overlay{
-    display:none;
-  }
-  #sidebar{
-    display: none;
-  }
-  #sidebar:checked ~ #overlay{
-   cursor: pointer;
-   height:100%;
-  
-   width: 100%;
-   
-   z-index: 9;
-   display:flex;
+
+/* Course titles */
+.svolgimento h1 {
+    margin-top: 30px;
+    margin-bottom: 15px;
+    font-size: 2vw;
 }
-   #sidebar:checked ~ .open{
-    display: none;
-   }
-   #primo{
-    width: 100%;
-    height: 30vw;
-    background: url(/images/menu_settimanale/primo.jpg)no-repeat center;
-    background-size: 30%;
-   }
-    #secondo{
-    width: 100%;
-    height: 30vw;
-    background: url(/images/menu_settimanale/secondo.jpg)no-repeat center;
-    background-size: 30%;
-   }
-   #contorno{
-    width: 100%;
-    height: 30vw;
-    background: url(/images/menu_settimanale/contorno.jpg)no-repeat center;
-    background-size: 30%;
-   }
-   .svolgimento h2{
+
+.svolgimento h2 {
     margin-top: 4vw;
     text-align: center;
     width: 100%;
-   }
-   .svolgimento p{
-    font-size: 1.8vw;
-   }
-   .svolgimento p{
-    margin-top: 2vw;
+}
 
-   }
-   .download{
+.svolgimento p {
+    font-size: 1.8vw;
+    margin-top: 2vw;
+    line-height: 1.6;
+}
+
+/* Images */
+#primo, #secondo, #contorno {
+    width: 100%;
+    margin: 20px 0;
+    border-radius: 8px;
+}
+
+#primo img, #secondo img, #contorno img {
+    width: 100%;
+    max-width: 300px;
+    border-radius: 8px;
+    display: block;
+    margin: 20px auto;
+}
+
+/* Download section */
+.download {
     margin-top: 5vw;
     width: 100%;
     text-align: center;
-   }
-   .download a{
+}
+
+.download a {
     text-decoration: none;
     font-size: 2vw;
     cursor: pointer;
-    color: rgb(24, 14, 224);
-   }
-
-
-
-
-@media(max-width:640px){
-    .idea{
-    padding: 0vw 3vw 15vw 3vw;
-     background: url(/images/laboratori/cucina.jpg)no-repeat bottom center;
-    background-size:60% 40%;
-    margin-left: 0;
-    border-radius: 1em;
-    width: 100%;
-    height: 100vw;
-    padding-top: 15vw;
+    color: #00e29f;
+    transition: color 0.3s ease;
 }
-.dev{
-    background:url(/images/deviltailnoback.png)top right no-repeat ;
-   background-size: 30%;
-   width: 60vw;
-   text-align: right;
-   padding-right: 5vw;
-   margin-left: 5vw;
-  
+
+.download a:hover {
+    color: #00cff6;
 }
-    .idea h1{
+
+/* Separators */
+hr {
+    border: none;
+    border-top: 2px solid rgba(255, 255, 255, 0.2);
+    margin: 30px 0;
+}
+
+/* ===== RESPONSIVE DESIGN ===== */
+
+@media(max-width:640px) {
+    .idea {
+        padding: 0vw 3vw 15vw 3vw;
+        background: url(/images/laboratori/cucina.jpg)no-repeat bottom center;
+        background-size: 60% 40%;
+        margin-left: 0;
+        border-radius: 1em;
+        width: 100%;
+        height: 100vw;
+        padding-top: 15vw;
+    }
+
+    .dev {
+        background: url(/images/deviltailnoback.png)top right no-repeat;
+        background-size: 30%;
+        width: 60vw;
+        text-align: right;
+        padding-right: 5vw;
+        margin-left: 5vw;
+    }
+
+    .idea h1 {
         font-size: 2.5vw;
-        color:rgb(12, 8, 236);
-       
+        color: rgb(12, 8, 236);
     }
-    .ricetta p{
-        font-size: 3vw;
+
+    .open {
+        margin-top: 4vw;
     }
-    .open{
-        margin-top:4vw;
+
+    .ricetta {
+        max-width: 95vw;
+        max-height: 90vh;
+        padding: 20px 15px;
+        font-size: 2.5vw;
     }
-    .help{
-    width: 100%;
-    justify-items: center;
-}
 
+    .ricetta h1 {
+        font-size: 2.5vw;
+    }
 
+    .svolgimento p {
+        font-size: 2.5vw;
+    }
 
+    .download a {
+        font-size: 2vw;
+    }
 
+    .help {
+        width: 100%;
+        justify-items: center;
+    }
 }

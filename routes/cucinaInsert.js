@@ -116,6 +116,20 @@ router.get('/api/recipe/:title', async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+router.get('/api/recipe/latest/published', async (req, res) => {
+  try {
+    const recipe = await Recipe.findOne({ published: true }).sort({ publishedAt: -1 });
+    
+    if (!recipe) {
+      return res.status(404).json({ error: 'Nessun menu pubblicato' });
+    }
+    
+    res.json(recipe);
+  } catch (error) {
+    console.error('Errore nel recupero del menu:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
 
 // ===== UPLOAD IMMAGINI =====
 
