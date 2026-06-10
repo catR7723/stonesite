@@ -691,7 +691,7 @@ router.post('/salvaMenuR', async (req, res) => {
     res.send(`
       <script>
         alert("Menu pubblicato con successo!");
-        window.location.href = "/cucinaInsert";
+        window.location.href = "/cucina";
       </script>
     `);
 

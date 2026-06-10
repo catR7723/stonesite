@@ -73,6 +73,7 @@ background-image: linear-gradient(to bottom, #eff508, #d5f53b, #bdf457, #a8f16e,
     margin:10px;
     align-self: center;
     align-items: center;
+    
 
     
 }
@@ -119,6 +120,31 @@ background-image: linear-gradient(to bottom, #eff508, #d5f53b, #bdf457, #a8f16e,
     word-wrap: break-word;
     line-height: 1.6;
     font-size: 0.8em;
+    margin: 15px 0 15px 0;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.Primo #descrizionePrimo {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    line-height: 1.6;
+    font-size: 0.9em;
+    margin: 15px 0 15px 0;
+    font-family: 'Courier New', Courier, monospace;
+}
+.Secondo #descrizioneSecondo {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    line-height: 1.6;
+    font-size: 0.9em;
+    margin: 15px 0 15px 0;
+    font-family: 'Courier New', Courier, monospace;
+}
+.Contorno #descrizioneContorno {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    line-height: 1.6;
+    font-size: 0.9em;
     margin: 15px 0 15px 0;
     font-family: 'Courier New', Courier, monospace;
 }

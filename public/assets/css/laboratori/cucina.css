@@ -25,6 +25,7 @@ background-image: linear-gradient(to left, #f08a06, #f19203, #f19a00, #f1a100, #
     border-top: 2px solid white;
     border-radius: 0 0 .5em .5em;
     z-index: 50;
+    
 }
 .menu ul{
     display: flex;
@@ -164,6 +165,7 @@ margin-bottom: 10vw;
     width: 100%;
     text-align: center;
     position: relative;
+    
 }
 
 /* Checkbox hidden */
@@ -217,6 +219,7 @@ margin-bottom: 10vw;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
     font-size: 1.8vw;
     text-align: justify;
+    
 }
 
 /* Scrollbar styling */
@@ -287,6 +290,9 @@ margin-bottom: 10vw;
 }
 
 /* Course titles */
+.svolgimento {
+    margin-top: 10vw;
+}
 .svolgimento h1 {
     margin-top: 30px;
     margin-bottom: 15px;
@@ -303,6 +309,7 @@ margin-bottom: 10vw;
     font-size: 1.8vw;
     margin-top: 2vw;
     line-height: 1.6;
+    
 }
 
 /* Images */
@@ -310,6 +317,10 @@ margin-bottom: 10vw;
     width: 100%;
     margin: 20px 0;
     border-radius: 8px;
+  display: flex;
+    align-items: center;
+    justify-content: center; 
+    
 }
 
 #primo img, #secondo img, #contorno img {
@@ -346,6 +357,44 @@ hr {
     margin: 30px 0;
 }
 
+#main_title{
+    margin-left: 10vw;
+    margin-right: 0;
+    text-align: right;
+}
+#recipe_title_display_label {
+  margin-right: 15vw;
+  margin-left: 2vw;
+  text-align: left;
+  
+}
+#recipe_title_display_intro {
+    text-align: center;
+    font-size: 4vw;
+    color: #d1ee87;
+    margin-top: 2vw;
+    margin-bottom: 3vw;
+}
+#titolop_svolgimento, #titolodefSecondo_svolgimento, #titolodefConto_svolgimento {
+    text-align: center;
+    font-size: 3vw;
+    color: #d1ee87;
+    margin-top: 4vw;
+    margin-bottom: 1vw;
+}
+
+#titolop_svolgimento,
+#titolodefSecondo_svolgimento,
+#titolodefConto_svolgimento,
+#ingredientiPrimo,
+#ingredientiSecondo,
+#ingredientiContorno,
+#descrizionePrimo,
+#descrizioneSecondo,
+#descrizioneContorno {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
 /* ===== RESPONSIVE DESIGN ===== */
 
 @media(max-width:640px) {
