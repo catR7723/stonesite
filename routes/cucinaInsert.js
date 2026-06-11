@@ -6,7 +6,7 @@ const path = require('path');
 const cheerio = require('cheerio'); 
 const fs = require('fs/promises');
 const cloudinary = require('cloudinary').v2;
-const Recipe = require('../models/Recipe');
+const { Recipe, Archivio } = require('../models/Recipes');
 
 
 // Configurazione Cloudinary
@@ -100,8 +100,8 @@ router.get('/walking', (req, res) => {
     res.sendFile(path.join(__dirname, '../views/html/laboratori/walking.html'));
 });
 
-// ===== API RICETTA =====
-router.get('/api/recipe/:title', async (req, res) => {
+// ===== RICETTA =====
+router.get('/recipe/:title', async (req, res) => {
   try {
     const title = req.params.title;
     const recipe = await Recipe.findOne({ title: title });
@@ -116,7 +116,7 @@ router.get('/api/recipe/:title', async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
-router.get('/api/recipe/latest/published', async (req, res) => {
+router.get('/recipe/latest/published', async (req, res) => {
   try {
     const recipe = await Recipe.findOne({ published: true }).sort({ publishedAt: -1 });
     
@@ -684,6 +684,28 @@ router.post('/salvaMenuR', async (req, res) => {
       `);
     }
 
+    // ✅ ARCHIVIA RICETTA PRECEDENTE SE ESISTE
+    const ricettaPrecedente = await Recipe.findOne({ published: true, title: { $ne: recipeTitle } });
+    if (ricettaPrecedente) {
+      console.log('🔄 Archiviazione ricetta precedente:', ricettaPrecedente.title);
+      
+      const archiviata = new Archivio({
+        title: ricettaPrecedente.title,
+        category: ricettaPrecedente.category,
+        primo: ricettaPrecedente.primo,
+        secondo: ricettaPrecedente.secondo,
+        contorno: ricettaPrecedente.contorno,
+        ricetta: ricettaPrecedente.ricetta
+      });
+      
+      await archiviata.save();
+      console.log('✅ Ricetta archiviata:', ricettaPrecedente.title);
+      
+      // Rimuovi quella vecchia dalla collezione Recipe
+      await Recipe.deleteOne({ _id: ricettaPrecedente._id });
+    }
+
+    // ✅ PUBBLICA LA NUOVA RICETTA
     recipe.published = true;
     recipe.publishedAt = new Date();
     await recipe.save();
@@ -704,6 +726,130 @@ router.post('/salvaMenuR', async (req, res) => {
       </script>
     `);
   }
+});
+
+// ===== ARCHIVIO RICETTE =====
+
+// ✅ POST - Archivia ricetta corrente
+router.post('/recipe/archive', async (req, res) => {
+  try {
+    const { recipe } = req.body;
+
+    if (!recipe || !recipe.title) {
+      return res.status(400).json({ error: 'Ricetta incompleta' });
+    }
+
+    const { Archivio } = require('../models/Recipes');
+
+    const archiviata = new Archivio({
+      title: recipe.title,
+      category: recipe.category,
+      primo: recipe.primo,
+      secondo: recipe.secondo,
+      contorno: recipe.contorno,
+      ricetta: recipe.ricetta
+    });
+
+    await archiviata.save();
+    console.log('✅ Ricetta archiviata:', recipe.title);
+
+    res.json({ success: true, message: 'Ricetta archiviata con successo' });
+  } catch (err) {
+    console.error('❌ Errore nell\'archiviazione:', err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// ✅ POST - Ripristina ricetta da archivio
+router.post('/recipe/restore/:id', async (req, res) => {
+  try {
+    const { Archivio } = require('../models/Recipes');
+
+    const archiviata = await Archivio.findById(req.params.id);
+    if (!archiviata) {
+      return res.status(404).json({ error: 'Ricetta archivio non trovata' });
+    }
+
+    // Archiva ricetta corrente se esiste
+    const corrente = await Recipe.findOne({ published: true });
+    if (corrente) {
+      const nuovaArchiviata = new Archivio({
+        title: corrente.title,
+        category: corrente.category,
+        primo: corrente.primo,
+        secondo: corrente.secondo,
+        contorno: corrente.contorno,
+        ricetta: corrente.ricetta
+      });
+      await nuovaArchiviata.save();
+      console.log('✅ Ricetta corrente archiviata');
+      
+      await Recipe.deleteOne({ _id: corrente._id });
+    }
+
+    // Ripristina da archivio
+    const nuovaRicetta = new Recipe({
+      title: archiviata.title,
+      category: archiviata.category,
+      primo: archiviata.primo,
+      secondo: archiviata.secondo,
+      contorno: archiviata.contorno,
+      ricetta: archiviata.ricetta,
+      published: true,
+      publishedAt: new Date()
+    });
+    await nuovaRicetta.save();
+    console.log('✅ Ricetta ripristinata:', archiviata.title);
+
+    await Archivio.findByIdAndDelete(req.params.id);
+
+    res.json({ success: true, message: 'Ricetta ripristinata' });
+  } catch (err) {
+    console.error('❌ Errore nel ripristino:', err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// ✅ GET - Carica archivio ricette
+router.get('/archivio-api', async (req, res) => {
+  try {
+    const { Archivio } = require('../models/Recipes');
+
+    const archiviate = await Archivio.find()
+      .sort({ archiviataIl: -1 })
+      .limit(100);
+    
+    console.log(`📚 Archivio caricato: ${archiviate.length} ricette`);
+    res.json(archiviate);
+  } catch (err) {
+    console.error('❌ Errore nel caricamento archivio:', err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// ✅ DELETE - Elimina ricetta da archivio
+router.delete('/archivio/:id', async (req, res) => {
+  try {
+    const { Archivio } = require('../models/Recipes');
+
+    const archiviata = await Archivio.findById(req.params.id);
+    if (!archiviata) {
+      return res.status(404).json({ error: 'Ricetta non trovata' });
+    }
+
+    await Archivio.findByIdAndDelete(req.params.id);
+    console.log('🗑️ Ricetta eliminata dall\'archivio:', archiviata.title);
+    
+    res.json({ success: true, message: 'Ricetta eliminata dall\'archivio' });
+  } catch (err) {
+    console.error('❌ Errore nell\'eliminazione:', err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// ✅ GET - Serve la pagina archivio
+router.get('/archivio', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'views', 'html', 'archivio.html'));
 });
 
 module.exports = router;

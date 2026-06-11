@@ -2,7 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const path = require('path');
 const session = require('express-session');
-const mongoose = require('mongoose'); // 🟩 AGGIUNTO
+const mongoose = require('mongoose'); 
 const { default: MongoStore } = require('connect-mongo'); 
 
 const app = express();
@@ -43,6 +43,10 @@ const uploadRoutes = require('./routes/cucinaInsert');
 const cineforumRoutes = require('./routes/cineforumInsert');
 app.use('/', uploadRoutes);
 app.use('/', cineforumRoutes); 
+app.get('/archivio', (req, res) => {
+  res.sendFile(path.join(__dirname, 'views', 'html', 'archivio.html'));
+});
+
 
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
