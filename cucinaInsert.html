@@ -27,25 +27,29 @@
     
     <div>
       <label>Carica il Primo:</label>
-      <input type="file" name="primo" required>
+      <input type="file" name="primo" id="filePrimo" accept="image/*" required>
+      <img id="previewPrimo" src="" alt="Primo" style="display:none; max-width: 200px; margin-top: 10px; border-radius: 8px;">
     </div>
     
-    <div>
+    <div style="margin-top: 20px;">
       <label>Carica il Secondo:</label>
-      <input type="file" name="secondo" required>
+      <input type="file" name="secondo" id="fileSecondo" accept="image/*" required>
+      <img id="previewSecondo" src="" alt="Secondo" style="display:none; max-width: 200px; margin-top: 10px; border-radius: 8px;">
     </div>
     
-    <div>
+    <div style="margin-top: 20px;">
       <label>Carica il Contorno:</label>
-      <input type="file" name="contorno" required>
+      <input type="file" name="contorno" id="fileContorno" accept="image/*" required>
+      <img id="previewContorno" src="" alt="Contorno" style="display:none; max-width: 200px; margin-top: 10px; border-radius: 8px;">
     </div>
 
-    <div>
+    <div style="margin-top: 20px;">
       <label>Carica pdf della ricetta:</label>
-      <input type="file" name="ricetta" required>
+      <input type="file" name="ricetta" id="filePdf" accept=".pdf" required>
+      <p id="pdfFileName" style="margin-top: 10px; color: #666;"></p>
     </div>
 
-    <button type="submit">Anteprima Immagini</button>
+    <button type="submit" style="margin-top: 20px;">Anteprima Immagini</button>
   </form>
 </div>
 
@@ -57,9 +61,11 @@
     <!-- IMMAGINE DEL PRIMO -->
     <div id="primo-image-container">
       <img id="imgPrimo" src="" alt="Primo" width="200" style="display:none;">
-      <button id="deletePrimoImageBtn" type="button" class="btn" style="display:none; margin: 10px 0;">Elimina Immagine del Primo</button>
-      <input type="file" id="uploadPrimoImageInput" accept="image/*" style="display:none;">
-      <button id="uploadPrimoImageBtn" type="button" class="btn" style="display:none; margin: 10px 0;">Carica Nuova Immagine Primo</button>
+      <div id="primo-button-container">
+        <button id="deletePrimoImageBtn" type="button" class="btn" style="display:none; margin: 10px 0;">Elimina Immagine del Primo</button>
+        <input type="file" id="uploadPrimoImageInput" accept="image/*" style="display:none;">
+        <button id="uploadPrimoImageBtn" type="button" class="btn" style="display:none; margin: 10px 0;">Carica Nuova Immagine Primo</button>
+      </div>
     </div>
 
     <div class="Primo">
@@ -98,9 +104,11 @@
     <!-- IMMAGINE DEL SECONDO -->
     <div id="secondo-image-container">
       <img id="imgSecondo" src="" alt="Secondo" width="200" style="display:none;">
-      <button id="deleteSecondoImageBtn" type="button" class="btn" style="display:none; margin: 10px 0;">Elimina Immagine del Secondo</button>
-      <input type="file" id="uploadSecondoImageInput" accept="image/*" style="display:none;">
-      <button id="uploadSecondoImageBtn" type="button" class="btn" style="display:none; margin: 10px 0;">Carica Nuova Immagine Secondo</button>
+      <div id="secondo-button-container">
+        <button id="deleteSecondoImageBtn" type="button" class="btn" style="display:none; margin: 10px 0;">Elimina Immagine del Secondo</button>
+        <input type="file" id="uploadSecondoImageInput" accept="image/*" style="display:none;">
+        <button id="uploadSecondoImageBtn" type="button" class="btn" style="display:none; margin: 10px 0;">Carica Nuova Immagine Secondo</button>
+      </div>
     </div>
 
     <div class="Secondo">
@@ -139,9 +147,11 @@
     <!-- IMMAGINE DEL CONTORNO -->
     <div id="contorno-image-container">
       <img id="imgContorno" src="" alt="Contorno" width="200" style="display:none;">
-      <button id="deleteContornoImageBtn" type="button" class="btn" style="display:none; margin: 10px 0;">Elimina Immagine del Contorno</button>
-      <input type="file" id="uploadContornoImageInput" accept="image/*" style="display:none;">
-      <button id="uploadContornoImageBtn" type="button" class="btn" style="display:none; margin: 10px 0;">Carica Nuova Immagine Contorno</button>
+      <div id="contorno-button-container">
+        <button id="deleteContornoImageBtn" type="button" class="btn" style="display:none; margin: 10px 0;">Elimina Immagine del Contorno</button>
+        <input type="file" id="uploadContornoImageInput" accept="image/*" style="display:none;">
+        <button id="uploadContornoImageBtn" type="button" class="btn" style="display:none; margin: 10px 0;">Carica Nuova Immagine Contorno</button>
+      </div>
     </div>
 
     <div class="Contorno">
@@ -234,822 +244,584 @@
     </form>
   </div>
 </div>
+</div>
 
 <script>
-    // Controlla se il menu è stato salvato
-    const urlParams = new URLSearchParams(window.location.search);
-    const menuSalvato = urlParams.get('menuSalvato');
-    const recipeTitleFromUrl = urlParams.get('recipeTitle');  // ← CAMBIA QUI
-
-    if (menuSalvato === 'true' && recipeTitleFromUrl) {
-      // Mostra la sezione di pubblicazione
-      document.getElementById('pubblicazione').style.display = 'block';
-      document.getElementById('recipeTitle_salvaMenuR').value = recipeTitleFromUrl;  // ← CAMBIA QUI
-      
-      // Opzionale: mostra il link per scaricare la ricetta
-      document.getElementById('ricetta').href = `/download/${recipeTitleFromUrl}`;  // ← CAMBIA QUI
-      
-      alert("Menu salvato con successo in cucina/" + recipeTitleFromUrl + "!");  // ← CAMBIA QUI
-    }
-
-const recipeTitle = document.getElementById('recipeTitle');
-const titleStatus = document.getElementById('currentTitle');
-const btnCreateTitle = document.getElementById('btnCreateTitle');
-const headerTitle = document.getElementById('headerTitle');
-const headerDiv = document.getElementById('header-title');
-
+// ===== STATO GLOBALE =====
 let currentRecipeTitle = '';
+let recipeData = {
+  primo: { titolo: '', ingredienti: '', descrizione: '', imageUrl: '' },
+  secondo: { titolo: '', ingredienti: '', descrizione: '', imageUrl: '' },
+  contorno: { titolo: '', ingredienti: '', descrizione: '', imageUrl: '' },
+  ricetta: { pdfUrl: '' }
+};
 
-// Funzione per mostrare/nascondere step
-function showStep(stepId) {
-  document.querySelectorAll('.step-container').forEach(step => {
-    step.style.display = 'none';
-    step.classList.remove('active');
-  });
-  const step = document.getElementById(stepId);
-  if (step) {
-    step.style.display = 'block';
-    step.classList.add('active');
-  }
-}
-
-// STEP 1: Crea titolo
-btnCreateTitle.addEventListener('click', () => {
-  const title = recipeTitle.value.trim();
+// ===== STEP 1: CREA TITOLO =====
+document.getElementById('btnCreateTitle').addEventListener('click', async () => {
+  const title = document.getElementById('recipeTitle').value.trim();
+  
   if (!title) {
     alert('Inserisci un titolo per il menu');
     return;
   }
-  
+
   currentRecipeTitle = title;
-  titleStatus.textContent = title;
-  headerTitle.textContent = title;
-  headerDiv.style.display = 'block';
-  updateRecipeTitle(title);
-  localStorage.setItem('recipeTitle', title);
+  localStorage.setItem('currentRecipeTitle', currentRecipeTitle);
   
-  showStep('step-upload-images');
+  document.getElementById('currentTitle').textContent = currentRecipeTitle;
+  document.getElementById('headerTitle').textContent = currentRecipeTitle;
+  document.getElementById('header-title').style.display = 'block';
+  
+  // Carica i dati esistenti se la ricetta esiste
+  await loadRecipeData(currentRecipeTitle);
+  
+  // Vai allo Step 2
+  goToStep(2);
 });
 
-// Funzione per aggiornare il titolo in tutti i form
-function updateRecipeTitle(title) {
-  document.querySelectorAll('input[name="recipeTitle"]').forEach(input => {
-    input.value = title;
-  });
-}
+// ===== STEP 2: ANTEPRIMA IMMAGINI LOCALI =====
+document.getElementById('filePrimo').addEventListener('change', function() {
+  previewImage(this, 'previewPrimo');
+});
 
-// Funzione per aggiornare l'anteprima
-function aggiornaAnteprima(portata) {
-  if (portata === 'primo') {
-    const titolo = document.getElementById('inputTitoloPrimo').value;
-    const ingredienti = document.getElementById('ingredientiPrimoInput').value;
-    const descrizione = document.getElementById('descrizionePrimoInput').value;
-    
-    document.getElementById('titdef').textContent = titolo || '';
-    document.getElementById('ingredientiPrimo').textContent = ingredienti || '';
-    document.getElementById('descrizionePrimo').textContent = descrizione || '';
-  } else if (portata === 'secondo') {
-    const titolo = document.getElementById('inputTitoloSecondo').value;
-    const ingredienti = document.getElementById('ingredientiSecondoInput').value;
-    const descrizione = document.getElementById('descrizioneSecondoInput').value;
-    
-    document.getElementById('titolodefSecondo').textContent = titolo || '';
-    document.getElementById('ingredientiSecondo').textContent = ingredienti || '';
-    document.getElementById('descrizioneSecondo').textContent = descrizione || '';
-  } else if (portata === 'contorno') {
-    const titolo = document.getElementById('inputTitoloContorno').value;
-    const ingredienti = document.getElementById('ingredientiContornoInput').value;
-    const descrizione = document.getElementById('descrizioneContornoInput').value;
-    
-    document.getElementById('titdefConto').textContent = titolo || '';
-    document.getElementById('ingredientiContorno').textContent = ingredienti || '';
-    document.getElementById('descrizioneContorno').textContent = descrizione || '';
+document.getElementById('fileSecondo').addEventListener('change', function() {
+  previewImage(this, 'previewSecondo');
+});
+
+document.getElementById('fileContorno').addEventListener('change', function() {
+  previewImage(this, 'previewContorno');
+});
+
+document.getElementById('filePdf').addEventListener('change', function() {
+  const fileName = this.files[0]?.name || '';
+  document.getElementById('pdfFileName').textContent = fileName ? `📄 ${fileName}` : '';
+});
+
+function previewImage(input, previewId) {
+  if (input.files && input.files[0]) {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const preview = document.getElementById(previewId);
+      preview.src = e.target.result;
+      preview.style.display = 'block';
+    };
+    reader.readAsDataURL(input.files[0]);
   }
 }
 
-// Carica i dati da MongoDB
+// ===== FORM STEP 2: UPLOAD IMMAGINI =====
+document.getElementById('topForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  
+  const formData = new FormData(e.target);
+  formData.set('recipeTitle', currentRecipeTitle);
+  
+  try {
+    const response = await fetch('/cucinaInsert', {
+      method: 'POST',
+      body: formData
+    });
+    
+    const result = await response.json();
+    
+    if (result.success) {
+      // Salva gli URL delle immagini
+      recipeData.primo.imageUrl = result.images?.primo || '';
+      recipeData.secondo.imageUrl = result.images?.secondo || '';
+      recipeData.contorno.imageUrl = result.images?.contorno || '';
+      recipeData.ricetta.pdfUrl = result.images?.ricetta || '';
+      
+      // Aggiorna i hidden input
+      document.getElementById('recipeTitle_hidden').value = currentRecipeTitle;
+      document.getElementById('recipeTitle_primo').value = currentRecipeTitle;
+      document.getElementById('recipeTitle_secondo').value = currentRecipeTitle;
+      document.getElementById('recipeTitle_contorno').value = currentRecipeTitle;
+      document.getElementById('recipeTitle_salvaMenuR').value = currentRecipeTitle;
+      
+      // Vai allo Step 3
+      loadStepImages('primo');
+      goToStep(3);
+    }
+  } catch (error) {
+    console.error('Errore:', error);
+    alert('Errore nel caricamento delle immagini');
+  }
+});
+
+// ===== CARICA IMMAGINI NEGLI STEP =====
 async function loadRecipeData(title) {
   try {
-    const response = await fetch(`/api/recipe/${encodeURIComponent(title)}`);
-    if (!response.ok) return;
+    const response = await fetch(`/getImageUrls/${encodeURIComponent(title)}`);
     
-    const recipe = await response.json();
-    
-    // Carica immagini
-    if (recipe.primo?.imageUrl) {
-      document.getElementById('imgPrimo').src = recipe.primo.imageUrl;
-      document.getElementById('imgPrimo').style.display = 'block';
-      document.getElementById('deletePrimoImageBtn').style.display = 'inline-block';
-      document.getElementById('uploadPrimoImageBtn').style.display = 'none';
-    } else {
-      document.getElementById('imgPrimo').style.display = 'none';
-      document.getElementById('deletePrimoImageBtn').style.display = 'none';
-      document.getElementById('uploadPrimoImageBtn').style.display = 'inline-block';
-    }
-    
-    if (recipe.secondo?.imageUrl) {
-      document.getElementById('imgSecondo').src = recipe.secondo.imageUrl;
-      document.getElementById('imgSecondo').style.display = 'block';
-      document.getElementById('deleteSecondoImageBtn').style.display = 'inline-block';
-      document.getElementById('uploadSecondoImageBtn').style.display = 'none';
-    } else {
-      document.getElementById('imgSecondo').style.display = 'none';
-      document.getElementById('deleteSecondoImageBtn').style.display = 'none';
-      document.getElementById('uploadSecondoImageBtn').style.display = 'inline-block';
-    }
-    
-    if (recipe.contorno?.imageUrl) {
-      document.getElementById('imgContorno').src = recipe.contorno.imageUrl;
-      document.getElementById('imgContorno').style.display = 'block';
-      document.getElementById('deleteContornoImageBtn').style.display = 'inline-block';
-      document.getElementById('uploadContornoImageBtn').style.display = 'none';
-    } else {
-      document.getElementById('imgContorno').style.display = 'none';
-      document.getElementById('deleteContornoImageBtn').style.display = 'none';
-      document.getElementById('uploadContornoImageBtn').style.display = 'inline-block';
-    }
-    
-    if (recipe.ricetta?.pdfUrl) {
-      document.getElementById('ricetta').href = recipe.ricetta.pdfUrl;
-    }
-    
-    // Carica testi primo
-    if (recipe.primo?.titolo) {
-      document.getElementById('inputTitoloPrimo').value = recipe.primo.titolo;
-      document.getElementById('titdef').textContent = recipe.primo.titolo;
-    }
-    if (recipe.primo?.ingredienti) {
-      document.getElementById('ingredientiPrimoInput').value = recipe.primo.ingredienti;
-      document.getElementById('ingredientiPrimo').textContent = recipe.primo.ingredienti;
-    }
-    if (recipe.primo?.descrizione) {
-      document.getElementById('descrizionePrimoInput').value = recipe.primo.descrizione;
-      document.getElementById('descrizionePrimo').textContent = recipe.primo.descrizione;
-    }
-    
-    // Carica testi secondo
-    if (recipe.secondo?.titolo) {
-      document.getElementById('inputTitoloSecondo').value = recipe.secondo.titolo;
-      document.getElementById('titolodefSecondo').textContent = recipe.secondo.titolo;
-    }
-    if (recipe.secondo?.ingredienti) {
-      document.getElementById('ingredientiSecondoInput').value = recipe.secondo.ingredienti;
-      document.getElementById('ingredientiSecondo').textContent = recipe.secondo.ingredienti;
-    }
-    if (recipe.secondo?.descrizione) {
-      document.getElementById('descrizioneSecondoInput').value = recipe.secondo.descrizione;
-      document.getElementById('descrizioneSecondo').textContent = recipe.secondo.descrizione;
-    }
-    
-    // Carica testi contorno
-    if (recipe.contorno?.titolo) {
-      document.getElementById('inputTitoloContorno').value = recipe.contorno.titolo;
-      document.getElementById('titdefConto').textContent = recipe.contorno.titolo;
-    }
-    if (recipe.contorno?.ingredienti) {
-      document.getElementById('ingredientiContornoInput').value = recipe.contorno.ingredienti;
-      document.getElementById('ingredientiContorno').textContent = recipe.contorno.ingredienti;
-    }
-    if (recipe.contorno?.descrizione) {
-      document.getElementById('descrizioneContornoInput').value = recipe.contorno.descrizione;
-      document.getElementById('descrizioneContorno').textContent = recipe.contorno.descrizione;
+    if (response.ok) {
+      const data = await response.json();
+      recipeData.primo.imageUrl = data.primo || '';
+      recipeData.primo.titolo = data.primo_titolo || '';
+      recipeData.primo.ingredienti = data.primo_ingredienti || '';
+      recipeData.primo.descrizione = data.primo_descrizione || '';
+      
+      recipeData.secondo.imageUrl = data.secondo || '';
+      recipeData.secondo.titolo = data.secondo_titolo || '';
+      recipeData.secondo.ingredienti = data.secondo_ingredienti || '';
+      recipeData.secondo.descrizione = data.secondo_descrizione || '';
+      
+      recipeData.contorno.imageUrl = data.contorno || '';
+      recipeData.contorno.titolo = data.contorno_titolo || '';
+      recipeData.contorno.ingredienti = data.contorno_ingredienti || '';
+      recipeData.contorno.descrizione = data.contorno_descrizione || '';
+      
+      recipeData.ricetta.pdfUrl = data.ricetta || '';
     }
   } catch (error) {
-    console.error('Errore nel caricamento della ricetta:', error);
+    console.log('Nessun dato precedente trovato');
   }
 }
 
-// Funzione per caricare e mostrare le anteprime nel step finale
-async function loadFinalPreview(title) {
-  try {
-    const response = await fetch(`/api/recipe/${encodeURIComponent(title)}`);
-    if (!response.ok) return;
-    
-    const recipe = await response.json();
-    
-    // Primo
-    if (recipe.primo?.imageUrl) {
-      document.getElementById('previewImgPrimo').src = recipe.primo.imageUrl;
-      document.getElementById('previewImgPrimo').style.display = 'block';
-    } else {
-      document.getElementById('previewImgPrimo').style.display = 'none';
-    }
-    if (recipe.primo?.titolo) {
-      document.getElementById('previewTitoloPrimo').textContent = recipe.primo.titolo;
-    } else {
-      document.getElementById('previewTitoloPrimo').textContent = '';
-    }
-    if (recipe.primo?.ingredienti) {
-      document.getElementById('previewIngredientiPrimo').textContent = recipe.primo.ingredienti;
-    } else {
-      document.getElementById('previewIngredientiPrimo').textContent = '';
-    }
-    if (recipe.primo?.descrizione) {
-      document.getElementById('previewDescrizionePrimo').textContent = recipe.primo.descrizione;
-    } else {
-      document.getElementById('previewDescrizionePrimo').textContent = '';
-    }
-    
-    // Secondo
-    if (recipe.secondo?.imageUrl) {
-      document.getElementById('previewImgSecondo').src = recipe.secondo.imageUrl;
-      document.getElementById('previewImgSecondo').style.display = 'block';
-    } else {
-      document.getElementById('previewImgSecondo').style.display = 'none';
-    }
-    if (recipe.secondo?.titolo) {
-      document.getElementById('previewTitoloSecondo').textContent = recipe.secondo.titolo;
-    } else {
-      document.getElementById('previewTitoloSecondo').textContent = '';
-    }
-    if (recipe.secondo?.ingredienti) {
-      document.getElementById('previewIngredientiSecondo').textContent = recipe.secondo.ingredienti;
-    } else {
-      document.getElementById('previewIngredientiSecondo').textContent = '';
-    }
-    if (recipe.secondo?.descrizione) {
-      document.getElementById('previewDescrizioneSecondo').textContent = recipe.secondo.descrizione;
-    } else {
-      document.getElementById('previewDescrizioneSecondo').textContent = '';
-    }
-    
-    // Contorno
-    if (recipe.contorno?.imageUrl) {
-      document.getElementById('previewImgContorno').src = recipe.contorno.imageUrl;
-      document.getElementById('previewImgContorno').style.display = 'block';
-    } else {
-      document.getElementById('previewImgContorno').style.display = 'none';
-    }
-    if (recipe.contorno?.titolo) {
-      document.getElementById('previewTitoloContorno').textContent = recipe.contorno.titolo;
-    } else {
-      document.getElementById('previewTitoloContorno').textContent = '';
-    }
-    if (recipe.contorno?.ingredienti) {
-      document.getElementById('previewIngredientiContorno').textContent = recipe.contorno.ingredienti;
-    } else {
-      document.getElementById('previewIngredientiContorno').textContent = '';
-    }
-    if (recipe.contorno?.descrizione) {
-      document.getElementById('previewDescrizioneContorno').textContent = recipe.contorno.descrizione;
-    } else {
-      document.getElementById('previewDescrizioneContorno').textContent = '';
-    }
-    
-    // Ricetta PDF
-    if (recipe.ricetta?.pdfUrl) {
-      document.getElementById('ricetta').href = recipe.ricetta.pdfUrl;
-    }
-    
-    // Aggiorna i campi nascosti
-    document.getElementById('recipeTitle_salvaMenu').value = title;
-    document.getElementById('recipeTitle_salvaMenuR').value = title;
-    
-  } catch (error) {
-    console.error('Errore nel caricamento dell\'anteprima:', error);
-  }
-}
-
-// STEP 2: Intercetta il submit del form immagini
-document.getElementById('topForm').addEventListener('submit', function(e) {
-  e.preventDefault();
-  
-  const formData = new FormData(this);
-  
-  fetch('/cucinaInsert', {
-    method: 'POST',
-    body: formData
-  })
-  .then(response => response.json())
-  .then(data => {
-    if (data.success) {
-      loadRecipeData(currentRecipeTitle);
-      showStep('step-primo');
-    }
-  })
-  .catch(error => {
-    console.error('Errore:', error);
-    alert('Errore durante il caricamento delle immagini');
-  });
-});
-
-// Controlla se primo è completato
-function checkPrimoCompletion() {
-  const titolo = document.getElementById('inputTitoloPrimo').value.trim();
-  const ingredienti = document.getElementById('ingredientiPrimoInput').value.trim();
-  const descrizione = document.getElementById('descrizionePrimoInput').value.trim();
-  
-  return titolo && ingredienti && descrizione;
-}
-
-// Controlla se secondo è completato
-function checkSecondoCompletion() {
-  const titolo = document.getElementById('inputTitoloSecondo').value.trim();
-  const ingredienti = document.getElementById('ingredientiSecondoInput').value.trim();
-  const descrizione = document.getElementById('descrizioneSecondoInput').value.trim();
-  
-  return titolo && ingredienti && descrizione;
-}
-
-// Controlla se contorno è completato
-function checkContornoCompletion() {
-  const titolo = document.getElementById('inputTitoloContorno').value.trim();
-  const ingredienti = document.getElementById('ingredientiContornoInput').value.trim();
-  const descrizione = document.getElementById('descrizioneContornoInput').value.trim();
-  
-  return titolo && ingredienti && descrizione;
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-  recipeTitle.focus();
-  
-  // ===== PRIMO =====
-  // Upload immagine Primo
-  document.getElementById('uploadPrimoImageBtn').addEventListener('click', () => {
-    document.getElementById('uploadPrimoImageInput').click();
-  });
-
-  document.getElementById('uploadPrimoImageInput').addEventListener('change', async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    const formData = new FormData();
-    formData.append('immagine', file);
-    formData.append('recipeTitle', currentRecipeTitle);
-
-    try {
-      const response = await fetch('/uploadNuovaImmaginePrimo', {
-        method: 'POST',
-        body: formData
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        document.getElementById('imgPrimo').src = data.imageUrl;
-        document.getElementById('imgPrimo').style.display = 'block';
-        document.getElementById('deletePrimoImageBtn').style.display = 'inline-block';
-        document.getElementById('uploadPrimoImageBtn').style.display = 'none';
-        alert('Immagine primo caricata!');
-      }
-    } catch (error) {
-      console.error('Errore:', error);
-      alert('Errore nel caricamento dell\'immagine');
-    }
-  });
-
-  // Elimina immagine Primo
-  document.getElementById('deletePrimoImageBtn').addEventListener('click', async () => {
-    if (!confirm('Sei sicuro di voler eliminare l\'immagine del primo?')) return;
-
-    try {
-      const response = await fetch('/deleteImmaginePrimo', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ recipeTitle: currentRecipeTitle })
-      });
-
-      if (response.ok) {
-        document.getElementById('imgPrimo').style.display = 'none';
-        document.getElementById('deletePrimoImageBtn').style.display = 'none';
-        document.getElementById('uploadPrimoImageBtn').style.display = 'inline-block';
-        alert('Immagine primo eliminata!');
-      }
-    } catch (error) {
-      console.error('Errore:', error);
-      alert('Errore nell\'eliminazione dell\'immagine');
-    }
-  });
-
-  // Cancella Primo dal form
-  document.getElementById('cancelPrimoBtn').addEventListener('click', async () => {
-    if (!confirm('Sei sicuro di voler cancellare il primo? I testi verranno cancellati ma l\'immagine rimane.')) return;
-
-    try {
-      const response = await fetch('/deletePrimoFinal', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ recipeTitle: currentRecipeTitle })
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        // Pulisci i campi
-        document.getElementById('inputTitoloPrimo').value = '';
-        document.getElementById('ingredientiPrimoInput').value = '';
-        document.getElementById('descrizionePrimoInput').value = '';
-        document.getElementById('primo-completato').style.display = 'none';
-        aggiornaAnteprima('primo');
-        showStep('step-primo');
-        alert('Primo cancellato! Torna al step 3');
-      }
-    } catch (error) {
-      console.error('Errore:', error);
-      alert('Errore nella cancellazione');
-    }
-  });
-
-  // Salva Primo
-  document.getElementById('formPrimo').addEventListener('submit', function(e) {
-    e.preventDefault();
-    
-    fetch('/salvaPrimo', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        recipeTitle: currentRecipeTitle,
-        titolo_Primo: document.getElementById('inputTitoloPrimo').value,
-        ingredienti_Primo: document.getElementById('ingredientiPrimoInput').value,
-        descrizione_Primo: document.getElementById('descrizionePrimoInput').value
-      })
-    })
-    .then(() => {
-      if (checkPrimoCompletion()) {
-        document.getElementById('primo-completato').style.display = 'block';
-        setTimeout(() => {
-          showStep('step-secondo');
-          loadRecipeData(currentRecipeTitle);
-        }, 1500);
-      }
-    })
-    .catch(error => console.error('Errore:', error));
-  });
-
-  // ===== SECONDO =====
-  // Upload immagine Secondo
-  document.getElementById('uploadSecondoImageBtn').addEventListener('click', () => {
-    document.getElementById('uploadSecondoImageInput').click();
-  });
-
-  document.getElementById('uploadSecondoImageInput').addEventListener('change', async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    const formData = new FormData();
-    formData.append('immagine', file);
-    formData.append('recipeTitle', currentRecipeTitle);
-
-    try {
-      const response = await fetch('/uploadNuovaImmmagineSecondo', {
-        method: 'POST',
-        body: formData
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        document.getElementById('imgSecondo').src = data.imageUrl;
-        document.getElementById('imgSecondo').style.display = 'block';
-        document.getElementById('deleteSecondoImageBtn').style.display = 'inline-block';
-        document.getElementById('uploadSecondoImageBtn').style.display = 'none';
-        alert('Immagine secondo caricata!');
-      }
-    } catch (error) {
-      console.error('Errore:', error);
-      alert('Errore nel caricamento dell\'immagine');
-    }
-  });
-
-  // Elimina immagine Secondo
-  document.getElementById('deleteSecondoImageBtn').addEventListener('click', async () => {
-    if (!confirm('Sei sicuro di voler eliminare l\'immagine del secondo?')) return;
-
-    try {
-      const response = await fetch('/deleteImmmagineSecondo', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ recipeTitle: currentRecipeTitle })
-      });
-
-      if (response.ok) {
-        document.getElementById('imgSecondo').style.display = 'none';
-        document.getElementById('deleteSecondoImageBtn').style.display = 'none';
-        document.getElementById('uploadSecondoImageBtn').style.display = 'inline-block';
-        alert('Immagine secondo eliminata!');
-      }
-    } catch (error) {
-      console.error('Errore:', error);
-      alert('Errore nell\'eliminazione dell\'immagine');
-    }
-  });
-
-  // Cancella Secondo dal form
-  document.getElementById('cancelSecondoBtn').addEventListener('click', async () => {
-    if (!confirm('Sei sicuro di voler cancellare il secondo? I testi verranno cancellati ma l\'immagine rimane.')) return;
-
-    try {
-      const response = await fetch('/deleteSecondoFinal', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ recipeTitle: currentRecipeTitle })
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        // Pulisci i campi
-        document.getElementById('inputTitoloSecondo').value = '';
-        document.getElementById('ingredientiSecondoInput').value = '';
-        document.getElementById('descrizioneSecondoInput').value = '';
-        document.getElementById('secondo-completato').style.display = 'none';
-        aggiornaAnteprima('secondo');
-        showStep('step-secondo');
-        alert('Secondo cancellato! Torna al step 4');
-      }
-    } catch (error) {
-      console.error('Errore:', error);
-      alert('Errore nella cancellazione');
-    }
-  });
-
-  // Salva Secondo
-  document.getElementById('formSecondo').addEventListener('submit', function(e) {
-    e.preventDefault();
-    
-    fetch('/salvaSecondo', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        recipeTitle: currentRecipeTitle,
-        titolo_Secondo: document.getElementById('inputTitoloSecondo').value,
-        ingredienti_Secondo: document.getElementById('ingredientiSecondoInput').value,
-        descrizione_Secondo: document.getElementById('descrizioneSecondoInput').value
-      })
-    })
-    .then(() => {
-      if (checkSecondoCompletion()) {
-        document.getElementById('secondo-completato').style.display = 'block';
-        setTimeout(() => {
-          showStep('step-contorno');
-          loadRecipeData(currentRecipeTitle);
-        }, 1500);
-      }
-    })
-    .catch(error => console.error('Errore:', error));
-  });
-
-  // ===== CONTORNO =====
-  // Upload immagine Contorno
-  document.getElementById('uploadContornoImageBtn').addEventListener('click', () => {
-    document.getElementById('uploadContornoImageInput').click();
-  });
-
-  document.getElementById('uploadContornoImageInput').addEventListener('change', async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    const formData = new FormData();
-    formData.append('immagine', file);
-    formData.append('recipeTitle', currentRecipeTitle);
-
-    try {
-      const response = await fetch('/uploadNuovaImmmagineContorno', {
-        method: 'POST',
-        body: formData
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        document.getElementById('imgContorno').src = data.imageUrl;
-        document.getElementById('imgContorno').style.display = 'block';
-        document.getElementById('deleteContornoImageBtn').style.display = 'inline-block';
-        document.getElementById('uploadContornoImageBtn').style.display = 'none';
-        alert('Immagine contorno caricata!');
-      }
-    } catch (error) {
-      console.error('Errore:', error);
-      alert('Errore nel caricamento dell\'immagine');
-    }
-  });
-
-  // Elimina immagine Contorno
-  document.getElementById('deleteContornoImageBtn').addEventListener('click', async () => {
-    if (!confirm('Sei sicuro di voler eliminare l\'immagine del contorno?')) return;
-
-    try {
-      const response = await fetch('/deleteImmmagineContorno', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ recipeTitle: currentRecipeTitle })
-      });
-
-      if (response.ok) {
-        document.getElementById('imgContorno').style.display = 'none';
-        document.getElementById('deleteContornoImageBtn').style.display = 'none';
-        document.getElementById('uploadContornoImageBtn').style.display = 'inline-block';
-        alert('Immagine contorno eliminata!');
-      }
-    } catch (error) {
-      console.error('Errore:', error);
-      alert('Errore nell\'eliminazione dell\'immagine');
-    }
-  });
-
-  // Cancella Contorno dal form
-  document.getElementById('cancelContornoBtn').addEventListener('click', async () => {
-    if (!confirm('Sei sicuro di voler cancellare il contorno? I testi verranno cancellati ma l\'immagine rimane.')) return;
-
-    try {
-      const response = await fetch('/deleteContornoFinal', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ recipeTitle: currentRecipeTitle })
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        // Pulisci i campi
-        document.getElementById('inputTitoloContorno').value = '';
-        document.getElementById('ingredientiContornoInput').value = '';
-        document.getElementById('descrizioneContornoInput').value = '';
-        document.getElementById('contorno-completato').style.display = 'none';
-        aggiornaAnteprima('contorno');
-        showStep('step-contorno');
-        alert('Contorno cancellato! Torna al step 5');
-      }
-    } catch (error) {
-      console.error('Errore:', error);
-      alert('Errore nella cancellazione');
-    }
-  });
-
-  // Salva Contorno
-  document.getElementById('formContorno').addEventListener('submit', function(e) {
-    e.preventDefault();
-    
-    fetch('/salvaContorno', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        recipeTitle: currentRecipeTitle,
-        titolo_Contorno: document.getElementById('inputTitoloContorno').value,
-        ingredienti_Contorno: document.getElementById('ingredientiContornoInput').value,
-        descrizione_Contorno: document.getElementById('descrizioneContornoInput').value
-      })
-    })
-    .then(() => {
-      if (checkContornoCompletion()) {
-        document.getElementById('contorno-completato').style.display = 'block';
-        setTimeout(() => {
-          loadFinalPreview(currentRecipeTitle);
-          showStep('step-finale');
-        }, 1500);
-      }
-    })
-    .catch(error => console.error('Errore:', error));
-  });
-
-  // ===== STEP FINALE: Elimina dal preview =====
-  document.getElementById('deletePrimoFinalBtn').addEventListener('click', async () => {
-    if (!confirm('Sei sicuro di voler eliminare il primo dall\'anteprima?')) return;
-
-    try {
-      const response = await fetch('/deletePrimoFinal', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ recipeTitle: currentRecipeTitle })
-      });
-
-      if (response.ok) {
-        // Pulisci i campi dello step 3 e torna
-        document.getElementById('inputTitoloPrimo').value = '';
-        document.getElementById('ingredientiPrimoInput').value = '';
-        document.getElementById('descrizionePrimoInput').value = '';
-        document.getElementById('primo-completato').style.display = 'none';
-        aggiornaAnteprima('primo');
-        
-        // Carica dati aggiornati (immagine rimane)
-        await loadRecipeData(currentRecipeTitle);
-        
-        // Torna al step 3
-        showStep('step-primo');
-        alert('Primo eliminato! Torna al step 3');
-      }
-    } catch (error) {
-      console.error('Errore:', error);
-      alert('Errore nell\'eliminazione');
-    }
-  });
-
-  document.getElementById('deleteSecondoFinalBtn').addEventListener('click', async () => {
-    if (!confirm('Sei sicuro di voler eliminare il secondo dall\'anteprima?')) return;
-
-    try {
-      const response = await fetch('/deleteSecondoFinal', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ recipeTitle: currentRecipeTitle })
-      });
-
-      if (response.ok) {
-        // Pulisci i campi dello step 4 e torna
-        document.getElementById('inputTitoloSecondo').value = '';
-        document.getElementById('ingredientiSecondoInput').value = '';
-        document.getElementById('descrizioneSecondoInput').value = '';
-        document.getElementById('secondo-completato').style.display = 'none';
-        aggiornaAnteprima('secondo');
-        
-        // Carica dati aggiornati (immagine rimane)
-        await loadRecipeData(currentRecipeTitle);
-        
-        // Torna al step 4
-        showStep('step-secondo');
-        alert('Secondo eliminato! Torna al step 4');
-      }
-    } catch (error) {
-      console.error('Errore:', error);
-      alert('Errore nell\'eliminazione');
-    }
-  });
-
-  document.getElementById('deleteContornoFinalBtn').addEventListener('click', async () => {
-    if (!confirm('Sei sicuro di voler eliminare il contorno dall\'anteprima?')) return;
-
-    try {
-      const response = await fetch('/deleteContornoFinal', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ recipeTitle: currentRecipeTitle })
-      });
-
-      if (response.ok) {
-        // Pulisci i campi dello step 5 e torna
-        document.getElementById('inputTitoloContorno').value = '';
-        document.getElementById('ingredientiContornoInput').value = '';
-        document.getElementById('descrizioneContornoInput').value = '';
-        document.getElementById('contorno-completato').style.display = 'none';
-        aggiornaAnteprima('contorno');
-        
-        // Carica dati aggiornati (immagine rimane)
-        await loadRecipeData(currentRecipeTitle);
-        
-        // Torna al step 5
-        showStep('step-contorno');
-        alert('Contorno eliminato! Torna al step 5');
-      }
-    } catch (error) {
-      console.error('Errore:', error);
-      alert('Errore nell\'eliminazione');
-    }
-  });
-
-  document.getElementById('deleteRicettaBtn').addEventListener('click', async () => {
-    if (!confirm('Sei sicuro di voler eliminare la ricetta PDF?')) return;
-
-    try {
-      const response = await fetch('/deleteRicettaFinal', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ recipeTitle: currentRecipeTitle })
-      });
-
-      if (response.ok) {
-        await loadFinalPreview(currentRecipeTitle);
-        alert('Ricetta eliminata');
-      }
-    } catch (error) {
-      console.error('Errore:', error);
-      alert('Errore nell\'eliminazione');
-    }
-  });
-});
-
-// Step 6: Salva Contorno e mostra anteprima finale
-document.getElementById('formContorno').addEventListener('submit', function(e) {
-  e.preventDefault();
-  
-  fetch('/salvaContorno', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
+function loadStepImages(tipo) {
+  const mapping = {
+    primo: {
+      img: 'imgPrimo',
+      deleteBtn: 'deletePrimoImageBtn',
+      uploadInput: 'uploadPrimoImageInput',
+      uploadBtn: 'uploadPrimoImageBtn',
+      buttonContainer: 'primo-button-container'
     },
-    body: JSON.stringify({
-      recipeTitle: currentRecipeTitle,
-      titolo_Contorno: document.getElementById('inputTitoloContorno').value,
-      ingredienti_Contorno: document.getElementById('ingredientiContornoInput').value,
-      descrizione_Contorno: document.getElementById('descrizioneContornoInput').value
-    })
-  })
-  .then(() => {
-    if (checkContornoCompletion()) {
-      document.getElementById('contorno-completato').style.display = 'block';
-      setTimeout(() => {
-        loadFinalPreview(currentRecipeTitle);
-        showStep('step-finale');
-        // ✅ AGGIUNGI QUI
-        document.getElementById('pubblicazione').style.display = 'block';
-        document.getElementById('recipeTitle_salvaMenuR').value = currentRecipeTitle;
-        document.getElementById('ricetta').href = `/download/${currentRecipeTitle}`;
-      }, 1500);
+    secondo: {
+      img: 'imgSecondo',
+      deleteBtn: 'deleteSecondoImageBtn',
+      uploadInput: 'uploadSecondoImageInput',
+      uploadBtn: 'uploadSecondoImageBtn',
+      buttonContainer: 'secondo-button-container'
+    },
+    contorno: {
+      img: 'imgContorno',
+      deleteBtn: 'deleteContornoImageBtn',
+      uploadInput: 'uploadContornoImageInput',
+      uploadBtn: 'uploadContornoImageBtn',
+      buttonContainer: 'contorno-button-container'
     }
-  })
-  .catch(error => console.error('Errore:', error));
+  };
+  
+  const ids = mapping[tipo];
+  const imageUrl = recipeData[tipo].imageUrl;
+  
+  const imgElement = document.getElementById(ids.img);
+  const deleteBtn = document.getElementById(ids.deleteBtn);
+  const uploadBtn = document.getElementById(ids.uploadBtn);
+  
+  if (imageUrl) {
+    imgElement.src = imageUrl;
+    imgElement.style.display = 'block';
+    deleteBtn.style.display = 'inline-block';
+    uploadBtn.style.display = 'none'; // Nascosto inizialmente
+  } else {
+    imgElement.style.display = 'none';
+    deleteBtn.style.display = 'none';
+    uploadBtn.style.display = 'none';
+  }
+}
+
+// ===== SALVA PRIMO/SECONDO/CONTORNO =====
+document.getElementById('formPrimo').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  
+  const data = {
+    recipeTitle: currentRecipeTitle,
+    titolo_Primo: document.getElementById('inputTitoloPrimo').value,
+    ingredienti_Primo: document.getElementById('ingredientiPrimoInput').value,
+    descrizione_Primo: document.getElementById('descrizionePrimoInput').value
+  };
+  
+  await savePiatto('/salvaPrimo', data, 'primo');
 });
 
+document.getElementById('formSecondo').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  
+  const data = {
+    recipeTitle: currentRecipeTitle,
+    titolo_Secondo: document.getElementById('inputTitoloSecondo').value,
+    ingredienti_Secondo: document.getElementById('ingredientiSecondoInput').value,
+    descrizione_Secondo: document.getElementById('descrizioneSecondoInput').value
+  };
+  
+  await savePiatto('/salvaSecondo', data, 'secondo');
+});
+
+document.getElementById('formContorno').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  
+  const data = {
+    recipeTitle: currentRecipeTitle,
+    titolo_Contorno: document.getElementById('inputTitoloContorno').value,
+    ingredienti_Contorno: document.getElementById('ingredientiContornoInput').value,
+    descrizione_Contorno: document.getElementById('descrizioneContornoInput').value
+  };
+  
+  await savePiatto('/salvaContorno', data, 'contorno');
+});
+
+async function savePiatto(endpoint, data, tipo) {
+  try {
+    const response = await fetch(endpoint, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    
+    if (response.ok) {
+      recipeData[tipo].titolo = data[`titolo_${tipo.charAt(0).toUpperCase() + tipo.slice(1)}`];
+      recipeData[tipo].ingredienti = data[`ingredienti_${tipo.charAt(0).toUpperCase() + tipo.slice(1)}`];
+      recipeData[tipo].descrizione = data[`descrizione_${tipo.charAt(0).toUpperCase() + tipo.slice(1)}`];
+      
+      document.getElementById(`${tipo}-completato`).style.display = 'block';
+      
+      const nextStep = tipo === 'primo' ? 4 : tipo === 'secondo' ? 5 : 6;
+      setTimeout(() => goToStep(nextStep), 1000);
+    }
+  } catch (error) {
+    console.error('Errore:', error);
+    alert('Errore nel salvataggio');
+  }
+}
+
+// ===== ANTEPRIMA DINAMICA MENTRE DIGITI =====
+function aggiornaAnteprima(tipo) {
+  const mapping = {
+    primo: {
+      titolo: 'inputTitoloPrimo',
+      ingredienti: 'ingredientiPrimoInput',
+      descrizione: 'descrizionePrimoInput',
+      displayTitolo: 'titdef',
+      displayIngredienti: 'ingredientiPrimo',
+      displayDescrizione: 'descrizionePrimo'
+    },
+    secondo: {
+      titolo: 'inputTitoloSecondo',
+      ingredienti: 'ingredientiSecondoInput',
+      descrizione: 'descrizioneSecondoInput',
+      displayTitolo: 'titolodefSecondo',
+      displayIngredienti: 'ingredientiSecondo',
+      displayDescrizione: 'descrizioneSecondo'
+    },
+    contorno: {
+      titolo: 'inputTitoloContorno',
+      ingredienti: 'ingredientiContornoInput',
+      descrizione: 'descrizioneContornoInput',
+      displayTitolo: 'titdefConto',
+      displayIngredienti: 'ingredientiContorno',
+      displayDescrizione: 'descrizioneContorno'
+    }
+  };
+  
+  const ids = mapping[tipo];
+  
+  const titolo = document.getElementById(ids.titolo).value;
+  const ingredienti = document.getElementById(ids.ingredienti).value;
+  const descrizione = document.getElementById(ids.descrizione).value;
+  
+  document.getElementById(ids.displayTitolo).textContent = titolo || '(Titolo non inserito)';
+  document.getElementById(ids.displayIngredienti).textContent = ingredienti || '(Ingredienti non inseriti)';
+  document.getElementById(ids.displayDescrizione).textContent = descrizione || '(Descrizione non inserita)';
+}
+
+// ===== ELIMINA IMMAGINI DA CLOUDINARY =====
+document.getElementById('deletePrimoImageBtn').addEventListener('click', () => deleteImage('primo'));
+document.getElementById('deleteSecondoImageBtn').addEventListener('click', () => deleteImage('secondo'));
+document.getElementById('deleteContornoImageBtn').addEventListener('click', () => deleteImage('contorno'));
+
+async function deleteImage(tipo) {
+  if (!confirm(`Elimina l'immagine del ${tipo}?`)) return;
+  
+  const endpoint = tipo === 'primo' ? '/deleteImmaginePrimo' :
+                   tipo === 'secondo' ? '/deleteImmmagineSecondo' :
+                   '/deleteImmmagineContorno';
+  
+  try {
+    const response = await fetch(endpoint, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ recipeTitle: currentRecipeTitle })
+    });
+    
+    if (response.ok) {
+      recipeData[tipo].imageUrl = '';
+      
+      // Mostra il bottone "Carica Nuova Immagine"
+      const mapping = {
+        primo: { img: 'imgPrimo', deleteBtn: 'deletePrimoImageBtn', uploadBtn: 'uploadPrimoImageBtn' },
+        secondo: { img: 'imgSecondo', deleteBtn: 'deleteSecondoImageBtn', uploadBtn: 'uploadSecondoImageBtn' },
+        contorno: { img: 'imgContorno', deleteBtn: 'deleteContornoImageBtn', uploadBtn: 'uploadContornoImageBtn' }
+      };
+      
+      const ids = mapping[tipo];
+      document.getElementById(ids.img).style.display = 'none';
+      document.getElementById(ids.deleteBtn).style.display = 'none';
+      document.getElementById(ids.uploadBtn).style.display = 'inline-block'; // Mostra il bottone "Carica"
+      
+      alert('Immagine eliminata da Cloudinary');
+    }
+  } catch (error) {
+    console.error('Errore:', error);
+    alert('Errore nell\'eliminazione dell\'immagine');
+  }
+}
+
+// ===== CARICA NUOVE IMMAGINI =====
+document.getElementById('uploadPrimoImageBtn').addEventListener('click', () => {
+  document.getElementById('uploadPrimoImageInput').click();
+});
+document.getElementById('uploadSecondoImageBtn').addEventListener('click', () => {
+  document.getElementById('uploadSecondoImageInput').click();
+});
+document.getElementById('uploadContornoImageBtn').addEventListener('click', () => {
+  document.getElementById('uploadContornoImageInput').click();
+});
+
+document.getElementById('uploadPrimoImageInput').addEventListener('change', () => uploadNewImage('primo'));
+document.getElementById('uploadSecondoImageInput').addEventListener('change', () => uploadNewImage('secondo'));
+document.getElementById('uploadContornoImageInput').addEventListener('change', () => uploadNewImage('contorno'));
+
+async function uploadNewImage(tipo) {
+  const inputId = `upload${tipo.charAt(0).toUpperCase() + tipo.slice(1)}ImageInput`;
+  const input = document.getElementById(inputId);
+  
+  if (!input.files[0]) return;
+  
+  const formData = new FormData();
+  formData.append('immagine', input.files[0]);
+  formData.append('recipeTitle', currentRecipeTitle);
+  
+  const endpoint = tipo === 'primo' ? '/uploadNuovaImmaginePrimo' :
+                   tipo === 'secondo' ? '/uploadNuovaImmmagineSecondo' :
+                   '/uploadNuovaImmmagineContorno';
+  
+  try {
+    const response = await fetch(endpoint, {
+      method: 'POST',
+      body: formData
+    });
+    
+    const result = await response.json();
+    
+    if (result.success) {
+      recipeData[tipo].imageUrl = result.imageUrl;
+      loadStepImages(tipo);
+      alert('Immagine caricata con successo');
+    }
+  } catch (error) {
+    console.error('Errore:', error);
+    alert('Errore nel caricamento');
+  }
+}
+
+// ===== CANCELLA PRIMO/SECONDO/CONTORNO DAL FORM =====
+document.getElementById('cancelPrimoBtn').addEventListener('click', async () => {
+  if (!confirm('Sei sicuro di voler cancellare il Primo?')) return;
+  
+  try {
+    await fetch('/deletePrimoFinal', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ recipeTitle: currentRecipeTitle })
+    });
+    
+    document.getElementById('inputTitoloPrimo').value = '';
+    document.getElementById('ingredientiPrimoInput').value = '';
+    document.getElementById('descrizionePrimoInput').value = '';
+    document.getElementById('primo-completato').style.display = 'none';
+    
+    goToStep(2);
+  } catch (error) {
+    console.error('Errore:', error);
+  }
+});
+
+document.getElementById('cancelSecondoBtn').addEventListener('click', async () => {
+  if (!confirm('Sei sicuro di voler cancellare il Secondo?')) return;
+  
+  try {
+    await fetch('/deleteSecondoFinal', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ recipeTitle: currentRecipeTitle })
+    });
+    
+    document.getElementById('inputTitoloSecondo').value = '';
+    document.getElementById('ingredientiSecondoInput').value = '';
+    document.getElementById('descrizioneSecondoInput').value = '';
+    document.getElementById('secondo-completato').style.display = 'none';
+    
+    goToStep(3);
+  } catch (error) {
+    console.error('Errore:', error);
+  }
+});
+
+document.getElementById('cancelContornoBtn').addEventListener('click', async () => {
+  if (!confirm('Sei sicuro di voler cancellare il Contorno?')) return;
+  
+  try {
+    await fetch('/deleteContornoFinal', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ recipeTitle: currentRecipeTitle })
+    });
+    
+    document.getElementById('inputTitoloContorno').value = '';
+    document.getElementById('ingredientiContornoInput').value = '';
+    document.getElementById('descrizioneContornoInput').value = '';
+    document.getElementById('contorno-completato').style.display = 'none';
+    
+    goToStep(4);
+  } catch (error) {
+    console.error('Errore:', error);
+  }
+});
+
+// ===== STEP 6: ANTEPRIMA FINALE =====
+function loadFinalPreview() {
+  // Primo
+  if (recipeData.primo.imageUrl) {
+    document.getElementById('previewImgPrimo').src = recipeData.primo.imageUrl;
+    document.getElementById('previewImgPrimo').style.display = 'block';
+  }
+  document.getElementById('previewTitoloPrimo').textContent = recipeData.primo.titolo || '-';
+  document.getElementById('previewIngredientiPrimo').textContent = recipeData.primo.ingredienti || '-';
+  document.getElementById('previewDescrizionePrimo').textContent = recipeData.primo.descrizione || '-';
+  
+  // Secondo
+  if (recipeData.secondo.imageUrl) {
+    document.getElementById('previewImgSecondo').src = recipeData.secondo.imageUrl;
+    document.getElementById('previewImgSecondo').style.display = 'block';
+  }
+  document.getElementById('previewTitoloSecondo').textContent = recipeData.secondo.titolo || '-';
+  document.getElementById('previewIngredientiSecondo').textContent = recipeData.secondo.ingredienti || '-';
+  document.getElementById('previewDescrizioneSecondo').textContent = recipeData.secondo.descrizione || '-';
+  
+  // Contorno
+  if (recipeData.contorno.imageUrl) {
+    document.getElementById('previewImgContorno').src = recipeData.contorno.imageUrl;
+    document.getElementById('previewImgContorno').style.display = 'block';
+  }
+  document.getElementById('previewTitoloContorno').textContent = recipeData.contorno.titolo || '-';
+  document.getElementById('previewIngredientiContorno').textContent = recipeData.contorno.ingredienti || '-';
+  document.getElementById('previewDescrizioneContorno').textContent = recipeData.contorno.descrizione || '-';
+  
+  // PDF
+  if (recipeData.ricetta.pdfUrl) {
+    document.getElementById('ricetta').href = recipeData.ricetta.pdfUrl;
+    document.getElementById('pubblicazione').style.display = 'block';
+  }
+}
+
+// ===== ELIMINA FINALE =====
+document.getElementById('deletePrimoFinalBtn').addEventListener('click', async () => {
+  if (!confirm('Eliminare il Primo dalla preview finale?')) return;
+  
+  try {
+    await fetch('/deleteImmaginePrimo', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ recipeTitle: currentRecipeTitle })
+    });
+    
+    recipeData.primo = { titolo: '', ingredienti: '', descrizione: '', imageUrl: '' };
+    loadFinalPreview();
+  } catch (error) {
+    console.error('Errore:', error);
+  }
+});
+
+document.getElementById('deleteSecondoFinalBtn').addEventListener('click', async () => {
+  if (!confirm('Eliminare il Secondo dalla preview finale?')) return;
+  
+  try {
+    await fetch('/deleteImmmagineSecondo', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ recipeTitle: currentRecipeTitle })
+    });
+    
+    recipeData.secondo = { titolo: '', ingredienti: '', descrizione: '', imageUrl: '' };
+    loadFinalPreview();
+  } catch (error) {
+    console.error('Errore:', error);
+  }
+});
+
+document.getElementById('deleteContornoFinalBtn').addEventListener('click', async () => {
+  if (!confirm('Eliminare il Contorno dalla preview finale?')) return;
+  
+  try {
+    await fetch('/deleteImmmagineContorno', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ recipeTitle: currentRecipeTitle })
+    });
+    
+    recipeData.contorno = { titolo: '', ingredienti: '', descrizione: '', imageUrl: '' };
+    loadFinalPreview();
+  } catch (error) {
+    console.error('Errore:', error);
+  }
+});
+
+document.getElementById('deleteRicettaBtn').addEventListener('click', async () => {
+  if (!confirm('Eliminare la Ricetta PDF?')) return;
+  
+  try {
+    await fetch('/deleteRicettaFinal', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ recipeTitle: currentRecipeTitle })
+    });
+    
+    recipeData.ricetta.pdfUrl = '';
+    loadFinalPreview();
+  } catch (error) {
+    console.error('Errore:', error);
+  }
+});
+
+// ===== NAVIGAZIONE TRA STEP =====
+function goToStep(step) {
+  document.querySelectorAll('.step-container').forEach(el => el.style.display = 'none');
+  
+  const stepIds = {
+    1: 'recipe-title-section',
+    2: 'step-upload-images',
+    3: 'step-primo',
+    4: 'step-secondo',
+    5: 'step-contorno',
+    6: 'step-finale'
+  };
+  
+  const targetId = stepIds[step];
+  if (targetId) {
+    document.getElementById(targetId).style.display = 'block';
+    
+    if (step === 3) loadStepImages('primo');
+    if (step === 4) loadStepImages('secondo');
+    if (step === 5) loadStepImages('contorno');
+    if (step === 6) loadFinalPreview();
+  }
+  
+  window.scrollTo(0, 0);
+}
+
+// ===== AL CARICAMENTO DELLA PAGINA =====
+window.addEventListener('DOMContentLoaded', async () => {
+  const saved = localStorage.getItem('currentRecipeTitle');
+  
+  if (saved) {
+    currentRecipeTitle = saved;
+    document.getElementById('headerTitle').textContent = currentRecipeTitle;
+    document.getElementById('header-title').style.display = 'block';
+    await loadRecipeData(currentRecipeTitle);
+  }
+});
 </script>
 
-
-</body></html>
+</body>
+</html>

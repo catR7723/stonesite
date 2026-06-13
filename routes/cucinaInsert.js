@@ -200,27 +200,50 @@ router.post('/cucinaInsert', uploadCucina, async (req, res) => {
     
     await recipe.save();
 
-    res.json({ success: true });
+    // 🆕 SALVA GLI URL IN UN FILE JSON PER LE ANTEPRIME
+    const imageUrls = {
+      primo: primoResult.secure_url,
+      secondo: secondoResult.secure_url,
+      contorno: contornoResult.secure_url,
+      ricetta: ricettaResult.secure_url,
+      recipeTitle: recipeTitle
+    };
+
+    // Crea la cartella se non esiste
+    const uploadDir = path.join(__dirname, '..', 'uploads', 'cucina');
+    await fs.mkdir(uploadDir, { recursive: true });
+
+    // Salva il JSON
+    const jsonPath = path.join(uploadDir, `${recipeTitle}.json`);
+    await fs.writeFile(jsonPath, JSON.stringify(imageUrls, null, 2));
+
+    res.json({ success: true, images: imageUrls });
 
   } catch (error) {
     console.error(error);
     res.status(500).json({ success: false, error: error.message });
   }
 });
-
-// ===== LOGOUT =====
-
-router.post('/logout', (req, res) => {
-  req.session.destroy((err) => {
-    if (err) {
-      console.log('errore', err);
-      return res.redirect('/cucinaInsert');
+// 🆕 Endpoint per recuperare gli URL delle immagini
+router.get('/getImageUrls/:recipeTitle', async (req, res) => {
+  try {
+    const { recipeTitle } = req.params;
+    const recipe = await Recipe.findOne({ title: recipeTitle });
+    
+    if (!recipe) {
+      return res.status(404).json({ error: 'Ricetta non trovata' });
     }
-    res.clearCookie('connect.sid');
-    res.redirect('/login');
-  });
-});
 
+    res.json({
+      primo: recipe.primo?.imageUrl || '',
+      secondo: recipe.secondo?.imageUrl || '',
+      contorno: recipe.contorno?.imageUrl || ''
+    });
+  } catch (error) {
+    console.error('Errore:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
 // ===== SALVA PRIMO =====
 
 router.post('/salvaPrimo', async (req, res) => {
