@@ -100,7 +100,104 @@ router.get('/walking', (req, res) => {
     res.sendFile(path.join(__dirname, '../views/html/laboratori/walking.html'));
 });
 
+// routes/cucinaInsert.js
+
+// Assicurati che ci sia il pezzo ":recipeTitle" nell'URL
+router.get('/getImageUrls/:recipeTitle', async (req, res) => {
+  try {
+    // Recuperiamo il titolo dall'URL usando req.params
+    const titleToFind = req.params.recipeTitle;
+    
+    // Cerchiamo nel database
+    const recipe = await Recipe.findOne({ title: titleToFind });
+    
+    // 💡 SE LA RICETTA NON ESISTE ANCORA:
+    // Non inviare un errore 404! Invia un oggetto vuoto con stato 200 (OK)
+    if (!recipe) {
+      return res.json({
+        success: true,
+        primo: '', primo_titolo: '', primo_ingredienti: '', primo_descrizione: '',
+        secondo: '', secondo_titolo: '', secondo_ingredienti: '', secondo_descrizione: '',
+        contorno: '', contorno_titolo: '', contorno_ingredienti: '', contorno_descrizione: '',
+        ricetta: ''
+      });
+    }
+    
+    // SE LA RICETTA ESISTE: inviamo i dati reali al frontend
+    res.json({
+      success: true,
+      primo: recipe.primo?.imageUrl || '',
+      primo_titolo: recipe.primo?.titolo || '',
+      primo_ingredienti: recipe.primo?.ingredienti || '',
+      primo_descrizione: recipe.primo?.descrizione || '',
+      
+      secondo: recipe.secondo?.imageUrl || '',
+      secondo_titolo: recipe.secondo?.titolo || '',
+      secondo_ingredienti: recipe.secondo?.ingredienti || '',
+      secondo_descrizione: recipe.secondo?.descrizione || '',
+      
+      contorno: recipe.contorno?.imageUrl || '',
+      contorno_titolo: recipe.contorno?.titolo || '',
+      contorno_ingredienti: recipe.contorno?.ingredienti || '',
+      contorno_descrizione: recipe.contorno?.descrizione || '',
+      
+      ricetta: recipe.ricetta?.pdfUrl || ''
+    });
+
+  } catch (error) {
+    console.error("Errore recupero immagini:", error);
+    res.status(500).json({ error: "Errore interno del server" });
+  }
+});
+
+
 // ===== RICETTA =====
+
+// ✅ QUESTO DEVE ESSERE PRIMA DI /recipe/:title
+router.get('/getImageUrls/:recipeTitle', async (req, res) => {
+  try {
+    const { recipeTitle } = req.params;
+    console.log('📖 Recupero dati per:', recipeTitle);
+    
+    const recipe = await Recipe.findOne({ title: recipeTitle });
+    
+    if (!recipe) {
+      console.log('⚠️ Ricetta non trovata:', recipeTitle);
+      return res.status(404).json({ error: 'Ricetta non trovata' });
+    }
+
+    console.log('✅ Ricetta trovata, URL immagini:', {
+      primo: recipe.primo?.imageUrl ? '✅' : '❌',
+      secondo: recipe.secondo?.imageUrl ? '✅' : '❌',
+      contorno: recipe.contorno?.imageUrl ? '✅' : '❌'
+    });
+
+    res.json({
+      primo: recipe.primo?.imageUrl || '',
+      secondo: recipe.secondo?.imageUrl || '',
+      contorno: recipe.contorno?.imageUrl || ''
+    });
+  } catch (error) {
+    console.error('Errore:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+router.get('/recipe/latest/published', async (req, res) => {
+  try {
+    const recipe = await Recipe.findOne({ published: true }).sort({ publishedAt: -1 });
+    
+    if (!recipe) {
+      return res.status(404).json({ error: 'Nessun menu pubblicato' });
+    }
+    
+    res.json(recipe);
+  } catch (error) {
+    console.error('Errore nel recupero del menu:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
 router.get('/recipe/:title', async (req, res) => {
   try {
     const title = req.params.title;
@@ -113,20 +210,6 @@ router.get('/recipe/:title', async (req, res) => {
     res.json(recipe);
   } catch (error) {
     console.error('Errore nel recupero della ricetta:', error);
-    res.status(500).json({ error: error.message });
-  }
-});
-router.get('/recipe/latest/published', async (req, res) => {
-  try {
-    const recipe = await Recipe.findOne({ published: true }).sort({ publishedAt: -1 });
-    
-    if (!recipe) {
-      return res.status(404).json({ error: 'Nessun menu pubblicato' });
-    }
-    
-    res.json(recipe);
-  } catch (error) {
-    console.error('Errore nel recupero del menu:', error);
     res.status(500).json({ error: error.message });
   }
 });
@@ -148,6 +231,14 @@ router.post('/cucinaInsert', uploadCucina, async (req, res) => {
     const files = req.files;
     const recipeTitle = req.body.recipeTitle || 'menu_' + Date.now();
 
+    console.log('📸 DEBUG STEP 1: recipeTitle =', recipeTitle);
+    console.log('📸 DEBUG STEP 2: files ricevuti =', files ? Object.keys(files) : 'NESSUN FILE');
+    console.log('📸 DEBUG STEP 3: Cloudinary config =', {
+      cloud_name: process.env.CLOUDINARY_CLOUD_NAME ? '✅' : '❌',
+      api_key: process.env.CLOUDINARY_API_KEY ? '✅' : '❌',
+      api_secret: process.env.CLOUDINARY_API_SECRET ? '✅' : '❌'
+    });
+
     if (!files || !files['primo'] || !files['secondo'] || !files['contorno'] || !files['ricetta']) {
       return res.status(400).json({ success: false, error: 'Tutti i campi sono obbligatori' });
     }
@@ -160,26 +251,40 @@ router.post('/cucinaInsert', uploadCucina, async (req, res) => {
     }
 
     const uploadToCloudinary = async (fileBuffer, fileName, resourceType = 'image') => {
-      return new Promise((resolve, reject) => {
-        const uploadStream = cloudinary.uploader.upload_stream({
-          resource_type: resourceType,
-          public_id: `cucina/${recipeTitle}/${fileName.replace(/\.[^.]+$/, '')}`,
-          folder: `cucina/${recipeTitle}`
-        }, (error, result) => {
-          if (error) reject(error);
-          else resolve(result);
-        });
-        
-        uploadStream.end(fileBuffer);
-      });
-    };
+  return new Promise((resolve, reject) => {
+    console.log(`📤 Inizio upload: ${fileName} (tipo: ${resourceType})`);
+    
+    const uploadStream = cloudinary.uploader.upload_stream({
+      resource_type: resourceType,
+      public_id: `cucina/${recipeTitle}/${fileName.replace(/\.[^.]+$/, '')}`,
+      
+    }, (error, result) => {
+      if (error) {
+        console.error(`❌ ERRORE upload ${fileName}:`, error.message);
+        reject(error);
+      }
+  else {
+    console.log(`✅ Upload riuscito ${fileName}`);
+    console.log('   public_id:', result.public_id);
+    console.log('   secure_url:', result.secure_url);
+    console.log('   version:', result.version);
+    resolve(result);
+      }
+    });
+    
+    uploadStream.end(fileBuffer);
+  });
+};
 
+    console.log('📸 DEBUG STEP 4: Inizio upload parallelo...');
     const [primoResult, secondoResult, contornoResult, ricettaResult] = await Promise.all([
       uploadToCloudinary(files['primo'][0].buffer, 'primo.jpg', 'image'),
       uploadToCloudinary(files['secondo'][0].buffer, 'secondo.jpg', 'image'),
       uploadToCloudinary(files['contorno'][0].buffer, 'contorno.jpg', 'image'),
       uploadToCloudinary(files['ricetta'][0].buffer, 'ricetta.pdf', 'raw')
     ]);
+
+    console.log('📸 DEBUG STEP 5: Upload completato, salvataggio DB...');
 
     let recipe = await Recipe.findOne({ title: recipeTitle });
     
@@ -199,6 +304,7 @@ router.post('/cucinaInsert', uploadCucina, async (req, res) => {
     }
     
     await recipe.save();
+    console.log('📸 DEBUG STEP 6: DB salvato');
 
     // 🆕 SALVA GLI URL IN UN FILE JSON PER LE ANTEPRIME
     const imageUrls = {
@@ -217,33 +323,18 @@ router.post('/cucinaInsert', uploadCucina, async (req, res) => {
     const jsonPath = path.join(uploadDir, `${recipeTitle}.json`);
     await fs.writeFile(jsonPath, JSON.stringify(imageUrls, null, 2));
 
+    console.log('📸 DEBUG STEP 7: JSON salvato in', jsonPath);
+    console.log('✅ UPLOAD COMPLETATO CON SUCCESSO');
+
     res.json({ success: true, images: imageUrls });
 
   } catch (error) {
-    console.error(error);
+    console.error('❌ ERRORE GENERALE:', error.message);
+    console.error('Stack trace:', error.stack);
     res.status(500).json({ success: false, error: error.message });
   }
 });
-// 🆕 Endpoint per recuperare gli URL delle immagini
-router.get('/getImageUrls/:recipeTitle', async (req, res) => {
-  try {
-    const { recipeTitle } = req.params;
-    const recipe = await Recipe.findOne({ title: recipeTitle });
-    
-    if (!recipe) {
-      return res.status(404).json({ error: 'Ricetta non trovata' });
-    }
 
-    res.json({
-      primo: recipe.primo?.imageUrl || '',
-      secondo: recipe.secondo?.imageUrl || '',
-      contorno: recipe.contorno?.imageUrl || ''
-    });
-  } catch (error) {
-    console.error('Errore:', error);
-    res.status(500).json({ error: error.message });
-  }
-});
 // ===== SALVA PRIMO =====
 
 router.post('/salvaPrimo', async (req, res) => {
@@ -557,8 +648,6 @@ router.post('/uploadNuovaImmmagineContorno', uploadSingleImage, async (req, res)
   }
 });
 
-// ===== CANCELLA PRIMO DAL FORM (Step 3) =====
-
 router.post('/deletePrimoFinal', async (req, res) => {
   try {
     const { recipeTitle } = req.body;
@@ -574,14 +663,12 @@ router.post('/deletePrimoFinal', async (req, res) => {
       await recipe.save();
     }
     
-    res.json({ success: true, step: 3 });
+    res.json({ success: true, step: 1 });
   } catch (error) {
     console.error('Errore:', error);
     res.status(500).json({ error: error.message });
   }
 });
-
-// ===== CANCELLA SECONDO DAL FORM (Step 4) =====
 
 router.post('/deleteSecondoFinal', async (req, res) => {
   try {
@@ -604,8 +691,6 @@ router.post('/deleteSecondoFinal', async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
-
-// ===== CANCELLA CONTORNO DAL FORM (Step 5) =====
 
 router.post('/deleteContornoFinal', async (req, res) => {
   try {
@@ -707,22 +792,98 @@ router.post('/salvaMenuR', async (req, res) => {
       `);
     }
 
-    // ✅ ARCHIVIA RICETTA PRECEDENTE SE ESISTE
+    // ✅ ARCHIVIA E COPIA RICETTA PRECEDENTE SE ESISTE
     const ricettaPrecedente = await Recipe.findOne({ published: true, title: { $ne: recipeTitle } });
     if (ricettaPrecedente) {
       console.log('🔄 Archiviazione ricetta precedente:', ricettaPrecedente.title);
       
+      // 🆕 COPIA IMMAGINI DA CLOUDINARY DA cucina/ A archivio/
+      const copyImageToArchive = async (imageUrl, fileName, resourceType = 'image') => {
+        if (!imageUrl) return null;
+        
+        try {
+          // Scarica l'immagine da Cloudinary
+          const response = await fetch(imageUrl);
+          const buffer = await response.buffer();
+
+          // Riaggiungi a Cloudinary nella cartella archivio
+          return new Promise((resolve, reject) => {
+            const uploadStream = cloudinary.uploader.upload_stream({
+              resource_type: resourceType,
+              public_id: `archivio/${ricettaPrecedente.title}/${fileName.replace(/\.[^.]+$/, '')}`,
+            }, (error, result) => {
+              if (error) {
+                console.error(`❌ Errore copia immagine ${fileName}:`, error.message);
+                resolve(null);
+              } else {
+                console.log(`✅ Immagine copiata in archivio: ${fileName}`);
+                resolve(result.secure_url);
+              }
+            });
+            uploadStream.end(buffer);
+          });
+        } catch (err) {
+          console.error(`⚠️ Errore nel copiare immagine ${fileName}:`, err.message);
+          return null;
+        }
+      };
+
+      console.log('📦 Inizio copia immagini in archivio...');
+      const [primoUrl, secondoUrl, contornoUrl, ricettaUrl] = await Promise.all([
+        copyImageToArchive(ricettaPrecedente.primo?.imageUrl, 'primo.jpg', 'image'),
+        copyImageToArchive(ricettaPrecedente.secondo?.imageUrl, 'secondo.jpg', 'image'),
+        copyImageToArchive(ricettaPrecedente.contorno?.imageUrl, 'contorno.jpg', 'image'),
+        copyImageToArchive(ricettaPrecedente.ricetta?.pdfUrl, 'ricetta.pdf', 'raw')
+      ]);
+
+      // Salva in Archivio
       const archiviata = new Archivio({
         title: ricettaPrecedente.title,
         category: ricettaPrecedente.category,
-        primo: ricettaPrecedente.primo,
-        secondo: ricettaPrecedente.secondo,
-        contorno: ricettaPrecedente.contorno,
-        ricetta: ricettaPrecedente.ricetta
+        primo: {
+          ...ricettaPrecedente.primo,
+          imageUrl: primoUrl || ricettaPrecedente.primo?.imageUrl
+        },
+        secondo: {
+          ...ricettaPrecedente.secondo,
+          imageUrl: secondoUrl || ricettaPrecedente.secondo?.imageUrl
+        },
+        contorno: {
+          ...ricettaPrecedente.contorno,
+          imageUrl: contornoUrl || ricettaPrecedente.contorno?.imageUrl
+        },
+        ricetta: {
+          ...ricettaPrecedente.ricetta,
+          pdfUrl: ricettaUrl || ricettaPrecedente.ricetta?.pdfUrl
+        }
       });
       
       await archiviata.save();
       console.log('✅ Ricetta archiviata:', ricettaPrecedente.title);
+
+      // 🆕 ELIMINA IMMAGINI DA CLOUDINARY DALLA CARTELLA cucina/
+      const deleteImageFromCucina = async (imageUrl, fileName, resourceType = 'image') => {
+        if (!imageUrl) return;
+        
+        try {
+          await cloudinary.uploader.destroy(`cucina/${ricettaPrecedente.title}/${fileName.replace(/\.[^.]+$/, '')}`, { 
+            resource_type: resourceType 
+          });
+          console.log(`✅ Immagine eliminata da cucina: ${fileName}`);
+        } catch (err) {
+          console.error(`⚠️ Errore nell'eliminare immagine da cucina ${fileName}:`, err.message);
+        }
+      };
+
+      console.log('🗑️ Inizio eliminazione immagini da cucina...');
+      await Promise.all([
+        deleteImageFromCucina(ricettaPrecedente.primo?.imageUrl, 'primo.jpg', 'image'),
+        deleteImageFromCucina(ricettaPrecedente.secondo?.imageUrl, 'secondo.jpg', 'image'),
+        deleteImageFromCucina(ricettaPrecedente.contorno?.imageUrl, 'contorno.jpg', 'image'),
+        deleteImageFromCucina(ricettaPrecedente.ricetta?.pdfUrl, 'ricetta.pdf', 'raw')
+      ]);
+
+      console.log('✅ Immagini eliminate da cucina');
       
       // Rimuovi quella vecchia dalla collezione Recipe
       await Recipe.deleteOne({ _id: ricettaPrecedente._id });
@@ -750,6 +911,7 @@ router.post('/salvaMenuR', async (req, res) => {
     `);
   }
 });
+
 
 // ===== ARCHIVIO RICETTE =====
 
@@ -876,12 +1038,3 @@ router.get('/archivio', (req, res) => {
 });
 
 module.exports = router;
-
-
-
-
-
-
-
-
-

@@ -395,6 +395,21 @@ hr {
     white-space: pre-wrap;
     word-wrap: break-word;
 }
+
+.archivio {
+    cursor: pointer;
+   
+    width: 100%;
+    margin-top: 8vw;
+    text-align: center;
+   
+}
+.archivio a {
+    font-size: 2vw;
+    color: #320cba;
+    text-shadow: 2px 2px 4px rgba(50, 12, 186, 0.5);
+    text-decoration: none;
+}
 /* ===== RESPONSIVE DESIGN ===== */
 
 @media(max-width:640px) {

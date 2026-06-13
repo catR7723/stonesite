@@ -46,6 +46,16 @@ app.use('/', cineforumRoutes);
 app.get('/archivio', (req, res) => {
   res.sendFile(path.join(__dirname, 'views', 'html', 'archivio.html'));
 });
+app.get('/check-ruolo-cucina', (req, res) => {
+    // 💡 Sincronizzato con le variabili reali del tuo login: authenticated e role
+    if (req.session && req.session.authenticated && req.session.role === 'cucina') {
+        return res.json({ autorizzato: true });
+    }
+    res.json({ autorizzato: false });
+});
+
+
+
 
 
 app.get('/', (req, res) => {
