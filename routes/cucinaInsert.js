@@ -314,7 +314,7 @@ router.post('/cucinaInsert', uploadCucina, async (req, res) => {
       ricetta: ricettaResult.secure_url,
       recipeTitle: recipeTitle
     };
-
+/*
     // Crea la cartella se non esiste
     const uploadDir = path.join(__dirname, '..', 'uploads', 'cucina');
     await fs.mkdir(uploadDir, { recursive: true });
@@ -324,6 +324,9 @@ router.post('/cucinaInsert', uploadCucina, async (req, res) => {
     await fs.writeFile(jsonPath, JSON.stringify(imageUrls, null, 2));
 
     console.log('📸 DEBUG STEP 7: JSON salvato in', jsonPath);
+
+    */
+   
     console.log('✅ UPLOAD COMPLETATO CON SUCCESSO');
 
     res.json({ success: true, images: imageUrls });
