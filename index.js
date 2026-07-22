@@ -3,37 +3,51 @@ const express = require('express');
 const path = require('path');
 const session = require('express-session');
 const mongoose = require('mongoose'); 
-const { default: MongoStore } = require('connect-mongo'); 
+const { default: MongoStore } = require('connect-mongo');
+
+
+const connectDB = require('./db');
 
 const app = express();
-
-// 🟩 1. CONNESSIONE UNICA A MONGO (Prende la stringa dal file .env)
 const mongoStringa = process.env.MONGO_URI;
 
-mongoose.connect(mongoStringa)
-  .then(() => console.log('Connesso a MongoDB con successo!'))
-  .catch(err => console.error('Errore connessione MongoDB:', err));
+// Middleware per connettere Mongoose a ogni richiesta in modo sicuro (Serverless friendly)
+app.use(async (req, res, next) => {
+    if (mongoose.connection.readyState >= 1) {
+        return next();
+    }
+    try {
+        await mongoose.connect(mongoStringa, { bufferCommands: false });
+        next();
+    } catch (err) {
+        console.error('Errore DNS/Connessione MongoDB su Vercel:', err);
+        res.status(500).send('Database temporaneamente non raggiungibile');
+    }
+});
 
 // Middleware di base
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// 🟩 2. CONFIGURAZIONE SESSIONE PERSISTENTE
+// CONFIGURAZIONE SESSIONE PERSISTENTE SU VERCEL
 app.use(session({
     secret: process.env.SESSION_SECRET || 'chiave-segreta-molto-sicura',
     resave: false,
     saveUninitialized: false,
     store: MongoStore.create({ 
         mongoUrl: mongoStringa, 
-        ttl: 14 * 24 * 60 * 60 
+        ttl: 14 * 24 * 60 * 60,
+        mongoUrlOptions: { useNewUrlParser: true, useUnifiedTopology: true }
     }),
     cookie: { 
-        secure: false, 
+        secure: process.env.NODE_ENV === 'production', 
         maxAge: 1000 * 60 * 60 * 24 
     }
 }));
+
+
+
 
 // --- CARICAMENTO ROTTE ---
 const loginRouter = require('./routes/login'); 
