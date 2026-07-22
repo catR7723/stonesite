@@ -77,24 +77,31 @@ router.post('/cineforumInsert', uploadFilm, async (req, res) => {
 
     console.log('LOCANDINA:', locandina);
 
+    // ✅ CORREZIONE: Forza l'URL di Cloudinary in HTTPS fin da subito
+    let urlSicura = locandina.path || '';
+    if (urlSicura.startsWith('http://')) {
+        urlSicura = urlSicura.replace('http://', 'https://');
+    }
+
     const metadata = {
         public_id: locandina.filename,
-        url: locandina.path
+        url: urlSicura
     };
 
     console.log('METADATA:', metadata);
 
-    // 1. Salva il file JSON (manteniamo la tua logica esistente)
+    // 1. Salva il file JSON nella cartella temporanea
     const uploadDir = path.join(__dirname, '../uploads/cineforum');
     await fs.mkdir(uploadDir, { recursive: true });
 
     await fs.writeFile(
         path.join(uploadDir, 'locandina.json'),
-        JSON.stringify(metadata, null, 2)
+        JSON.stringify(metadata, null, 2),
+        'utf8'
     );
-    console.log('locandina.json salvato');
+    console.log('✅ locandina.json salvato in uploads/cineforum');
 
-            // ============================================================
+    // ============================================================
     // AGGIORNA DIRETTAMENTE IL FILE IN VIEWS CON CHEERIO
     // ============================================================
     try {
@@ -108,7 +115,7 @@ router.post('/cineforumInsert', uploadFilm, async (req, res) => {
         const imgTag = $('#locandina-film-settimana').length ? $('#locandina-film-settimana') : $('img[alt="locandina"]');
 
         if (imgTag.length) {
-            imgTag.attr('src', metadata.url);       // Inietta l'URL di Cloudinary
+            imgTag.attr('src', metadata.url);        // Inietta l'URL sicuro di Cloudinary
             imgTag.removeAttr('style');              // Rimuove eventuali display: none
             imgTag.css('display', 'block');          // Si assicura che sia visibile
             
@@ -123,15 +130,16 @@ router.post('/cineforumInsert', uploadFilm, async (req, res) => {
     }
     // ============================================================
 
-    
-
-    res.sendFile(path.join(__dirname, '../cineforumInsert.html'));
+    // ✅ CORREZIONE FONDAMENTALE: Usa il redirect invece di sendFile.
+    // Questo ripulisce l'URL della barra degli indirizzi del browser ed evita i finti errori 404 sulle fetch successive.
+    res.redirect('/cineforumInsert');
 
   } catch (error) {
-    console.error(error);
+    console.error("Errore rotta cineforumInsert:", error);
     res.status(500).send("Errore durante il salvataggio dei file.");
   }
 });
+
 
     
 
