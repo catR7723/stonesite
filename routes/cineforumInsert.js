@@ -35,281 +35,130 @@ const storage = new CloudinaryStorage({
 });
 
 const upload = multer({ storage });
+const uploadFilm = upload.fields([{ name: 'locandina', maxCount: 1 }]);
 
 
-
-const uploadFilm = upload.fields([
-  { name: 'locandina', maxCount: 1 },
-
-]);
-const deleteAndRedirect = async (filename, res) => {
-    try {
-        const filePath = path.join(__dirname, '../uploads/cineforum', filename);
-        await fs.unlink(filePath);
-        console.log(`Successo: ${filename} rimosso.`);
-    } catch (err) {
-        if (err.code !== 'ENOENT') {
-            console.error(`Errore eliminazione ${filename}:`, err);
-            return res.status(500).send("Errore nel server");
-        }
-    }
-    res.send(`
-    <script>
-      alert("Locandina eliminata con successo!");
-      window.location.href = "/cineforumInsert";
-    </script>
-    `);
-};
-
+// ➡️ PASSO 1: CARICAMENTO DELLA LOCANDINA
 router.post('/cineforumInsert', uploadFilm, async (req, res) => {
-  try {
-    // Con upload.fields, il file si trova dentro req.files['nome_campo'][0]
-    const locandina = req.files && req.files['locandina'] ? req.files['locandina'][0] : null;
-
-    if (!locandina) {
-      return res.send(`
-        <script>
-          alert("Errore: Inserisci la Locandina");
-          window.history.back();
-        </script>
-      `);
-    }
-
-    console.log('LOCANDINA:', locandina);
-
-    // ✅ CORREZIONE: Forza l'URL di Cloudinary in HTTPS fin da subito
-    let urlSicura = locandina.path || '';
-    if (urlSicura.startsWith('http://')) {
-        urlSicura = urlSicura.replace('http://', 'https://');
-    }
-
-    const metadata = {
-        public_id: locandina.filename,
-        url: urlSicura
-    };
-
-    console.log('METADATA:', metadata);
-
-    // 1. Salva il file JSON nella cartella temporanea
-    const uploadDir = path.join(__dirname, '../uploads/cineforum');
-    await fs.mkdir(uploadDir, { recursive: true });
-
-    await fs.writeFile(
-        path.join(uploadDir, 'locandina.json'),
-        JSON.stringify(metadata, null, 2),
-        'utf8'
-    );
-    console.log('✅ locandina.json salvato in uploads/cineforum');
-
-    // ============================================================
-    // AGGIORNA DIRETTAMENTE IL FILE IN VIEWS CON CHEERIO
-    // ============================================================
     try {
-        // PERCORSO ESATTO: Sale da routes e scende in views/html/laboratori
-        const htmlPath = path.join(__dirname, '../views/html/laboratori/cineforum.html');
-        let htmlContent = await fs.readFile(htmlPath, 'utf-8');
+        const fileLocandina = req.files && req.files['locandina'] ? req.files['locandina'][0] : null;
 
-        const $ = cheerio.load(htmlContent);
-
-        // Trova il tag dell'immagine usando l'ID o l'attributo alt
-        const imgTag = $('#locandina-film-settimana').length ? $('#locandina-film-settimana') : $('img[alt="locandina"]');
-
-        if (imgTag.length) {
-            imgTag.attr('src', metadata.url);        // Inietta l'URL sicuro di Cloudinary
-            imgTag.removeAttr('style');              // Rimuove eventuali display: none
-            imgTag.css('display', 'block');          // Si assicura che sia visibile
-            
-            // Scrive le modifiche nel file fisico dentro views
-            await fs.writeFile(htmlPath, $.html(), 'utf-8');
-            console.log("HTML in views aggiornato! Link Cloudinary scritto nel file:", metadata.url);
-        } else {
-            console.log("Attenzione: Non ho trovato il tag img dentro views/html/laboratori/cineforum.html");
+        if (!fileLocandina) {
+            return res.send('<script>alert("Errore: Seleziona un file!"); window.history.back();</script>');
         }
-    } catch (htmlError) {
-        console.error("Errore durante la lettura o scrittura del file in views:", htmlError);
+
+        // Forza HTTPS per evitare l'errore "Mixed Content" del browser
+        const urlSicura = fileLocandina.path.replace(/^http:/, 'https:');
+
+        const metadata = {
+            public_id: fileLocandina.filename,
+            url: urlSicura
+        };
+
+        // Salva il promemoria temporaneo sul server
+        const uploadDir = path.join(__dirname, '../uploads/cineforum');
+        await fs.mkdir(uploadDir, { recursive: true });
+        await fs.writeFile(path.join(uploadDir, 'locandina.json'), JSON.stringify(metadata, null, 2), 'utf8');
+
+        // Torna alla pagina principale in modo pulito
+        res.redirect('/cineforumInsert');
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Errore durante il caricamento della locandina.");
     }
-    // ============================================================
-
-    // ✅ CORREZIONE FONDAMENTALE: Usa il redirect invece di sendFile.
-    // Questo ripulisce l'URL della barra degli indirizzi del browser ed evita i finti errori 404 sulle fetch successive.
-    res.redirect('/cineforumInsert');
-
-  } catch (error) {
-    console.error("Errore rotta cineforumInsert:", error);
-    res.status(500).send("Errore durante il salvataggio dei file.");
-  }
+});
+   // ➡️ PASSO 2: API PER DIRE AL FRONTEND QUAL È LA LOCANDINA ATTIVA (Risolve l'errore 404)
+router.get('/api/locandina', async (req, res) => {
+    const percorsoJson = path.join(__dirname, '../uploads/cineforum/locandina.json');
+    try {
+        await fs.access(percorsoJson);
+        const data = await fs.readFile(percorsoJson, 'utf8');
+        return res.json(JSON.parse(data));
+    } catch (err) {
+        // Se non c'è nessuna locandina caricata, risponde in modo pulito senza fare errori 404
+        return res.json({ url: null });
+    }
 });
 
+// ➡️ PASSO 3: CANCELLA LA LOCANDINA
+router.post('/deleteLocandina', async (req, res) => {
+    try {
+        const percorsoJson = path.join(__dirname, '../uploads/cineforum/locandina.json');
+        await fs.unlink(percorsoJson);
+    } catch (err) {}
+    res.send('<script>alert("Locandina eliminata!"); window.location.href = "/cineforumInsert";</script>');
+});
 
-    
-
-// Rotte specifiche
-router.post('/deleteLocandina', (req, res) => deleteAndRedirect('locandina.json', res));
-
-
-//sposta i file da uploads 
-
+// ➡️ PASSO 4: SALVA IL FILM DEFINITIVAMENTE NELL'ARCHIVIO HTML
 router.post('/salvaFilm', async (req, res) => {
     const cartellaSorgente = path.join(__dirname, '../uploads/cineforum');
-    const cartellaDestinazioneBase = path.join(__dirname, '../public/images/films');
-    
-    // Funzione interna per creare lo slug (nome cartella sicuro)
-    const slugify = (text) => text.toString().toLowerCase().trim()
-        .replace(/\s+/g, '-')           // Sostituisce spazi con -
-        .replace(/[^\w\-]+/g, '')       // Rimuove caratteri speciali
-        .replace(/\-\-+/g, '-');        // Rimuove doppie --
+    const cartellaDestinazione = path.join(__dirname, '../public/images/films');
+
+    const slugify = (text) => text.toString().toLowerCase().trim().replace(/\s+/g, '-').replace(/[^\w\-]+/g, '');
 
     try {
-        // 1. Recuperiamo il titolo dal file sorgente PRIMA di spostare tutto
-        const pathTitoloSorgente = path.join(cartellaSorgente, 'titolo_film.txt');
-        const titoloTesto = await fs.readFile(pathTitoloSorgente, 'utf-8');
-        
-        // 2. Definiamo la cartella specifica del film dentro blog
+        const titoloTesto = await fs.readFile(path.join(cartellaSorgente, 'titolo_film.txt'), 'utf-8');
         const nomeCartellaFilm = slugify(titoloTesto);
-        const cartellaBlogSpecifico = path.join(cartellaDestinazioneBase, 'blog', nomeCartellaFilm);
-        
-        // Creiamo le cartelle necessarie
-        await fs.mkdir(cartellaDestinazioneBase, { recursive: true });
-        await fs.mkdir(cartellaBlogSpecifico, { recursive: true });
+        const cartellaSpecifico = path.join(cartellaDestinazione, 'blog', nomeCartellaFilm);
 
+        await fs.mkdir(cartellaSpecifico, { recursive: true });
         const dataOggi = getDataFormattata();
 
-        // 3. Mappa dei file: ora puntano alla sottocartella specifica
-        const fileMappa = [
-            { orig: 'locandina.json', blog: 'locandina.json' },
-            { orig: 'titolo_film.txt', blog: `titolo_film_${dataOggi}.txt` },
-            { orig: 'tramaFilm.txt', blog: `tramaFilm_${dataOggi}.txt` },
-            { orig: 'discussione.txt', blog: `discussione_${dataOggi}.txt` }
-        ];
+        // Legge la locandina salvata nel punto 1
+        const locandinaData = JSON.parse(await fs.readFile(path.join(cartellaSorgente, 'locandina.json'), 'utf8'));
 
-        // 4. Spostamento e Copia File
-        for (const file of fileMappa) {
-            const sorgente = path.join(cartellaSorgente, file.orig);
-            const blogDest = path.join(cartellaBlogSpecifico, file.blog); // Dentro la cartella del film
-            const radiceDest = path.join(cartellaDestinazioneBase, file.orig);
+        let tramaTesto = 'Trama non disponibile';
+        try { tramaTesto = await fs.readFile(path.join(cartellaSorgente, 'tramaFilm.txt'), 'utf-8'); } catch(e) {}
 
-            try {
-                await fs.access(sorgente); 
-                await fs.copyFile(sorgente, blogDest);
-                await fs.rename(sorgente, radiceDest);
-            } catch (err) {
-                console.warn(`SALTO: ${file.orig} non trovato.`);
-            }
-        }
-
-        // 5. Lettura dei contenuti dai file per incorporarli direttamente nell'HTML
-        let titoloContenuto = titoloTesto;
-        let tramaContenuto = '';
-        let discussioneContenuto = '';
-
-        try {
-            tramaContenuto = await fs.readFile(path.join(cartellaBlogSpecifico, `tramaFilm_${dataOggi}.txt`), 'utf-8');
-        } catch (e) {
-            tramaContenuto = 'Trama non disponibile';
-        }
-
-        try {
-            discussioneContenuto = await fs.readFile(path.join(cartellaBlogSpecifico, `discussione_${dataOggi}.txt`), 'utf-8');
-        } catch (e) {
-            discussioneContenuto = 'Discussione non disponibile';
-        }
-
-        // 5. Aggiornamento HTML con i contenuti INCORPORATI (non link)
-      
-        
-  
-        // ✅ Genera ID unico basato su timestamp
-const generaIdUnico = () => {
-    const now = new Date();
-    const ore = String(now.getHours()).padStart(2, '0');
-    const minuti = String(now.getMinutes()).padStart(2, '0');
-    const secondi = String(now.getSeconds()).padStart(2, '0');
-    const millisecondi = String(now.getMilliseconds()).padStart(3, '0');
-    return `film-${ore}-${minuti}-${secondi}-${millisecondi}`;
-};
-
-
-const idUnico = generaIdUnico();
-const locandinaData = JSON.parse(
-    await fs.readFile(
-        path.join(cartellaBlogSpecifico, 'locandina.json'),
-        'utf8'
-    )
-);
-
-const imageUrl = cloudinary.url(
-    locandinaData.public_id,
-    {
-        quality: 'auto',
-        fetch_format: 'auto',
-        width: 600,
-        crop: 'scale'
-    }
-);
-
-const contenutoComune = `
-    <h1>${titoloContenuto}</h1>
-    <h3>Film del ${dataOggi.replace(/_/g, '/')}</h3>
-    <input type="checkbox" id="sidebar-${idUnico}">
-    <label for="sidebar-${idUnico}" class="toggle-img">
-        <img src="${imageUrl}" width="100">
-    </label>
-    <br>
-    <div class="film-details">
-        <label for="sidebar-${idUnico}" class="toggle-archivio">
-
-            <div class="film-section">
-                <h4>📖 Trama</h4>
-                <p>${tramaContenuto.replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\n/g, '<br>')}</p>
-            </div>
-            <div class="film-section">
-                <h4>💬 Discussione</h4>
-                <p>${discussioneContenuto.replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\n/g, '<br>')}</p>
-            </div>
-        </label>
-    </div>
-`;
-
-        const nuovoBlocco = `<div id="${dataOggi}" class="film-archiviato" data-folder="${nomeCartellaFilm}">${contenutoComune}</div>`;
-        
-        const nuovoBloccoInsert = `
+        let discussioneTesto = 'Discussione non disponibile';
+        try { discussioneTesto = await fs.readFile(path.join(cartellaSorgente, 'discussione.txt'), 'utf-8'); } catch(e) {}
+// Genera il blocco HTML da aggiungere nell'archivio
+        const idUnico = `film-${Date.now()}`;
+        const bloccoArchivio = `
             <div id="${dataOggi}" class="film-archiviato" data-folder="${nomeCartellaFilm}">
                 <form action="/modificaInsert/${nomeCartellaFilm}" method="post">
-                    <button type="submit">Modifica ${titoloContenuto}</button>
+                    <button type="submit">Modifica ${titoloTesto}</button>
                 </form>
-                ${contenutoComune}
+                <h1>${titoloTesto}</h1>
+                <h3>Film del ${dataOggi.replace(/_/g, '/')}</h3>
+                <input type="checkbox" id="${idUnico}">
+                <label for="${idUnico}" class="toggle-img">
+                    <img src="${locandinaData.url}" width="100">
+                </label>
+                <div class="film-details">
+                    <div class="film-section"><h4>📖 Trama</h4><p>${tramaTesto}</p></div>
+                    <div class="film-section"><h4>💬 Discussione</h4><p>${discussioneTesto}</p></div>
+                </div>
             </div>
         `;
 
-        // Scrittura sui file HTML (come nel tuo codice originale)
-        const pathHtmlPubblico = path.join(__dirname, '..', 'views', 'html', 'laboratori', 'cineforum.html');
-        const pathHtmlInsert = path.join(__dirname, '../cineforumInsert.html');
+        // Modifica direttamente il file HTML nella radice del progetto
+        const htmlPath = path.join(__dirname, '../cineforumInsert.html');
+        const htmlContent = await fs.readFile(htmlPath, 'utf-8');
+        const $ = cheerio.load(htmlContent);
 
-        const htmlPub = await fs.readFile(pathHtmlPubblico, 'utf-8');
-        const $pub = cheerio.load(htmlPub);
-        $pub('#archivio').append(nuovoBlocco);
-        await fs.writeFile(pathHtmlPubblico, $pub.html());
-
-        const htmlIns = await fs.readFile(pathHtmlInsert, 'utf-8');
-        const $ins = cheerio.load(htmlIns);
-        $ins('#archivio').append(nuovoBloccoInsert);
-        $ins('#titoloFilm, #tramaFilm, #discussione').text('');
-        await fs.writeFile(pathHtmlInsert, $ins.html());
-
-res.send(`
-    <script>
-        alert("Film salvato nella cartella ${nomeCartellaFilm}!");
+        $('#archivio').append(bloccoArchivio);
         
-        window.location.href = "/cineforumInsert"; 
-    </script>
-`);
+        // Pulisce l'anteprima attuale per il prossimo inserimento
+        $('#titoloFilm, #tramaFilm, #discussione').text('');
 
+        await fs.writeFile(htmlPath, $.html(), 'utf-8');
+
+        // Svuota la cartella dei file temporanei dopo il salvataggio
+        try { await fs.unlink(path.join(cartellaSorgente, 'locandina.json')); } catch(e) {}
+
+        res.send('<script>alert("Film salvato nell\'archivio!"); window.location.href = "/cineforumInsert";</script>');
 
     } catch (error) {
-        console.error("Errore durante il salvataggio:", error);
-        res.status(500).send("Errore interno del server.");
+        console.error(error);
+        res.status(500).send("Errore durante il salvataggio del film.");
     }
 });
+
+
+
+
 
 
 //testi

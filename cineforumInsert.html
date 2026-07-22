@@ -2,38 +2,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inserisci il Film</title>
-    
-    
     <link rel="stylesheet" href="/assets/css/laboratori/cineforum.css">
-    
 </head>
 <body>
-  <div class="locandina">
+
+<div class="locandina">
     <h1>Carica La Locandina del Film della Settimana</h1>
     <form action="/cineforumInsert" method="POST" enctype="multipart/form-data" id="locandina">
-<div class="scegli">
-    <label id="carica" for="file-input">Scegli File</label>
-    <input type="file" name="locandina" id="file-input" required="" onchange="mostraBottone(); mostraFileName()">
-    <span id="fileName">Nessun file selezionato</span>
-</div>
+        <div class="scegli">
+            <label id="carica" for="file-input">Scegli File</label>
+            <input type="file" name="locandina" id="file-input" required="" onchange="mostraBottone(); mostraFileName()">
+            <span id="fileName">Nessun file selezionato</span>
+        </div>
         <button type="submit" id="btn-anteprima" style="display: none;">Anteprima della Locandina</button>
     </form> 
 </div>
 
 <div class="Conteiner_Film">
     <div class="imgLoc">
-        
         <img id="locandina-img" alt="locandina" width="200" style="display: none;">
-
-
         <form action="/deleteLocandina" method="POST" id="form-cancella">
             <button class="btn" type="submit" id="deleteLocandina">Elimina la Locandina</button>
         </form>
-        
     </div>
-   <!-- Il div con i testi che arrivano dal server -->
+    
+    <!-- Il div con i testi che arrivano dal server -->
     <div class="film">
-        <h1 id="titoloFilm"></h1>
+        <h1 id="titoloFilm">kkkkk</h1>
         <h1 id="tramaFilm"></h1>
         <h1 id="discussione"></h1>
     </div>
@@ -57,61 +52,11 @@
     </div> 
 </div>
 
-<script>
-// 1. Gestisce l'apparizione del tasto "Anteprima" quando l'utente seleziona un file dal PC
-function mostraBottone() {
-    const fileInput = document.getElementById('file-input');
-    const btnAnteprima = document.getElementById('btn-anteprima');
-    
-    if (fileInput && fileInput.files.length > 0) {
-        if (btnAnteprima) btnAnteprima.style.display = 'block'; 
-    } else {
-        if (btnAnteprima) btnAnteprima.style.display = 'none';
-    }
-}
-
-// 2. Controlla AUTOMATICAMENTE se la locandina esiste già sul server all'apertura della pagina
-// Controlla AUTOMATICAMENTE se la locandina esiste già su Cloudinary leggendo il file JSON
-window.addEventListener('DOMContentLoaded', () => {
-    const img = document.getElementById('locandina-img');
-    const divIns = document.querySelector('.ins');
-    const formCancella = document.getElementById('form-cancella');
-
-    // Recuperiamo il file JSON salvato dal backend
-    fetch('/uploads/cineforum/locandina.json')
-      .then(response => {
-          if (!response.ok) throw new Error('File JSON non trovato');
-          return response.json();
-      })
-      .then(data => {
-          if (data && data.url) {
-              // 1. Assegniamo il link di Cloudinary all'immagine
-              img.src = data.url;
-              img.style.display = 'block'; // Ci assicuriamo che sia visibile
-
-              // 2. Mostriamo i moduli di inserimento testo e il tasto cancella
-              if (divIns) divIns.style.display = 'block';
-              if (formCancella) formCancella.style.display = 'block';
-          }
-      })
-      .catch(err => {
-          console.log('Nessuna locandina caricata o errore:', err.message);
-          // Se il file JSON non esiste, nascondiamo l'immagine e i moduli
-          if (img) img.style.display = 'none';
-          if (divIns) divIns.style.display = 'none';
-          if (formCancella) formCancella.style.display = 'none';
-      });
-});
-
-</script>
-
-
 <!-- Contenitore Pulsanti Finali -->
 <div class="azioni-finali">
   <!-- Form Salva -->
   <form action="/salvaFilm" method="POST" id="formSalva">
-    <!-- Al click, esegue la funzione mostraPubblica() -->
-    <button class="btn" type="submit" id="salvaFilm" onclick="mostraPubblica()">Salva il Film</button>
+    <button class="btn" type="submit" id="btnSalvaFilm" onclick="mostraPubblica()">Salva il Film</button>
   </form>
   
   <!-- Form Pubblica -->
@@ -120,117 +65,119 @@ window.addEventListener('DOMContentLoaded', () => {
   </form>
 </div>
 
-
-  <form action="/logout" method="POST">
+<form action="/logout" method="POST">
     <button class="btn" type="submit" id="logout">LogOut</button>
-  </form>
+</form>
 
-  <input type="checkbox" id="sidebar-archivio">
-               <label for="sidebar-archivio" class="open-archivio">
-                 <h1 class="w-archivio">Archivio</h1>
-                 </label>
-            <label for="sidebar-archivio" id="overlay-archivio">
-  
+<input type="checkbox" id="sidebar-archivio">
+<label for="sidebar-archivio" class="open-archivio">
+    <h1 class="w-archivio">Archivio</h1>
+</label>
+<label for="sidebar-archivio" id="overlay-archivio"></label>
   
 <div id="archivio">
-
-        
-            
-        
-            
-
-            
-        
-            <div id="17_06_2026" class="film-archiviato" data-folder="red">
-                <form action="/modificaInsert/red" method="post">
-                    <button type="submit">Modifica Red</button>
-                </form>
+    <div id="17_06_2026" class="film-archiviato" data-folder="red">
+        <form action="/modificaInsert/red" method="post">
+            <button type="submit">Modifica Red</button>
+        </form>
                 
-    <h1>Red</h1>
-    <h3>Film del 17/06/2026</h3>
-    <input type="checkbox" id="sidebar-film-13-47-09-916">
-    <label for="sidebar-film-13-47-09-916" class="toggle-img">
-        <img src="http://res.cloudinary.com/ddojtr6uq/image/upload/c_scale,f_auto,q_auto,w_600/v1/cineforum/qkuuvlr5kfiqmxnuhbyg" width="100">
-    </label>
-    <br>
-    <div class="film-details">
-        <label for="sidebar-film-13-47-09-916" class="toggle-archivio">
-
-            <div class="film-section">
-                <h4>📖 Trama</h4>
-                <p>Frank Moses, ex agente segreto della CIA, viveva una vita tranquilla e appartata con la compagna Sarah. Poi, l'arrivo di un commando armato deciso a ucciderlo, lo costringe a riunire la sua vecchia squadra nel disperato tentativo di sopravvivere. Frank, Joe, Marvin e Victoria, un tempo i migliori agenti segreti della CIA, dovranno usare tutta la loro astuzia ed esperienza per rimanere un passo avanti ai loro inseguitori mortali e, insieme all'aiuto della 'civile' Sarah, cercheranno di fare irruzione nel quartier generale top-secret della CIA per sventare la più grande cospirazione governativa della storia.</p>
-            </div>
-            <div class="film-section">
-                <h4>💬 Discussione</h4>
-                <p>Un po’ come l’ex agente Moses alcuni di noi hanno svolto un lavoro, o anche più di uno, c’era chi inseriva i dati di produzione al pc, chi lavorava in comune e chi si occupava di grafica. Tutti mettevano il loro impegno nel portare a termine il loro compito con puntualità, rispetto e dedizione. Tutti noi siamo arrivati al termine delle nostre carriere lavorative. Per alcuni è stato sollievo in quanto sopportavano quell’ambiente che vivevano con ansia e pressione, per i tempi troppo stretti, perché non si trovavano bene con i propri collegati oppure perché non gli piaceva il loro lavoro; mentre altri sono rimasti dispiaciuti in quanto era ciò che avevano desiderato e conquistato dopo tanto tempo. Per molti ricevere uno stipendio ha voluto dire togliersi qualche sfizio, come comprarsi qualcosa che desiderava oppure andare a fare una gita. Sicuramente guadagnare dei soldi per aver svolto il proprio lavoro è gratificante perché ci rendiamo conto che i nostri sforzi vengono ricompensati.</p>
-            </div>
+        <h1>Red</h1>
+        <h3>Film del 17/06/2026</h3>
+        <input type="checkbox" id="sidebar-film-13-47-09-916">
+        <label for="sidebar-film-13-47-09-916" class="toggle-img">
+            <!-- Nota: Inserita la 's' in https:// per eliminare il Mixed Content dell'immagine di Red -->
+            <img src="https://cloudinary.com" width="100">
         </label>
-    </div>
-
-            </div>
-        </div>
+        <br>
+        <div class="film-details">
+            <label for="sidebar-film-13-47-09-916" class="toggle-archivio">
+                <div class="film-section">
+                    <h4>📖 Trama</h4>
+                    <p>Frank Moses, ex agente segreto della CIA, viveva una vita tranquilla e appartata con la compagna Sarah. Poi, l'arrivo di un commando armato deciso a ucciderlo, lo costringe a riunire la sua vecchia squadra nel disperato tentativo di sopravvivere. Frank, Joe, Marvin e Victoria, un tempo i migliori agenti segreti della CIA, dovranno usare tutta la loro astuzia ed esperienza per rimanere un passo avanti ai loro inseguitori mortali e, insieme all'aiuto della 'civile' Sarah, cercheranno di fare irruzione nel quartier generale top-secret della CIA per sventare la più grande cospirazione governativa della storia.</p>
+                </div>
+                <div class="film-section">
+                    <h4>💬 Discussione</h4>
+                    <p>Un po’ come l’ex agente Moses alcuni di noi hanno svolto un lavoro, o anche più di uno, c’era chi inseriva i dati di produzione al pc, chi lavorava in comune e chi si occupava di grafica. Tutti mettevano il loro impegno nel portare a termine il loro compito con puntualità, rispetto e dedizione. Tutti noi siamo arrivati al termine delle nostre carriere lavorative. Per alcuni è stato sollievo in quanto sopportavano quell’ambiente che vivevano con ansia e pressione, per i tempi troppo stretti, perché non si trovavano bene con i propri collegati oppure perché non gli piaceva il loro lavoro; mentre altri sono rimasti dispiaciuti in quanto era ciò che avevano desiderato e conquistato dopo tanto tempo. Per molti ricevere uno stipendio ha voluto dire togliersi qualche sfizio, come comprarsi qualcosa che desiderava oppure andare a fare una gita. Sicuramente guadagnare dei soldi per haber svolto il proprio lavoro è gratificante perché ci rendiamo conto che i nostri sforzi vengono ricompensati.</p>
+                </div>
             </label>
-        
-           <script>
-function mostraPubblica() {
-    // Salva lo stato nel browser prima del ricaricamento del server
-    localStorage.setItem('filmSalvato', 'true');
+        </div>
+    </div>
+</div>
+
+<!-- SCRIPT DI CONFIGURAZIONE UNIFICATO -->
+<script>
+// 1. Mostra il pulsante Anteprima se il file è selezionato
+function mostraBottone() {
+    const fileInput = document.getElementById('file-input');
+    const btnAnteprima = document.getElementById('btn-anteprima');
+    if (fileInput && fileInput.files.length > 0) {
+        if (btnAnteprima) btnAnteprima.style.display = 'block'; 
+    } else {
+        if (btnAnteprima) btnAnteprima.style.display = 'none';
+    }
 }
 
-// Al caricamento della pagina, controlla se l'utente ha premuto "Salva" in precedenza
-document.addEventListener("DOMContentLoaded", function() {
-    if (localStorage.getItem('filmSalvato') === 'true') {
-        document.getElementById('formPubblica').classList.add('mostra-pubblica');
-    }
-});
-
-// Opzionale: Se vuoi resettare lo stato quando l'utente clicca su "Pubblica"
-document.getElementById('formPubblica').addEventListener('submit', function() {
-    localStorage.removeItem('filmSalvato');
-});
+// 2. Mostra il nome del file selezionato sotto il pulsante
 function mostraFileName() {
     const fileInput = document.getElementById('file-input');
     const fileName = document.getElementById('fileName');
-    
-    if (fileInput.files.length > 0) {
+    if (fileInput && fileInput.files.length > 0) {
         fileName.textContent = fileInput.files[0].name;
     } else {
         fileName.textContent = 'Nessun file selezionato';
     }
 }
-</script> 
-        
-        
-  
-            
-        
-            
-        
-            
-        
-            
-        
-            
-        
-            
-        
-            
-        
-            
-        
-            
-        
-            
-        
-            
-        
-            
-        
-            
-        
-            
-        
-            
-        
-            
-        </body></html>
+
+// 3. Funzione di attivazione dello stato di salvataggio
+function mostraPubblica() {
+    localStorage.setItem('filmSalvato', 'true');
+}
+
+// 4. Gestione dinamica degli elementi all'apertura del documento
+window.addEventListener('DOMContentLoaded', () => {
+    const img = document.getElementById('locandina-img');
+    const divIns = document.querySelector('.ins');
+    const formCancella = document.getElementById('form-cancella');
+
+    // Lettura del file statico locale per l'anteprima immediata
+    fetch('/uploads/cineforum/locandina.json')
+      .then(response => {
+          if (!response.ok) throw new Error('File JSON non presente');
+          return response.json();
+      })
+      .then(data => {
+          if (data && data.url) {
+              // Forza la sicurezza HTTPS sull'URL della locandina caricata
+              let urlSicura = data.url.replace(/^http:/, 'https:');
+              img.src = urlSicura;
+              img.style.display = 'block';
+
+              if (divIns) divIns.style.display = 'block';
+              if (formCancella) formCancella.style.display = 'block';
+          }
+      })
+      .catch(err => {
+          console.log('Nessuna locandina attiva rilevata:', err.message);
+          if (img) img.style.display = 'none';
+          if (divIns) divIns.style.display = 'none';
+          if (formCancella) formCancella.style.display = 'none';
+      });
+
+    // Controllo dello stato salvato per mostrare il pulsante Pubblica
+    if (localStorage.getItem('filmSalvato') === 'true') {
+        const formPubblica = document.getElementById('formPubblica');
+        if (formPubblica) formPubblica.classList.add('mostra-pubblica');
+    }
+});
+
+// Svuota lo stato al momento della pubblicazione effettiva
+const formPubblicaElement = document.getElementById('formPubblica');
+if (formPubblicaElement) {
+    formPubblicaElement.addEventListener('submit', function() {
+        localStorage.removeItem('filmSalvato');
+    });
+}
+</script>
+
+</body>
+</html>
