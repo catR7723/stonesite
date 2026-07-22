@@ -140,12 +140,9 @@ window.addEventListener('DOMContentLoaded', () => {
     const formCancella = document.getElementById('form-cancella');
 
     // Lettura del file statico locale per l'anteprima immediata
-    fetch('/uploads/cineforum/locandina.json')
-      .then(response => {
-          if (!response.ok) throw new Error('File JSON non presente');
-          return response.json();
-      })
-      .then(data => {
+    fetch('/api/locandina')
+            .then(response => response.json())
+            .then(data => {
           if (data && data.url) {
               // Forza la sicurezza HTTPS sull'URL della locandina caricata
               let urlSicura = data.url.replace(/^http:/, 'https:');
