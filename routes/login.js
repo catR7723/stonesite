@@ -5,6 +5,7 @@ const bcrypt = require('bcrypt');
 const sgMail = require('@sendgrid/mail');
 const mongoose = require('mongoose');
 const crypto = require('crypto');
+const jwt = require('jsonwebtoken');
 
 // Configura SendGrid
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
@@ -27,6 +28,15 @@ const UtenteAutorizzatoSchema = new mongoose.Schema({
 });
 const UtenteAutorizzato = mongoose.model('UtenteAutorizzato', UtenteAutorizzatoSchema, 'utenti_autorizzati');
 
+// --- SCHEMA LOGIN TOKEN (per admin via email) ---
+const AdminLoginTokenSchema = new mongoose.Schema({
+    token: String,
+    email: String,
+    expiresAt: Date,
+    createdAt: { type: Date, default: Date.now, expires: 3600 } // TTL 1 ora
+});
+const AdminLoginToken = mongoose.model('AdminLoginToken', AdminLoginTokenSchema, 'admin_login_tokens');
+
 // Verifica SendGrid all'avvio
 console.log('✅ SendGrid configurato');
 
@@ -38,6 +48,7 @@ const initializeAuthorizedUsers = async () => {
             { _id: 'anto', role: 'cineforum' },
             { _id: 'dave_cucina', role: 'cucina' },
             { _id: 'stefi', role: 'cucina' },
+            { _id: 'tanos', role: 'boss' },  // 🆕 Admin
             { _id: 'boss', role: 'boss' }
         ];
 
@@ -53,8 +64,6 @@ const initializeAuthorizedUsers = async () => {
         console.error('❌ Errore inizializzazione utenti autorizzati:', err);
     }
 };
-
-
 
 // --- MIDDLEWARE DI PROTEZIONE ROTTE ---
 const richiediCineforum = (req, res, next) => {
@@ -78,6 +87,24 @@ const richiediBoss = (req, res, next) => {
     return res.redirect('/login');
 };
 
+// 🆕 Middleware: Verifica JWT admin
+const authenticateAdmin = (req, res, next) => {
+    const token = req.cookies?.adminToken;
+    
+    if (!token) {
+        return res.status(401).redirect('/login');
+    }
+
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        req.admin = decoded;
+        next();
+    } catch (err) {
+        res.clearCookie('adminToken');
+        return res.status(403).redirect('/login');
+    }
+};
+
 // --- ROTTE DI VISUALIZZAZIONE PAGINE ---
 router.get('/login', (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'views', 'html', 'login.html'));
@@ -91,15 +118,17 @@ router.get('/cucinaInsert', richiediCucina, (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'cucinaInsert.html'));
 });
 
-router.get('/bossPanel', richiediBoss, (req, res) => {
+// 🆕 ROTTA PROTETTA: bossPanel con autenticazione JWT
+router.get('/bossPanel', authenticateAdmin, (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'views', 'html', 'bossPanel.html'));
 });
 
 router.get('/logout', (req, res) => {
     req.session.destroy((err) => {
         if (err) console.error('Errore logout:', err);
-        res.redirect('/login');
     });
+    res.clearCookie('adminToken');
+    res.redirect('/login');
 });
 
 // --- 1. LOGIN CON MONGODB ---
@@ -141,6 +170,147 @@ router.post('/auth', async (req, res) => {
     } catch (err) {
         console.error('❌ Errore Login:', err);
         res.status(500).json({ error: 'Errore nel server' });
+    }
+});
+
+// --- 🆕 2. LOGIN ADMIN VIA EMAIL (PER TANOS) ---
+router.post('/admin-login', async (req, res) => {
+    const { email } = req.body;
+
+    if (!email) {
+        return res.status(400).json({ message: '❌ Email richiesta' });
+    }
+
+    try {
+        // Verifica che l'email sia di tanos (admin)
+        if (email !== process.env.ADMIN_EMAIL) {
+            return res.status(401).json({ message: '❌ Email non autorizzata per l\'accesso admin' });
+        }
+
+        // Genera token temporaneo (valido 15 minuti)
+        const tempToken = crypto.randomBytes(32).toString('hex');
+        const loginToken = new AdminLoginToken({
+            token: tempToken,
+            email: email,
+            expiresAt: new Date(Date.now() + 15 * 60 * 1000) // 15 minuti
+        });
+        await loginToken.save();
+
+        // Link di login con token
+        const loginLink = `${process.env.APP_URL || 'http://localhost:3000'}/verify-admin?token=${tempToken}`;
+
+        // Invia email con link
+        await sgMail.send({
+            to: email,
+            from: process.env.EMAIL_USER,
+            subject: '🔐 Accesso Admin - Stone Site',
+            html: `
+                <div style="font-family: Arial, sans-serif; padding: 20px; background: #f5f5f5; border-radius: 8px;">
+                    <h2>👑 Accesso Admin</h2>
+                    <p>Hai richiesto di accedere al Pannello Boss.</p>
+                    <p style="margin-top: 20px;">
+                        <a href="${loginLink}" style="display: inline-block; padding: 12px 24px; background: #28a745; color: white; text-decoration: none; border-radius: 4px; font-weight: bold;">
+                            ✅ Accedi Ora
+                        </a>
+                    </p>
+                    <p style="color: #666; font-size: 12px; margin-top: 20px;">
+                        ⏱️ Questo link scade tra 15 minuti.<br>
+                        Se non hai effettuato questa richiesta, ignora questo messaggio.
+                    </p>
+                    <hr>
+                    <p style="color: #666; font-size: 12px;">
+                        Non condividere questo link con nessuno. Stone Site Team
+                    </p>
+                </div>
+            `
+        });
+
+        console.log(`✅ Email di accesso admin inviata a ${email}`);
+        res.json({ message: '✅ Email inviata! Controlla la tua posta.' });
+
+    } catch (err) {
+        console.error('❌ Errore admin-login:', err);
+        res.status(500).json({ message: '❌ Errore nella richiesta' });
+    }
+});
+
+// --- 🆕 3. VERIFICA TOKEN E LOGIN ADMIN ---
+router.get('/verify-admin', async (req, res) => {
+    const { token } = req.query;
+
+    if (!token) {
+        return res.redirect('/login');
+    }
+
+    try {
+        // Verifica token nel database
+        const loginRecord = await AdminLoginToken.findOne({ token });
+
+        if (!loginRecord) {
+            return res.status(401).send(`
+                <html>
+                    <body style="font-family: Arial; text-align: center; padding: 50px;">
+                        <h1>❌ Token non valido o scaduto</h1>
+                        <p>Il link è scaduto o non esiste.</p>
+                        <a href="/login">Torna al login</a>
+                    </body>
+                </html>
+            `);
+        }
+
+        // Verifica scadenza
+        if (new Date() > loginRecord.expiresAt) {
+            await AdminLoginToken.deleteOne({ _id: loginRecord._id });
+            return res.status(401).send(`
+                <html>
+                    <body style="font-family: Arial; text-align: center; padding: 50px;">
+                        <h1>⏱️ Token scaduto</h1>
+                        <p>Il link è scaduto dopo 15 minuti.</p>
+                        <a href="/login">Richiedi nuovo accesso</a>
+                    </body>
+                </html>
+            `);
+        }
+
+        // ✅ Token valido: genera JWT
+        const jwtToken = jwt.sign(
+            { email: loginRecord.email, role: 'boss', username: 'tanos' },
+            process.env.JWT_SECRET,
+            { expiresIn: '24h' }
+        );
+
+        // Salva JWT nel cookie
+        res.cookie('adminToken', jwtToken, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'lax',
+            maxAge: 24 * 60 * 60 * 1000 // 24 ore
+        });
+
+        // Elimina il token temporaneo
+        await AdminLoginToken.deleteOne({ _id: loginRecord._id });
+
+        // Invia notifica login admin
+        sgMail.send({
+            to: process.env.EMAIL_USER,
+            from: process.env.EMAIL_USER,
+            subject: `🔓 Admin Login: tanos`,
+            html: `<p><b>tanos</b> ha effettuato l'accesso admin il ${new Date().toLocaleString('it-IT')}</p>`
+        }).catch(err => console.error('❌ Errore notifica:', err));
+
+        // Redirect a bossPanel
+        res.redirect('/bossPanel');
+
+    } catch (err) {
+        console.error('❌ Errore verify-admin:', err);
+        res.status(500).send(`
+            <html>
+                <body style="font-family: Arial; text-align: center; padding: 50px;">
+                    <h1>❌ Errore nel server</h1>
+                    <a href="/login">Torna al login</a>
+                </body>
+            </html>
+        `);
     }
 });
 
@@ -305,7 +475,7 @@ router.get('/api/utenti', richiediBoss, async (req, res) => {
 router.delete('/api/utenti/:username', richiediBoss, async (req, res) => {
     const { username } = req.params;
 
-    if (username === 'boss') {
+    if (username === 'boss' || username === 'tanos') {
         return res.status(403).json({ error: 'Non puoi eliminare l\'admin!' });
     }
 
@@ -414,6 +584,7 @@ module.exports = {
     router: router,
     initializeAuthorizedUsers: initializeAuthorizedUsers
 };
+
 
 
 
