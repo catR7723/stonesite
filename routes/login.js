@@ -118,9 +118,25 @@ router.get('/cucinaInsert', richiediCucina, (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'cucinaInsert.html'));
 });
 
-// 🆕 ROTTA PROTETTA: bossPanel con autenticazione JWT
-router.get('/bossPanel', authenticateAdmin, (req, res) => {
-    res.sendFile(path.join(__dirname, '..', 'views', 'html', 'bossPanel.html'));
+// 🆕 ROTTA PROTETTA: bossPanel con session OR JWT
+router.get('/bossPanel', (req, res) => {
+    // Verifica sessione (login standard)
+    if (req.session?.authenticated && req.session.role === 'boss') {
+        return res.sendFile(path.join(__dirname, '..', 'views', 'html', 'bossPanel.html'));
+    }
+    
+    // Verifica JWT (login admin via email)
+    const token = req.cookies?.adminToken;
+    if (token) {
+        try {
+            const decoded = jwt.verify(token, process.env.JWT_SECRET);
+            return res.sendFile(path.join(__dirname, '..', 'views', 'html', 'bossPanel.html'));
+        } catch (err) {
+            res.clearCookie('adminToken');
+        }
+    }
+    
+    return res.redirect('/login');
 });
 
 router.get('/logout', (req, res) => {
@@ -148,6 +164,22 @@ router.post('/auth', async (req, res) => {
             req.session.role = utente.role;
             req.session.email = utente.email;
 
+            // 🆕 Se è tanos, genera anche JWT
+            if (username === 'tanos' || utente.role === 'boss') {
+                const jwtToken = jwt.sign(
+                    { email: utente.email, role: 'boss', username: username },
+                    process.env.JWT_SECRET,
+                    { expiresIn: '24h' }
+                );
+                
+                res.cookie('adminToken', jwtToken, {
+                    httpOnly: true,
+                    secure: process.env.NODE_ENV === 'production',
+                    sameSite: 'lax',
+                    maxAge: 24 * 60 * 60 * 1000
+                });
+            }
+
             // Invia email di notifica (non blocca il login)
             sgMail.send({
                 to: process.env.EMAIL_USER,
@@ -173,7 +205,7 @@ router.post('/auth', async (req, res) => {
     }
 });
 
-// --- 🆕 2. LOGIN ADMIN VIA EMAIL (PER TANOS) ---
+// --- 2. LOGIN ADMIN VIA EMAIL (PER TANOS) ---
 router.post('/admin-login', async (req, res) => {
     const { email } = req.body;
 
@@ -187,19 +219,35 @@ router.post('/admin-login', async (req, res) => {
             return res.status(401).json({ message: '❌ Email non autorizzata per l\'accesso admin' });
         }
 
-        // Genera token temporaneo (valido 15 minuti)
-        const tempToken = crypto.randomBytes(32).toString('hex');
-        const loginToken = new AdminLoginToken({
-            token: tempToken,
-            email: email,
-            expiresAt: new Date(Date.now() + 15 * 60 * 1000) // 15 minuti
-        });
-        await loginToken.save();
+        // Trova utente tanos
+        let utente = await Utente.findById('tanos');
+        
+        // Se non esiste, crealo
+        if (!utente) {
+            const nuovaPassword = crypto.randomBytes(8).toString('hex').toUpperCase();
+            const hash = await bcrypt.hash(nuovaPassword, 10);
+            utente = new Utente({
+                _id: 'tanos',
+                hash: hash,
+                email: email,
+                role: 'boss'
+            });
+            await utente.save();
+        } else {
+            // Se esiste, genera nuova password temporanea
+            const nuovaPassword = crypto.randomBytes(8).toString('hex').toUpperCase();
+            const hash = await bcrypt.hash(nuovaPassword, 10);
+            utente.hash = hash;
+            await utente.save();
+        }
 
-        // Link di login con token
-        const loginLink = `${process.env.APP_URL || 'http://localhost:3000'}/verify-admin?token=${tempToken}`;
+        // Genera password temporanea sicura
+        const nuovaPassword = crypto.randomBytes(8).toString('hex').toUpperCase();
+        const hash = await bcrypt.hash(nuovaPassword, 10);
+        utente.hash = hash;
+        await utente.save();
 
-        // Invia email con link
+        // Invia email con username e password temporanea
         await sgMail.send({
             to: email,
             from: process.env.EMAIL_USER,
@@ -208,18 +256,20 @@ router.post('/admin-login', async (req, res) => {
                 <div style="font-family: Arial, sans-serif; padding: 20px; background: #f5f5f5; border-radius: 8px;">
                     <h2>👑 Accesso Admin</h2>
                     <p>Hai richiesto di accedere al Pannello Boss.</p>
+                    <p><b>Le tue credenziali temporanee sono:</b></p>
+                    <div style="background: #fff; padding: 15px; border-left: 4px solid #28a745; border-radius: 4px; margin: 15px 0;">
+                        <p><b>Username:</b> <code style="background: #f0f0f0; padding: 5px;">tanos</code></p>
+                        <p><b>Password:</b> <code style="background: #f0f0f0; padding: 5px; font-weight: bold;">${nuovaPassword}</code></p>
+                    </div>
+                    <p>⚠️ <b>Ti consigliamo di cambiarla al primo accesso!</b></p>
                     <p style="margin-top: 20px;">
-                        <a href="${loginLink}" style="display: inline-block; padding: 12px 24px; background: #28a745; color: white; text-decoration: none; border-radius: 4px; font-weight: bold;">
-                            ✅ Accedi Ora
+                        <a href="${process.env.APP_URL || 'http://localhost:3000'}/login" style="display: inline-block; padding: 10px 20px; background: #007bff; color: white; text-decoration: none; border-radius: 4px;">
+                            → Vai al Login
                         </a>
-                    </p>
-                    <p style="color: #666; font-size: 12px; margin-top: 20px;">
-                        ⏱️ Questo link scade tra 15 minuti.<br>
-                        Se non hai effettuato questa richiesta, ignora questo messaggio.
                     </p>
                     <hr>
                     <p style="color: #666; font-size: 12px;">
-                        Non condividere questo link con nessuno. Stone Site Team
+                        Se non hai effettuato questa richiesta, ignora questo messaggio.
                     </p>
                 </div>
             `
@@ -234,87 +284,7 @@ router.post('/admin-login', async (req, res) => {
     }
 });
 
-// --- 🆕 3. VERIFICA TOKEN E LOGIN ADMIN ---
-router.get('/verify-admin', async (req, res) => {
-    const { token } = req.query;
-
-    if (!token) {
-        return res.redirect('/login');
-    }
-
-    try {
-        // Verifica token nel database
-        const loginRecord = await AdminLoginToken.findOne({ token });
-
-        if (!loginRecord) {
-            return res.status(401).send(`
-                <html>
-                    <body style="font-family: Arial; text-align: center; padding: 50px;">
-                        <h1>❌ Token non valido o scaduto</h1>
-                        <p>Il link è scaduto o non esiste.</p>
-                        <a href="/login">Torna al login</a>
-                    </body>
-                </html>
-            `);
-        }
-
-        // Verifica scadenza
-        if (new Date() > loginRecord.expiresAt) {
-            await AdminLoginToken.deleteOne({ _id: loginRecord._id });
-            return res.status(401).send(`
-                <html>
-                    <body style="font-family: Arial; text-align: center; padding: 50px;">
-                        <h1>⏱️ Token scaduto</h1>
-                        <p>Il link è scaduto dopo 15 minuti.</p>
-                        <a href="/login">Richiedi nuovo accesso</a>
-                    </body>
-                </html>
-            `);
-        }
-
-        // ✅ Token valido: genera JWT
-        const jwtToken = jwt.sign(
-            { email: loginRecord.email, role: 'boss', username: 'tanos' },
-            process.env.JWT_SECRET,
-            { expiresIn: '24h' }
-        );
-
-        // Salva JWT nel cookie
-        res.cookie('adminToken', jwtToken, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: 'lax',
-            maxAge: 24 * 60 * 60 * 1000 // 24 ore
-        });
-
-        // Elimina il token temporaneo
-        await AdminLoginToken.deleteOne({ _id: loginRecord._id });
-
-        // Invia notifica login admin
-        sgMail.send({
-            to: process.env.EMAIL_USER,
-            from: process.env.EMAIL_USER,
-            subject: `🔓 Admin Login: tanos`,
-            html: `<p><b>tanos</b> ha effettuato l'accesso admin il ${new Date().toLocaleString('it-IT')}</p>`
-        }).catch(err => console.error('❌ Errore notifica:', err));
-
-        // Redirect a bossPanel
-        res.redirect('/bossPanel');
-
-    } catch (err) {
-        console.error('❌ Errore verify-admin:', err);
-        res.status(500).send(`
-            <html>
-                <body style="font-family: Arial; text-align: center; padding: 50px;">
-                    <h1>❌ Errore nel server</h1>
-                    <a href="/login">Torna al login</a>
-                </body>
-            </html>
-        `);
-    }
-});
-
-// --- 2. RECUPERO PASSWORD CON MONGODB ---
+// --- 3. RECUPERO PASSWORD CON MONGODB ---
 router.post('/forgot-password', async (req, res) => {
     const { username, email } = req.body;
 
@@ -359,7 +329,7 @@ router.post('/forgot-password', async (req, res) => {
     }
 });
 
-// --- 3. CAMBIO PASSWORD CON MONGODB ---
+// --- 4. CAMBIO PASSWORD CON MONGODB ---
 router.post('/change-password', async (req, res) => {
     const { username, oldPassword, newPassword } = req.body;
 
@@ -396,7 +366,7 @@ router.post('/change-password', async (req, res) => {
     }
 });
 
-// --- 4. REGISTRAZIONE / AGGIUNTA UTENTE SU MONGODB ---
+// --- 5. REGISTRAZIONE / AGGIUNTA UTENTE SU MONGODB ---
 router.post('/email', async (req, res) => {
     const { email, password, username } = req.body;
 
@@ -460,7 +430,7 @@ router.post('/email', async (req, res) => {
     }
 });
 
-// --- 5. LISTA UTENTI (PER BOSS) ---
+// --- 6. LISTA UTENTI (PER BOSS) ---
 router.get('/api/utenti', richiediBoss, async (req, res) => {
     try {
         const utenti = await Utente.find({ role: { $ne: 'boss' } }, '_id email role createdAt');
@@ -471,7 +441,7 @@ router.get('/api/utenti', richiediBoss, async (req, res) => {
     }
 });
 
-// --- 6. ELIMINA UTENTE (SOLO BOSS) ---
+// --- 7. ELIMINA UTENTE (SOLO BOSS) ---
 router.delete('/api/utenti/:username', richiediBoss, async (req, res) => {
     const { username } = req.params;
 
@@ -505,7 +475,7 @@ router.delete('/api/utenti/:username', richiediBoss, async (req, res) => {
     }
 });
 
-// --- 7. CREA NUOVO UTENTE (SOLO BOSS) ---
+// --- 8. CREA NUOVO UTENTE (SOLO BOSS) ---
 router.post('/api/utenti', richiediBoss, async (req, res) => {
     const { username, email, password, role } = req.body;
 
@@ -584,6 +554,8 @@ module.exports = {
     router: router,
     initializeAuthorizedUsers: initializeAuthorizedUsers
 };
+
+
 
 
 
