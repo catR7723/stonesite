@@ -54,8 +54,7 @@ const initializeAuthorizedUsers = async () => {
     }
 };
 
-// Chiama l'inizializzazione
-initializeAuthorizedUsers();
+
 
 // --- MIDDLEWARE DI PROTEZIONE ROTTE ---
 const richiediCineforum = (req, res, next) => {
@@ -411,7 +410,10 @@ router.post('/api/utenti', richiediBoss, async (req, res) => {
     }
 });
 
-module.exports = router;
+module.exports = {
+    router: router,
+    initializeAuthorizedUsers: initializeAuthorizedUsers
+};
 
 
 

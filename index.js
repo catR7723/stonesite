@@ -5,25 +5,11 @@ const session = require('express-session');
 const mongoose = require('mongoose'); 
 const { default: MongoStore } = require('connect-mongo');
 
-
+// 1. IMPORTA IL FILE DI CONNESSIONE CACHED
 const connectDB = require('./db');
 
 const app = express();
 const mongoStringa = process.env.MONGO_URI;
-
-// Middleware per connettere Mongoose a ogni richiesta in modo sicuro (Serverless friendly)
-app.use(async (req, res, next) => {
-    if (mongoose.connection.readyState >= 1) {
-        return next();
-    }
-    try {
-        await mongoose.connect(mongoStringa, { bufferCommands: false });
-        next();
-    } catch (err) {
-        console.error('Errore DNS/Connessione MongoDB su Vercel:', err);
-        res.status(500).send('Database temporaneamente non raggiungibile');
-    }
-});
 
 // Middleware di base
 app.use(express.static(path.join(__dirname, 'public')));
@@ -46,38 +32,62 @@ app.use(session({
     }
 }));
 
-
-
-
 // --- CARICAMENTO ROTTE ---
-const loginRouter = require('./routes/login'); 
-app.use('/', loginRouter);
+// 🟩 Modificato l'import per estrarre sia il router che la funzione di inizializzazione
+const loginModule = require('./routes/login'); 
+app.use('/', loginModule.router);
 
 const uploadRoutes = require('./routes/cucinaInsert');
 const cineforumRoutes = require('./routes/cineforumInsert');
 app.use('/', uploadRoutes);
 app.use('/', cineforumRoutes); 
-app.get('/archivio', (req, res) => {
-  res.sendFile(path.join(__dirname, 'views', 'html', 'archivio.html'));
+
+// --- ROTTE PUBBLICHE ---
+app.get('/cineforum', (req, res) => {
+    res.sendFile(path.join(__dirname, 'cineforum.html'));
 });
+
+app.get('/archivio', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'html', 'archivio.html'));
+});
+
 app.get('/check-ruolo-cucina', (req, res) => {
-    // 💡 Sincronizzato con le variabili reali del tuo login: authenticated e role
     if (req.session && req.session.authenticated && req.session.role === 'cucina') {
         return res.json({ autorizzato: true });
     }
     res.json({ autorizzato: false });
 });
 
-
-
-
-
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Server in esecuzione sulla porta ${PORT}`));
+// 2. AVVIO CONTROLLATO ED EVITAMENTO TIMEOUT/BUFFERING
+connectDB()
+  .then(async () => {
+    console.log('Connesso a MongoDB con successo!');
+    
+    // 🟩 Ora che il database è sicuramente connesso, eseguiamo l'inizializzazione degli utenti
+    if (loginModule.initializeAuthorizedUsers) {
+        try {
+            await loginModule.initializeAuthorizedUsers();
+            console.log('✅ Utenti autorizzati inizializzati con successo!');
+        } catch (err) {
+            console.error('❌ Errore durante l\'inizializzazione controllata degli utenti:', err);
+        }
+    }
+
+    const PORT = process.env.PORT || 3000;
+    app.listen(PORT, () => {
+        console.log(`Server in esecuzione sulla porta ${PORT}`);
+    });
+  })
+  .catch(err => {
+    console.error('Errore critico durante l\'avvio del database:', err);
+    process.exit(1);
+  });
+
+
 
 
 

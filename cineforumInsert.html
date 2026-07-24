@@ -1,180 +1,459 @@
-<!DOCTYPE html><html lang="en"><head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inserisci il Film</title>
-    <link rel="stylesheet" href="/assets/css/laboratori/cineforum.css">
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Admin - Inserisci Film (Cineforum)</title>
+  <link rel="stylesheet" href="/assets/css/laboratori/cineforum.css?v=1.3">
+  <style>
+    /* Minime regole locali di fallback */
+    .hidden { display: none !important; }
+    .preview { max-width: 320px; border-radius: 8px; display:block; margin: 12px 0; }
+    .btn { padding: 0.6rem 1rem; border-radius: 0.6rem; cursor:pointer; }
+    .container { max-width: 1000px; margin: 2rem auto; padding: 1rem; }
+    .film-archiviato { margin-bottom: 14px; }
+  </style>
 </head>
 <body>
+  <div class="container">
+    <h1>Area Cineforum — Inserimento / Gestione Film</h1>
 
-<div class="locandina">
-    <h1>Carica La Locandina del Film della Settimana</h1>
-    <form action="/cineforumInsert" method="POST" enctype="multipart/form-data" id="locandina">
-        <div class="scegli">
-            <label id="carica" for="file-input">Scegli File</label>
-            <input type="file" name="locandina" id="file-input" required="" onchange="mostraBottone(); mostraFileName()">
-            <span id="fileName">Nessun file selezionato</span>
+    <!-- Upload Locandina -->
+    <section class="locandina">
+      <h2>1) Carica la locandina</h2>
+      <form id="locandinaForm" enctype="multipart/form-data">
+        <label id="carica" class="btn" for="file-input">Scegli file</label>
+        <input id="file-input" name="locandina" type="file" accept="image/*" style="display:none">
+        <div><small id="fileName">Nessun file selezionato</small></div>
+      </form>
+
+      <div id="previewArea">
+        <img id="locandina-img" class="preview hidden" alt="Anteprima locandina">
+        <div>
+          <button id="deleteLocandina" class="btn hidden" type="button">Elimina la Locandina</button>
         </div>
-        <button type="submit" id="btn-anteprima" style="display: none;">Anteprima della Locandina</button>
-    </form> 
-</div>
+      </div>
+    </section>
 
-<div class="Conteiner_Film">
-    <div class="imgLoc">
-        <img id="locandina-img" alt="locandina" width="200" style="display: none;">
-        <form action="/deleteLocandina" method="POST" id="form-cancella">
-            <button class="btn" type="submit" id="deleteLocandina">Elimina la Locandina</button>
-        </form>
-    </div>
-    
-    <!-- Il div con i testi che arrivano dal server -->
-    <div class="film">
-        <h1 id="titoloFilm">kkkkk</h1>
-        <h1 id="tramaFilm"></h1>
-        <h1 id="discussione"></h1>
-    </div>
+    <!-- Moduli testo (visibili dopo upload) -->
+    <section id="testiSection" class="ins hidden" style="margin-top:1.5rem;">
+      <h2>2) Titolo / Trama / Discussione</h2>
 
-    <!-- Moduli di inserimento (nascosti di default) -->
-    <div class="ins" style="display: none;">
-        <form action="/salvaTitoloLocandina" id="salvaLocandina" method="POST">
-            <input type="text" id="inputTitolo" name="titoloFilm" placeholder="Inserisci il titolo del Film" required="">
-            <button class="btn" id="antTit" type="submit">Anteprima Titolo del Film</button>
-        </form>
+      <form id="salvaLocandina" style="margin-bottom:12px;">
+        <input id="inputTitolo" name="titoloFilm" type="text" placeholder="Inserisci il titolo del Film" style="width:68%;padding:8px">
+        <button id="antTit" class="btn" type="submit">Anteprima Titolo del Film</button>
+      </form>
 
-        <form action="/salvaTrama" id="salvaTrama" method="POST">
-            <textarea name="tramaFilm" placeholder="Trama" required=""></textarea>
-            <button type="submit" id="salTrama">Salva Trama</button>
-        </form>
+      <form id="salvaTrama" style="margin-bottom:12px;">
+        <textarea id="inputTrama" name="tramaFilm" placeholder="Trama" rows="5" style="width:100%;padding:8px"></textarea>
+        <button id="salTrama" class="btn" type="submit">Salva Trama</button>
+      </form>
 
-        <form action="/salvaDiscussione" id="salvaDiscussione" method="POST">
-            <textarea name="discussione" placeholder="Discussione" required=""></textarea>
-            <button type="submit" id="salDisc">Salva Discussione</button>
-        </form>
-    </div> 
-</div>
+      <form id="salvaDiscussione" style="margin-bottom:12px;">
+        <textarea id="inputDiscussione" name="discussione" placeholder="Discussione" rows="5" style="width:100%;padding:8px"></textarea>
+        <button id="salDisc" class="btn" type="submit">Salva Discussione</button>
+      </form>
+    </section>
 
-<!-- Contenitore Pulsanti Finali -->
-<div class="azioni-finali">
-  <!-- Form Salva -->
-  <form action="/salvaFilm" method="POST" id="formSalva">
-    <button class="btn" type="submit" id="btnSalvaFilm" onclick="mostraPubblica()">Salva il Film</button>
-  </form>
-  
-  <!-- Form Pubblica -->
-  <form action="/salvaFilmR" method="POST" id="formPubblica">
-    <button class="btn" type="submit" id="pubblicaFilm">Pubblica il Film!</button>
-  </form>
-</div>
+    <!-- Salvataggio bozza / pubblicazione -->
+    <section style="margin-top:1.5rem;">
+      <form id="formSalva" style="display:inline-block;margin-right:12px;">
+        <button id="btnSalvaFilm" class="btn" type="submit">Salva il Film (Bozza)</button>
+      </form>
+      <form id="formPubblica" style="display:inline-block;">
+        <button id="pubblicaFilm" class="btn hidden" type="submit">Pubblica il Film!</button>
+      </form>
+    </section>
 
-<form action="/logout" method="POST">
-    <button class="btn" type="submit" id="logout">LogOut</button>
-</form>
+    <!-- Anteprime testo -->
+    <section style="margin-top:2rem;">
+      <h3>Anteprime</h3>
+      <div>
+        <h4 id="titoloFilm">-</h4>
+        <p id="tramaFilm"></p>
+        <p id="discussione"></p>
+      </div>
+    </section>
 
-<input type="checkbox" id="sidebar-archivio">
-<label for="sidebar-archivio" class="open-archivio">
-    <h1 class="w-archivio">Archivio</h1>
-</label>
-<label for="sidebar-archivio" id="overlay-archivio"></label>
-  
-<div id="archivio">
-    <div id="17_06_2026" class="film-archiviato" data-folder="red">
-        <form action="/modificaInsert/red" method="post">
-            <button type="submit">Modifica Red</button>
-        </form>
-                
-        <h1>Red</h1>
-        <h3>Film del 17/06/2026</h3>
-        <input type="checkbox" id="sidebar-film-13-47-09-916">
-        <label for="sidebar-film-13-47-09-916" class="toggle-img">
-            <!-- Nota: Inserita la 's' in https:// per eliminare il Mixed Content dell'immagine di Red -->
-            <img src="https://cloudinary.com" width="100">
-        </label>
-        <br>
-        <div class="film-details">
-            <label for="sidebar-film-13-47-09-916" class="toggle-archivio">
-                <div class="film-section">
-                    <h4>📖 Trama</h4>
-                    <p>Frank Moses, ex agente segreto della CIA, viveva una vita tranquilla e appartata con la compagna Sarah. Poi, l'arrivo di un commando armato deciso a ucciderlo, lo costringe a riunire la sua vecchia squadra nel disperato tentativo di sopravvivere. Frank, Joe, Marvin e Victoria, un tempo i migliori agenti segreti della CIA, dovranno usare tutta la loro astuzia ed esperienza per rimanere un passo avanti ai loro inseguitori mortali e, insieme all'aiuto della 'civile' Sarah, cercheranno di fare irruzione nel quartier generale top-secret della CIA per sventare la più grande cospirazione governativa della storia.</p>
-                </div>
-                <div class="film-section">
-                    <h4>💬 Discussione</h4>
-                    <p>Un po’ come l’ex agente Moses alcuni di noi hanno svolto un lavoro, o anche più di uno, c’era chi inseriva i dati di produzione al pc, chi lavorava in comune e chi si occupava di grafica. Tutti mettevano il loro impegno nel portare a termine il loro compito con puntualità, rispetto e dedizione. Tutti noi siamo arrivati al termine delle nostre carriere lavorative. Per alcuni è stato sollievo in quanto sopportavano quell’ambiente che vivevano con ansia e pressione, per i tempi troppo stretti, perché non si trovavano bene con i propri collegati oppure perché non gli piaceva il loro lavoro; mentre altri sono rimasti dispiaciuti in quanto era ciò che avevano desiderato e conquistato dopo tanto tempo. Per molti ricevere uno stipendio ha voluto dire togliersi qualche sfizio, come comprarsi qualcosa che desiderava oppure andare a fare una gita. Sicuramente guadagnare dei soldi per haber svolto il proprio lavoro è gratificante perché ci rendiamo conto che i nostri sforzi vengono ricompensati.</p>
-                </div>
-            </label>
-        </div>
-    </div>
-</div>
+    <hr style="margin:2rem 0">
 
-<!-- SCRIPT DI CONFIGURAZIONE UNIFICATO -->
+    <!-- Archivio (mostrato su richiesta) -->
+    <section>
+      <h2 id="toggle-archivio" class="clickable" style="cursor:pointer;">📚 Archivio Film (clicca per mostrare)</h2>
+      <div id="archivio" style="display:none; margin-top:12px;"></div>
+    </section>
+
+    <hr style="margin:2rem 0">
+
+    <!-- Logout -->
+    <form action="/logout" method="POST">
+      <button class="btn" type="submit">LogOut</button>
+    </form>
+  </div>
+
 <script>
-// 1. Mostra il pulsante Anteprima se il file è selezionato
-function mostraBottone() {
-    const fileInput = document.getElementById('file-input');
-    const btnAnteprima = document.getElementById('btn-anteprima');
-    if (fileInput && fileInput.files.length > 0) {
-        if (btnAnteprima) btnAnteprima.style.display = 'block'; 
-    } else {
-        if (btnAnteprima) btnAnteprima.style.display = 'none';
-    }
+/* cineforumInsert.html — client-side completo per admin
+   Endpoints usati:
+   POST /cineforumInsert        (multipart form-data name=locandina)
+   POST /deleteLocandina        (json { publicId?, filmId? })
+   POST /salvaTitoloLocandina   (json { titoloFilm, filmId?, publicId? })
+   POST /salvaTrama             (json { tramaFilm, filmId })
+   POST /salvaDiscussione       (json { discussione, filmId })
+   POST /salvaFilm              (json { filmId? })
+   POST /salvaFilmR             (json { filmId? })
+   GET  /api/archivio
+   POST /deleteFilm             (json { filmId })
+*/
+
+const state = {
+  _id: null,
+  savedId: null,
+  titolo: null,
+  trama: null,
+  discussione: null,
+  nomeCartellaFilm: null,
+  locandina: { url: null, publicId: null }
+};
+
+function escapeHtml(str) {
+  if (str === undefined || str === null) return '';
+  return String(str).replace(/[&<>"']/g, (m) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 }
-
-// 2. Mostra il nome del file selezionato sotto il pulsante
-function mostraFileName() {
-    const fileInput = document.getElementById('file-input');
-    const fileName = document.getElementById('fileName');
-    if (fileInput && fileInput.files.length > 0) {
-        fileName.textContent = fileInput.files[0].name;
-    } else {
-        fileName.textContent = 'Nessun file selezionato';
-    }
+function setLoadingButton(btn, loading, text) {
+  if (!btn) return;
+  if (loading) {
+    btn._old = btn.textContent;
+    btn.disabled = true;
+    btn.textContent = text || 'Attendere...';
+  } else {
+    btn.disabled = false;
+    if (btn._old) btn.textContent = btn._old;
+  }
 }
+function showToast(msg) { alert(msg); } // semplice; puoi sostituire
 
-// 3. Funzione di attivazione dello stato di salvataggio
-function mostraPubblica() {
-    localStorage.setItem('filmSalvato', 'true');
-}
+/* ELEMENTS */
+const fileInput = document.getElementById('file-input');
+const fileNameSpan = document.getElementById('fileName');
+const previewImg = document.getElementById('locandina-img');
+const deleteBtn = document.getElementById('deleteLocandina');
+const testiSection = document.getElementById('testiSection');
+const archDiv = document.getElementById('archivio');
+const toggleArchivio = document.getElementById('toggle-archivio');
 
-// 4. Gestione dinamica degli elementi all'apertura del documento
-window.addEventListener('DOMContentLoaded', () => {
-    const img = document.getElementById('locandina-img');
-    const divIns = document.querySelector('.ins');
-    const formCancella = document.getElementById('form-cancella');
-
-    // Lettura del file statico locale per l'anteprima immediata
-    fetch('/api/locandina')
-            .then(response => response.json())
-            .then(data => {
-          if (data && data.url) {
-              // Forza la sicurezza HTTPS sull'URL della locandina caricata
-              let urlSicura = data.url.replace(/^http:/, 'https:');
-              img.src = urlSicura;
-              img.style.display = 'block';
-
-              if (divIns) divIns.style.display = 'block';
-              if (formCancella) formCancella.style.display = 'block';
-          }
-      })
-      .catch(err => {
-          console.log('Nessuna locandina attiva rilevata:', err.message);
-          if (img) img.style.display = 'none';
-          if (divIns) divIns.style.display = 'none';
-          if (formCancella) formCancella.style.display = 'none';
-      });
-
-    // Controllo dello stato salvato per mostrare il pulsante Pubblica
-    if (localStorage.getItem('filmSalvato') === 'true') {
-        const formPubblica = document.getElementById('formPubblica');
-        if (formPubblica) formPubblica.classList.add('mostra-pubblica');
-    }
+/* --- FILE INPUT & UPLOAD --- */
+fileInput.addEventListener('change', async (e) => {
+  const file = e.target.files[0];
+  fileNameSpan.textContent = file?.name || 'Nessun file selezionato';
+  if (!file) return;
+  // anteprima
+  previewImg.src = URL.createObjectURL(file);
+  previewImg.classList.remove('hidden');
+  // upload
+  await uploadLocandina(file);
 });
 
-// Svuota lo stato al momento della pubblicazione effettiva
-const formPubblicaElement = document.getElementById('formPubblica');
-if (formPubblicaElement) {
-    formPubblicaElement.addEventListener('submit', function() {
-        localStorage.removeItem('filmSalvato');
-    });
+async function uploadLocandina(file) {
+  const btnLabel = document.getElementById('carica');
+  setLoadingButton(btnLabel, true, 'Caricamento...');
+  try {
+    const fd = new FormData();
+    fd.append('locandina', file);
+    const res = await fetch('/cineforumInsert', { method: 'POST', body: fd });
+    const json = await res.json();
+    console.log('/cineforumInsert ->', json);
+    if (!res.ok || !json.success) {
+      showToast('Errore upload: ' + (json.error || json.message || 'server'));
+      return;
+    }
+    // salva info
+    state.locandina.url = json.url || json.secure_url || null;
+    state.locandina.publicId = json.publicId || json.public_id || null;
+    if (json.filmId) { state._id = json.filmId; state.savedId = json.filmId; }
+    // mostra UI
+    previewImg.src = state.locandina.url || previewImg.src;
+    previewImg.classList.remove('hidden');
+    deleteBtn.classList.remove('hidden');
+    testiSection.classList.remove('hidden');
+    showToast('Locandina caricata');
+  } catch (err) {
+    console.error('uploadLocandina error', err);
+    showToast('Errore upload: ' + err.message);
+  } finally {
+    setLoadingButton(btnLabel, false);
+  }
 }
-</script>
 
+/* --- DELETE LOCANDINA (elimina immagine temporanea o associata) --- */
+deleteBtn.addEventListener('click', async () => {
+  if (!confirm('Sei sicuro di eliminare la locandina?')) return;
+  setLoadingButton(deleteBtn, true, 'Eliminazione...');
+  try {
+    const body = { publicId: state.locandina.publicId || null, filmId: state.savedId || state._id || null };
+    const res = await fetch('/deleteLocandina', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify(body)
+    });
+    const json = await res.json();
+    console.log('/deleteLocandina ->', json);
+    if (!res.ok || !json.success) {
+      showToast('Errore eliminazione: ' + (json.error || json.message || 'server'));
+      return;
+    }
+    // pulisci stato e UI
+    state.locandina = { url: null, publicId: null };
+    state._id = null; state.savedId = null;
+    previewImg.src = ''; previewImg.classList.add('hidden');
+    deleteBtn.classList.add('hidden');
+    testiSection.classList.add('hidden');
+    fileInput.value = ''; fileNameSpan.textContent = 'Nessun file selezionato';
+    showToast('Locandina eliminata');
+  } catch (err) {
+    console.error('deleteLocandina err', err);
+    showToast('Errore: ' + err.message);
+  } finally {
+    setLoadingButton(deleteBtn, false);
+  }
+});
+
+/* --- SALVA TITOLO (anteprima) --- */
+document.getElementById('salvaLocandina').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const titolo = document.getElementById('inputTitolo').value.trim();
+  const btn = document.getElementById('antTit');
+  if (!titolo) { showToast('Inserisci il titolo'); return; }
+  // aggiorna localmente subito
+  state.titolo = titolo; document.getElementById('titoloFilm').textContent = escapeHtml(titolo);
+  setLoadingButton(btn, true, 'Salvataggio...');
+  try {
+    const body = { titoloFilm: titolo, filmId: state.savedId || state._id || null, publicId: state.locandina.publicId || null };
+    const res = await fetch('/salvaTitoloLocandina', {
+      method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(body)
+    });
+    const json = await res.json();
+    console.log('/salvaTitoloLocandina ->', json);
+    if (!res.ok || !json.success) {
+      showToast('Errore salvataggio titolo: ' + (json.error || json.message || 'server'));
+      return;
+    }
+    // aggiorna stato con id restituito (se presente)
+    if (json.filmId) { state.savedId = json.filmId; state._id = json.filmId; }
+    if (json.film) {
+      state.savedId = json.film._id || state.savedId;
+      state.nomeCartellaFilm = json.film.nomeCartellaFilm || state.nomeCartellaFilm;
+    }
+    // mostra moduli se nascosti
+    testiSection.classList.remove('hidden');
+    showToast('Titolo salvato');
+  } catch (err) {
+    console.error('salvaTitolo error', err);
+    showToast('Errore: ' + err.message);
+  } finally {
+    setLoadingButton(btn, false);
+  }
+});
+
+/* --- SALVA TRAMA --- */
+document.getElementById('salvaTrama').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const trama = document.getElementById('inputTrama').value.trim();
+  const btn = document.getElementById('salTrama');
+  if (!trama) { showToast('Inserisci la trama'); return; }
+  // fallback titolo se necessario
+  const titoloInputVal = document.getElementById('inputTitolo')?.value?.trim();
+  if (!state.titolo && !titoloInputVal) { showToast('Salva prima il titolo (crea la bozza)'); return; }
+  if (!state.titolo && titoloInputVal) { state.titolo = titoloInputVal; document.getElementById('titoloFilm').textContent = escapeHtml(titoloInputVal); }
+  setLoadingButton(btn, true, 'Salvataggio...');
+  try {
+    const body = { tramaFilm: trama, filmId: state.savedId || state._id || null };
+    const res = await fetch('/salvaTrama', {
+      method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(body)
+    });
+    const json = await res.json();
+    console.log('/salvaTrama ->', json);
+    if (!res.ok || !json.success) { showToast('Errore salvataggio trama: ' + (json.error || json.message || 'server')); return; }
+    state.trama = (json.film && json.film.trama) ? json.film.trama : trama;
+    document.getElementById('tramaFilm').textContent = escapeHtml(state.trama);
+    showToast('Trama salvata');
+  } catch (err) {
+    console.error('salvaTrama err', err);
+    showToast('Errore: ' + err.message);
+  } finally { setLoadingButton(btn, false); }
+});
+
+/* --- SALVA DISCUSSIONE --- */
+document.getElementById('salvaDiscussione').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const discussione = document.getElementById('inputDiscussione').value.trim();
+  const btn = document.getElementById('salDisc');
+  if (!discussione) { showToast('Inserisci la discussione'); return; }
+  const titoloInputVal = document.getElementById('inputTitolo')?.value?.trim();
+  if (!state.titolo && !titoloInputVal) { showToast('Salva prima il titolo (crea la bozza)'); return; }
+  if (!state.titolo && titoloInputVal) { state.titolo = titoloInputVal; document.getElementById('titoloFilm').textContent = escapeHtml(titoloInputVal); }
+  setLoadingButton(btn, true, 'Salvataggio...');
+  try {
+    const body = { discussione: discussione, filmId: state.savedId || state._id || null };
+    const res = await fetch('/salvaDiscussione', {
+      method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(body)
+    });
+    const json = await res.json();
+    console.log('/salvaDiscussione ->', json);
+    if (!res.ok || !json.success) { showToast('Errore salvataggio discussione: ' + (json.error || json.message || 'server')); return; }
+    state.discussione = (json.film && json.film.discussione) ? json.film.discussione : discussione;
+    document.getElementById('discussione').textContent = escapeHtml(state.discussione);
+    showToast('Discussione salvata');
+  } catch (err) {
+    console.error('salvaDiscussione err', err);
+    showToast('Errore: ' + err.message);
+  } finally { setLoadingButton(btn, false); }
+});
+
+/* --- SALVA FILM (BOZZA) --- */
+document.getElementById('formSalva').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const btn = document.getElementById('btnSalvaFilm');
+  // controlli
+  if (!state.titolo) { showToast('Inserisci e salva il titolo prima'); return; }
+  if (!state.trama) { showToast('Salva la trama prima'); return; }
+  if (!state.discussione) { showToast('Salva la discussione prima'); return; }
+  if (!state.locandina.url) { showToast('Carica la locandina prima'); return; }
+
+  setLoadingButton(btn, true, 'Salvataggio...');
+  try {
+    const body = { filmId: state.savedId || state._id || null };
+    const res = await fetch('/salvaFilm', {
+      method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(body)
+    });
+    const json = await res.json();
+    console.log('/salvaFilm ->', json);
+    if (!res.ok || !json.success) { showToast('Errore salvataggio film: ' + (json.error || json.message || 'server')); return; }
+    if (json.filmId) { state.savedId = json.filmId; state._id = json.filmId; }
+    if (json.film && json.film._id) { state.savedId = json.film._id; state._id = json.film._id; }
+    // mostra pubblica
+    document.getElementById('pubblicaFilm').classList.remove('hidden');
+    showToast('Film salvato come bozza');
+  } catch (err) {
+    console.error('salvaFilm err', err);
+    showToast('Errore: ' + err.message);
+  } finally { setLoadingButton(btn, false); }
+});
+
+/* --- PUBBLICA FILM --- */
+document.getElementById('formPubblica').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  if (!confirm('Sei sicuro di pubblicare il film?')) return;
+  const btn = document.getElementById('pubblicaFilm');
+  setLoadingButton(btn, true, 'Pubblicazione...');
+  try {
+    const body = { filmId: state.savedId || state._id || null };
+    const res = await fetch('/salvaFilmR', {
+      method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(body)
+    });
+    const json = await res.json();
+    console.log('/salvaFilmR ->', json);
+    if (!res.ok || !json.success) { showToast('Errore pubblicazione: ' + (json.error || json.message || 'server')); return; }
+    showToast('Film pubblicato con successo!');
+    // ricarica archivio per mostrare cambiamenti
+    await caricaArchivio(true);
+    // opzionale: pulire form e stato
+    setTimeout(() => window.location.reload(), 900);
+  } catch (err) {
+    console.error('pubblica err', err);
+    showToast('Errore: ' + err.message);
+  } finally { setLoadingButton(btn, false); }
+});
+
+/* --- CARICA ARCHIVIO (con pulsante Elimina per ogni film) --- */
+let archivioLoaded = false;
+async function caricaArchivio(forceReload = false) {
+  if (archivioLoaded && !forceReload) return;
+  archDiv.innerHTML = '<p class="caricamento">Caricamento archivio...</p>';
+  try {
+    const res = await fetch('/api/archivio');
+    const films = await res.json();
+    if (!films || (Array.isArray(films) && films.length === 0)) {
+      archDiv.innerHTML = `<p style="padding:14px; text-align:center;">Nessun film nell'archivio</p>`;
+      archivioLoaded = true;
+      return;
+    }
+
+    archDiv.innerHTML = '';
+    films.forEach(film => {
+      const div = document.createElement('div');
+      div.className = 'film-archiviato';
+      div.dataset.id = film._id;
+      div.innerHTML = `
+        <div style="display:flex;gap:12px;align-items:flex-start; border:1px solid #ddd; padding:12px; border-radius:8px;">
+          ${film.locandinaUrl ? `<div style="flex:0 0 110px;"><img src="${escapeHtml(film.locandinaUrl)}" alt="${escapeHtml(film.titolo)}" style="width:110px;border-radius:6px;"></div>` : ''}
+          <div style="flex:1;">
+            <h4 style="margin:0 0 6px 0;">${escapeHtml(film.titolo)}</h4>
+            <div style="color:#666; font-size:0.95em; margin-bottom:8px;">${escapeHtml(film.dataInserimento || '')}</div>
+            <details style="margin-bottom:6px;"><summary>📖 Trama</summary><p>${escapeHtml(film.trama || '')}</p></details>
+            <details><summary>💬 Discussione</summary><p>${escapeHtml(film.discussione || '')}</p></details>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px;align-items:flex-end;">
+            <button class="btn delete-film" data-id="${film._id}" style="background:#c0392b;color:white;">Elimina film</button>
+          </div>
+        </div>
+      `;
+      archDiv.appendChild(div);
+    });
+
+    // assegna listener elimina
+    archDiv.querySelectorAll('.delete-film').forEach(btn => {
+      btn.addEventListener('click', async (e) => {
+        const filmId = btn.dataset.id;
+        if (!filmId) return;
+        if (!confirm('Eliminare definitivamente questo film?')) return;
+        setLoadingButton(btn, true, 'Eliminazione...');
+        try {
+          const res = await fetch('/deleteFilm', {
+            method: 'POST',
+            headers: {'Content-Type':'application/json'},
+            body: JSON.stringify({ filmId })
+          });
+          const json = await res.json();
+          console.log('/deleteFilm ->', json);
+          if (!res.ok || !json.success) {
+            showToast('Errore eliminazione: ' + (json.error || json.message || 'server'));
+            setLoadingButton(btn, false);
+            return;
+          }
+          // rimuovi DOM block
+          const block = btn.closest('.film-archiviato');
+          if (block) block.remove();
+          showToast('Film eliminato');
+        } catch (err) {
+          console.error('deleteFilm err', err);
+          showToast('Errore: ' + err.message);
+          setLoadingButton(btn, false);
+        }
+      });
+    });
+
+    archivioLoaded = true;
+  } catch (err) {
+    console.error('caricaArchivio err', err);
+    archDiv.innerHTML = '<p style="color:red;">Errore caricamento archivio</p>';
+  }
+}
+
+/* Toggle archivio visibile solo on click */
+toggleArchivio.addEventListener('click', async () => {
+  const visible = getComputedStyle(archDiv).display !== 'none';
+  if (visible) {
+    archDiv.style.display = 'none';
+  } else {
+    archDiv.style.display = 'block';
+    await caricaArchivio();
+  }
+});
+
+/* Inizializzazione: se vuoi, carica archivio automatico per admin (qui no) */
+document.addEventListener('DOMContentLoaded', () => {
+  // niente caricamento automatico; l'admin cliccherà "Archivio"
+});
+</script>
 </body>
 </html>
