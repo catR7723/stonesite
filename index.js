@@ -11,18 +11,16 @@ const connectDB = require('./db');
 const app = express();
 const mongoStringa = process.env.MONGO_URI;
 
-// Middleware di base (QUESTI VANNO PRIMA)
+// Middleware di base
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(cookieParser()); // 🆕 Per gestire JWT nei cookie
+app.use(cookieParser());
 
-// 2. AVVIO CONTROLLATO
 connectDB()
   .then(async () => {
     console.log('✅ Connesso a MongoDB con successo!');
 
-    // 🟩 ADESSO configura la sessione (DOPO che MongoDB è connesso)
     app.use(session({
         secret: process.env.SESSION_SECRET || 'chiave-segreta-molto-sicura',
         resave: false,
@@ -40,33 +38,10 @@ connectDB()
         }
     }));
 
-    // 🆕 MIDDLEWARE: Verifica se admin è autenticato
-    const authenticateAdmin = (req, res, next) => {
-        const token = req.cookies?.adminToken;
-        
-        if (!token) {
-            console.log('❌ Nessun token admin trovato');
-            return res.status(401).redirect('/login');
-        }
+    // 🗑️ RIMOSSO: app.get('/bossPanel', authenticateAdmin, ...)
+    // La rotta è gestita in routes/login.js
 
-        try {
-            const decoded = jwt.verify(token, process.env.JWT_SECRET);
-            req.admin = decoded;
-            console.log('✅ Admin autenticato:', decoded.email);
-            next();
-        } catch (err) {
-            console.error('❌ Token admin invalido:', err.message);
-            res.clearCookie('adminToken');
-            return res.status(403).redirect('/login');
-        }
-    };
-
-    // 🆕 ROTTA PROTETTA: bossPanel solo per admin
-    app.get('/bossPanel', authenticateAdmin, (req, res) => {
-        res.sendFile(path.join(__dirname, 'views', 'html', 'bossPanel.html'));
-    });
-
-    // --- CARICAMENTO ROTTE (DOPO session middleware) ---
+    // --- CARICAMENTO ROTTE ---
     const loginModule = require('./routes/login'); 
     app.use('/', loginModule.router);
 
@@ -95,7 +70,7 @@ connectDB()
         res.sendFile(path.join(__dirname, 'index.html'));
     });
 
-    // 🟩 Inizializzazione utenti autorizzati
+    // Inizializzazione utenti autorizzati
     if (loginModule.initializeAuthorizedUsers) {
         try {
             await loginModule.initializeAuthorizedUsers();

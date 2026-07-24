@@ -80,10 +80,25 @@ const richiediCucina = (req, res, next) => {
     return res.redirect('/login');
 };
 
+// 🆕 AGGIORNATO: richiediBoss accetta SESSION o JWT
 const richiediBoss = (req, res, next) => {
+    // Verifica sessione
     if (req.session?.authenticated && req.session.role === 'boss') {
         return next();
     }
+    
+    // Verifica JWT
+    const token = req.cookies?.adminToken;
+    if (token) {
+        try {
+            const decoded = jwt.verify(token, process.env.JWT_SECRET);
+            req.admin = decoded;
+            return next();
+        } catch (err) {
+            res.clearCookie('adminToken');
+        }
+    }
+    
     return res.redirect('/login');
 };
 
@@ -232,12 +247,6 @@ router.post('/admin-login', async (req, res) => {
                 email: email,
                 role: 'boss'
             });
-            await utente.save();
-        } else {
-            // Se esiste, genera nuova password temporanea
-            const nuovaPassword = crypto.randomBytes(8).toString('hex').toUpperCase();
-            const hash = await bcrypt.hash(nuovaPassword, 10);
-            utente.hash = hash;
             await utente.save();
         }
 
@@ -430,7 +439,7 @@ router.post('/email', async (req, res) => {
     }
 });
 
-// --- 6. LISTA UTENTI (PER BOSS) ---
+// --- 6. LISTA UTENTI (PER BOSS) - 🆕 AGGIORNATO ---
 router.get('/api/utenti', richiediBoss, async (req, res) => {
     try {
         const utenti = await Utente.find({ role: { $ne: 'boss' } }, '_id email role createdAt');
@@ -441,7 +450,7 @@ router.get('/api/utenti', richiediBoss, async (req, res) => {
     }
 });
 
-// --- 7. ELIMINA UTENTE (SOLO BOSS) ---
+// --- 7. ELIMINA UTENTE (SOLO BOSS) - 🆕 AGGIORNATO ---
 router.delete('/api/utenti/:username', richiediBoss, async (req, res) => {
     const { username } = req.params;
 
@@ -475,7 +484,7 @@ router.delete('/api/utenti/:username', richiediBoss, async (req, res) => {
     }
 });
 
-// --- 8. CREA NUOVO UTENTE (SOLO BOSS) ---
+// --- 8. CREA NUOVO UTENTE (SOLO BOSS) - 🆕 AGGIORNATO ---
 router.post('/api/utenti', richiediBoss, async (req, res) => {
     const { username, email, password, role } = req.body;
 
