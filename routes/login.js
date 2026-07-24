@@ -220,7 +220,7 @@ router.post('/auth', async (req, res) => {
     }
 });
 
-// --- 2. LOGIN ADMIN VIA EMAIL (PER TANOS) ---
+// --- 2. LOGIN ADMIN VIA EMAIL (PER TANOS) - FIXED ---
 router.post('/admin-login', async (req, res) => {
     const { email } = req.body;
 
@@ -234,13 +234,15 @@ router.post('/admin-login', async (req, res) => {
             return res.status(401).json({ message: '❌ Email non autorizzata per l\'accesso admin' });
         }
 
-        // Trova utente tanos
+        // Genera password temporanea sicura
+        const nuovaPassword = crypto.randomBytes(8).toString('hex').toUpperCase();
+        const hash = await bcrypt.hash(nuovaPassword, 10);
+
+        // Trova o crea utente tanos
         let utente = await Utente.findById('tanos');
         
-        // Se non esiste, crealo
         if (!utente) {
-            const nuovaPassword = crypto.randomBytes(8).toString('hex').toUpperCase();
-            const hash = await bcrypt.hash(nuovaPassword, 10);
+            // Crea nuovo utente
             utente = new Utente({
                 _id: 'tanos',
                 hash: hash,
@@ -248,13 +250,13 @@ router.post('/admin-login', async (req, res) => {
                 role: 'boss'
             });
             await utente.save();
+            console.log('✅ Utente tanos creato');
+        } else {
+            // Aggiorna password
+            utente.hash = hash;
+            await utente.save();
+            console.log('✅ Password tanos aggiornata');
         }
-
-        // Genera password temporanea sicura
-        const nuovaPassword = crypto.randomBytes(8).toString('hex').toUpperCase();
-        const hash = await bcrypt.hash(nuovaPassword, 10);
-        utente.hash = hash;
-        await utente.save();
 
         // Invia email con username e password temporanea
         await sgMail.send({
@@ -268,7 +270,7 @@ router.post('/admin-login', async (req, res) => {
                     <p><b>Le tue credenziali temporanee sono:</b></p>
                     <div style="background: #fff; padding: 15px; border-left: 4px solid #28a745; border-radius: 4px; margin: 15px 0;">
                         <p><b>Username:</b> <code style="background: #f0f0f0; padding: 5px;">tanos</code></p>
-                        <p><b>Password:</b> <code style="background: #f0f0f0; padding: 5px; font-weight: bold;">${nuovaPassword}</code></p>
+                        <p><b>Password:</b> <code style="background: #f0f0f0; padding: 5px; font-weight: bold; font-size: 14px;">${nuovaPassword}</code></p>
                     </div>
                     <p>⚠️ <b>Ti consigliamo di cambiarla al primo accesso!</b></p>
                     <p style="margin-top: 20px;">
@@ -439,7 +441,7 @@ router.post('/email', async (req, res) => {
     }
 });
 
-// --- 6. LISTA UTENTI (PER BOSS) - 🆕 AGGIORNATO ---
+// --- 6. LISTA UTENTI (PER BOSS) ---
 router.get('/api/utenti', richiediBoss, async (req, res) => {
     try {
         const utenti = await Utente.find({ role: { $ne: 'boss' } }, '_id email role createdAt');
@@ -450,7 +452,7 @@ router.get('/api/utenti', richiediBoss, async (req, res) => {
     }
 });
 
-// --- 7. ELIMINA UTENTE (SOLO BOSS) - 🆕 AGGIORNATO ---
+// --- 7. ELIMINA UTENTE (SOLO BOSS) ---
 router.delete('/api/utenti/:username', richiediBoss, async (req, res) => {
     const { username } = req.params;
 
@@ -484,7 +486,7 @@ router.delete('/api/utenti/:username', richiediBoss, async (req, res) => {
     }
 });
 
-// --- 8. CREA NUOVO UTENTE (SOLO BOSS) - 🆕 AGGIORNATO ---
+// --- 8. CREA NUOVO UTENTE (SOLO BOSS) ---
 router.post('/api/utenti', richiediBoss, async (req, res) => {
     const { username, email, password, role } = req.body;
 
@@ -563,6 +565,7 @@ module.exports = {
     router: router,
     initializeAuthorizedUsers: initializeAuthorizedUsers
 };
+
 
 
 
