@@ -1,10 +1,20 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Pannello Boss - Stone Site</title>
     <link rel="stylesheet" type="text/css" href="/assets/css/bossPanel.css">
+    <style>
+      .message { padding: 8px; margin: 12px 0; border-radius: 4px; display:none; }
+      .message.ok { background:#e6ffed; color:#05622a; display:block; }
+      .message.err { background:#ffe6e6; color:#8b0000; display:block; }
+      .user-row { display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid #eee; }
+      .user-row .meta { color:#444; }
+      button.linklike { background:none;border:none;color:#007bff;cursor:pointer;padding:0; }
+      select, input, button { font-size: 1rem; padding: 8px; }
+      .controls-row { display:flex; gap:8px; margin-top:12px; }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -13,12 +23,12 @@
             <p>Gestisci gli utenti del sistema Stone Site</p>
         </div>
 
-        <div id="message" class="message" style="display: none;"></div>
+        <div id="message" class="message"></div>
 
         <!-- SEZIONE ELIMINA UTENTE -->
         <div class="section">
-            <h2><span class="emoji">🗑️</span>Elimina Utente</h2>
-            <p style="color: #666; margin-bottom: 15px;">Seleziona un utente per eliminarlo definitivamente dal sistema.</p>
+            <h2><span class="emoji">🗑️</span>Elimina / Invia password</h2>
+            <p style="color: #666; margin-bottom: 15px;">Seleziona un utente per eliminarlo o inviare una password temporanea.</p>
             
             <div class="form-group">
                 <label for="userSelect">Scegli utente:</label>
@@ -29,9 +39,14 @@
 
             <div id="userDetailsDelete" style="margin-top: 15px;"></div>
 
-            <button class="btn-delete" onclick="eliminaUtente()" style="width: 100%; margin-top: 15px;">
-                🗑️ Elimina Utente Selezionato
-            </button>
+            <div class="controls-row">
+              <button class="btn-delete" id="btnDelete" style="flex:1;" disabled>
+                  🗑️ Elimina Utente Selezionato
+              </button>
+              <button class="btn-sendtemp" id="btnSendTemp" style="flex:1;" disabled>
+                  ✉️ Invia password temporanea
+              </button>
+            </div>
         </div>
 
         <!-- SEZIONE CREA UTENTE -->
@@ -39,7 +54,7 @@
             <h2><span class="emoji">➕</span>Crea Nuovo Utente</h2>
             <p style="color: #666; margin-bottom: 15px;">Aggiungi un nuovo utente al sistema.</p>
 
-            <form id="createUserForm" onsubmit="creaUtente(event)">
+            <form id="createUserForm">
                 <div class="form-group">
                     <label for="newUsername">Username:</label>
                     <input type="text" id="newUsername" placeholder="es. mario_rossi" required>
@@ -51,16 +66,17 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="newPassword">Password:</label>
-                    <input type="password" id="newPassword" placeholder="Almeno 6 caratteri" required>
+                    <label for="newPassword">Password (opzionale):</label>
+                    <input type="password" id="newPassword" placeholder="Se vuoto verrà generata una password temporanea">
                 </div>
 
                 <div class="form-group">
-                    <label for="newRole">Ruolo:</label>
+                    <label for="newRole">Pagina autorizzata:</label>
                     <select id="newRole" required>
-                        <option value="">-- Seleziona ruolo --</option>
+                        <option value="">-- Seleziona pagina --</option>
                         <option value="cineforum">Cineforum</option>
                         <option value="cucina">Cucina</option>
+                        <option value="both">Entrambe</option>
                     </select>
                 </div>
 
@@ -70,7 +86,7 @@
             </form>
         </div>
 
-        <div class="loading" id="loading">⏳ Caricamento...</div>
+        <div class="loading" id="loading" style="display:none;">⏳ Caricamento...</div>
 
         <!-- LISTA UTENTI -->
         <div class="section">
@@ -86,196 +102,204 @@
         </a>
     </div>
 
-    <script>
-        // Carica lista utenti
-        async function caricaUtenti() {
-            try {
-                setLoading(true);
-                const response = await fetch('/api/utenti');
-                
-                if (!response.ok) {
-                    throw new Error('Errore nel caricamento utenti');
-                }
+<script>
+  // Helper DOM
+  const el = id => document.getElementById(id);
 
-                const utenti = await response.json();
-                setLoading(false);
+  // API wrapper that includes session cookie
+  async function api(path, opts = {}) {
+    const headers = opts.headers || {};
+    if (opts.body && !headers['Content-Type']) headers['Content-Type'] = 'application/json';
+    const cfg = Object.assign({}, opts, {
+      headers,
+      credentials: 'same-origin' // use 'include' if front-end is on a different origin and server CORS allows it
+    });
+    const res = await fetch(path, cfg);
+    // if unauthorized or forbidden, redirect to login
+    if (res.status === 401 || res.status === 403) {
+      alert('Sessione non valida o permessi insufficienti. Verrai reindirizzato al login.');
+      window.location.href = '/login.html';
+      throw { error: 'Unauthorized' };
+    }
+    const txt = await res.text();
+    let data;
+    try { data = txt ? JSON.parse(txt) : {}; } catch(e) { data = { message: txt }; }
+    if (!res.ok) throw data;
+    return data;
+  }
 
-                // Popola il select
-                const select = document.getElementById('userSelect');
-                select.innerHTML = '<option value="">-- Seleziona utente --</option>';
-                utenti.forEach(u => {
-                    const option = document.createElement('option');
-                    option.value = u._id;
-                    option.textContent = `${u._id} (${u.role})`;
-                    select.appendChild(option);
-                });
+  function showMessage(text, type='ok') {
+    const m = el('message');
+    m.textContent = text;
+    m.className = 'message ' + (type === 'ok' ? 'ok' : 'err');
+    m.style.display = 'block';
+    // auto-hide after 8s
+    setTimeout(() => { m.className = 'message'; m.style.display = 'none'; m.textContent = ''; }, 8000);
+  }
 
-                // Popola la lista visiva
-                const userList = document.getElementById('userList');
-                if (utenti.length === 0) {
-                    userList.innerHTML = '<p style="text-align: center; color: #999;">Nessun utente registrato</p>';
-                    return;
-                }
+  // Carica utenti per select e lista
+  async function loadUsers() {
+    el('loading').style.display = 'block';
+    try {
+      const users = await api('/admin/users', { method: 'GET' });
+      populateUserSelect(users);
+      populateUserList(users);
+    } catch (err) {
+      console.error(err);
+      showMessage(err?.error || err?.message || 'Errore caricamento utenti', 'err');
+      el('userList').innerHTML = '<p style="text-align:center;color:#999;">Impossibile caricare utenti</p>';
+    } finally {
+      el('loading').style.display = 'none';
+    }
+  }
 
-                userList.innerHTML = utenti.map(u => `
-                    <div class="user-item">
-                        <div class="user-info">
-                            <div class="user-username">👤 ${u._id}</div>
-                            <div class="user-email">✉️ ${u.email}</div>
-                            <span class="user-role ${u.role}">${u.role.toUpperCase()}</span>
-                        </div>
-                        <button class="btn-select" onclick="selezionaUtente('${u._id}')">Seleziona</button>
-                    </div>
-                `).join('');
+  function populateUserSelect(users) {
+    const sel = el('userSelect');
+    sel.innerHTML = '<option value="">-- Seleziona utente --</option>';
+    users.forEach(u => {
+      const opt = document.createElement('option');
+      opt.value = u._id;
+      opt.textContent = `${u.username || '(no username)'} — ${u.email}`;
+      opt.dataset.email = u.email || '';
+      opt.dataset.username = u.username || '';
+      opt.dataset.role = u.role || 'user';
+      opt.dataset.allowed = u.allowedPage || '-';
+      sel.appendChild(opt);
+    });
+    el('btnDelete').disabled = true;
+    el('btnSendTemp').disabled = true;
+    el('userDetailsDelete').textContent = '';
+  }
 
-            } catch (err) {
-                setLoading(false);
-                mostraMessaggio('Errore nel caricamento utenti: ' + err.message, 'error');
-                console.error(err);
-            }
+  // dettagli e abilitazione pulsanti quando cambia select
+  el('userSelect').addEventListener('change', () => {
+    const sel = el('userSelect');
+    const val = sel.value;
+    if (!val) {
+      el('userDetailsDelete').textContent = '';
+      el('btnDelete').disabled = true;
+      el('btnSendTemp').disabled = true;
+      return;
+    }
+    const opt = sel.selectedOptions[0];
+    el('userDetailsDelete').innerHTML = `<strong>${opt.textContent}</strong><div style="color:#666">Ruolo: ${opt.dataset.role} · Pagina: ${opt.dataset.allowed}</div>`;
+    el('btnDelete').disabled = false;
+    el('btnSendTemp').disabled = false;
+  });
+
+  // elimina utente selezionato
+  async function eliminaUtente() {
+    const sel = el('userSelect');
+    const id = sel.value;
+    if (!id) return;
+    if (!confirm('Sei sicuro di voler eliminare questo utente? Azione irreversibile.')) return;
+    el('btnDelete').disabled = true;
+    try {
+      await api('/admin/users/' + encodeURIComponent(id), { method: 'DELETE' });
+      showMessage('Utente eliminato', 'ok');
+      await loadUsers();
+    } catch (err) {
+      console.error(err);
+      showMessage(err?.error || err?.message || 'Errore durante eliminazione', 'err');
+    } finally {
+      el('btnDelete').disabled = false;
+    }
+  }
+  el('btnDelete').addEventListener('click', eliminaUtente);
+
+  // invia password temporanea all'utente selezionato (usa /auth/forgot-password)
+  async function inviaPasswordTemporanea() {
+    const sel = el('userSelect');
+    const opt = sel.selectedOptions[0];
+    if (!opt) return;
+    const username = opt.dataset.username;
+    const email = opt.dataset.email;
+    if (!username || !email) {
+      showMessage('Utente selezionato privo di username o email', 'err'); return;
+    }
+    if (!confirm(`Inviare password temporanea a ${email}?`)) return;
+    el('btnSendTemp').disabled = true;
+    try {
+      // /auth/forgot-password expects { username, email }
+      await api('/auth/forgot-password', { method: 'POST', body: JSON.stringify({ username, email }) });
+      showMessage('Password temporanea inviata via email', 'ok');
+    } catch (err) {
+      console.error(err);
+      showMessage(err?.error || err?.message || 'Errore invio password', 'err');
+    } finally {
+      el('btnSendTemp').disabled = false;
+    }
+  }
+  el('btnSendTemp').addEventListener('click', inviaPasswordTemporanea);
+
+  // crea utente
+  el('createUserForm').addEventListener('submit', async (ev) => {
+    ev.preventDefault();
+    const username = el('newUsername').value.trim();
+    const email = el('newEmail').value.trim();
+    const password = el('newPassword').value;
+    const allowedPage = el('newRole').value;
+    if (!username || !email || !allowedPage) {
+      showMessage('Compila tutti i campi obbligatori', 'err'); return;
+    }
+    const btn = ev.target.querySelector('button[type="submit"]');
+    btn.disabled = true;
+    try {
+      const body = { username, email, allowedPage };
+      if (password) body.password = password;
+      const res = await api('/admin/users', { method: 'POST', body: JSON.stringify(body) });
+      showMessage('Utente creato correttamente', 'ok');
+      el('createUserForm').reset();
+      await loadUsers();
+    } catch (err) {
+      console.error(err);
+      showMessage(err?.error || err?.message || 'Errore creazione utente', 'err');
+    } finally {
+      btn.disabled = false;
+    }
+  });
+
+  function populateUserList(users) {
+    const wrap = el('userList');
+    if (!users.length) {
+      wrap.innerHTML = '<p style="text-align:center;color:#999;">Nessun utente registrato</p>';
+      return;
+    }
+    wrap.innerHTML = '';
+    users.forEach(u => {
+      const row = document.createElement('div');
+      row.className = 'user-row';
+      const meta = document.createElement('div');
+      meta.className = 'meta';
+      meta.innerHTML = `<strong>${u.username || '(no username)'}</strong> — ${u.email} <div style="color:#666; font-size:0.9rem">Ruolo: ${u.role || 'user'} · Pagina: ${u.allowedPage || '-'}</div>`;
+      const actions = document.createElement('div');
+      const btnDel = document.createElement('button');
+      btnDel.className = 'linklike';
+      btnDel.textContent = 'Elimina';
+      btnDel.onclick = async () => {
+        if (!confirm('Eliminare ' + (u.username || u.email) + '?')) return;
+        try {
+          await api('/admin/users/' + encodeURIComponent(u._id), { method: 'DELETE' });
+          showMessage('Utente eliminato', 'ok');
+          await loadUsers();
+        } catch (err) {
+          console.error(err);
+          showMessage(err?.error || err?.message || 'Errore eliminazione', 'err');
         }
+      };
+      actions.appendChild(btnDel);
+      row.appendChild(meta);
+      row.appendChild(actions);
+      wrap.appendChild(row);
+    });
+  }
 
-        // Seleziona utente dal bottone
-        function selezionaUtente(username) {
-            document.getElementById('userSelect').value = username;
-            mostraDettagliUtente();
-            document.querySelector('.section:first-child').scrollIntoView({ behavior: 'smooth' });
-        }
-
-        // Mostra dettagli utente selezionato
-        function mostraDettagliUtente() {
-            const username = document.getElementById('userSelect').value;
-            const detailsDiv = document.getElementById('userDetailsDelete');
-
-            if (!username) {
-                detailsDiv.innerHTML = '';
-                return;
-            }
-
-            detailsDiv.innerHTML = `
-                <div style="background: #fff3cd; padding: 12px; border-radius: 6px; border-left: 4px solid #ff6b6b;">
-                    <strong>⚠️ Attenzione:</strong> Eliminerai l'utente <strong>${username}</strong> permanentemente.
-                </div>
-            `;
-        }
-
-        // Elimina utente
-        async function eliminaUtente() {
-            const username = document.getElementById('userSelect').value;
-
-            if (!username) {
-                mostraMessaggio('Seleziona un utente da eliminare', 'error');
-                return;
-            }
-
-            if (!confirm(`⚠️ Sei sicuro di voler eliminare ${username}? L'operazione è irreversibile!`)) {
-                return;
-            }
-
-            try {
-                setLoading(true);
-                const response = await fetch(`/api/utenti/${username}`, {
-                    method: 'DELETE'
-                });
-
-                if (!response.ok) {
-                    const data = await response.json();
-                    throw new Error(data.error || 'Errore nell\'eliminazione');
-                }
-
-                const data = await response.json();
-                setLoading(false);
-                mostraMessaggio('✅ ' + data.success, 'success');
-                
-                // Ricarica la lista
-                setTimeout(() => {
-                    document.getElementById('userSelect').value = '';
-                    document.getElementById('userDetailsDelete').innerHTML = '';
-                    caricaUtenti();
-                }, 1000);
-
-            } catch (err) {
-                setLoading(false);
-                mostraMessaggio('Errore: ' + err.message, 'error');
-                console.error(err);
-            }
-        }
-
-        // Crea nuovo utente
-        async function creaUtente(event) {
-            event.preventDefault();
-
-            const username = document.getElementById('newUsername').value.trim();
-            const email = document.getElementById('newEmail').value.trim();
-            const password = document.getElementById('newPassword').value;
-            const role = document.getElementById('newRole').value;
-
-            if (!username || !email || !password || !role) {
-                mostraMessaggio('Tutti i campi sono richiesti', 'error');
-                return;
-            }
-
-            if (password.length < 6) {
-                mostraMessaggio('La password deve avere almeno 6 caratteri', 'error');
-                return;
-            }
-
-            try {
-                setLoading(true);
-                const response = await fetch('/api/utenti', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ username, email, password, role })
-                });
-
-                if (!response.ok) {
-                    const data = await response.json();
-                    throw new Error(data.error || 'Errore nella creazione');
-                }
-
-                const data = await response.json();
-                setLoading(false);
-                mostraMessaggio('✅ ' + data.success, 'success');
-                
-                // Resetta form
-                document.getElementById('createUserForm').reset();
-                
-                // Ricarica lista
-                setTimeout(() => caricaUtenti(), 1000);
-
-            } catch (err) {
-                setLoading(false);
-                mostraMessaggio('Errore: ' + err.message, 'error');
-                console.error(err);
-            }
-        }
-
-        // Utility: Mostra messaggio
-        function mostraMessaggio(testo, tipo) {
-            const msgDiv = document.getElementById('message');
-            msgDiv.textContent = testo;
-            msgDiv.className = `message ${tipo}`;
-            msgDiv.style.display = 'block';
-
-            if (tipo === 'success' || tipo === 'info') {
-                setTimeout(() => {
-                    msgDiv.style.display = 'none';
-                }, 4000);
-            }
-        }
-
-        // Utility: Loading
-        function setLoading(active) {
-            document.getElementById('loading').classList.toggle('active', active);
-        }
-
-        // Event listener per select
-        document.getElementById('userSelect').addEventListener('change', mostraDettagliUtente);
-
-        // Carica utenti al caricamento pagina
-        window.addEventListener('load', caricaUtenti);
-    </script>
+  // inizializzazione: assicurati di essere autenticato; se no redirect a login
+  (function init() {
+    loadUsers().catch(() => {
+      // loadUsers già gestisce redirect in caso di 401/403
+    });
+  })();
+</script>
 </body>
 </html>

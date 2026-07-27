@@ -1,55 +1,167 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" id="silktide-consent-manager-css" href="/assets/css/login.css">
-    <title>Login</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="/assets/css/login.css" />
+  <title>Login</title>
+  <style>
+    /* Piccolo styling inline per feedback rapido */
+    .message { margin: .5rem 0; color: #c00; }
+    .ok { color: #080; }
+  </style>
 </head>
 <body>
-        <div class="login"> 
-                <h1 >Esegui il Tuo Login!</h1>
-        </div>
-         
-        
-    <div id="loginForm">
-      
-        <form action="/auth" method="POST" id="auth" >
-                <h1>Inserisci le Tue Credenziali</h1>
-                <input type="text" name="username" required placeholder="Inserisci il tuo username">
-                <input type="password" name="password" required placeholder="Inserisci la tua password">
-                <button type="submit">Login</button>
-        </form>
-
-        <!-- 🆕 NUOVO: Admin Login via Email -->
-        <form action="/admin-login" method="POST">
-                <h1>👑 Admin Login (Tanos)</h1>
-                <input type="email" name="email" required placeholder="Inserisci la tua email admin">
-                <button type="submit">Richiedi Accesso via Email</button>
-        </form>
-        
-        <form action="/email" method="POST" >
-                <h1>Iscriviti inserisci email</h1>
-                <input type="email" name="email" required placeholder="Inserisci la tua email">
-                <input type="text" name="username" required placeholder="Username Autorizzato">
-                <input type="password" name="password" required placeholder="Crea la tua Password">
-                <button type="submit">invia e-Mail</button>
-        </form>
-
-        <form action="/forgot-password" method="post">
-                <h1>Password dimenticata?</h1>
-                    <input type="text" name="username" placeholder="Inserisci il tuo username" required>
-                    <input type="email" name="email" placeholder="Inserisci la tua email registrata" required>
-                    <button type="submit">Recupera Password</button>
-        </form>
-
-        <form action="/change-password" method="POST">
-                 <h1>Cambia Password</h1>
-                <input type="text" name="username" placeholder="Tuo username" required>
-                <input type="password" name="oldPassword" placeholder="Vecchia Password" required>
-                <input type="password" name="newPassword" placeholder="Nuova Password" required>
-                <button type="submit">Aggiorna Password</button>
-        </form>
+  <div class="login">
+    <h1>Esegui il Tuo Login!</h1>
   </div>
+
+  <div id="loginForm">
+
+    <!-- Login (username + password) -->
+    <form id="form-login">
+      <h2>Inserisci le Tue Credenziali</h2>
+      <input type="text" id="login-username" required placeholder="Inserisci il tuo username" />
+      <input type="password" id="login-password" required placeholder="Inserisci la tua password" />
+      <button type="submit">Login</button>
+      <div id="login-msg" class="message" aria-live="polite"></div>
+    </form>
+
+    <!-- Boss: richiedi password temporanea -->
+    <form id="form-request-temp">
+      <h2>Adm Login</h2>
+      <input type="text" id="boss-userid"  required placeholder="admin ID" />
+      <input type="email" id="boss-email" required placeholder="La tua email" />
+      <button type="submit">Invia richiesta</button>
+      <div id="request-msg" class="message" aria-live="polite"></div>
+    </form>
+
+    <!-- Forgot password -->
+    <form id="form-forgot">
+      <h2>Password dimenticata?</h2>
+      <input type="text" id="forgot-username" placeholder="Inserisci il tuo username" required />
+      <input type="email" id="forgot-email" placeholder="Inserisci la tua email registrata" required />
+      <button type="submit">Recupera Password</button>
+      <div id="forgot-msg" class="message" aria-live="polite"></div>
+    </form>
+
+    <!-- Change password -->
+    <form id="form-change">
+      <h2>Cambia Password</h2>
+      <input type="text" id="change-username" placeholder="Tuo username" required />
+      <input type="password" id="change-old" placeholder="Vecchia Password" required />
+      <input type="password" id="change-new" placeholder="Nuova Password" required />
+      <button type="submit">Aggiorna Password</button>
+      <div id="change-msg" class="message" aria-live="polite"></div>
+    </form>
+
+  </div>
+
+  <script>
+    // Helper: post JSON and return parsed JSON (throws on non-OK)
+    async function postJson(url, body, token) {
+      const headers = { 'Content-Type': 'application/json' };
+      if (token) headers['Authorization'] = 'Bearer ' + token;
+      const res = await fetch(url, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify(body),
+        credentials: 'include' // ✅ IMPORTANTE: invia cookie
+      });
+      const txt = await res.text();
+      let data;
+      try { data = txt ? JSON.parse(txt) : {}; } catch (e) { data = { message: txt }; }
+      if (!res.ok) throw data;
+      return data;
+    }
+
+    // Login
+document.getElementById('form-login').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const msgEl = document.getElementById('login-msg');
+  msgEl.textContent = 'Sto effettuando il login...';
+  try {
+    const username = document.getElementById('login-username').value.trim();
+    const password = document.getElementById('login-password').value;
+    const data = await postJson('/auth/login', { username, password });
+    
+    // ✅ NON salvare token, le sessioni sono automatiche via cookie
+    msgEl.className = 'message ok';
+    msgEl.textContent = 'Login effettuato. Reindirizzamento...';
+    
+    // redirect based on role / allowedPage
+    if (data.role === 'boss') {
+      setTimeout(() => location.href = '/bossPanel.html', 700);
+    } else {
+      const ap = data.allowedPage;
+      if (ap === 'cineforum') location.href = '/cineforum';
+      else if (ap === 'cucina') location.href = '/cucina';
+      else if (ap === 'both') {
+        setTimeout(() => location.href = '/scegli-pagina.html', 700);
+      } else {
+        setTimeout(() => location.href = '/', 700);
+      }
+    }
+  } catch (err) {
+    msgEl.className = 'message';
+    msgEl.textContent = err?.error || err?.message || 'Errore nel login';
+  }
+});
+
+    // Boss request temporary password
+    document.getElementById('form-request-temp').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const msgEl = document.getElementById('request-msg');
+      msgEl.textContent = 'Invio richiesta...';
+      try {
+        const userId = document.getElementById('boss-userid').value.trim();
+        const email = document.getElementById('boss-email').value.trim();
+        const data = await postJson('/auth/request-temp', { userId, email });
+        msgEl.className = 'message ok';
+        msgEl.textContent = data.message || 'Password temporanea inviata via email.';
+      } catch (err) {
+        msgEl.className = 'message';
+        msgEl.textContent = err?.error || err?.message || 'Errore nella richiesta';
+      }
+    });
+
+    // Forgot password
+    document.getElementById('form-forgot').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const msgEl = document.getElementById('forgot-msg');
+      msgEl.textContent = 'Invio richiesta di recupero...';
+      try {
+        const username = document.getElementById('forgot-username').value.trim();
+        const email = document.getElementById('forgot-email').value.trim();
+        const data = await postJson('/auth/forgot-password', { username, email });
+        msgEl.className = 'message ok';
+        msgEl.textContent = data.message || 'Controlla la tua email per le istruzioni.';
+      } catch (err) {
+        msgEl.className = 'message';
+        msgEl.textContent = err?.error || err?.message || 'Errore nella richiesta';
+      }
+    });
+
+    // Change password
+    document.getElementById('form-change').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const msgEl = document.getElementById('change-msg');
+      msgEl.textContent = 'Aggiornamento password...';
+      try {
+        const username = document.getElementById('change-username').value.trim();
+        const oldPassword = document.getElementById('change-old').value;
+        const newPassword = document.getElementById('change-new').value;
+        const data = await postJson('/auth/change-password', { username, oldPassword, newPassword });
+        msgEl.className = 'message ok';
+        msgEl.textContent = data.message || 'Password aggiornata con successo.';
+      } catch (err) {
+        msgEl.className = 'message';
+        msgEl.textContent = err?.error || err?.message || 'Errore nell\'aggiornamento';
+      }
+    });
+
+    // Utility: attach Authorization header for future fetches (example)
+    // Example use in bossPanel: fetch('/admin/users', { headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }})
+  </script>
 </body>
 </html>
