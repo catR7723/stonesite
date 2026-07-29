@@ -1,0 +1,1 @@
+MONGO_URI='mongodb+srv://catroboticsdev:LP0Yjjcw2mB09jlj@cluster0.vp9eyhc.mongodb.net/stonesite?retryWrites=true&w=majority' 

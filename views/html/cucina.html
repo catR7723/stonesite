@@ -4,13 +4,13 @@
     <title>Laboratorio di Cucina</title>
     <link rel="stylesheet" href="/assets/css/laboratori/cucina.css">
     <link rel="stylesheet" id="silktide-consent-manager-css" href="/assets/css/silktide-consent-manager.css">
-    <script src="/public/assets/js/silktide-consent-manager.js"></script>
+    <script src="/assets/js/silktide-consent-manager.js"></script>
 
     <script type="text/javascript" src="https://cs.iubenda.com/autoblocking/4252528.js"></script>
     <script type="text/javascript" url="//cdn.iubenda.com/cs/gpp/stub.js"></script>
     <script type="text/javascript" url="//cdn.iubenda.com/cs/iubenda_cs.js" charset="UTF-8" async=""></script>
 
-<script src="/assets/js/cucinaInsert.js" defer=""></script>
+
 </head>
 <body>
     <div class="menu">
@@ -136,147 +136,7 @@
      
         </div>
 <script>
- async function loadWeeklyRecipe() {
-    try {
-      console.log('🍽️ Inizio caricamento ricetta...');
-      
-      let recipeTitle = localStorage.getItem('recipeTitle');
-      console.log('RecipeTitle da localStorage:', recipeTitle);
-      let recipe = null;
 
-      // ✅ CARICA L'ULTIMO MENU PUBBLICATO (senza archiviare)
-      console.log('📥 Caricamento ultimo menu pubblicato...');
-      try {
-        const response = await fetch('/recipe/latest/published');
-        
-        if (!response.ok) {
-          console.error('❌ Errore API:', response.status);
-          const titleDisplay = document.getElementById('recipe_title_display');
-          if (titleDisplay) {
-            titleDisplay.textContent = 'Nessun menu pubblicato';
-          }
-          return;
-        }
-        
-        recipe = await response.json();
-        recipeTitle = recipe.title;
-        localStorage.setItem('recipeTitle', recipeTitle);
-        console.log('✅ Ricetta caricata:', recipe);
-      } catch (err) {
-        console.error('❌ Errore nel fetch API:', err);
-        return;
-      }
-
-      if (!recipe || !recipeTitle) {
-        console.error('❌ Ricetta o titolo non trovati');
-        return;
-      }
-
-      // ✅ AGGIORNA TITOLI
-      const titleLabel = document.getElementById('recipe_title_display_label');
-      const titleIntro = document.getElementById('recipe_title_display_intro');
-      if (titleLabel) {
-        titleLabel.textContent = recipeTitle;
-        console.log('📝 Titolo label aggiornato');
-      }
-      if (titleIntro) {
-        titleIntro.textContent = recipeTitle;
-      }
-
-      // ✅ AGGIORNA INTRO
-      if (recipe.primo?.titolo) {
-        const elem = document.getElementById('titolop_intro');
-        if (elem) elem.textContent = recipe.primo.titolo;
-      }
-      if (recipe.secondo?.titolo) {
-        const elem = document.getElementById('titolodefSecondo_intro');
-        if (elem) elem.textContent = recipe.secondo.titolo;
-      }
-      if (recipe.contorno?.titolo) {
-        const elem = document.getElementById('titolodefConto_intro');
-        if (elem) elem.textContent = recipe.contorno.titolo;
-      }
-
-      // ✅ PRIMO
-      if (recipe.primo?.titolo) {
-        const elem = document.getElementById('titolop_svolgimento');
-        if (elem) elem.textContent = recipe.primo.titolo;
-      }
-      if (recipe.primo?.ingredienti) {
-        const elem = document.getElementById('ingredientiPrimo');
-        if (elem) elem.textContent = recipe.primo.ingredienti;
-      }
-      if (recipe.primo?.descrizione) {
-        const elem = document.getElementById('descrizionePrimo');
-        if (elem) elem.textContent = recipe.primo.descrizione;
-      }
-      if (recipe.primo?.imageUrl) {
-        const primoDiv = document.getElementById('primo');
-        if (primoDiv) {
-          primoDiv.innerHTML = `<img src="${recipe.primo.imageUrl}" alt="Primo" width="300" style="margin: 20px 0; border-radius: 8px;">`;
-        }
-      }
-
-      // ✅ SECONDO
-      if (recipe.secondo?.titolo) {
-        const elem = document.getElementById('titolodefSecondo_svolgimento');
-        if (elem) elem.textContent = recipe.secondo.titolo;
-      }
-      if (recipe.secondo?.ingredienti) {
-        const elem = document.getElementById('ingredientiSecondo');
-        if (elem) elem.textContent = recipe.secondo.ingredienti;
-      }
-      if (recipe.secondo?.descrizione) {
-        const elem = document.getElementById('descrizioneSecondo');
-        if (elem) elem.textContent = recipe.secondo.descrizione;
-      }
-      if (recipe.secondo?.imageUrl) {
-        const secondoDiv = document.getElementById('secondo');
-        if (secondoDiv) {
-          secondoDiv.innerHTML = `<img src="${recipe.secondo.imageUrl}" alt="Secondo" width="300" style="margin: 20px 0; border-radius: 8px;">`;
-        }
-      }
-
-      // ✅ CONTORNO
-      if (recipe.contorno?.titolo) {
-        const elem = document.getElementById('titolodefConto_svolgimento');
-        if (elem) elem.textContent = recipe.contorno.titolo;
-      }
-      if (recipe.contorno?.ingredienti) {
-        const elem = document.getElementById('ingredientiContorno');
-        if (elem) elem.textContent = recipe.contorno.ingredienti;
-      }
-      if (recipe.contorno?.descrizione) {
-        const elem = document.getElementById('descrizioneContorno');
-        if (elem) elem.textContent = recipe.contorno.descrizione;
-      }
-      if (recipe.contorno?.imageUrl) {
-        const contornoDiv = document.getElementById('contorno');
-        if (contornoDiv) {
-          contornoDiv.innerHTML = `<img src="${recipe.contorno.imageUrl}" alt="Contorno" width="300" style="margin: 20px 0; border-radius: 8px;">`;
-        }
-      }
-
-      // ✅ PDF RICETTA
-      if (recipe.ricetta?.pdfUrl) {
-        const downloadLink = document.querySelector('.download a');
-        if (downloadLink) {
-          downloadLink.href = recipe.ricetta.pdfUrl;
-        }
-      }
-
-      console.log('✅ Ricetta caricata e visualizzata con successo!');
-
-    } catch (error) {
-      console.error('❌ Errore nel caricamento della ricetta:', error);
-      const titleDisplay = document.getElementById('recipe_title_display');
-      if (titleDisplay) {
-        titleDisplay.textContent = 'Errore nel caricamento';
-      }
-    }
-}
-
-// ✅ ESEGUI QUANDO LA PAGINA È CARICATA
-document.addEventListener('DOMContentLoaded', loadWeeklyRecipe);  </script>
+      </script>
 
 </body></html>

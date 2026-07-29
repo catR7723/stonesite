@@ -316,7 +316,8 @@ document.getElementById('topForm').addEventListener('submit', async (e) => {
   try {
     const response = await fetch('/cucinaInsert', {
       method: 'POST',
-      body: formData
+      body: formData,
+      credentials: 'include'
     });
     
     const result = await response.json();
