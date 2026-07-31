@@ -103,7 +103,11 @@ module.exports = (upload, cloudinary) => {
 
         // Salva gli URL su MongoDB
         let recipe = await Recipe.findOne({ title: recipeTitle });
-        if (!recipe) recipe = new Recipe({ title: recipeTitle });
+        if (!recipe) {
+          recipe = new Recipe({ title: recipeTitle, userId: req.session && req.session.userId });
+        } else if (!recipe.userId && req.session && req.session.userId) {
+          recipe.userId = req.session.userId;
+        }
 
         if (images.primo) recipe.primo = { ...recipe.primo, imageUrl: images.primo };
         if (images.secondo) recipe.secondo = { ...recipe.secondo, imageUrl: images.secondo };
@@ -129,7 +133,11 @@ module.exports = (upload, cloudinary) => {
     try {
       const { recipeTitle, titolo_Primo, ingredienti_Primo, descrizione_Primo } = req.body;
       let recipe = await Recipe.findOne({ title: recipeTitle });
-      if (!recipe) recipe = new Recipe({ title: recipeTitle });
+      if (!recipe) {
+        recipe = new Recipe({ title: recipeTitle, userId: req.session && req.session.userId });
+      } else if (!recipe.userId && req.session && req.session.userId) {
+        recipe.userId = req.session.userId;
+      }
 
       recipe.primo = {
         titolo: titolo_Primo || '',
@@ -151,7 +159,11 @@ module.exports = (upload, cloudinary) => {
     try {
       const { recipeTitle, titolo_Secondo, ingredienti_Secondo, descrizione_Secondo } = req.body;
       let recipe = await Recipe.findOne({ title: recipeTitle });
-      if (!recipe) recipe = new Recipe({ title: recipeTitle });
+      if (!recipe) {
+        recipe = new Recipe({ title: recipeTitle, userId: req.session && req.session.userId });
+      } else if (!recipe.userId && req.session && req.session.userId) {
+        recipe.userId = req.session.userId;
+      }
 
       recipe.secondo = {
         titolo: titolo_Secondo || '',
@@ -173,7 +185,11 @@ module.exports = (upload, cloudinary) => {
     try {
       const { recipeTitle, titolo_Contorno, ingredienti_Contorno, descrizione_Contorno } = req.body;
       let recipe = await Recipe.findOne({ title: recipeTitle });
-      if (!recipe) recipe = new Recipe({ title: recipeTitle });
+      if (!recipe) {
+        recipe = new Recipe({ title: recipeTitle, userId: req.session && req.session.userId });
+      } else if (!recipe.userId && req.session && req.session.userId) {
+        recipe.userId = req.session.userId;
+      }
 
       recipe.contorno = {
         titolo: titolo_Contorno || '',
@@ -189,6 +205,59 @@ module.exports = (upload, cloudinary) => {
       return res.status(500).json({ success: false, error: 'Errore server' });
     }
   });
+
+  // GET /api/recipe/latest -> restituisce l'ultima ricetta dell'utente, ma normalizza le sezioni
+router.get('/api/recipe/latest', ensureCucinaAllowed, async (req, res) => {
+  try {
+    console.log('--- GET /api/recipe/latest --- session:', req.session && { userId: req.session.userId });
+    const userId = req.session && req.session.userId;
+
+    let recipe = null;
+    if (userId) {
+      recipe = await Recipe.findOne({ userId }).sort({ createdAt: -1 }).lean();
+      console.log('by userId found?', !!recipe);
+    }
+
+    if (!recipe) {
+      // fallback: prendi l'ultima ricetta (globale) se non ci sono ricette con userId
+      recipe = await Recipe.findOne({}).sort({ createdAt: -1 }).lean();
+      console.log('fallback global latest found?', !!recipe);
+    }
+
+    if (!recipe) return res.status(404).json({ error: 'nessuna ricetta' });
+
+    // helper che normalizza una "sezione" (può essere stringa=imageUrl o oggetto)
+    const normalizeSection = (sec) => {
+      if (!sec) return { titolo: '', ingredienti: '', descrizione: '', imageUrl: '' };
+      if (typeof sec === 'string') {
+        return { titolo: '', ingredienti: '', descrizione: '', imageUrl: sec };
+      }
+      // sec è oggetto: estrai campi attesi, con fallback
+      return {
+        titolo: sec.titolo || sec.title || '',
+        ingredienti: sec.ingredienti || sec.ingredients || '',
+        descrizione: sec.descrizione || sec.description || '',
+        imageUrl: sec.imageUrl || sec.pdfUrl || (typeof sec === 'string' ? sec : '') || ''
+      };
+    };
+
+    const primo = normalizeSection(recipe.primo);
+    const secondo = normalizeSection(recipe.secondo);
+    const contorno = normalizeSection(recipe.contorno);
+
+    return res.json({
+      id: recipe._id,
+      title: recipe.title || '',
+      primo,
+      secondo,
+      contorno,
+      ricetta: recipe.ricetta?.pdfUrl || (recipe.ricetta || null)
+    });
+  } catch (err) {
+    console.error('Errore /api/recipe/latest', err);
+    return res.status(500).json({ error: 'server error' });
+  }
+});
 
   // POST /salvaMenuR (pubblica e archivia)
   router.post('/salvaMenuR', ensureCucinaAllowed, async (req, res) => {
@@ -277,6 +346,5 @@ module.exports = (upload, cloudinary) => {
   return router;
 };
 console.log('ROUTER cucinaInsert montato');
-
 
 

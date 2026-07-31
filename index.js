@@ -393,3 +393,4 @@ app.get('/lettura', (req, res) => { res.sendFile(path.join(__dirname, 'views', '
 app.get('/musica_passiva', (req, res) => { res.sendFile(path.join(__dirname, 'views', 'html', 'laboratori', 'musica_passiva.html')); });
 app.get('/piscina', (req, res) => { res.sendFile(path.join(__dirname, 'views', 'html', 'laboratori', 'piscina.html')); });
 app.get('/menu', (req, res) => { res.sendFile(path.join(__dirname, 'views', 'html', 'laboratori', 'menu.html')); });
+app.get('/archivio', (req, res) => { res.sendFile(path.join(__dirname, 'views', 'html', 'archivio.html')); });

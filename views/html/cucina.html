@@ -10,9 +10,9 @@
     <script type="text/javascript" url="//cdn.iubenda.com/cs/gpp/stub.js"></script>
     <script type="text/javascript" url="//cdn.iubenda.com/cs/iubenda_cs.js" charset="UTF-8" async=""></script>
 
-
 </head>
 <body>
+
     <div class="menu">
         <ul>
             <li class="home">
@@ -135,8 +135,132 @@
 
      
         </div>
-<script>
 
-      </script>
+<!-- Script: fetch e popolamento (posizionato in fondo, prima di </body>) -->
+<script>
+document.addEventListener('DOMContentLoaded', async () => {
+  // elementi principali
+  const inputTitle = document.getElementById('recipeTitle_salvaMenuR');
+  let inputId = document.getElementById('recipeId_salvaMenuR');
+  const btn = document.getElementById('salvaMenuR');
+
+  // helper per leggere/scrivere testo in modo sicuro
+  const setText = (id, text) => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = text || '';
+  };
+  const ensureImg = (container, imgId, src) => {
+    if (!container || !src) return;
+    let img = document.getElementById(imgId);
+    if (!img) {
+      img = document.createElement('img');
+      img.id = imgId;
+      img.style.maxWidth = '100%';
+      img.style.height = 'auto';
+      container.appendChild(img);
+    }
+    img.src = src;
+  };
+
+  if (btn) btn.disabled = true;
+
+  try {
+    const res = await fetch('/api/recipe/latest', { credentials: 'include' });
+    console.log('fetch /api/recipe/latest status', res.status);
+    if (!res.ok) {
+      console.log('Nessuna ricetta trovata:', res.status);
+      if (btn) btn.disabled = false;
+      return;
+    }
+    const data = await res.json();
+
+    // impostazione hidden title (usato dalla route /salvaMenuR)
+    if (inputTitle) inputTitle.value = data.title || '';
+
+    // crea/aggiorna hidden recipeId se non esiste
+    if (!inputId) {
+      const form = document.querySelector('form[action="/salvaMenuR"]');
+      if (form) {
+        inputId = document.createElement('input');
+        inputId.type = 'hidden';
+        inputId.name = 'recipeId';
+        inputId.id = 'recipeId_salvaMenuR';
+        form.appendChild(inputId);
+      }
+    }
+    if (inputId) inputId.value = data.id || '';
+
+    // Titoli principali
+    setText('recipe_title_display_label', data.title || '');
+    setText('recipe_title_display_intro', data.title || '');
+
+    // funzione per popolare sezione (primo/secondo/contorno)
+    const fillSection = (prefix, value) => {
+      const container = document.getElementById(prefix);
+      // ids per testi differenziati intro / svolgimento
+      const titleIntroId = prefix === 'primo' ? 'titolop_intro' : (prefix === 'secondo' ? 'titolodefSecondo_intro' : 'titolodefConto_intro');
+      const titleSvolId  = prefix === 'primo' ? 'titolop_svolgimento' : (prefix === 'secondo' ? 'titolodefSecondo_svolgimento' : 'titolodefConto_svolgimento');
+      const ingrId = prefix === 'primo' ? 'ingredientiPrimo' : (prefix === 'secondo' ? 'ingredientiSecondo' : 'ingredientiContorno');
+      const descId = prefix === 'primo' ? 'descrizionePrimo' : (prefix === 'secondo' ? 'descrizioneSecondo' : 'descrizioneContorno');
+      const imgId = prefix === 'primo' ? 'imgPrimo' : (prefix === 'secondo' ? 'imgSecondo' : 'imgContorno');
+
+      if (!value) {
+        setText(titleIntroId, '');
+        setText(titleSvolId, '');
+        setText(ingrId, '');
+        setText(descId, '');
+        return;
+      }
+
+      // se value è oggetto con testi
+      if (typeof value === 'object') {
+        const titolo = value.titolo || value.title || '';
+        const ingredienti = value.ingredienti || value.ingredients || '';
+        const descrizione = value.descrizione || value.description || '';
+        const imageUrl = value.imageUrl || value.pdfUrl || value.ricetta || null;
+
+        if (titolo) setText(titleIntroId, titolo);
+        if (titolo) setText(titleSvolId, titolo);
+        if (ingredienti) setText(ingrId, ingredienti);
+        if (descrizione) setText(descId, descrizione);
+
+        if (imageUrl && container) ensureImg(container, imgId, imageUrl);
+        return;
+      }
+
+      // se value è stringa trattala come imageUrl
+      if (typeof value === 'string') {
+        if (container) ensureImg(container, imgId, value);
+        // testi rimangono quelli presenti nella pagina come fallback
+        return;
+      }
+    };
+
+    // popola le tre sezioni
+    fillSection('primo', data.primo || null);
+    fillSection('secondo', data.secondo || null);
+    fillSection('contorno', data.contorno || null);
+
+    // fallback: se i testi si trovano altrove (es. data.primo_text) gestiscili
+    if (data.primo_text) {
+      setText('ingredientiPrimo', data.primo_text.ingredienti || '');
+      setText('descrizionePrimo', data.primo_text.descrizione || '');
+    }
+    if (data.secondo_text) {
+      setText('ingredientiSecondo', data.secondo_text.ingredienti || '');
+      setText('descrizioneSecondo', data.secondo_text.descrizione || '');
+    }
+    if (data.contorno_text) {
+      setText('ingredientiContorno', data.contorno_text.ingredienti || '');
+      setText('descrizioneContorno', data.contorno_text.descrizione || '');
+    }
+
+  } catch (err) {
+    console.error('Errore fetch /api/recipe/latest:', err);
+  } finally {
+    if (btn) btn.disabled = false;
+  }
+});
+</script>
 
 </body></html>
