@@ -37,11 +37,18 @@ function formatFrom() {
 if (isProd && mailEnabled && process.env.SENDGRID_API_KEY) {
   try {
     sendgrid = require('@sendgrid/mail');
+    const keyLen = process.env.SENDGRID_API_KEY.length;
+    const keyStart = process.env.SENDGRID_API_KEY.substring(0, 10);
+    console.log(`[Mailer] Setting SendGrid API key (length: ${keyLen}, starts with: ${keyStart}...)`);
     sendgrid.setApiKey(process.env.SENDGRID_API_KEY);
     useSendGridApi = true;
     console.log('Mailer: using SendGrid Web API');
   } catch (e) {
     console.warn('SendGrid API client not available, falling back to SMTP:', e.message);
+  }
+} else {
+  if (isProd && mailEnabled) {
+    console.log(`[Mailer] isProd=${isProd}, mailEnabled=${mailEnabled}, SENDGRID_API_KEY=${process.env.SENDGRID_API_KEY ? 'present' : 'MISSING'}`);
   }
 }
 
@@ -78,6 +85,7 @@ async function sendMail(to, subject, text, html) {
 
   try {
     if (useSendGridApi && sendgrid) {
+      console.log(`[Mailer] Sending via SendGrid API to ${to}, from ${from}`);
       // sendgrid.send returns a promise that resolves to an array [response, body]
       const res = await sendgrid.send(msg);
       console.log('Mail sent via SendGrid API:', Array.isArray(res) ? res[0].statusCode : res.statusCode);
@@ -85,6 +93,7 @@ async function sendMail(to, subject, text, html) {
     }
 
     // Fallback to nodemailer transporter
+    console.log(`[Mailer] Sending via nodemailer SMTP to ${to}, from ${from}`);
     const info = await transporter.sendMail({ from, to, subject, text, html });
     console.log('Mail send result (SMTP/jsonTransport):', info && (info.messageId || info));
     return info;
