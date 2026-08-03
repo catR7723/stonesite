@@ -1,2 +1,2 @@
-comando per sviluppo:
+
 NODE_ENV=development node index.js
