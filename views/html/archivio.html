@@ -42,191 +42,231 @@
 
     <div class="dev">CatRobotics DevSolutions</div>
 
-    <script>
+  <script>
     let allRecipes = [];
-    // 💡 Variabile globale per salvare lo stato dell'utente
     let isCucinaUser = false; 
 
-    // Eseguiamo il controllo del ruolo non appena la pagina è pronta
+    // Helper per estrarre in modo sicuro i dati dei piatti (primo, secondo, contorno)
+    function getPiatto(p) {
+        if (!p || typeof p !== 'object') return null;
+        return {
+            titolo: p.titolo || p.nome || p.title || '',
+            imageUrl: p.imageUrl || p.url || p.immagine || p.foto || '',
+            ingredienti: p.ingredienti || p.ingredients || '',
+            descrizione: p.descrizione || p.preparazione || p.procedimento || ''
+        };
+    }
+
+    // Controllo permessi e avvio al caricamento della pagina
     document.addEventListener('DOMContentLoaded', async () => {
         try {
             const authResponse = await fetch('/check-ruolo-cucina');
             const authData = await authResponse.json();
             
-            // Se autorizzato, impostiamo la variabile su true
             if (authData.autorizzato) {
                 isCucinaUser = true;
                 console.log('✅ Utente abilitato come cucina.');
             } else {
-                console.log('🔒 Utente non abilitato. I controlli di eliminazione rimarranno nascosti.');
+                console.log('🔒 Utente non abilitato come cucina.');
             }
         } catch (err) {
             console.error('Errore nel controllo autenticazione:', err);
         }
         
-        // Avvia il caricamento dei dati delle ricette dopo il controllo di sicurezza
         loadArchivio();
     });
 
-    // Carica l'archivio
+    // Caricamento dell'archivio dal server
     async function loadArchivio() {
         try {
             const response = await fetch('/archivio-api');
-            if (!response.ok) throw new Error('Errore nel caricamento');
+            if (!response.ok) throw new Error('Errore durante la risposta del server');
             
-            allRecipes = await response.json();
-            console.log('Archivio caricato:', allRecipes.length, 'ricette');
+            const rawData = await response.json();
             
+            // Estrae l'array sia che arrivi diretto [...] sia che sia in { data: [...] } o { recipes: [...] }
+            allRecipes = Array.isArray(rawData) ? rawData : (rawData.recipes || rawData.data || rawData.archivio || []);
+            
+            console.log('📦 Ricette caricate da MongoDB (archivios):', allRecipes);
             displayArchivio(allRecipes);
         } catch (err) {
-            console.error('Errore:', err);
+            console.error('Errore di caricamento:', err);
             document.getElementById('archivioContainer').innerHTML = 
                 '<p class="error">Errore nel caricamento dell\'archivio</p>';
         }
     }
 
-    // Visualizza le ricette
+    // Renderizzazione delle schede nell'HTML
     function displayArchivio(recipes) {
         const container = document.getElementById('archivioContainer');
+        if (!container) return;
         
-        if (recipes.length === 0) {
+        if (!Array.isArray(recipes) || recipes.length === 0) {
             container.innerHTML = '<p class="empty">Nessuna ricetta nell\'archivio</p>';
             return;
         }
 
-        container.innerHTML = recipes.map((recipe, index) => `
-            <div class="recipe-card" data-id="${recipe._id}">
-                <div class="recipe-header">
-                    <h2>${recipe.title}</h2>
-                    <span class="date">${new Date(recipe.archiviataIl).toLocaleDateString('it-IT')}</span>
-                </div>
-                
-                <div class="recipe-content">
-                    ${recipe.primo ? `
-                        <div class="piatto">
-                            <h3>🍝 Primo</h3>
-                            <p><strong>${recipe.primo.titolo}</strong></p>
-                            ${recipe.primo.imageUrl ? `<img src="${recipe.primo.imageUrl}" alt="Primo" class="piatto-img">` : ''}
-                        </div>
-                    ` : ''}
-                    
-                    ${recipe.secondo ? `
-                        <div class="piatto">
-                            <h3>🍖 Secondo</h3>
-                            <p><strong>${recipe.secondo.titolo}</strong></p>
-                            ${recipe.secondo.imageUrl ? `<img src="${recipe.secondo.imageUrl}" alt="Secondo" class="piatto-img">` : ''}
-                        </div>
-                    ` : ''}
-                    
-                    ${recipe.contorno ? `
-                        <div class="piatto">
-                            <h3>🥗 Contorno</h3>
-                            <p><strong>${recipe.contorno.titolo}</strong></p>
-                            ${recipe.contorno.imageUrl ? `<img src="${recipe.contorno.imageUrl}" alt="Contorno" class="piatto-img">` : ''}
-                        </div>
-                    ` : ''}
-                </div>
-                
-                <div class="recipe-actions">
-                    <button class="btn-view" onclick="viewRecipe('${recipe._id}')">👁️ Visualizza</button>
-                    <button class="btn-delete" onclick="deleteRecipe('${recipe._id}', '${recipe.title}')">🗑️ Elimina</button>
-                </div>
-            </div>
-        `).join('');
+        container.innerHTML = recipes.map((recipe) => {
+            const primo = getPiatto(recipe.primo);
+            const secondo = getPiatto(recipe.secondo);
+            const contorno = getPiatto(recipe.contorno);
 
-        // 💡 AGGIORNAMENTO DI SICUREZZA VISIVA: 
-        // Se l'utente è "cucina", forziamo la visualizzazione dei bottoni appena creati
+            // Formattazione data archiviazione
+            const dataFormatted = recipe.archiviataIl 
+                ? new Date(recipe.archiviataIl).toLocaleDateString('it-IT') 
+                : '';
+
+            return `
+                <div class="recipe-card" data-id="${recipe._id}">
+                    <div class="recipe-header">
+                        <h2>${recipe.title || 'Ricetta Senza Titolo'}</h2>
+                        ${dataFormatted ? `<span class="date">${dataFormatted}</span>` : ''}
+                    </div>
+                    
+                    <div class="recipe-content">
+                        ${primo && primo.titolo ? `
+                            <div class="piatto">
+                                <h3>🍝 Primo</h3>
+                                <p><strong>${primo.titolo}</strong></p>
+                                ${primo.imageUrl ? `<img src="${primo.imageUrl}" alt="Primo" class="piatto-img">` : ''}
+                            </div>
+                        ` : ''}
+                        
+                        ${secondo && secondo.titolo ? `
+                            <div class="piatto">
+                                <h3>🍖 Secondo</h3>
+                                <p><strong>${secondo.titolo}</strong></p>
+                                ${secondo.imageUrl ? `<img src="${secondo.imageUrl}" alt="Secondo" class="piatto-img">` : ''}
+                            </div>
+                        ` : ''}
+                        
+                        ${contorno && contorno.titolo ? `
+                            <div class="piatto">
+                                <h3>🥗 Contorno</h3>
+                                <p><strong>${contorno.titolo}</strong></p>
+                                ${contorno.imageUrl ? `<img src="${contorno.imageUrl}" alt="Contorno" class="piatto-img">` : ''}
+                            </div>
+                        ` : ''}
+                    </div>
+                    
+                    <div class="recipe-actions">
+                        <button class="btn-view" onclick="viewRecipe('${recipe._id}')">👁️ Visualizza</button>
+                        <button class="btn-delete" onclick="deleteRecipe('${recipe._id}')">🗑️ Elimina</button>
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+        // Mostra i bottoni elimina se l'utente ha il ruolo cucina
         if (isCucinaUser) {
-            const bottoniElimina = container.querySelectorAll('.btn-delete');
-            bottoniElimina.forEach(btn => {
+            container.querySelectorAll('.btn-delete').forEach(btn => {
                 btn.style.setProperty('display', 'inline-block', 'important');
             });
         }
     }
 
-    // Filtra e ordina
-   function filterAndSort() {
-    const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-    const sortBy = document.getElementById('filterSort').value;
+    // Filtra e ordina le ricette
+    function filterAndSort() {
+        const searchInput = document.getElementById('searchInput');
+        const filterSort = document.getElementById('filterSort');
+        const searchTerm = searchInput ? searchInput.value.toLowerCase().trim() : '';
+        const sortBy = filterSort ? filterSort.value : 'recent';
 
-    let filtered = allRecipes.filter(recipe => 
-        recipe.title.toLowerCase().includes(searchTerm)
-    );
-
-    if (sortBy === 'recent') {
-        filtered.sort((a, b) => new Date(b.archiviataIl) - new Date(a.archiviataIl));
-    } else if (sortBy === 'oldest') {
-        filtered.sort((a, b) => new Date(a.archiviataIl) - new Date(b.archiviataIl));
-    } else if (sortBy === 'title') {
-        filtered.sort((a, b) => a.title.localeCompare(b.title));
-    }
-
-    displayArchivio(filtered);
-
-    // 💡 Mantiene visibili i bottoni elimina anche dopo aver usato la barra di ricerca!
-    if (isCucinaUser) {
-        document.querySelectorAll('.btn-delete').forEach(btn => {
-            btn.style.setProperty('display', 'inline-block', 'important');
+        let filtered = allRecipes.filter(recipe => {
+            const title = (recipe.title || '').toLowerCase();
+            const primo = (recipe.primo?.titolo || recipe.primo?.nome || '').toLowerCase();
+            const secondo = (recipe.secondo?.titolo || recipe.secondo?.nome || '').toLowerCase();
+            const contorno = (recipe.contorno?.titolo || recipe.contorno?.nome || '').toLowerCase();
+            
+            return title.includes(searchTerm) || 
+                   primo.includes(searchTerm) || 
+                   secondo.includes(searchTerm) || 
+                   contorno.includes(searchTerm);
         });
+
+        if (sortBy === 'recent') {
+            filtered.sort((a, b) => new Date(b.archiviataIl || 0) - new Date(a.archiviataIl || 0));
+        } else if (sortBy === 'oldest') {
+            filtered.sort((a, b) => new Date(a.archiviataIl || 0) - new Date(b.archiviataIl || 0));
+        } else if (sortBy === 'title') {
+            filtered.sort((a, b) => (a.title || '').localeCompare(b.title || ''));
+        }
+
+        displayArchivio(filtered);
     }
-}
 
-// Assicurati che ci siano anche i listener agganciati agli elementi di input:
-document.getElementById('searchInput').addEventListener('input', filterAndSort);
-document.getElementById('filterSort').addEventListener('change', filterAndSort);
+    // Collegamento event listeners per ricerca e ordinamento
+    document.addEventListener('DOMContentLoaded', () => {
+        const searchInput = document.getElementById('searchInput');
+        const filterSort = document.getElementById('filterSort');
+        if (searchInput) searchInput.addEventListener('input', filterAndSort);
+        if (filterSort) filterSort.addEventListener('change', filterAndSort);
+    });
 
-
-    // Visualizza ricetta in dettaglio
+    // Modale di visualizzazione dettaglio
     async function viewRecipe(id) {
         const recipe = allRecipes.find(r => r._id === id);
         if (!recipe) return;
+
+        const primo = getPiatto(recipe.primo);
+        const secondo = getPiatto(recipe.secondo);
+        const contorno = getPiatto(recipe.contorno);
+        const dataFormatted = recipe.archiviataIl 
+            ? new Date(recipe.archiviataIl).toLocaleDateString('it-IT') 
+            : '';
 
         const modal = document.createElement('div');
         modal.className = 'modal';
         modal.innerHTML = `
             <div class="modal-content">
-                <span class="close" onclick="this.parentElement.parentElement.remove()">✕</span>
-                <h1>${recipe.title}</h1>
-                <p class="meta">Archiviata il: ${new Date(recipe.archiviataIl).toLocaleDateString('it-IT')}</p>
+                <span class="close" onclick="this.closest('.modal').remove()">✕</span>
+                <h1>${recipe.title || 'Ricetta'}</h1>
+                ${dataFormatted ? `<p class="meta">Archiviata il: ${dataFormatted}</p>` : ''}
                 
-                ${recipe.primo ? `
+                ${primo && primo.titolo ? `
                     <div class="modal-section">
-                        <h2>🍝 Primo: ${recipe.primo.titolo}</h2>
-                        ${recipe.primo.imageUrl ? `<img src="${recipe.primo.imageUrl}" alt="Primo">` : ''}
-                        <p><strong>Ingredienti:</strong> ${recipe.primo.ingredienti}</p>
-                        <p><strong>Preparazione:</strong> ${recipe.primo.descrizione}</p>
+                        <h2>🍝 Primo: ${primo.titolo}</h2>
+                        ${primo.imageUrl ? `<img src="${primo.imageUrl}" alt="Primo">` : ''}
+                        ${primo.ingredienti ? `<p><strong>Ingredienti:</strong> ${primo.ingredienti}</p>` : ''}
+                        ${primo.descrizione ? `<p><strong>Preparazione:</strong> ${primo.descrizione}</p>` : ''}
                     </div>
                 ` : ''}
                 
-                ${recipe.secondo ? `
+                ${secondo && secondo.titolo ? `
                     <div class="modal-section">
-                        <h2>🍖 Secondo: ${recipe.secondo.titolo}</h2>
-                        ${recipe.secondo.imageUrl ? `<img src="${recipe.secondo.imageUrl}" alt="Secondo">` : ''}
-                        <p><strong>Ingredienti:</strong> ${recipe.secondo.ingredienti}</p>
-                        <p><strong>Preparazione:</strong> ${recipe.secondo.descrizione}</p>
+                        <h2>🍖 Secondo: ${secondo.titolo}</h2>
+                        ${secondo.imageUrl ? `<img src="${secondo.imageUrl}" alt="Secondo">` : ''}
+                        ${secondo.ingredienti ? `<p><strong>Ingredienti:</strong> ${secondo.ingredienti}</p>` : ''}
+                        ${secondo.descrizione ? `<p><strong>Preparazione:</strong> ${secondo.descrizione}</p>` : ''}
                     </div>
                 ` : ''}
                 
-                ${recipe.contorno ? `
+                ${contorno && contorno.titolo ? `
                     <div class="modal-section">
-                        <h2>🥗 Contorno: ${recipe.contorno.titolo}</h2>
-                        ${recipe.contorno.imageUrl ? `<img src="${recipe.contorno.imageUrl}" alt="Contorno">` : ''}
-                        <p><strong>Ingredienti:</strong> ${recipe.contorno.ingredienti}</p>
-                        <p><strong>Preparazione:</strong> ${recipe.contorno.descrizione}</p>
+                        <h2>🥗 Contorno: ${contorno.titolo}</h2>
+                        ${contorno.imageUrl ? `<img src="${contorno.imageUrl}" alt="Contorno">` : ''}
+                        ${contorno.ingredienti ? `<p><strong>Ingredienti:</strong> ${contorno.ingredienti}</p>` : ''}
+                        ${contorno.descrizione ? `<p><strong>Preparazione:</strong> ${contorno.descrizione}</p>` : ''}
                     </div>
                 ` : ''}
             </div>
         `;
+
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) modal.remove();
+        });
+
         document.body.appendChild(modal);
     }
 
-    // Elimina ricetta dall'archivio (con eliminazione da Cloudinary e MongoDB)
-    async function deleteRecipe(id, recipeTitle) {
-        if (!confirm('Eliminare definitivamente questa ricetta? Verranno eliminate anche tutte le immagini da Cloudinary.')) return;
+    // Cancellazione ricetta
+    async function deleteRecipe(id) {
+        const recipe = allRecipes.find(r => r._id === id);
+        const title = recipe ? recipe.title : 'questa ricetta';
+
+        if (!confirm(`Eliminare definitivamente "${title}"?`)) return;
 
         try {
-            console.log('🗑️ Inizio eliminazione ricetta:', recipeTitle);
-            
             const response = await fetch(`/archivio/${id}`, { 
                 method: 'DELETE',
                 headers: { 'Content-Type': 'application/json' }
@@ -234,7 +274,6 @@ document.getElementById('filterSort').addEventListener('change', filterAndSort);
             
             if (response.ok) {
                 alert('Ricetta eliminata correttamente!');
-                // Ricarica la lista aggiornata
                 loadArchivio();
             } else {
                 const errData = await response.json();
