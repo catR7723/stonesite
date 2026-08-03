@@ -895,5 +895,210 @@ function goToStep(step) {
       <button class="btn" type="submit" id="logout">LogOut</button>
     </form>
   </div>
+<!-- Sezione Gestione Archivio -->
+<div class="gestione-archivio-container">
+    <div class="gestione-archivio-header">
+        <h2>🗑️ Gestione ed Eliminazione Ricette</h2>
+        <p>Elenco delle ricette attualmente pubblicate nell'archivio pubblico. L'eliminazione rimuoverà anche i media da Cloudinary.</p>
+    </div>
+    
+    <div class="gestione-archivio-search">
+        <input type="text" id="searchDeleteInput" placeholder="Filtra ricette per titolo..." oninput="filtraRicetteDaEliminare()">
+    </div>
+
+    <ul id="listaRicetteElimina" class="lista-elimina-grid">
+        <li class="stato-lista">Caricamento ricette in corso...</li>
+    </ul>
+</div>
+
+<!-- Stili CSS dedicati alla sezione gestione (Puoi spostarli nel tuo file .css se preferisci) -->
+<style>
+    .gestione-archivio-container {
+        background: #ffffff;
+        border-radius: 12px;
+        padding: 25px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        margin-top: 40px;
+        font-family: system-ui, -apple-system, sans-serif;
+    }
+    .gestione-archivio-header h2 {
+        margin-top: 0;
+        color: #2c3e50;
+        font-size: 1.5rem;
+    }
+    .gestione-archivio-header p {
+        color: #7f8c8d;
+        font-size: 0.9rem;
+        margin-bottom: 20px;
+    }
+    .gestione-archivio-search input {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #dfe6e9;
+        border-radius: 8px;
+        font-size: 0.95rem;
+        margin-bottom: 15px;
+        box-sizing: border-box;
+        transition: border 0.2s;
+    }
+    .gestione-archivio-search input:focus {
+        border-color: #3498db;
+        outline: none;
+    }
+    .lista-elimina-grid {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        max-height: 400px;
+        overflow-y: auto;
+        border: 1px solid #f1f2f6;
+        border-radius: 8px;
+    }
+    .item-ricetta-elimina {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 14px 20px;
+        border-bottom: 1px solid #f1f2f6;
+        transition: background-color 0.2s;
+    }
+    .item-ricetta-elimina:last-child {
+        border-bottom: none;
+    }
+    .item-ricetta-elimina:hover {
+        background-color: #fafafa;
+    }
+    .info-ricetta {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+    .titolo-ricetta {
+        font-weight: 600;
+        color: #2d3436;
+    }
+    .data-ricetta {
+        font-size: 0.8rem;
+        color: #b2bec3;
+    }
+    .btn-action-delete {
+        background-color: #ff7675;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        cursor: pointer;
+        border-radius: 6px;
+        font-weight: 500;
+        transition: background-color 0.2s, transform 0.1s;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+    .btn-action-delete:hover {
+        background-color: #d63031;
+    }
+    .btn-action-delete:active {
+        transform: scale(0.97);
+    }
+    .stato-lista {
+        padding: 20px;
+        text-align: center;
+        color: #7f8c8d;
+        font-style: italic;
+    }
+</style>
+
+<!-- Logica JavaScript per il recupero e filtraggio dinamico -->
+<script>
+    let cacheRicetteElimina = [];
+
+    document.addEventListener('DOMContentLoaded', () => {
+        caricaRicettePerEliminazione();
+    });
+
+    async function caricaRicettePerEliminazione() {
+        try {
+            const response = await fetch('/archivio-api');
+            if (!response.ok) throw new Error('Errore di rete');
+            
+            const rawData = await response.json();
+            // Allineamento con le possibili strutture dell'array dal tuo database
+            cacheRicetteElimina = Array.isArray(rawData) ? rawData : (rawData.recipes || rawData.data || rawData.archivio || []);
+            
+            renderListaElimina(cacheRicetteElimina);
+        } catch (err) {
+            console.error('Errore nel caricamento della lista di rimozione:', err);
+            document.getElementById('listaRicetteElimina').innerHTML = '<li class="stato-lista" style="color: #e74c3c;">Impossibile caricare le ricette.</li>';
+        }
+    }
+
+    function renderListaElimina(ricette) {
+        const lista = document.getElementById('listaRicetteElimina');
+        if (!ricette || ricette.length === 0) {
+            lista.innerHTML = '<li class="stato-lista">Nessuna ricetta trovata nell\'archivio.</li>';
+            return;
+        }
+
+        lista.innerHTML = ricette.map(ricetta => {
+            const dataFormatted = recipeDateFormatted(ricetta.archiviataIl);
+            return `
+                <li class="item-ricetta-elimina">
+                    <div class="info-ricetta">
+                        <span class="titolo-ricetta">${ricetta.title || 'Senza Titolo'}</span>
+                        ${dataFormatted ? `<span class="data-ricetta">Archiviata il: ${dataFormatted}</span>` : ''}
+                    </div>
+                    <button class="btn-action-delete" onclick="eliminaRicetta('${ricetta._id}')">
+                        🗑️ Elimina
+                    </button>
+                </li>
+            `;
+        }).join('');
+    }
+
+    function filtraRicetteDaEliminare() {
+        const query = document.getElementById('searchDeleteInput').value.toLowerCase().trim();
+        const filtrate = cacheRicetteElimina.filter(r => (r.title || '').toLowerCase().includes(query));
+        renderListaElimina(filtrate);
+    }
+
+    function recipeDateFormatted(dateString) {
+        if (!dateString) return '';
+        try {
+            return new Date(dateString).toLocaleDateString('it-IT');
+        } catch(e) {
+            return '';
+        }
+    }
+
+    async function eliminaRicetta(id) {
+        if (!confirm("Sei sicuro di voler eliminare questa ricetta definitivamente? L'operazione cancellerà anche i file multimediali da Cloudinary.")) return;
+
+        try {
+            const response = await fetch(`/elimina-ricetta-api/${id}`, { 
+                method: 'DELETE',
+                credentials: 'include' // Invia in sicurezza il cookie di sessione della cucina
+            });
+            
+            const data = await response.json();
+
+            if (response.ok) {
+                alert("Ricetta rimossa correttamente da MongoDB e Cloudinary!");
+                // Resetta l'input di ricerca e aggiorna l'elenco locale
+                document.getElementById('searchDeleteInput').value = '';
+                caricaRicettePerEliminazione();
+                
+                // Opzionale: se nella pagina c'è una funzione globale per aggiornare altri dati, richiamala qui
+                if (typeof loadArchivio === 'function') loadArchivio();
+            } else {
+                alert("Errore: " + (data.error || "Azione non consentita. Verifica i tuoi permessi."));
+            }
+        } catch (err) {
+            console.error("Errore di rete durante la cancellazione:", err);
+            alert("Errore di connessione con il server.");
+        }
+    }
+</script>
+
+
 </body>
 </html>
