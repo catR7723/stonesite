@@ -45,9 +45,10 @@ module.exports = (upload, cloudinary) => {
   });
 
   // Alias protetto /cucina -> cucinaInsert.html
-  router.get('/cucina', ensureCucinaAllowed, (req, res) => {
-    return res.sendFile(path.join(__dirname, '..', 'cucinaInsert.html'));
-  });
+router.get('/cucina', ensureCucinaAllowed, (req, res) => {
+    return res.sendFile(path.join(__dirname, '..', 'views', 'cucinaInsert.html'));
+});
+
 
   // Helper: upload a Cloudinary via upload_stream
   const uploadToCloudinary = (buffer, fileName, folder, resourceType = 'image') =>
