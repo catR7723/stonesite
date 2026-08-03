@@ -1,14 +1,16 @@
 // utils/mailer.js
-// Env-aware mailer: in production uses SendGrid Web API if available; otherwise falls back to SMTP. In non-production or when MAIL_ENABLED=false it logs emails.
+// Env-aware mailer: in production uses Mailgun API if available; otherwise falls back to SMTP. In non-production or when MAIL_ENABLED=false it logs emails.
 require('dotenv').config();
 const nodemailer = require('nodemailer');
+const formData = require('form-data');
+const Mailgun = require('mailgun.js');
 
 const isProd = process.env.NODE_ENV === 'production';
 const mailEnabled = process.env.MAIL_ENABLED !== 'false'; // default true
 
 let transporter = null;
-let sendgrid = null;
-let useSendGridApi = false;
+let mgClient = null;
+let useMailgunApi = false;
 
 function formatFrom() {
   const raw = process.env.MAIL_FROM || process.env.EMAIL_FROM || process.env.EMAIL_USER || '';
@@ -33,18 +35,19 @@ function formatFrom() {
   return 'no-reply@example.com';
 }
 
-// Prefer SendGrid Web API on production when SENDGRID_API_KEY is set
-if (isProd && mailEnabled && process.env.SENDGRID_API_KEY) {
+// Prefer Mailgun API on production when MAILGUN_API_KEY and MAILGUN_DOMAIN are set
+if (isProd && mailEnabled && process.env.MAILGUN_API_KEY && process.env.MAILGUN_DOMAIN) {
   try {
-    sendgrid = require('@sendgrid/mail');
-    const keyLen = process.env.SENDGRID_API_KEY.length;
-    const keyStart = process.env.SENDGRID_API_KEY.substring(0, 10);
-    console.log(`[Mailer] Setting SendGrid API key (length: ${keyLen}, starts with: ${keyStart}...)`);
-    sendgrid.setApiKey(process.env.SENDGRID_API_KEY);
-    useSendGridApi = true;
-    console.log('Mailer: using SendGrid Web API');
+    const mailgun = new Mailgun(formData);
+    mgClient = mailgun.client({
+      username: 'api',
+      key: process.env.MAILGUN_API_KEY,
+      url: process.env.MAILGUN_URL || 'https://api.mailgun.net' // defaults to US region
+    });
+    useMailgunApi = true;
+    console.log('Mailer: using Mailgun API');
   } catch (e) {
-    console.warn('SendGrid API client not available, falling back to SMTP:', e.message);
+    console.warn('Mailgun API client not available, falling back to SMTP:', e.message);
   }
 } else {
   if (isProd && mailEnabled) {
@@ -52,15 +55,15 @@ if (isProd && mailEnabled && process.env.SENDGRID_API_KEY) {
   }
 }
 
-if (!useSendGridApi && isProd && mailEnabled) {
-  // Use SMTP transport (configurable via env)
+if (!useMailgunApi && isProd && mailEnabled) {
+  // Use SMTP transport (configurable via env) as fallback
   transporter = nodemailer.createTransport({
-    host: process.env.SMTP_HOST || 'smtp.sendgrid.net',
+    host: process.env.SMTP_HOST || 'smtp.mailgun.org',
     port: Number(process.env.SMTP_PORT) || 587,
     secure: Number(process.env.SMTP_SECURE) === 1 || process.env.SMTP_SECURE === 'true' || false,
     auth: {
-      user: process.env.SMTP_USER || 'apikey',
-      pass: process.env.SENDGRID_API_KEY || process.env.SMTP_PASS
+      user: process.env.SMTP_USER,
+      pass: process.env.SMTP_PASS
     }
   });
 
@@ -76,19 +79,25 @@ if (!useSendGridApi && isProd && mailEnabled) {
 
 async function sendMail(to, subject, text, html) {
   const from = formatFrom();
-  const msg = { to, from, subject, text, html };
-
+  
   if (!mailEnabled) {
     console.log('[MAIL DISABLED] to=%s subject=%s text=%s', to, subject, text);
     return { messageId: `disabled-${Date.now()}` };
   }
 
   try {
-    if (useSendGridApi && sendgrid) {
-      console.log(`[Mailer] Sending via SendGrid API to ${to}, from ${from}`);
-      // sendgrid.send returns a promise that resolves to an array [response, body]
-      const res = await sendgrid.send(msg);
-      console.log('Mail sent via SendGrid API:', Array.isArray(res) ? res[0].statusCode : res.statusCode);
+    if (useMailgunApi && mgClient) {
+      // Mailgun API payload
+      const messageData = {
+        from: from,
+        to: [to],
+        subject: subject,
+        text: text,
+        html: html
+      };
+
+      const res = await mgClient.messages.create(process.env.MAILGUN_DOMAIN, messageData);
+      console.log('Mail sent via Mailgun API:', res.status || res.message);
       return res;
     }
 
