@@ -367,12 +367,40 @@ connectDB()
     process.exit(1);
   });
 
-  // ============ ARCHIVIO ============
+// Helper function: estrae il public_id di Cloudinary dall'URL dell'immagine
+// Funziona con url del tipo: https://cloudinary.com -> restituisce "cartella/nome_foto"
+function getCloudinaryPublicId(url) {
+    if (!url || !url.includes('cloudinary.com')) return null;
+    try {
+        const parts = url.split('/upload/');
+        if (parts.length < 2) return null;
+        
+        // Rimuove la versione (es: v1234567/) se presente
+        let remaining = parts[1];
+        if (remaining.startsWith('v')) {
+            const firstSlash = remaining.indexOf('/');
+            remaining = remaining.substring(firstSlash + 1);
+        }
+        
+        // Rimuove l'estensione del file (es: .jpg, .png)
+        const dotIndex = remaining.lastIndexOf('.');
+        if (dotIndex !== -1) {
+            remaining = remaining.substring(0, dotIndex);
+        }
+        return remaining;
+    } catch (err) {
+        console.error("Errore nel parsing dell'URL Cloudinary:", err);
+        return null;
+    }
+}
 
-  // 1. Rotta PUBBLICA: Chiunque può accedere per leggere le ricette dall'archivio
+//====================== ARCHIVIO ======================
+
+// ============ ARCHIVIO ============
+
+// 1. Rotta PUBBLICA: Chiunque può accedere per leggere le ricette dall'archivio
 app.get('/archivio-api', async (req, res) => {
     try {
-        // 'Archivio' è il modello Mongoose collegato alla collezione 'archivios'
         const ricette = await Archivio.find().sort({ archiviataIl: -1 });
         res.json(ricette);
     } catch (err) {
@@ -383,15 +411,70 @@ app.get('/archivio-api', async (req, res) => {
 
 // 2. Rotta per il controllo ruolo: Gestisce sia gli utenti loggati che i visitatori anonimi
 app.get('/check-ruolo-cucina', (req, res) => {
-    // Se c'è un utente in sessione ed è "cucina"
     if (req.session && req.session.user && req.session.user.role === 'cucina') {
         return res.json({ autorizzato: true });
     }
-    
-    // Per tutti i visitatori pubblici/anonimi o utenti non-cucina, 
-    // rispondiamo con HTTP 200 e autorizzato: false (SENZA generare errori 404 o 401)
     res.json({ autorizzato: false });
 });
+
+// 3. NUOVA Rotta PROTETTA: Incolla qui sotto il codice che ti ho dato per eliminare da DB e Cloudinary
+function getCloudinaryPublicId(url) {
+    // ... (tutto il codice della funzione che estrae l'ID)
+}
+
+app.delete('/elimina-ricetta-api/:id', async (req, res) => {
+    // ... (tutto il blocco app.delete che elimina da MongoDB e Cloudinary)
+});
+
+
+// 3. Rotta PROTETTA: Elimina la ricetta da MongoDB e le relative immagini da Cloudinary
+app.delete('/elimina-ricetta-api/:id', async (req, res) => {
+    // BLOCCO DI SICUREZZA: Solo l'utente 'cucina' può procedere
+    if (!req.session || !req.session.user || req.session.user.role !== 'cucina') {
+        return res.status(403).json({ error: 'Azione non autorizzata. Permessi insufficienti.' });
+    }
+
+    const recId = req.params.id;
+
+    try {
+        // 1. Trova la ricetta prima di eliminarla per accedere agli URL delle immagini
+        const ricetta = await Archivio.findById(recId);
+        
+        if (!ricetta) {
+            return res.status(404).json({ error: 'Ricetta non trovata nell\'archivio' });
+        }
+
+        // 2. Raccoglie i public_id di tutte le immagini presenti nella ricetta
+        const publicIdsDaEliminare = [];
+        const piatti = ['primo', 'secondo', 'contorno'];
+
+        piatti.forEach(tipoPiatto => {
+            if (ricetta[tipoPiatto] && ricetta[tipoPiatto].imageUrl) {
+                const pId = getCloudinaryPublicId(ricetta[tipoPiatto].imageUrl);
+                if (pId) publicIdsDaEliminare.push(pId);
+            }
+        });
+
+        // 3. Elimina i file da Cloudinary in modo asincrono (se presenti)
+        if (publicIdsDaEliminare.length > 0) {
+            console.log(`Eliminazione immagini da Cloudinary: ${publicIdsDaEliminare}`);
+            // Usiamo Promise.all per eliminare tutte le immagini in parallelo
+            await Promise.all(
+                publicIdsDaEliminare.map(id => cloudinary.uploader.destroy(id))
+            );
+        }
+
+        // 4. Elimina definitivamente il documento da MongoDB
+        await Archivio.findByIdAndDelete(recId);
+
+        res.json({ message: 'Ricetta e relative immagini eliminate con successo!' });
+
+    } catch (err) {
+        console.error('Errore durante l\'eliminazione della ricetta:', err);
+        res.status(500).json({ error: 'Errore interno del server durante l\'eliminazione' });
+    }
+});
+
 
 // ============ ROTTE HOME PUBBLICHE (fuori dal blocco di connessione) ============
 // serve la home (index.html) dalla root

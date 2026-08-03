@@ -5,11 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Archivio Ricette</title>
     <link rel="stylesheet" href="/assets/css/archivio.css">
-       <style>
-        .btn-delete {
-            display: none !important;
-        }
-    </style>
+
 </head>
 <body>
     <div class="menu">
@@ -59,7 +55,15 @@
 
     // Controllo permessi e avvio al caricamento della pagina
     document.addEventListener('DOMContentLoaded', async () => {
+        // Inizializza prima i controlli di ricerca e ordinamento
+        const searchInput = document.getElementById('searchInput');
+        const filterSort = document.getElementById('filterSort');
+        
+        if (searchInput) searchInput.addEventListener('input', filterAndSort);
+        if (filterSort) filterSort.addEventListener('change', filterAndSort);
+
         try {
+            // Controlla il ruolo sul server
             const authResponse = await fetch('/check-ruolo-cucina');
             const authData = await authResponse.json();
             
@@ -73,7 +77,8 @@
             console.error('Errore nel controllo autenticazione:', err);
         }
         
-        loadArchivio();
+        // Carica l'archivio solo DOPO aver capito se l'utente è cucina o meno
+        await loadArchivio();
     });
 
     // Caricamento dell'archivio dal server
@@ -84,10 +89,10 @@
             
             const rawData = await response.json();
             
-            // Estrae l'array sia che arrivi diretto [...] sia che sia in { data: [...] } o { recipes: [...] }
+            // Estrae l'array dei dati
             allRecipes = Array.isArray(rawData) ? rawData : (rawData.recipes || rawData.data || rawData.archivio || []);
             
-            console.log('📦 Ricette caricate da MongoDB (archivios):', allRecipes);
+            console.log('📦 Ricette caricate da MongoDB:', allRecipes);
             displayArchivio(allRecipes);
         } catch (err) {
             console.error('Errore di caricamento:', err);
@@ -111,7 +116,6 @@
             const secondo = getPiatto(recipe.secondo);
             const contorno = getPiatto(recipe.contorno);
 
-            // Formattazione data archiviazione
             const dataFormatted = recipe.archiviataIl 
                 ? new Date(recipe.archiviataIl).toLocaleDateString('it-IT') 
                 : '';
@@ -151,18 +155,12 @@
                     
                     <div class="recipe-actions">
                         <button class="btn-view" onclick="viewRecipe('${recipe._id}')">👁️ Visualizza</button>
-                        <button class="btn-delete" onclick="deleteRecipe('${recipe._id}')">🗑️ Elimina</button>
+                        <!-- Il bottone viene renderizzato visibile o invisibile in base a isCucinaUser -->
+                        <button class="btn-delete" style="display: ${isCucinaUser ? 'inline-block' : 'none'};" onclick="deleteRecipe('${recipe._id}')">🗑️ Elimina</button>
                     </div>
                 </div>
             `;
         }).join('');
-
-        // Mostra i bottoni elimina se l'utente ha il ruolo cucina
-        if (isCucinaUser) {
-            container.querySelectorAll('.btn-delete').forEach(btn => {
-                btn.style.setProperty('display', 'inline-block', 'important');
-            });
-        }
     }
 
     // Filtra e ordina le ricette
@@ -195,96 +193,29 @@
         displayArchivio(filtered);
     }
 
-    // Collegamento event listeners per ricerca e ordinamento
-    document.addEventListener('DOMContentLoaded', () => {
-        const searchInput = document.getElementById('searchInput');
-        const filterSort = document.getElementById('filterSort');
-        if (searchInput) searchInput.addEventListener('input', filterAndSort);
-        if (filterSort) filterSort.addEventListener('change', filterAndSort);
-    });
-
-    // Modale di visualizzazione dettaglio
-    async function viewRecipe(id) {
-        const recipe = allRecipes.find(r => r._id === id);
-        if (!recipe) return;
-
-        const primo = getPiatto(recipe.primo);
-        const secondo = getPiatto(recipe.secondo);
-        const contorno = getPiatto(recipe.contorno);
-        const dataFormatted = recipe.archiviataIl 
-            ? new Date(recipe.archiviataIl).toLocaleDateString('it-IT') 
-            : '';
-
-        const modal = document.createElement('div');
-        modal.className = 'modal';
-        modal.innerHTML = `
-            <div class="modal-content">
-                <span class="close" onclick="this.closest('.modal').remove()">✕</span>
-                <h1>${recipe.title || 'Ricetta'}</h1>
-                ${dataFormatted ? `<p class="meta">Archiviata il: ${dataFormatted}</p>` : ''}
-                
-                ${primo && primo.titolo ? `
-                    <div class="modal-section">
-                        <h2>🍝 Primo: ${primo.titolo}</h2>
-                        ${primo.imageUrl ? `<img src="${primo.imageUrl}" alt="Primo">` : ''}
-                        ${primo.ingredienti ? `<p><strong>Ingredienti:</strong> ${primo.ingredienti}</p>` : ''}
-                        ${primo.descrizione ? `<p><strong>Preparazione:</strong> ${primo.descrizione}</p>` : ''}
-                    </div>
-                ` : ''}
-                
-                ${secondo && secondo.titolo ? `
-                    <div class="modal-section">
-                        <h2>🍖 Secondo: ${secondo.titolo}</h2>
-                        ${secondo.imageUrl ? `<img src="${secondo.imageUrl}" alt="Secondo">` : ''}
-                        ${secondo.ingredienti ? `<p><strong>Ingredienti:</strong> ${secondo.ingredienti}</p>` : ''}
-                        ${secondo.descrizione ? `<p><strong>Preparazione:</strong> ${secondo.descrizione}</p>` : ''}
-                    </div>
-                ` : ''}
-                
-                ${contorno && contorno.titolo ? `
-                    <div class="modal-section">
-                        <h2>🥗 Contorno: ${contorno.titolo}</h2>
-                        ${contorno.imageUrl ? `<img src="${contorno.imageUrl}" alt="Contorno">` : ''}
-                        ${contorno.ingredienti ? `<p><strong>Ingredienti:</strong> ${contorno.ingredienti}</p>` : ''}
-                        ${contorno.descrizione ? `<p><strong>Preparazione:</strong> ${contorno.descrizione}</p>` : ''}
-                    </div>
-                ` : ''}
-            </div>
-        `;
-
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) modal.remove();
-        });
-
-        document.body.appendChild(modal);
-    }
-
-    // Cancellazione ricetta
+    // Funzione fittizia per eliminare la ricetta (da mappare con la tua logica di backend)
     async function deleteRecipe(id) {
-        const recipe = allRecipes.find(r => r._id === id);
-        const title = recipe ? recipe.title : 'questa ricetta';
-
-        if (!confirm(`Eliminare definitivamente "${title}"?`)) return;
-
+        if (!confirm("Sei sicuro di voler eliminare questa ricetta definitivamente?")) return;
+        
         try {
-            const response = await fetch(`/archivio/${id}`, { 
-                method: 'DELETE',
-                headers: { 'Content-Type': 'application/json' }
-            });
-            
+            const response = await fetch(`/elimina-ricetta-api/${id}`, { method: 'DELETE' });
             if (response.ok) {
-                alert('Ricetta eliminata correttamente!');
-                loadArchivio();
+                alert("Ricetta eliminata con successo!");
+                loadArchivio(); // Ricarica l'archivio aggiornato
             } else {
-                const errData = await response.json();
-                alert('Errore durante l\'eliminazione: ' + (errData.error || response.statusText));
+                alert("Errore durante l'eliminazione.");
             }
         } catch (err) {
-            console.error('Errore:', err);
-            alert('Errore di rete durante la cancellazione');
+            console.error("Errore di rete:", err);
         }
     }
+
+    // Funzione fittizia per visualizzare la ricetta
+    function viewRecipe(id) {
+        window.location.href = `/ricetta/${id}`;
+    }
 </script>
+
 
 </body>
 </html>
