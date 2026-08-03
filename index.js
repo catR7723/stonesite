@@ -396,7 +396,6 @@ function getCloudinaryPublicId(url) {
 
 //====================== ARCHIVIO ======================
 
-// ============ ARCHIVIO ============
 
 // 1. Rotta PUBBLICA: Chiunque può accedere per leggere le ricette dall'archivio
 app.get('/archivio-api', async (req, res) => {
