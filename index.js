@@ -367,6 +367,32 @@ connectDB()
     process.exit(1);
   });
 
+  // ============ ARCHIVIO ============
+
+  // 1. Rotta PUBBLICA: Chiunque può accedere per leggere le ricette dall'archivio
+app.get('/archivio-api', async (req, res) => {
+    try {
+        // 'Archivio' è il modello Mongoose collegato alla collezione 'archivios'
+        const ricette = await Archivio.find().sort({ archiviataIl: -1 });
+        res.json(ricette);
+    } catch (err) {
+        console.error('Errore nel recupero dell\'archivio:', err);
+        res.status(500).json({ error: 'Errore del server nel recupero dati' });
+    }
+});
+
+// 2. Rotta per il controllo ruolo: Gestisce sia gli utenti loggati che i visitatori anonimi
+app.get('/check-ruolo-cucina', (req, res) => {
+    // Se c'è un utente in sessione ed è "cucina"
+    if (req.session && req.session.user && req.session.user.role === 'cucina') {
+        return res.json({ autorizzato: true });
+    }
+    
+    // Per tutti i visitatori pubblici/anonimi o utenti non-cucina, 
+    // rispondiamo con HTTP 200 e autorizzato: false (SENZA generare errori 404 o 401)
+    res.json({ autorizzato: false });
+});
+
 // ============ ROTTE HOME PUBBLICHE (fuori dal blocco di connessione) ============
 // serve la home (index.html) dalla root
 app.get('/', (req, res) => {
