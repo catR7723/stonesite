@@ -48,7 +48,12 @@ if (isProd && !process.env.FRONTEND_ORIGIN) {
 }
 app.use(cors(corsOptions));
 
-// 3. Configurazione SESSIONE GLOBALE (Prima di tutte le rotte che usano la sessione)
+// 1. AGGIUNGI QUESTO PRIMA DELLA SESSIONE (Fondamentale in produzione su Vercel/Heroku/Render)
+if (isProd) {
+  app.set('trust proxy', 1); 
+}
+
+// 2. CONFIGURAZIONE SESSIONE GLOBALE
 app.use(session({
   secret: process.env.SESSION_SECRET || 'chiave-segreta-molto-sicura',
   resave: false,
@@ -58,13 +63,15 @@ app.use(session({
     ttl: 14 * 24 * 60 * 60 // 14 giorni
   }),
   cookie: {
-    secure: isProd, // true in produzione (HTTPS su Vercel)
+    secure: isProd, // true in produzione (HTTPS)
     httpOnly: true,
-    sameSite: isProd ? 'none' : 'lax',
+    // MODIFICATO: 'lax' è la scelta corretta se frontend e backend condividono lo stesso dominio
+    sameSite: 'lax', 
     maxAge: 1000 * 60 * 60 * 24 * 14
   },
   name: 'sessionId'
 }));
+
 
 // Multer config per Vercel (memory storage)
 const upload = multer({
