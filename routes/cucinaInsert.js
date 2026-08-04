@@ -205,7 +205,7 @@ router.get('/cucina', ensureCucinaAllowed, (req, res) => {
   });
 
   // GET /api/recipe/latest -> restituisce l'ultima ricetta dell'utente, ma normalizza le sezioni
-router.get('/api/recipe/latest', ensureCucinaAllowed, async (req, res) => {
+router.get('/api/recipe/latest', async (req, res) => {
   try {
     console.log('--- GET /api/recipe/latest --- session:', req.session && { userId: req.session.userId });
     const userId = req.session && req.session.userId;

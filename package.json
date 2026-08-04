@@ -26,6 +26,7 @@
     "balanced-match": "^4.0.4",
     "basic-auth": "^2.0.1",
     "bcrypt": "^6.0.0",
+    "bcryptjs": "^3.0.3",
     "binary-extensions": "^2.3.0",
     "body-parser": "^2.2.2",
     "boolbase": "^1.0.0",
