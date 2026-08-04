@@ -35,10 +35,7 @@ module.exports = (upload, cloudinary) => {
     return res.sendFile(path.join(__dirname, '..', 'views', 'html', 'cucina.html'));
   });
 
-  // Pagine riservate
-  router.get('/cucinaInsert', ensureCucinaAllowed, (req, res) => {
-    return res.sendFile(path.join(__dirname, '..', 'cucinaInsert.html'));
-  });
+
 
   router.get('/cineforumInsert', ensureCineforumAllowed, (req, res) => {
     return res.sendFile(path.join(__dirname, '..', 'cineforumInsert.html'));
@@ -46,7 +43,7 @@ module.exports = (upload, cloudinary) => {
 
   // Alias protetto /cucina -> cucinaInsert.html
 router.get('/cucina', ensureCucinaAllowed, (req, res) => {
-    return res.sendFile(path.join(__dirname, '..', 'views', 'cucinaInsert.html'));
+    return res.sendFile(path.join(__dirname, '..', 'views', 'html', 'cucinaInsert.html'));
 });
 
 
