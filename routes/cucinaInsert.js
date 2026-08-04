@@ -205,19 +205,21 @@ router.get('/cucina', ensureCucinaAllowed, (req, res) => {
   });
 
   // GET /api/recipe/latest -> restituisce l'ultima ricetta dell'utente, ma normalizza le sezioni
-router.get('/api/recipe/latest', async (req, res) => {
+// GET /api/recipe/latest -> restituisce l'ultima ricetta (PUBBLICA, accessibile a tutti)
+router.get('/api/recipe/latest', async (req, res) => { // Rimosso ensureCucinaAllowed
   try {
-    console.log('--- GET /api/recipe/latest --- session:', req.session && { userId: req.session.userId });
+    console.log('--- GET /api/recipe/latest (PUBBLICA) --- session:', req.session && { userId: req.session.userId });
     const userId = req.session && req.session.userId;
 
     let recipe = null;
+    // Se l'utente è loggato, prova a prendere la sua ultima ricetta
     if (userId) {
       recipe = await Recipe.findOne({ userId }).sort({ createdAt: -1 }).lean();
       console.log('by userId found?', !!recipe);
     }
 
+    // Se l'utente non è loggato (o non ha ricette), prendi l'ultima ricetta globale
     if (!recipe) {
-      // fallback: prendi l'ultima ricetta (globale) se non ci sono ricette con userId
       recipe = await Recipe.findOne({}).sort({ createdAt: -1 }).lean();
       console.log('fallback global latest found?', !!recipe);
     }
@@ -230,12 +232,11 @@ router.get('/api/recipe/latest', async (req, res) => {
       if (typeof sec === 'string') {
         return { titolo: '', ingredienti: '', descrizione: '', imageUrl: sec };
       }
-      // sec è oggetto: estrai campi attesi, con fallback
       return {
         titolo: sec.titolo || sec.title || '',
         ingredienti: sec.ingredienti || sec.ingredients || '',
         descrizione: sec.descrizione || sec.description || '',
-        imageUrl: sec.imageUrl || sec.pdfUrl || (typeof sec === 'string' ? sec : '') || ''
+        imageUrl: sec.imageUrl || sec.pdfUrl || ''
       };
     };
 
@@ -256,6 +257,7 @@ router.get('/api/recipe/latest', async (req, res) => {
     return res.status(500).json({ error: 'server error' });
   }
 });
+
 
   // POST /salvaMenuR (pubblica e archivia)
   router.post('/salvaMenuR', ensureCucinaAllowed, async (req, res) => {
