@@ -381,12 +381,18 @@ app.get('/archivio-api', async (req, res) => {
 });
 
 app.get('/check-ruolo-cucina', (req, res) => {
-    if (req.session && req.session.user && req.session.user.role === 'cucina') {
+ 
+    console.log('--- DEBUG SESSIONE ---');
+    console.log(' req.session:', req.session);
+    console.log(' req.session.user:', req.session ? req.session.user : 'Nessuna sessione');
+
+    // Usiamo .toLowerCase() per evitare problemi tra "Cucina" e "cucina"
+    if (req.session && req.session.user && req.session.user.role && req.session.user.role.toLowerCase() === 'cucina') {
         return res.json({ autorizzato: true });
     }
+    
     res.json({ autorizzato: false });
-}
-);
+});
 
 // Estrae il public_id di Cloudinary dall'URL dell'immagine
 function getCloudinaryPublicId(url) {
