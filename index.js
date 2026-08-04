@@ -315,43 +315,40 @@ connectDB()
     app.use('/', cucinaRouter);
 
     // ============ RECIPE ROUTES (restanti) ============
-    // GET /getImageUrls/:recipeTitle
     app.get('/getImageUrls/:recipeTitle', async (req, res) => {
-      try {
-        const { recipeTitle } = req.params;
-        const recipe = await Recipe.findOne({ title: recipeTitle });
+  try {
+    const { recipeTitle } = req.params;
+    const recipe = await Recipe.findOne({ title: recipeTitle });
 
-        if (!recipe) {
-          return res.status(404).json({ error: 'Ricetta non trovata' });
-        }
+    if (!recipe) {
+      return res.status(404).json({ error: 'Ricetta non trovata' });
+    }
 
-        return res.json({
-          primo: recipe.primo?.imageUrl,
-          primo_titolo: recipe.primo?.titolo,
-          primo_ingredienti: recipe.primo?.ingredienti,
-          primo_descrizione: recipe.primo?.descrizione,
+    return res.json({
+      primo: recipe.primo?.imageUrl,
+      primo_titolo: recipe.primo?.titolo,
+      primo_ingredienti: recipe.primo?.ingredienti,
+      primo_descrizione: recipe.primo?.descrizione,
 
-          secondo: recipe.secondo?.imageUrl,
-          secondo_titolo: recipe.secondo?.titolo,
-          secondo_ingredienti: recipe.secondo?.ingredienti,
-          secondo_descrizione: recipe.secondo?.descrizione,
+      secondo: recipe.secondo?.imageUrl,
+      secondo_titolo: recipe.secondo?.titolo,
+      secondo_ingredienti: recipe.secondo?.ingredienti,
+      secondo_descrizione: recipe.secondo?.descrizione,
 
-          contorno: recipe.contorno?.imageUrl,
-          contorno_titolo: recipe.contorno?.titolo,
-          contorno_ingredienti: recipe.contorno?.ingredienti,
-          contorno_descrizione: recipe.contorno?.descrizione,
+      contorno: recipe.contorno?.imageUrl,
+      contorno_titolo: recipe.contorno?.titolo,
+      contorno_ingredienti: recipe.contorno?.ingredienti,
+      contorno_descrizione: recipe.contorno?.descrizione,
 
-          ricetta: recipe.ricetta?.pdfUrl
-        });
-      } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: 'Errore server' });
-      }
+      ricetta: recipe.ricetta?.pdfUrl
     });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Errore server' });
+  }
+});
 
-    // (le altre POST /salvaPrimo, /salvaSecondo, ecc. rimangono invariate)
-    // copiale qui come nel file originale (omesse per brevità in questo snippet)
-    // --- se vuoi, posso reinserirle tutte esattamente come prima ---
+
 
     // ============ START SERVER ============
 
@@ -367,22 +364,43 @@ connectDB()
     process.exit(1);
   });
 
-// Helper function: estrae il public_id di Cloudinary dall'URL dell'immagine
-// Funziona con url del tipo: https://cloudinary.com -> restituisce "cartella/nome_foto"
+
+
+//====================== ARCHIVIO ======================
+
+
+// GET - Archivio Pubblico
+app.get('/archivio-api', async (req, res) => {
+    try {
+        const ricette = await Archivio.find().sort({ archiviataIl: -1 });
+        res.json(ricette);
+    } catch (err) {
+        console.error('Errore nel recupero dell\'archivio:', err);
+        res.status(500).json({ error: 'Errore del server nel recupero dati' });
+    }
+});
+
+app.get('/check-ruolo-cucina', (req, res) => {
+    if (req.session && req.session.user && req.session.user.role === 'cucina') {
+        return res.json({ autorizzato: true });
+    }
+    res.json({ autorizzato: false });
+}
+);
+
+// Estrae il public_id di Cloudinary dall'URL dell'immagine
 function getCloudinaryPublicId(url) {
     if (!url || !url.includes('cloudinary.com')) return null;
     try {
         const parts = url.split('/upload/');
         if (parts.length < 2) return null;
         
-        // Rimuove la versione (es: v1234567/) se presente
         let remaining = parts[1];
         if (remaining.startsWith('v')) {
             const firstSlash = remaining.indexOf('/');
             remaining = remaining.substring(firstSlash + 1);
         }
         
-        // Rimuove l'estensione del file (es: .jpg, .png)
         const dotIndex = remaining.lastIndexOf('.');
         if (dotIndex !== -1) {
             remaining = remaining.substring(0, dotIndex);
@@ -394,36 +412,7 @@ function getCloudinaryPublicId(url) {
     }
 }
 
-//====================== ARCHIVIO ======================
 
-
-// 1. Rotta PUBBLICA: Chiunque può accedere per leggere le ricette dall'archivio
-app.get('/archivio-api', async (req, res) => {
-    try {
-        const ricette = await Archivio.find().sort({ archiviataIl: -1 });
-        res.json(ricette);
-    } catch (err) {
-        console.error('Errore nel recupero dell\'archivio:', err);
-        res.status(500).json({ error: 'Errore del server nel recupero dati' });
-    }
-});
-
-// 2. Rotta per il controllo ruolo: Gestisce sia gli utenti loggati che i visitatori anonimi
-app.get('/check-ruolo-cucina', (req, res) => {
-    if (req.session && req.session.user && req.session.user.role === 'cucina') {
-        return res.json({ autorizzato: true });
-    }
-    res.json({ autorizzato: false });
-});
-
-// 3. NUOVA Rotta PROTETTA: Incolla qui sotto il codice che ti ho dato per eliminare da DB e Cloudinary
-function getCloudinaryPublicId(url) {
-    // ... (tutto il codice della funzione che estrae l'ID)
-}
-
-app.delete('/elimina-ricetta-api/:id', async (req, res) => {
-    // ... (tutto il blocco app.delete che elimina da MongoDB e Cloudinary)
-});
 
 
 // 3. Rotta PROTETTA: Elimina la ricetta da MongoDB e le relative immagini da Cloudinary
