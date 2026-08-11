@@ -70,15 +70,25 @@
                     <input type="password" id="newPassword" placeholder="Se vuoto verrà generata una password temporanea">
                 </div>
 
-                <div class="form-group">
-                    <label for="newRole">Pagina autorizzata:</label>
-                    <select id="newRole" required>
-                        <option value="">-- Seleziona pagina --</option>
-                        <option value="cineforum">Cineforum</option>
-                        <option value="cucina">Cucina</option>
-                        <option value="both">Entrambe</option>
-                    </select>
-                </div>
+               <div class="form-group">
+  <label for="newAllowedPage">Pagina autorizzata:</label>
+  <select id="newAllowedPage" required>
+    <option value="">-- Seleziona pagina --</option>
+    <option value="cineforum">Cineforum</option>
+    <option value="cucina">Cucina</option>
+    <option value="both">Entrambe</option>
+  </select>
+</div>
+
+<div class="form-group">
+  <label for="newRole">Ruolo:</label>
+  <select id="newRole" required>
+    <option value="">-- Seleziona ruolo --</option>
+    <option value="user">User</option>
+    <option value="cucina">Cucina</option>
+    <option value="boss">Boss</option>
+  </select>
+</div>
 
                 <button type="submit" class="btn-create" style="width: 100%;">
                     ➕ Crea Utente
@@ -233,15 +243,17 @@
   el('btnSendTemp').addEventListener('click', inviaPasswordTemporanea);
 
   // crea utente
-  el('createUserForm').addEventListener('submit', async (ev) => {
-    ev.preventDefault();
-    const username = el('newUsername').value.trim();
-    const email = el('newEmail').value.trim();
-    const password = el('newPassword').value;
-    const allowedPage = el('newRole').value;
-    if (!username || !email || !allowedPage) {
-      showMessage('Compila tutti i campi obbligatori', 'err'); return;
-    }
+ el('createUserForm').addEventListener('submit', async (ev) => {
+  ev.preventDefault();
+  const username = el('newUsername').value.trim();
+  const email = el('newEmail').value.trim();
+  const password = el('newPassword').value;
+  const allowedPage = el('newAllowedPage').value;
+  const role = el('newRole').value; // <-- qui
+
+  if (!username || !email || !allowedPage || !role) {
+    showMessage('Compila tutti i campi obbligatori', 'err'); return;
+  }
     const btn = ev.target.querySelector('button[type="submit"]');
     btn.disabled = true;
     try {

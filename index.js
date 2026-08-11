@@ -304,10 +304,22 @@ app.get('/admin/users', ensureBoss, async (req, res) => {
 // POST /admin/users
 app.post('/admin/users', ensureBoss, async (req, res) => {
   try {
-    const { username, email, allowedPage, password } = req.body;
+    const { username, email, allowedPage, password, role } = req.body;
+
+    // validazione minima
     if (!email || !allowedPage) return res.status(400).json({ error: 'Campi mancanti' });
 
-    if (await User.findOne({ email })) return res.status(400).json({ error: 'Email già esistente' });
+    const validRoles = ['boss', 'user', 'cucina'];
+    const validPages = ['cineforum', 'cucina', 'both'];
+
+    // validazione role (se non fornito, default 'user')
+    const finalRole = (role || 'user').toString();
+    if (!validRoles.includes(finalRole)) return res.status(400).json({ error: 'Ruolo non valido' });
+
+    if (!validPages.includes(allowedPage)) return res.status(400).json({ error: 'Pagina non valida' });
+
+    // controllo email unica
+    if (await User.findOne({ email })) return res.status(409).json({ error: 'Email già esistente' });
 
     let passwordHash;
     let tempPlain = null;
@@ -321,7 +333,7 @@ app.post('/admin/users', ensureBoss, async (req, res) => {
     const user = new User({
       username,
       email,
-      role: 'user',
+      role: finalRole,
       allowedPage,
       passwordHash,
       tempExpiresAt: tempPlain ? new Date(Date.now() + TEMP_TTL_MS) : null
@@ -334,9 +346,13 @@ app.post('/admin/users', ensureBoss, async (req, res) => {
       await sendMail(email, 'Account creato', `Il tuo account è stato creato. Usa la password che hai scelto per il login.`);
     }
 
-    return res.json({ ok: true, userId: user._id });
+    return res.status(201).json({ ok: true, userId: user._id });
   } catch (err) {
     console.error(err);
+    // gestione più robusta per conflitti unici
+    if (err && err.code === 11000) {
+      return res.status(409).json({ error: 'Chiave duplicata (email già esistente)' });
+    }
     return res.status(500).json({ error: 'Errore server' });
   }
 });
