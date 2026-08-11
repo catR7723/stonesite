@@ -10,6 +10,11 @@ const recipeSchema = new mongoose.Schema({
     type: String, 
     default: 'cucina' 
   },
+  // Flag per distinguere al volo il tipo di menu
+  isPiattoUnico: {
+    type: Boolean,
+    default: false
+  },
   folder: {
     type: String,
     get: function() {
@@ -29,6 +34,13 @@ const recipeSchema = new mongoose.Schema({
     imageUrl: String
   },
   contorno: {
+    titolo: String,
+    ingredienti: String,
+    descrizione: String,
+    imageUrl: String
+  },
+  // ➕ NUOVO CAMPO: Piatto Unico
+  piattoUnico: {
     titolo: String,
     ingredienti: String,
     descrizione: String,
@@ -52,7 +64,7 @@ const recipeSchema = new mongoose.Schema({
   }
 });
 
-// ✅ SCHEMA ARCHIVIO - Identico a Recipe ma senza unique
+// ✅ SCHEMA ARCHIVIO - Identico a Recipe ma senza unique su title e con archiviataIl
 const archivoSchema = new mongoose.Schema({
   title: { 
     type: String, 
@@ -61,6 +73,10 @@ const archivoSchema = new mongoose.Schema({
   category: { 
     type: String, 
     default: 'cucina' 
+  },
+  isPiattoUnico: {
+    type: Boolean,
+    default: false
   },
   folder: {
     type: String,
@@ -81,6 +97,13 @@ const archivoSchema = new mongoose.Schema({
     imageUrl: String
   },
   contorno: {
+    titolo: String,
+    ingredienti: String,
+    descrizione: String,
+    imageUrl: String
+  },
+  // ➕ NUOVO CAMPO: Piatto Unico in Archivio
+  piattoUnico: {
     titolo: String,
     ingredienti: String,
     descrizione: String,

@@ -12,35 +12,53 @@
 </div>
 
 <!-- STEP 1: Titolo del Menu -->
+
 <div id="recipe-title-section" class="step-container active">
   <h2>Step 1: Crea il titolo del menu</h2>
   <input type="text" id="recipeTitle" placeholder="Inserisci il titolo del menu della settimana" value="">
+  
+  <div style="margin: 15px 0;">
+    <button type="button" id="btnTogglePiattoUnico" class="btn" style="background-color: #6c757d;">
+      Piatto Unico: <span id="labelPiattoUnico">NO</span>
+    </button>
+  </div>
+
   <button type="button" id="btnCreateTitle" class="btn">Crea Titolo del Menu</button>
   <p id="titleStatus">Titolo: <strong id="currentTitle">-</strong></p>
 </div>
-
 <!-- STEP 2: Carica Immagini -->
 <div id="step-upload-images" class="step-container" style="display:none;">
   <h2>Step 2: Carica le immagini</h2>
   <form action="/cucinaInsert" method="POST" enctype="multipart/form-data" id="topForm">
     <input type="hidden" name="recipeTitle" id="recipeTitle_hidden">
+    <input type="hidden" name="isPiattoUnico" id="isPiattoUnico_hidden" value="false">
     
-    <div>
-      <label>Carica il Primo:</label>
-      <input type="file" name="primo" id="filePrimo" accept="image/*" required>
-      <img id="previewPrimo" src="" alt="Primo" style="display:none; max-width: 200px; margin-top: 10px; border-radius: 8px;">
+    <div id="wrapper-tre-portate">
+      <div>
+        <label>Carica il Primo:</label>
+        <input type="file" name="primo" id="filePrimo" accept="image/*">
+        <img id="previewPrimo" src="" alt="Primo" style="display:none; max-width: 200px; margin-top: 10px; border-radius: 8px;">
+      </div>
+      
+      <div style="margin-top: 20px;">
+        <label>Carica il Secondo:</label>
+        <input type="file" name="secondo" id="fileSecondo" accept="image/*">
+        <img id="previewSecondo" src="" alt="Secondo" style="display:none; max-width: 200px; margin-top: 10px; border-radius: 8px;">
+      </div>
+      
+      <div style="margin-top: 20px;">
+        <label>Carica il Contorno:</label>
+        <input type="file" name="contorno" id="fileContorno" accept="image/*">
+        <img id="previewContorno" src="" alt="Contorno" style="display:none; max-width: 200px; margin-top: 10px; border-radius: 8px;">
+      </div>
     </div>
-    
-    <div style="margin-top: 20px;">
-      <label>Carica il Secondo:</label>
-      <input type="file" name="secondo" id="fileSecondo" accept="image/*" required>
-      <img id="previewSecondo" src="" alt="Secondo" style="display:none; max-width: 200px; margin-top: 10px; border-radius: 8px;">
-    </div>
-    
-    <div style="margin-top: 20px;">
-      <label>Carica il Contorno:</label>
-      <input type="file" name="contorno" id="fileContorno" accept="image/*" required>
-      <img id="previewContorno" src="" alt="Contorno" style="display:none; max-width: 200px; margin-top: 10px; border-radius: 8px;">
+
+    <div id="wrapper-piatto-unico" style="display:none;">
+      <div>
+        <label>Carica Immagine Piatto Unico:</label>
+        <input type="file" name="piattoUnico" id="filePiattoUnico" accept="image/*">
+        <img id="previewPiattoUnico" src="" alt="Piatto Unico" style="display:none; max-width: 200px; margin-top: 10px; border-radius: 8px;">
+      </div>
     </div>
 
     <div style="margin-top: 20px;">
@@ -246,6 +264,7 @@
 <script>
 // ===== STATO GLOBALE =====
 let currentRecipeTitle = '';
+let isPiattoUnico = false;
 let recipeData = {
   primo: { titolo: '', ingredienti: '', descrizione: '', imageUrl: '' },
   secondo: { titolo: '', ingredienti: '', descrizione: '', imageUrl: '' },
@@ -275,6 +294,26 @@ document.getElementById('btnCreateTitle').addEventListener('click', async () => 
   // Vai allo Step 2
   goToStep(2);
 });
+
+document.getElementById('btnTogglePiattoUnico').addEventListener('click', () => {
+  isPiattoUnico = !isPiattoUnico;
+  const label = document.getElementById('labelPiattoUnico');
+  const btn = document.getElementById('btnTogglePiattoUnico');
+  
+  if (isPiattoUnico) {
+    label.textContent = 'SÌ';
+    btn.style.backgroundColor = '#28a745';
+    document.getElementById('wrapper-tre-portate').style.display = 'none';
+    document.getElementById('wrapper-piatto-unico').style.display = 'block';
+  } else {
+    label.textContent = 'NO';
+    btn.style.backgroundColor = '#6c757d';
+    document.getElementById('wrapper-tre-portate').style.display = 'block';
+    document.getElementById('wrapper-piatto-unico').style.display = 'none';
+  }
+  document.getElementById('isPiattoUnico_hidden').value = isPiattoUnico;
+});
+
 
 // ===== STEP 2: ANTEPRIMA IMMAGINI LOCALI =====
 document.getElementById('filePrimo').addEventListener('change', function() {
@@ -476,14 +515,35 @@ async function savePiatto(endpoint, data, tipo) {
     });
     
     if (response.ok) {
-      recipeData[tipo].titolo = data[`titolo_${tipo.charAt(0).toUpperCase() + tipo.slice(1)}`];
-      recipeData[tipo].ingredienti = data[`ingredienti_${tipo.charAt(0).toUpperCase() + tipo.slice(1)}`];
-      recipeData[tipo].descrizione = data[`descrizione_${tipo.charAt(0).toUpperCase() + tipo.slice(1)}`];
+      // Formatta la chiave con la prima lettera maiuscola (es. "Primo", "PiattoUnico")
+      const tipoKey = tipo.charAt(0).toUpperCase() + tipo.slice(1);
       
-      document.getElementById(`${tipo}-completato`).style.display = 'block';
+      // Assicura che l'oggetto nello stato locale esista
+      if (!recipeData[tipo]) {
+        recipeData[tipo] = { titolo: '', ingredienti: '', descrizione: '', imageUrl: '' };
+      }
+
+      // Salva i dati nell'oggetto globale
+      recipeData[tipo].titolo = data[`titolo_${tipoKey}`] || '';
+      recipeData[tipo].ingredienti = data[`ingredienti_${tipoKey}`] || '';
+      recipeData[tipo].descrizione = data[`descrizione_${tipoKey}`] || '';
       
-      const nextStep = tipo === 'primo' ? 4 : tipo === 'secondo' ? 5 : 6;
+      // Mostra il messaggio di completamento se il div esiste
+      const statusEl = document.getElementById(`${tipo}-completato`);
+      if (statusEl) statusEl.style.display = 'block';
+      
+      // CALCOLO DEL PROSSIMO STEP:
+      // Se è Piatto Unico va direttamente allo Step 6, altrimenti segue il flusso sequenziale
+      let nextStep;
+      if (typeof isPiattoUnico !== 'undefined' && isPiattoUnico) {
+        nextStep = 6;
+      } else {
+        nextStep = tipo === 'primo' ? 4 : tipo === 'secondo' ? 5 : 6;
+      }
+      
       setTimeout(() => goToStep(nextStep), 1000);
+    } else {
+      alert('Errore durante il salvataggio sul server.');
     }
   } catch (error) {
     console.error('Errore:', error);

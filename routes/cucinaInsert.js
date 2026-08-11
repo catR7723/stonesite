@@ -11,7 +11,6 @@ module.exports = (upload, cloudinary) => {
         (req.session.allowedPage === 'cucina' || req.session.allowedPage === 'both')) {
       return next();
     }
-    // non autenticato -> redirect al login, altrimenti 403
     if (!req.session || !req.session.authenticated) {
       return res.redirect('/login.html');
     }
@@ -35,17 +34,14 @@ module.exports = (upload, cloudinary) => {
     return res.sendFile(path.join(__dirname, '..', 'views', 'html', 'cucina.html'));
   });
 
-
-
   router.get('/cineforumInsert', ensureCineforumAllowed, (req, res) => {
     return res.sendFile(path.join(__dirname, '..', 'cineforumInsert.html'));
   });
 
   // Alias protetto /cucina -> cucinaInsert.html
-router.get('/cucina', ensureCucinaAllowed, (req, res) => {
+  router.get('/cucina', ensureCucinaAllowed, (req, res) => {
     return res.sendFile(path.join(__dirname, '..', 'views', 'html', 'cucinaInsert.html'));
-});
-
+  });
 
   // Helper: upload a Cloudinary via upload_stream
   const uploadToCloudinary = (buffer, fileName, folder, resourceType = 'image') =>
@@ -69,11 +65,12 @@ router.get('/cucina', ensureCucinaAllowed, (req, res) => {
       { name: 'primo', maxCount: 1 },
       { name: 'secondo', maxCount: 1 },
       { name: 'contorno', maxCount: 1 },
+      { name: 'piattoUnico', maxCount: 1 }, // ➕ Campo Piatto Unico
       { name: 'ricetta', maxCount: 1 }
     ]),
     async (req, res) => {
       try {
-        const { recipeTitle } = req.body;
+        const { recipeTitle, isPiattoUnico } = req.body;
         if (!recipeTitle) return res.status(400).json({ success: false, error: 'recipeTitle mancante' });
 
         const images = {};
@@ -93,13 +90,18 @@ router.get('/cucina', ensureCucinaAllowed, (req, res) => {
           images.contorno = r.secure_url;
           console.log(`✅ Contorno uploaded: ${images.contorno}`);
         }
+        if (req.files?.piattoUnico?.[0]) {
+          const r = await uploadToCloudinary(req.files.piattoUnico[0].buffer, `piattoUnico_${Date.now()}`, recipeTitle, 'image');
+          images.piattoUnico = r.secure_url;
+          console.log(`✅ Piatto Unico uploaded: ${images.piattoUnico}`);
+        }
         if (req.files?.ricetta?.[0]) {
           const r = await uploadToCloudinary(req.files.ricetta[0].buffer, `ricetta_${Date.now()}`, recipeTitle, 'raw');
           images.ricetta = r.secure_url;
           console.log(`✅ Ricetta uploaded: ${images.ricetta}`);
         }
 
-        // Salva gli URL su MongoDB
+        // Salva gli URL e il flag su MongoDB
         let recipe = await Recipe.findOne({ title: recipeTitle });
         if (!recipe) {
           recipe = new Recipe({ title: recipeTitle, userId: req.session && req.session.userId });
@@ -107,9 +109,12 @@ router.get('/cucina', ensureCucinaAllowed, (req, res) => {
           recipe.userId = req.session.userId;
         }
 
+        recipe.isPiattoUnico = isPiattoUnico === 'true' || isPiattoUnico === true;
+
         if (images.primo) recipe.primo = { ...recipe.primo, imageUrl: images.primo };
         if (images.secondo) recipe.secondo = { ...recipe.secondo, imageUrl: images.secondo };
         if (images.contorno) recipe.contorno = { ...recipe.contorno, imageUrl: images.contorno };
+        if (images.piattoUnico) recipe.piattoUnico = { ...recipe.piattoUnico, imageUrl: images.piattoUnico };
         if (images.ricetta) recipe.ricetta = { pdfUrl: images.ricetta };
 
         recipe.updatedAt = new Date();
@@ -204,60 +209,83 @@ router.get('/cucina', ensureCucinaAllowed, (req, res) => {
     }
   });
 
-  // GET /api/recipe/latest -> restituisce l'ultima ricetta dell'utente, ma normalizza le sezioni
-// GET /api/recipe/latest -> restituisce l'ultima ricetta (PUBBLICA, accessibile a tutti)
-router.get('/api/recipe/latest', async (req, res) => { // Rimosso ensureCucinaAllowed
-  try {
-    console.log('--- GET /api/recipe/latest (PUBBLICA) --- session:', req.session && { userId: req.session.userId });
-    const userId = req.session && req.session.userId;
-
-    let recipe = null;
-    // Se l'utente è loggato, prova a prendere la sua ultima ricetta
-    if (userId) {
-      recipe = await Recipe.findOne({ userId }).sort({ createdAt: -1 }).lean();
-      console.log('by userId found?', !!recipe);
-    }
-
-    // Se l'utente non è loggato (o non ha ricette), prendi l'ultima ricetta globale
-    if (!recipe) {
-      recipe = await Recipe.findOne({}).sort({ createdAt: -1 }).lean();
-      console.log('fallback global latest found?', !!recipe);
-    }
-
-    if (!recipe) return res.status(404).json({ error: 'nessuna ricetta' });
-
-    // helper che normalizza una "sezione" (può essere stringa=imageUrl o oggetto)
-    const normalizeSection = (sec) => {
-      if (!sec) return { titolo: '', ingredienti: '', descrizione: '', imageUrl: '' };
-      if (typeof sec === 'string') {
-        return { titolo: '', ingredienti: '', descrizione: '', imageUrl: sec };
+  // POST /salvaPiattoUnico (➕ NUOVO)
+  router.post('/salvaPiattoUnico', ensureCucinaAllowed, async (req, res) => {
+    try {
+      const { recipeTitle, titolo_PiattoUnico, ingredienti_PiattoUnico, descrizione_PiattoUnico } = req.body;
+      let recipe = await Recipe.findOne({ title: recipeTitle });
+      if (!recipe) {
+        recipe = new Recipe({ title: recipeTitle, userId: req.session && req.session.userId });
+      } else if (!recipe.userId && req.session && req.session.userId) {
+        recipe.userId = req.session.userId;
       }
-      return {
-        titolo: sec.titolo || sec.title || '',
-        ingredienti: sec.ingredienti || sec.ingredients || '',
-        descrizione: sec.descrizione || sec.description || '',
-        imageUrl: sec.imageUrl || sec.pdfUrl || ''
+
+      recipe.isPiattoUnico = true;
+      recipe.piattoUnico = {
+        titolo: titolo_PiattoUnico || '',
+        ingredienti: ingredienti_PiattoUnico || '',
+        descrizione: descrizione_PiattoUnico || '',
+        imageUrl: recipe.piattoUnico?.imageUrl || ''
       };
-    };
+      recipe.updatedAt = new Date();
+      await recipe.save();
+      return res.json({ success: true, message: 'Piatto Unico salvato' });
+    } catch (err) {
+      console.error('Errore /salvaPiattoUnico:', err);
+      return res.status(500).json({ success: false, error: 'Errore server' });
+    }
+  });
 
-    const primo = normalizeSection(recipe.primo);
-    const secondo = normalizeSection(recipe.secondo);
-    const contorno = normalizeSection(recipe.contorno);
+  // GET /api/recipe/latest -> restituisce l'ultima ricetta PUBBLICA
+  router.get('/api/recipe/latest', async (req, res) => {
+    try {
+      console.log('--- GET /api/recipe/latest (PUBBLICA) --- session:', req.session && { userId: req.session.userId });
+      const userId = req.session && req.session.userId;
 
-    return res.json({
-      id: recipe._id,
-      title: recipe.title || '',
-      primo,
-      secondo,
-      contorno,
-      ricetta: recipe.ricetta?.pdfUrl || (recipe.ricetta || null)
-    });
-  } catch (err) {
-    console.error('Errore /api/recipe/latest', err);
-    return res.status(500).json({ error: 'server error' });
-  }
-});
+      let recipe = null;
+      if (userId) {
+        recipe = await Recipe.findOne({ userId }).sort({ createdAt: -1 }).lean();
+      }
 
+      if (!recipe) {
+        recipe = await Recipe.findOne({}).sort({ createdAt: -1 }).lean();
+      }
+
+      if (!recipe) return res.status(404).json({ error: 'nessuna ricetta' });
+
+      const normalizeSection = (sec) => {
+        if (!sec) return { titolo: '', ingredienti: '', descrizione: '', imageUrl: '' };
+        if (typeof sec === 'string') {
+          return { titolo: '', ingredienti: '', descrizione: '', imageUrl: sec };
+        }
+        return {
+          titolo: sec.titolo || sec.title || '',
+          ingredienti: sec.ingredienti || sec.ingredients || '',
+          descrizione: sec.descrizione || sec.description || '',
+          imageUrl: sec.imageUrl || sec.pdfUrl || ''
+        };
+      };
+
+      const primo = normalizeSection(recipe.primo);
+      const secondo = normalizeSection(recipe.secondo);
+      const contorno = normalizeSection(recipe.contorno);
+      const piattoUnico = normalizeSection(recipe.piattoUnico);
+
+      return res.json({
+        id: recipe._id,
+        title: recipe.title || '',
+        isPiattoUnico: recipe.isPiattoUnico || false,
+        primo,
+        secondo,
+        contorno,
+        piattoUnico,
+        ricetta: recipe.ricetta?.pdfUrl || (recipe.ricetta || null)
+      });
+    } catch (err) {
+      console.error('Errore /api/recipe/latest', err);
+      return res.status(500).json({ error: 'server error' });
+    }
+  });
 
   // POST /salvaMenuR (pubblica e archivia)
   router.post('/salvaMenuR', ensureCucinaAllowed, async (req, res) => {
@@ -274,9 +302,11 @@ router.get('/api/recipe/latest', async (req, res) => { // Rimosso ensureCucinaAl
       const archivioEntry = new Archivio({
         title: recipe.title,
         category: recipe.category,
+        isPiattoUnico: recipe.isPiattoUnico,
         primo: recipe.primo,
         secondo: recipe.secondo,
         contorno: recipe.contorno,
+        piattoUnico: recipe.piattoUnico,
         ricetta: recipe.ricetta
       });
       await archivioEntry.save();
@@ -289,7 +319,7 @@ router.get('/api/recipe/latest', async (req, res) => { // Rimosso ensureCucinaAl
     }
   });
 
-  // Delete endpoints (finali) - rimuovono campi testuali ma non immagini
+  // Delete endpoints (finali)
   router.post('/deletePrimoFinal', ensureCucinaAllowed, async (req, res) => {
     try {
       const { recipeTitle } = req.body;
@@ -332,6 +362,21 @@ router.get('/api/recipe/latest', async (req, res) => { // Rimosso ensureCucinaAl
     }
   });
 
+  // POST /deletePiattoUnicoFinal (➕ NUOVO)
+  router.post('/deletePiattoUnicoFinal', ensureCucinaAllowed, async (req, res) => {
+    try {
+      const { recipeTitle } = req.body;
+      await Recipe.updateOne(
+        { title: recipeTitle },
+        { $set: { 'piattoUnico.titolo': '', 'piattoUnico.ingredienti': '', 'piattoUnico.descrizione': '' } }
+      );
+      return res.json({ success: true, step: 1 });
+    } catch (err) {
+      console.error('Errore /deletePiattoUnicoFinal:', err);
+      return res.status(500).json({ success: false, error: 'Errore server' });
+    }
+  });
+
   router.post('/deleteRicettaFinal', ensureCucinaAllowed, async (req, res) => {
     try {
       const { recipeTitle } = req.body;
@@ -345,6 +390,6 @@ router.get('/api/recipe/latest', async (req, res) => { // Rimosso ensureCucinaAl
 
   return router;
 };
-console.log('ROUTER cucinaInsert montato');
 
+console.log('ROUTER cucinaInsert montato');
 
