@@ -257,7 +257,7 @@
     const btn = ev.target.querySelector('button[type="submit"]');
     btn.disabled = true;
     try {
-      const body = { username, email, allowedPage };
+      const body = { username, email, allowedPage, role };
       if (password) body.password = password;
       const res = await api('/admin/users', { method: 'POST', body: JSON.stringify(body) });
       showMessage('Utente creato correttamente', 'ok');
