@@ -201,64 +201,65 @@
 </div>
 
 <!-- STEP 6: Download e Pubblicazione -->
-<div id="step-finale" class="step-container" style="display:none;">
-  <h2>Step 6: Pubblica il Menu</h2>
-  
-  <!-- ANTEPRIMA PRIMO -->
-  <div class="preview-section">
-    <h3>Anteprima Primo</h3>
-    <img id="previewImgPrimo" src="" alt="Primo" width="200" style="display:none;">
-    <div>
-      <p><strong>Titolo:</strong> <span id="previewTitoloPrimo"></span></p>
-      <p><strong>Ingredienti:</strong> <span id="previewIngredientiPrimo"></span></p>
-      <p><strong>Descrizione:</strong> <span id="previewDescrizionePrimo"></span></p>
+<div id="step-6" class="step-container" style="display:none;">
+  <h2>Step 6: Pubblica Menu</h2>
+
+  <div id="preview-piatto-unico" style="display:none;">
+    <div class="card-anteprima">
+      <h3>Anteprima Piatto Unico</h3>
+      <img id="previewPiattoUnicoImg" src="" alt="Piatto Unico" style="max-width: 250px; display:none; border-radius: 8px; margin-bottom: 10px;">
+      <p><strong>Titolo:</strong> <span id="previewPiattoUnicoTitolo">-</span></p>
+      <p><strong>Ingredienti:</strong> <span id="previewPiattoUnicoIngredienti">-</span></p>
+      <p><strong>Descrizione:</strong> <span id="previewPiattoUnicoDescrizione">-</span></p>
+      
+      <button type="button" onclick="eliminaPiattoUnicoFinal()" class="btn btn-danger" style="margin-top: 10px;">
+        Elimina Piatto Unico
+      </button>
     </div>
-    <button class="btn btn-delete" type="button" id="deletePrimoFinalBtn">Elimina Primo</button>
   </div>
 
-  <!-- ANTEPRIMA SECONDO -->
-  <div class="preview-section">
-    <h3>Anteprima Secondo</h3>
-    <img id="previewImgSecondo" src="" alt="Secondo" width="200" style="display:none;">
-    <div>
-      <p><strong>Titolo:</strong> <span id="previewTitoloSecondo"></span></p>
-      <p><strong>Ingredienti:</strong> <span id="previewIngredientiSecondo"></span></p>
-      <p><strong>Descrizione:</strong> <span id="previewDescrizioneSecondo"></span></p>
+  <div id="preview-tre-portate">
+    <div class="card-anteprima">
+      <h3>Primo</h3>
+      <img id="previewPrimoImg" src="" alt="Primo" style="max-width: 200px; display:none; border-radius: 8px;">
+      <p><strong>Titolo:</strong> <span id="previewPrimoTitolo">-</span></p>
+      <p><strong>Ingredienti:</strong> <span id="previewPrimoIngredienti">-</span></p>
+      <p><strong>Descrizione:</strong> <span id="previewPrimoDescrizione">-</span></p>
+      <button type="button" onclick="eliminaPrimoFinal()" class="btn btn-danger">Elimina Primo</button>
     </div>
-    <button class="btn btn-delete" type="button" id="deleteSecondoFinalBtn">Elimina Secondo</button>
+
+    <div class="card-anteprima" style="margin-top: 15px;">
+      <h3>Secondo</h3>
+      <img id="previewSecondoImg" src="" alt="Secondo" style="max-width: 200px; display:none; border-radius: 8px;">
+      <p><strong>Titolo:</strong> <span id="previewSecondoTitolo">-</span></p>
+      <p><strong>Ingredienti:</strong> <span id="previewSecondoIngredienti">-</span></p>
+      <p><strong>Descrizione:</strong> <span id="previewSecondoDescrizione">-</span></p>
+      <button type="button" onclick="eliminaSecondoFinal()" class="btn btn-danger">Elimina Secondo</button>
+    </div>
+
+    <div class="card-anteprima" style="margin-top: 15px;">
+      <h3>Contorno</h3>
+      <img id="previewContornoImg" src="" alt="Contorno" style="max-width: 200px; display:none; border-radius: 8px;">
+      <p><strong>Titolo:</strong> <span id="previewContornoTitolo">-</span></p>
+      <p><strong>Ingredienti:</strong> <span id="previewContornoIngredienti">-</span></p>
+      <p><strong>Descrizione:</strong> <span id="previewContornoDescrizione">-</span></p>
+      <button type="button" onclick="eliminaContornoFinal()" class="btn btn-danger">Elimina Contorno</button>
+    </div>
   </div>
 
-  <!-- ANTEPRIMA CONTORNO -->
-  <div class="preview-section">
-    <h3>Anteprima Contorno</h3>
-    <img id="previewImgContorno" src="" alt="Contorno" width="200" style="display:none;">
-    <div>
-      <p><strong>Titolo:</strong> <span id="previewTitoloContorno"></span></p>
-      <p><strong>Ingredienti:</strong> <span id="previewIngredientiContorno"></span></p>
-      <p><strong>Descrizione:</strong> <span id="previewDescrizioneContorno"></span></p>
-    </div>
-    <button class="btn btn-delete" type="button" id="deleteContornoFinalBtn">Elimina Contorno</button>
-  </div>
+  <div style="margin-top: 25px; padding-top: 15px; border-top: 1px solid #ccc;">
+    <p id="pdfContainer" style="display:none;">
+      <strong>Ricetta PDF:</strong> 
+      <a id="previewPdfLink" href="#" target="_blank" class="btn btn-info" style="margin-left: 10px;">Scarica la ricetta</a>
+    </p>
 
-<!-- DOWNLOAD E PUBBLICAZIONE -->
-<div id="pubblicazione" style="display:none;">
-  <div class="download">
-    <a id="ricetta" href="" target="_blank" rel="noopener noreferrer">
-      Scarica le Ricette del Menu della settimana
-    </a>
-    <button class="btn btn-delete" type="button" id="deleteRicettaBtn">Elimina la Ricetta</button>
-  </div>
-  
-  <div>
-    <form action="/salvaMenuR" method="POST">
-      <input type="hidden" name="recipeTitle" id="recipeTitle_salvaMenuR">
-      <button class="btn" type="submit" id="salvaMenuR">Pubblica il Menu!</button>
+    <form action="/salvaMenuR" method="POST" style="margin-top: 15px;">
+      <input type="hidden" name="recipeTitle" class="recipeTitle_hidden_field">
+      <button type="submit" class="btn btn-success" style="font-size: 1.1rem; padding: 10px 20px;">
+        Pubblica Menu
+      </button>
     </form>
   </div>
-
-
-
-</div>
 </div>
 
 <script>
@@ -313,6 +314,108 @@ document.getElementById('btnTogglePiattoUnico').addEventListener('click', () => 
   }
   document.getElementById('isPiattoUnico_hidden').value = isPiattoUnico;
 });
+
+// ==========================================
+  // 🟢 2. FUNZIONI DI NAVIGAZIONE E RENDER
+  // ==========================================
+
+  function goToStep(stepNum) {
+    document.querySelectorAll('.step-container').forEach(div => div.style.display = 'none');
+    
+    const targetStep = document.getElementById(`step-${stepNum}`) || document.querySelectorAll('.step-container')[stepNum - 1];
+    if (targetStep) targetStep.style.display = 'block';
+
+    // Sincronizza l'anteprima se andiamo allo Step 6
+    if (stepNum === 6) {
+      renderStep6();
+    }
+  }
+
+  function renderStep6() {
+    const containerTrePortate = document.getElementById('preview-tre-portate');
+    const containerPiattoUnico = document.getElementById('preview-piatto-unico');
+
+    if (isPiattoUnico) {
+      // Mostra SOLO piatto unico
+      if (containerTrePortate) containerTrePortate.style.display = 'none';
+      if (containerPiattoUnico) containerPiattoUnico.style.display = 'block';
+
+      const pu = recipeData.piattoUnico || {};
+      document.getElementById('previewPiattoUnicoTitolo').textContent = pu.titolo || '-';
+      document.getElementById('previewPiattoUnicoIngredienti').textContent = pu.ingredienti || '-';
+      document.getElementById('previewPiattoUnicoDescrizione').textContent = pu.descrizione || '-';
+
+      const imgEl = document.getElementById('previewPiattoUnicoImg');
+      if (imgEl) {
+        if (pu.imageUrl) {
+          imgEl.src = pu.imageUrl;
+          imgEl.style.display = 'block';
+        } else {
+          imgEl.style.display = 'none';
+        }
+      }
+    } else {
+      // Mostra SOLO tre portate
+      if (containerPiattoUnico) containerPiattoUnico.style.display = 'none';
+      if (containerTrePortate) containerTrePortate.style.display = 'block';
+
+      ['primo', 'secondo', 'contorno'].forEach(tipo => {
+        const data = recipeData[tipo] || {};
+        const cap = tipo.charAt(0).toUpperCase() + tipo.slice(1);
+        
+        const tEl = document.getElementById(`preview${cap}Titolo`);
+        const iEl = document.getElementById(`preview${cap}Ingredienti`);
+        const dEl = document.getElementById(`preview${cap}Descrizione`);
+        const imgEl = document.getElementById(`preview${cap}Img`);
+
+        if (tEl) tEl.textContent = data.titolo || '-';
+        if (iEl) iEl.textContent = data.ingredienti || '-';
+        if (dEl) dEl.textContent = data.descrizione || '-';
+        if (imgEl) {
+          if (data.imageUrl) {
+            imgEl.src = data.imageUrl;
+            imgEl.style.display = 'block';
+          } else {
+            imgEl.style.display = 'none';
+          }
+        }
+      });
+    }
+
+    // PDF Link
+    const pdfContainer = document.getElementById('pdfContainer');
+    const pdfLink = document.getElementById('previewPdfLink');
+    if (recipeData.pdfUrl) {
+      if (pdfLink) pdfLink.href = recipeData.pdfUrl;
+      if (pdfContainer) pdfContainer.style.display = 'block';
+    } else {
+      if (pdfContainer) pdfContainer.style.display = 'none';
+    }
+
+    // Inputs nascosti col titolo
+    document.querySelectorAll('.recipeTitle_hidden_field').forEach(el => {
+      el.value = currentRecipeTitle;
+    });
+  }
+
+  async function eliminaPiattoUnicoFinal() {
+    if (!confirm('Vuoi davvero cancellare il piatto unico e tornare allo Step 1?')) return;
+    
+    try {
+      const res = await fetch('/deletePiattoUnicoFinal', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ recipeTitle: currentRecipeTitle })
+      });
+      const data = await res.json();
+      if (data.success) {
+        recipeData.piattoUnico = { titolo: '', ingredienti: '', descrizione: '', imageUrl: '' };
+        goToStep(1);
+      }
+    } catch (err) {
+      console.error('Errore durante cancellazione:', err);
+    }
+  }
 
 
 // ===== STEP 2: ANTEPRIMA IMMAGINI LOCALI =====
