@@ -1,4 +1,6 @@
-<!DOCTYPE html><html lang="en"><head>
+<!DOCTYPE html>
+<html lang="it">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Laboratorio di Cucina</title>
@@ -9,7 +11,6 @@
     <script type="text/javascript" src="https://cs.iubenda.com/autoblocking/4252528.js"></script>
     <script type="text/javascript" url="//cdn.iubenda.com/cs/gpp/stub.js"></script>
     <script type="text/javascript" url="//cdn.iubenda.com/cs/iubenda_cs.js" charset="UTF-8" async=""></script>
-
 </head>
 <body>
 
@@ -21,97 +22,111 @@
                 </a>
             </li>
             <li>
-                <div class="cat">
-
-                </div>
+                <div class="cat"></div>
             </li>
         </ul>
     </div>
+    
     <div class="nav">
         <h1 class="title">Laboratorio di Cucina</h1>
         <div class="idea">
             <h1 class="ideaexplain">
-                LABORATORIO DI CUCINA:<br><br>un laboratorio che coinvolge tutti i ragazzi del centro, si parte dal cercare la ricetta su internet, individiare gli ingredienti.<br>
-                Le tecniche di cucina pone la persona al centro dell'agire, proporre qualcosa di buono signigìfica essere responsabile e capace delle techìniche che portano al risultato.<br>
+                LABORATORIO DI CUCINA:<br><br>un laboratorio che coinvolge tutti i ragazzi del centro, si parte dal cercare la ricetta su internet, individuare gli ingredienti.<br>
+                Le tecniche di cucina pongono la persona al centro dell'agire, proporre qualcosa di buono significa essere responsabile e capace delle tecniche che portano al risultato.<br>
                 Gruppo cucina significa competenze, collaborazione, capacità. 
             </h1>
         </div>
+
         <div id="blog">
-    <input type="checkbox" id="sidebar">
-    
-    <!-- Label per aprire l'overlay -->
-    <label for="sidebar" class="open">
-        <h1 id="main_title">Questa Settimana :</h1>
-   
-    
-    <!-- ✅ AGGIUNGI QUI IL TITOLO DELLA RICETTA -->
-    <h1 id="recipe_title_display_label">
-        Caricamento ricetta...
-    </h1>
-   </label>
-   <div id="overlay">
-        <!-- Chiudi cliccando fuori -->
-        <label for="sidebar" style="position: absolute; width: 100%; height: 100%; top: 0; left: 0; cursor: pointer;"></label>
-        
-        <!-- Contenuto ricetta -->
-        <div class="ricetta">
-            <div class="intro">
-                <br class="intro1">Questa Settimana proponiamo:<br><br>
- <h1 id="recipe_title_display_intro">
-        Caricamento ricetta...
-    </h1>
-                <h1 id="titolop_intro">riso bianco</h1>
-                <h1 id="titolodefSecondo_intro">frittata</h1>
-                <h1 id="titolodefConto_intro">insalata verde</h1>
-   
-            </div>
+            <input type="checkbox" id="sidebar">
             
-            <div class="svolgimento">
-              <h1 id="titolop_svolgimento">riso bianco</h1> 
-                <div id="primo"></div>
-                
-                <p><strong>INGREDIENTI PER 4 PERSONE</strong></p>
-                <p id="ingredientiPrimo">riso sale acqua</p>
-                <p><strong>PREPARAZIONE</strong></p>
-                <p id="descrizionePrimo">prendi butta mescola</p>
-                
-                <hr style="margin: 30px 0;">
-                
-                <h1 id="titolodefSecondo_svolgimento">frittata</h1>               
-                <div id="secondo"></div>
-                <p><strong>INGREDIENTI PER 4 PERSONE</strong></p>
-                <p id="ingredientiSecondo">uova sale burro</p>
-                <p><strong>PREPARAZIONE</strong></p>
-                <p id="descrizioneSecondo">rompi le uova sbatti</p>
+            <label for="sidebar" class="open">
+                <h1 id="main_title">Questa Settimana :</h1>
+                <h1 id="recipe_title_display_label">
+                    Caricamento ricetta...
+                </h1>
+            </label>
 
-                <hr style="margin: 30px 0;">
-
-                <h1 id="titolodefConto_svolgimento">insalata verde</h1>  
-                <div id="contorno"></div>
-                <p><strong>INGREDIENTI PER 4 PERSONE</strong></p>
-                <p id="ingredientiContorno">insalata pomodori cipolla</p>
-                <p><strong>PREPARAZIONE</strong></p>
-                <p id="descrizioneContorno">taglia e lettili li</p>
+            <div id="overlay">
+                <label for="sidebar" style="position: absolute; width: 100%; height: 100%; top: 0; left: 0; cursor: pointer;"></label>
                 
-                <div class="download">
-                    <a href="/images/menu_settimanale/ricetta.pdf" target="_blank" rel="noopener noreferrer">
-                        📥 Scarica le Ricette del Menu della settimana
-                    </a>
+                <div class="ricetta">
+                    <div class="intro">
+                        <br class="intro1">Questa Settimana proponiamo:<br><br>
+                        <h1 id="recipe_title_display_intro">
+                            Caricamento ricetta...
+                        </h1>
+                        
+                        <div id="intro-tre-portate">
+                            <h1 id="titolop_intro">riso bianco</h1>
+                            <h1 id="titolodefSecondo_intro">frittata</h1>
+                            <h1 id="titolodefConto_intro">insalata verde</h1>
+                        </div>
+
+                        <div id="intro-piatto-unico" style="display: none;">
+                            <h1 id="titoloPiattoUnico_intro">Piatto Unico</h1>
+                        </div>
+                    </div>
+                    
+                    <div class="svolgimento">
+                        <div id="svolgimento-tre-portate">
+                            <h1 id="titolop_svolgimento">riso bianco</h1> 
+                            <div id="primo"></div>
+                            <p><strong>INGREDIENTI PER 4 PERSONE</strong></p>
+                            <p id="ingredientiPrimo">riso sale acqua</p>
+                            <p><strong>PREPARAZIONE</strong></p>
+                            <p id="descrizionePrimo">prendi butta mescola</p>
+                            
+                            <hr style="margin: 30px 0;">
+                            
+                            <h1 id="titolodefSecondo_svolgimento">frittata</h1>               
+                            <div id="secondo"></div>
+                            <p><strong>INGREDIENTI PER 4 PERSONE</strong></p>
+                            <p id="ingredientiSecondo">uova sale burro</p>
+                            <p><strong>PREPARAZIONE</strong></p>
+                            <p id="descrizioneSecondo">rompi le uova sbatti</p>
+
+                            <hr style="margin: 30px 0;">
+
+                            <h1 id="titolodefConto_svolgimento">insalata verde</h1>  
+                            <div id="contorno"></div>
+                            <p><strong>INGREDIENTI PER 4 PERSONE</strong></p>
+                            <p id="ingredientiContorno">insalata pomodori cipolla</p>
+                            <p><strong>PREPARAZIONE</strong></p>
+                            <p id="descrizioneContorno">taglia e mettili li</p>
+                        </div>
+
+                        <div id="svolgimento-piatto-unico" style="display: none;">
+                            <h1 id="titoloPiattoUnico_svolgimento">Piatto Unico</h1> 
+                            <div id="piattoUnico"></div>
+                            <p><strong>INGREDIENTI PER 4 PERSONE</strong></p>
+                            <p id="ingredientiPiattoUnico">-</p>
+                            <p><strong>PREPARAZIONE</strong></p>
+                            <p id="descrizionePiattoUnico">-</p>
+                        </div>
+                        
+                        <div class="download" id="downloadPdfContainer">
+                            <a id="downloadPdfLink" href="#" target="_blank" rel="noopener noreferrer">
+                                📥 Scarica le Ricette del Menu della settimana
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</div>
-<div class="archivio">
-  <a href="/archivio" class="archivio-link">Clicca qui per vedere tutte le Ricette</a>
-</div>
-         <div class="write">
+
+        <div class="archivio">
+            <a href="/archivio" class="archivio-link">Clicca qui per vedere tutte le Ricette</a>
+        </div>
+
+        <div class="write">
             <a href="mailto:infocoopstone@gmail.com" target="_blank" class="scrivi">scrivi: infocoopstone@gmail.com</a>
         </div>
 
         <div class="dev">
             CatRobotics DevSolutions
         </div>
+
         <div class="help">
             <a class="button" href="https://www.paypal.com/donate/?hosted_button_id=4R8KNTDTP6RKN">DONA CLICCA QUI<br>
                 <img src="/images/paypaldonation.png" target="_blank" rel="noopener noreferrer" width="20%">
@@ -120,35 +135,27 @@
 
         <div class="policy">
             <div>
-                <a href="https://www.iubenda.com/privacy-policy/44804857" class="iubenda-white iubenda-noiframe iubenda-embed iubenda-noiframe" title="Privacy Policy ">Privacy Policy
-                </a>
+                <a href="https://www.iubenda.com/privacy-policy/44804857" class="iubenda-white iubenda-noiframe iubenda-embed iubenda-noiframe" title="Privacy Policy ">Privacy Policy</a>
             </div>
             <div>
-                <a href="https://www.iubenda.com/privacy-policy/44804857/cookie-policy" class="iubenda-white iubenda-noiframe iubenda-embed iubenda-noiframe" title="Cookie Policy ">Cookie Policy
-                </a>
+                <a href="https://www.iubenda.com/privacy-policy/44804857/cookie-policy" class="iubenda-white iubenda-noiframe iubenda-embed iubenda-noiframe" title="Cookie Policy ">Cookie Policy</a>
             </div>
         </div>
+    </div>
 
-        </div>
-
-    
-
-     
-        </div>
-
-<!-- Script: fetch e popolamento (posizionato in fondo, prima di </body>) -->
 <script>
 document.addEventListener('DOMContentLoaded', async () => {
-  // elementi principali
   const inputTitle = document.getElementById('recipeTitle_salvaMenuR');
   let inputId = document.getElementById('recipeId_salvaMenuR');
   const btn = document.getElementById('salvaMenuR');
 
-  // helper per leggere/scrivere testo in modo sicuro
+  // Helper per testo
   const setText = (id, text) => {
     const el = document.getElementById(id);
     if (el) el.textContent = text || '';
   };
+
+  // Helper per immagini
   const ensureImg = (container, imgId, src) => {
     if (!container || !src) return;
     let img = document.getElementById(imgId);
@@ -174,10 +181,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
     const data = await res.json();
 
-    // impostazione hidden title (usato dalla route /salvaMenuR)
+    // Hidden title e recipeId
     if (inputTitle) inputTitle.value = data.title || '';
 
-    // crea/aggiorna hidden recipeId se non esiste
     if (!inputId) {
       const form = document.querySelector('form[action="/salvaMenuR"]');
       if (form) {
@@ -194,15 +200,46 @@ document.addEventListener('DOMContentLoaded', async () => {
     setText('recipe_title_display_label', data.title || '');
     setText('recipe_title_display_intro', data.title || '');
 
-    // funzione per popolare sezione (primo/secondo/contorno)
+    // PDF Link Download
+    const pdfLink = document.getElementById('downloadPdfLink');
+    const pdfContainer = document.getElementById('downloadPdfContainer');
+    if (data.ricetta) {
+      if (pdfLink) pdfLink.href = data.ricetta;
+      if (pdfContainer) pdfContainer.style.display = 'block';
+    } else if (pdfContainer) {
+      pdfContainer.style.display = 'none';
+    }
+
+    // Helper per popolare la singola sezione
     const fillSection = (prefix, value) => {
       const container = document.getElementById(prefix);
-      // ids per testi differenziati intro / svolgimento
-      const titleIntroId = prefix === 'primo' ? 'titolop_intro' : (prefix === 'secondo' ? 'titolodefSecondo_intro' : 'titolodefConto_intro');
-      const titleSvolId  = prefix === 'primo' ? 'titolop_svolgimento' : (prefix === 'secondo' ? 'titolodefSecondo_svolgimento' : 'titolodefConto_svolgimento');
-      const ingrId = prefix === 'primo' ? 'ingredientiPrimo' : (prefix === 'secondo' ? 'ingredientiSecondo' : 'ingredientiContorno');
-      const descId = prefix === 'primo' ? 'descrizionePrimo' : (prefix === 'secondo' ? 'descrizioneSecondo' : 'descrizioneContorno');
-      const imgId = prefix === 'primo' ? 'imgPrimo' : (prefix === 'secondo' ? 'imgSecondo' : 'imgContorno');
+      
+      let titleIntroId, titleSvolId, ingrId, descId, imgId;
+      if (prefix === 'primo') {
+        titleIntroId = 'titolop_intro';
+        titleSvolId = 'titolop_svolgimento';
+        ingrId = 'ingredientiPrimo';
+        descId = 'descrizionePrimo';
+        imgId = 'imgPrimo';
+      } else if (prefix === 'secondo') {
+        titleIntroId = 'titolodefSecondo_intro';
+        titleSvolId = 'titolodefSecondo_svolgimento';
+        ingrId = 'ingredientiSecondo';
+        descId = 'descrizioneSecondo';
+        imgId = 'imgSecondo';
+      } else if (prefix === 'contorno') {
+        titleIntroId = 'titolodefConto_intro';
+        titleSvolId = 'titolodefConto_svolgimento';
+        ingrId = 'ingredientiContorno';
+        descId = 'descrizioneContorno';
+        imgId = 'imgContorno';
+      } else if (prefix === 'piattoUnico') {
+        titleIntroId = 'titoloPiattoUnico_intro';
+        titleSvolId = 'titoloPiattoUnico_svolgimento';
+        ingrId = 'ingredientiPiattoUnico';
+        descId = 'descrizionePiattoUnico';
+        imgId = 'imgPiattoUnico';
+      }
 
       if (!value) {
         setText(titleIntroId, '');
@@ -212,7 +249,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         return;
       }
 
-      // se value è oggetto con testi
       if (typeof value === 'object') {
         const titolo = value.titolo || value.title || '';
         const ingredienti = value.ingredienti || value.ingredients || '';
@@ -228,31 +264,35 @@ document.addEventListener('DOMContentLoaded', async () => {
         return;
       }
 
-      // se value è stringa trattala come imageUrl
       if (typeof value === 'string') {
         if (container) ensureImg(container, imgId, value);
-        // testi rimangono quelli presenti nella pagina come fallback
         return;
       }
     };
 
-    // popola le tre sezioni
-    fillSection('primo', data.primo || null);
-    fillSection('secondo', data.secondo || null);
-    fillSection('contorno', data.contorno || null);
+    // GESTIONE VISIBILITÀ: IS PIATTO UNICO?
+    const isPiattoUnico = !!data.isPiattoUnico;
+    const introTrePortate = document.getElementById('intro-tre-portate');
+    const introPiattoUnico = document.getElementById('intro-piatto-unico');
+    const svolgimentoTrePortate = document.getElementById('svolgimento-tre-portate');
+    const svolgimentoPiattoUnico = document.getElementById('svolgimento-piatto-unico');
 
-    // fallback: se i testi si trovano altrove (es. data.primo_text) gestiscili
-    if (data.primo_text) {
-      setText('ingredientiPrimo', data.primo_text.ingredienti || '');
-      setText('descrizionePrimo', data.primo_text.descrizione || '');
-    }
-    if (data.secondo_text) {
-      setText('ingredientiSecondo', data.secondo_text.ingredienti || '');
-      setText('descrizioneSecondo', data.secondo_text.descrizione || '');
-    }
-    if (data.contorno_text) {
-      setText('ingredientiContorno', data.contorno_text.ingredienti || '');
-      setText('descrizioneContorno', data.contorno_text.descrizione || '');
+    if (isPiattoUnico) {
+      if (introTrePortate) introTrePortate.style.display = 'none';
+      if (introPiattoUnico) introPiattoUnico.style.display = 'block';
+      if (svolgimentoTrePortate) svolgimentoTrePortate.style.display = 'none';
+      if (svolgimentoPiattoUnico) svolgimentoPiattoUnico.style.display = 'block';
+
+      fillSection('piattoUnico', data.piattoUnico || null);
+    } else {
+      if (introTrePortate) introTrePortate.style.display = 'block';
+      if (introPiattoUnico) introPiattoUnico.style.display = 'none';
+      if (svolgimentoTrePortate) svolgimentoTrePortate.style.display = 'block';
+      if (svolgimentoPiattoUnico) svolgimentoPiattoUnico.style.display = 'none';
+
+      fillSection('primo', data.primo || null);
+      fillSection('secondo', data.secondo || null);
+      fillSection('contorno', data.contorno || null);
     }
 
   } catch (err) {
@@ -263,4 +303,5 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 </script>
 
-</body></html>
+</body>
+</html>
