@@ -42,6 +42,8 @@ router.post('/recipe/archive', async (req, res) => {
     const archiviata = new Archivio({
       title: recipe.title,
       category: recipe.category,
+      isPiattoUnico: recipe.isPiattoUnico, // ➕ AGGIUNTO
+      piattoUnico: recipe.piattoUnico,     // ➕ AGGIUNTO
       primo: recipe.primo,
       secondo: recipe.secondo,
       contorno: recipe.contorno,
@@ -71,6 +73,8 @@ router.post('/recipe/restore/:id', async (req, res) => {
       const nuovaArchiviata = new Archivio({
         title: corrente.title,
         category: corrente.category,
+        isPiattoUnico: corrente.isPiattoUnico, // ➕ AGGIUNTO
+        piattoUnico: corrente.piattoUnico,     // ➕ AGGIUNTO
         primo: corrente.primo,
         secondo: corrente.secondo,
         contorno: corrente.contorno,
@@ -83,6 +87,8 @@ router.post('/recipe/restore/:id', async (req, res) => {
     const nuovaRicetta = new Recipe({
       title: archiviata.title,
       category: archiviata.category,
+      isPiattoUnico: archiviata.isPiattoUnico, // ➕ AGGIUNTO
+      piattoUnico: archiviata.piattoUnico,     // ➕ AGGIUNTO
       primo: archiviata.primo,
       secondo: archiviata.secondo,
       contorno: archiviata.contorno,

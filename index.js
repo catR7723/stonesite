@@ -443,6 +443,7 @@ app.delete('/elimina-ricetta-api/:id', ensureCucina, async (req, res) => {
 });
 
 // GET immagine/urls di una ricetta (by title)
+// GET immagine/urls di una ricetta (by title)
 app.get('/getImageUrls/:recipeTitle', async (req, res) => {
   try {
     const { recipeTitle } = req.params;
@@ -453,6 +454,13 @@ app.get('/getImageUrls/:recipeTitle', async (req, res) => {
     }
 
     return res.json({
+      // ➕ AGGIUNTI I CAMPI DEL PIATTO UNICO
+      isPiattoUnico: recipe.isPiattoUnico || false,
+      piattoUnico: recipe.piattoUnico?.imageUrl,
+      piattoUnico_titolo: recipe.piattoUnico?.titolo,
+      piattoUnico_ingredienti: recipe.piattoUnico?.ingredienti,
+      piattoUnico_descrizione: recipe.piattoUnico?.descrizione,
+
       primo: recipe.primo?.imageUrl,
       primo_titolo: recipe.primo?.titolo,
       primo_ingredienti: recipe.primo?.ingredienti,
