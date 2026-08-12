@@ -199,6 +199,44 @@
     </div>
   </div>
 </div>
+<div id="contorno-completato" style="display:none; color: green; font-weight: bold; margin-top: 20px; font-size: 18px;">
+      ✓ Contorno completato! Puoi pubblicare il menu
+    </div>
+  </div>
+</div>
+
+<div id="step-piatto-unico" class="step-container" style="display:none;">
+  <h2>Step 3: Modifica il Piatto Unico</h2>
+  <div class="Conteiner_PiattoUnico" id="sezione-piatto-unico">
+
+    <div class="PiattoUnico">
+      <h1 id="titdefPiattoUnico"></h1>
+      <h1 id="ingredientiPiattoUnicoDisplay"></h1>
+      <h1 id="descrizionePiattoUnicoDisplay"></h1>
+    </div>
+
+    <form id="formPiattoUnico" method="POST">
+      <input type="hidden" name="recipeTitle" id="recipeTitle_piattoUnico">
+      
+      <label>Titolo del Piatto Unico:</label>
+      <input type="text" id="inputTitoloPiattoUnico" name="titolo_PiattoUnico" placeholder="Inserisci il titolo del Piatto Unico">
+
+      <label style="margin-top: 20px;">Ingredienti del Piatto Unico:</label>
+      <textarea id="ingredientiPiattoUnicoInput" name="ingredienti_PiattoUnico" placeholder="Inserisci gli ingredienti..." rows="10" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc; font-family: sans-serif;"></textarea>
+
+      <label style="margin-top: 20px;">Procedimento del Piatto Unico:</label>
+      <textarea id="descrizionePiattoUnicoInput" name="descrizione_PiattoUnico" placeholder="Inserisci qui tutto il procedimento..." rows="10" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc; font-family: sans-serif;"></textarea>
+      
+      <button class="btn" type="submit" style="margin-top: 10px;">Salva Piatto Unico</button>
+    </form>
+
+    <div id="piattoUnico-completato" style="display:none; color: green; font-weight: bold; margin-top: 20px; font-size: 18px;">
+      ✓ Piatto Unico completato! Procedi alla pubblicazione
+    </div>
+  </div>
+</div>
+<div id="step-6" class="step-container" style="display:none;">
+
 
 <!-- STEP 6: Download e Pubblicazione -->
 <div id="step-6" class="step-container" style="display:none;">
@@ -270,6 +308,7 @@ let recipeData = {
   primo: { titolo: '', ingredienti: '', descrizione: '', imageUrl: '' },
   secondo: { titolo: '', ingredienti: '', descrizione: '', imageUrl: '' },
   contorno: { titolo: '', ingredienti: '', descrizione: '', imageUrl: '' },
+  piattoUnico: { titolo: '', ingredienti: '', descrizione: '', imageUrl: '' }, 
   ricetta: { pdfUrl: '' }
 };
 
@@ -318,18 +357,41 @@ document.getElementById('btnTogglePiattoUnico').addEventListener('click', () => 
 // ==========================================
   // 🟢 2. FUNZIONI DI NAVIGAZIONE E RENDER
   // ==========================================
-
-  function goToStep(stepNum) {
-    document.querySelectorAll('.step-container').forEach(div => div.style.display = 'none');
-    
-    const targetStep = document.getElementById(`step-${stepNum}`) || document.querySelectorAll('.step-container')[stepNum - 1];
-    if (targetStep) targetStep.style.display = 'block';
-
-    // Sincronizza l'anteprima se andiamo allo Step 6
-    if (stepNum === 6) {
-      renderStep6();
-    }
+// ===== UNICA FUNZIONE DI NAVIGAZIONE TRA GLI STEP =====
+function goToStep(step) {
+  // Nasconde tutti gli step presenti nella pagina
+  document.querySelectorAll('.step-container').forEach(el => el.style.display = 'none');
+  
+  // 1. Caso Piatto Unico
+  if (step === 'piatto-unico') {
+    const el = document.getElementById('step-piatto-unico');
+    if (el) el.style.display = 'block';
+    return;
   }
+
+  // 2. Mappatura degli step numerici con gli ID HTML
+  const stepIds = {
+    1: 'recipe-title-section',
+    2: 'step-upload-images',
+    3: 'step-primo',
+    4: 'step-secondo',
+    5: 'step-contorno',
+    6: 'step-6'
+  };
+  
+  const targetId = stepIds[step];
+  if (targetId) {
+    const targetElement = document.getElementById(targetId);
+    if (targetElement) targetElement.style.display = 'block';
+    
+    // Azioni automatiche al passaggio dello step
+    if (step === 3) loadStepImages('primo');
+    if (step === 4) loadStepImages('secondo');
+    if (step === 5) loadStepImages('contorno');
+    if (step === 6) renderStep6(); // Mostra l'anteprima finale
+  }
+}
+
 
   function renderStep6() {
     const containerTrePortate = document.getElementById('preview-tre-portate');
@@ -449,6 +511,7 @@ function previewImage(input, previewId) {
 }
 
 // ===== FORM STEP 2: UPLOAD IMMAGINI =====
+// ===== FORM STEP 2: UPLOAD IMMAGINI =====
 document.getElementById('topForm').addEventListener('submit', async (e) => {
   e.preventDefault();
   
@@ -465,22 +528,24 @@ document.getElementById('topForm').addEventListener('submit', async (e) => {
     const result = await response.json();
     
     if (result.success) {
-      // Salva gli URL delle immagini
       recipeData.primo.imageUrl = result.images?.primo || '';
       recipeData.secondo.imageUrl = result.images?.secondo || '';
       recipeData.contorno.imageUrl = result.images?.contorno || '';
+      recipeData.piattoUnico.imageUrl = result.images?.piattoUnico || ''; // ➕ Salva immagine Piatto Unico
       recipeData.ricetta.pdfUrl = result.images?.ricetta || '';
       
-      // Aggiorna i hidden input
-      document.getElementById('recipeTitle_hidden').value = currentRecipeTitle;
-      document.getElementById('recipeTitle_primo').value = currentRecipeTitle;
-      document.getElementById('recipeTitle_secondo').value = currentRecipeTitle;
-      document.getElementById('recipeTitle_contorno').value = currentRecipeTitle;
-      document.getElementById('recipeTitle_salvaMenuR').value = currentRecipeTitle;
+      // Aggiorna i campi hidden col titolo
+      document.querySelectorAll('.recipeTitle_hidden_field, #recipeTitle_hidden, #recipeTitle_primo, #recipeTitle_secondo, #recipeTitle_contorno, #recipeTitle_piattoUnico').forEach(el => {
+        if(el) el.value = currentRecipeTitle;
+      });
       
-      // Vai allo Step 3
-      loadStepImages('primo');
-      goToStep(3);
+      // 🔀 REINDIRIZZAMENTO INTELLIGENTE:
+      if (isPiattoUnico) {
+        goToStep('piatto-unico'); // Va al form del Piatto Unico!
+      } else {
+        loadStepImages('primo');
+        goToStep(3); // Va al Primo
+      }
     }
   } catch (error) {
     console.error('Errore:', error);
@@ -607,6 +672,19 @@ document.getElementById('formContorno').addEventListener('submit', async (e) => 
   };
   
   await savePiatto('/salvaContorno', data, 'contorno');
+});
+// ===== SALVA PIATTO UNICO =====
+document.getElementById('formPiattoUnico').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  
+  const data = {
+    recipeTitle: currentRecipeTitle,
+    titolo_PiattoUnico: document.getElementById('inputTitoloPiattoUnico').value || currentRecipeTitle,
+    ingredienti_PiattoUnico: document.getElementById('ingredientiPiattoUnicoInput').value,
+    descrizione_PiattoUnico: document.getElementById('descrizionePiattoUnicoInput').value
+  };
+  
+  await savePiatto('/salvaPiattoUnico', data, 'piattoUnico');
 });
 
 async function savePiatto(endpoint, data, tipo) {
