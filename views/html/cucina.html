@@ -17,9 +17,7 @@
     <div class="menu">
         <ul>
             <li class="home">
-                <a href="/stone">
-                    Home
-                </a>
+                <a href="/stone">Home</a>
             </li>
             <li>
                 <div class="cat"></div>
@@ -42,9 +40,7 @@
             
             <label for="sidebar" class="open">
                 <h1 id="main_title">Questa Settimana :</h1>
-                <h1 id="recipe_title_display_label">
-                    Caricamento ricetta...
-                </h1>
+                <h1 id="recipe_title_display_label">Caricamento ricetta...</h1>
             </label>
 
             <div id="overlay">
@@ -53,9 +49,7 @@
                 <div class="ricetta">
                     <div class="intro">
                         <br class="intro1">Questa Settimana proponiamo:<br><br>
-                        <h1 id="recipe_title_display_intro">
-                            Caricamento ricetta...
-                        </h1>
+                        <h1 id="recipe_title_display_intro">Caricamento ricetta...</h1>
                         
                         <div id="intro-tre-portate">
                             <h1 id="titolop_intro">riso bianco</h1>
@@ -100,9 +94,9 @@
                             <h1 id="titoloPiattoUnico_svolgimento">Piatto Unico</h1> 
                             <div id="piattoUnico"></div>
                             <p><strong>INGREDIENTI PER 4 PERSONE</strong></p>
-                            <p id="ingredientiPiattoUnico">-</p>
+                            <p id="ingredientiPiattoUnico">Caricamento ingredienti...</p>
                             <p><strong>PREPARAZIONE</strong></p>
-                            <p id="descrizionePiattoUnico">-</p>
+                            <p id="descrizionePiattoUnico">Caricamento preparazione...</p>
                         </div>
                         
                         <div class="download" id="downloadPdfContainer">
@@ -148,13 +142,13 @@ document.addEventListener('DOMContentLoaded', async () => {
   let inputId = document.getElementById('recipeId_salvaMenuR');
   const btn = document.getElementById('salvaMenuR');
 
-  // Helper per testo (sovrascrive textContent se esiste)
+  // Helper per testo
   const setText = (id, text) => {
     const el = document.getElementById(id);
     if (el) el.textContent = text || '';
   };
 
-  // Helper per immagini: crea <img id=imgId> dentro container se non esiste
+  // Helper per immagini
   const ensureImg = (container, imgId, src) => {
     if (!container || !src) return;
     let img = document.getElementById(imgId);
@@ -168,7 +162,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     img.src = src;
   };
 
-  // Helper per creare/aggiornare un elemento testuale e inserirlo subito dopo afterEl
+  // Helper per creare/aggiornare elementi testuali dinamici
   const ensureTextElement = (parent, id, text, tag = 'p', afterEl = null) => {
     if (!parent) return null;
     let el = document.getElementById(id);
@@ -176,7 +170,6 @@ document.addEventListener('DOMContentLoaded', async () => {
       el = document.createElement(tag);
       el.id = id;
       el.style.margin = '6px 0';
-      // se afterEl è fornito inseriamo subito dopo, altrimenti appendiamo alla fine del parent
       if (afterEl && afterEl.parentNode === parent) {
         parent.insertBefore(el, afterEl.nextSibling);
       } else {
@@ -191,18 +184,15 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   try {
     const res = await fetch('/api/recipe/latest', { credentials: 'include' });
-    console.log('fetch /api/recipe/latest status', res.status);
     if (!res.ok) {
       console.log('Nessuna ricetta trovata:', res.status);
       if (btn) btn.disabled = false;
       return;
     }
     const data = await res.json();
-    console.log('data ricevuta /api/recipe/latest', data);
 
-    // Hidden title e recipeId (se presenti nel form)
+    // Gestione Title e ID
     if (inputTitle) inputTitle.value = data.title || '';
-
     if (!inputId) {
       const form = document.querySelector('form[action="/salvaMenuR"]');
       if (form) {
@@ -219,7 +209,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     setText('recipe_title_display_label', data.title || '');
     setText('recipe_title_display_intro', data.title || '');
 
-    // PDF Link Download: supporta sia stringa che oggetto { pdfUrl }
+    // Gestione PDF
     const pdfLink = document.getElementById('downloadPdfLink');
     const pdfContainer = document.getElementById('downloadPdfContainer');
     const ricettaLink = (data.ricetta && typeof data.ricetta === 'object') ? (data.ricetta.pdfUrl || null) : (data.ricetta || null);
@@ -230,47 +220,33 @@ document.addEventListener('DOMContentLoaded', async () => {
       pdfContainer.style.display = 'none';
     }
 
-    // Helper per popolare la singola sezione (primo/secondo/contorno/piattoUnico)
+    // Funzione principale per popolare le sezioni
     const fillSection = (prefix, value) => {
       const container = document.getElementById(prefix);
 
       let titleIntroId, titleSvolId, ingrId, descId, imgId;
       if (prefix === 'primo') {
-        titleIntroId = 'titolop_intro';
-        titleSvolId = 'titolop_svolgimento';
-        ingrId = 'ingredientiPrimo';
-        descId = 'descrizionePrimo';
-        imgId = 'imgPrimo';
+        titleIntroId = 'titolop_intro'; titleSvolId = 'titolop_svolgimento';
+        ingrId = 'ingredientiPrimo'; descId = 'descrizionePrimo'; imgId = 'imgPrimo';
       } else if (prefix === 'secondo') {
-        titleIntroId = 'titolodefSecondo_intro';
-        titleSvolId = 'titolodefSecondo_svolgimento';
-        ingrId = 'ingredientiSecondo';
-        descId = 'descrizioneSecondo';
-        imgId = 'imgSecondo';
+        titleIntroId = 'titolodefSecondo_intro'; titleSvolId = 'titolodefSecondo_svolgimento';
+        ingrId = 'ingredientiSecondo'; descId = 'descrizioneSecondo'; imgId = 'imgSecondo';
       } else if (prefix === 'contorno') {
-        titleIntroId = 'titolodefConto_intro';
-        titleSvolId = 'titolodefConto_svolgimento';
-        ingrId = 'ingredientiContorno';
-        descId = 'descrizioneContorno';
-        imgId = 'imgContorno';
+        titleIntroId = 'titolodefConto_intro'; titleSvolId = 'titolodefConto_svolgimento';
+        ingrId = 'ingredientiContorno'; descId = 'descrizioneContorno'; imgId = 'imgContorno';
       } else if (prefix === 'piattoUnico') {
-        titleIntroId = 'titoloPiattoUnico_intro';
-        titleSvolId = 'titoloPiattoUnico_svolgimento';
-        ingrId = 'ingredientiPiattoUnico';
-        descId = 'descrizionePiattoUnico';
-        imgId = 'imgPiattoUnico';
+        titleIntroId = 'titoloPiattoUnico_intro'; titleSvolId = 'titoloPiattoUnico_svolgimento';
+        ingrId = 'ingredientiPiattoUnico'; descId = 'descrizionePiattoUnico'; imgId = 'imgPiattoUnico';
       }
 
-      // rimuove eventuali elementi creati in precedenza (intro) se value falsy
       const ingrIntroElId = `${ingrId}_intro`;
       const descIntroElId = `${descId}_intro`;
       const ingrIntroEl = document.getElementById(ingrIntroElId);
       const descIntroEl = document.getElementById(descIntroElId);
+      
       if (!value) {
-        setText(titleIntroId, '');
-        setText(titleSvolId, '');
-        setText(ingrId, '');
-        setText(descId, '');
+        setText(titleIntroId, ''); setText(titleSvolId, '');
+        setText(ingrId, ''); setText(descId, '');
         if (ingrIntroEl && ingrIntroEl.parentNode) ingrIntroEl.parentNode.removeChild(ingrIntroEl);
         if (descIntroEl && descIntroEl.parentNode) descIntroEl.parentNode.removeChild(descIntroEl);
         return;
@@ -282,13 +258,16 @@ document.addEventListener('DOMContentLoaded', async () => {
         const descrizione = value.descrizione || value.description || '';
         const imageUrl = value.imageUrl || value.pdfUrl || value.ricetta || null;
 
-        if (titolo) setText(titleIntroId, titolo);
-        if (titolo) setText(titleSvolId, titolo);
-        // aggiorna gli elementi già presenti nella sezione svolgimento (se esistono)
+        if (titolo) {
+          setText(titleIntroId, titolo);
+          setText(titleSvolId, titolo);
+        }
+        
+        // Popola HTML principale dello svolgimento (incluso Piatto Unico)
         setText(ingrId, ingredienti);
         setText(descId, descrizione);
 
-        // POPOLA ANCHE L'INTRO: inserisco i due <p> subito dopo il titolo intro
+        // Popola l'intro (aggiungendo dinamicamente ingredienti e descrizione)
         const titleIntroEl = document.getElementById(titleIntroId);
         if (titleIntroEl && titleIntroEl.parentNode) {
           ensureTextElement(titleIntroEl.parentNode, ingrIntroElId, ingredienti, 'p', titleIntroEl);
@@ -300,13 +279,12 @@ document.addEventListener('DOMContentLoaded', async () => {
       }
 
       if (typeof value === 'string') {
-        // se la sezione è passata come stringa, consideriamola come imageUrl
         if (container) ensureImg(container, imgId, value);
         return;
       }
     };
 
-    // GESTIONE VISIBILITÀ: IS PIATTO UNICO?
+    // Gestione visualizzazione basata sul booleano isPiattoUnico
     const isPiattoUnico = !!data.isPiattoUnico;
     const introTrePortate = document.getElementById('intro-tre-portate');
     const introPiattoUnico = document.getElementById('intro-piatto-unico');
@@ -319,9 +297,10 @@ document.addEventListener('DOMContentLoaded', async () => {
       if (svolgimentoTrePortate) svolgimentoTrePortate.style.display = 'none';
       if (svolgimentoPiattoUnico) svolgimentoPiattoUnico.style.display = 'block';
 
+      // Popola unicamente il piatto unico
       fillSection('piattoUnico', data.piattoUnico || null);
-
-      // opzionale: svuota intro tre portate (solo estetica)
+      
+      // Svuota le tre portate classiche
       fillSection('primo', null);
       fillSection('secondo', null);
       fillSection('contorno', null);
@@ -331,11 +310,12 @@ document.addEventListener('DOMContentLoaded', async () => {
       if (svolgimentoTrePortate) svolgimentoTrePortate.style.display = 'block';
       if (svolgimentoPiattoUnico) svolgimentoPiattoUnico.style.display = 'none';
 
+      // Popola le tre portate
       fillSection('primo', data.primo || null);
       fillSection('secondo', data.secondo || null);
       fillSection('contorno', data.contorno || null);
 
-      // opzionale: svuota piattoUnico
+      // Svuota il piatto unico
       fillSection('piattoUnico', null);
     }
 
@@ -346,7 +326,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 });
 </script>
-
 
 </body>
 </html>
