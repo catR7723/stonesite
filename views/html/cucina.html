@@ -305,15 +305,27 @@ document.addEventListener('DOMContentLoaded', async () => {
       if (svolgimentoTrePortate) svolgimentoTrePortate.style.display = 'none';
       if (svolgimentoPiattoUnico) svolgimentoPiattoUnico.style.display = 'block';
 
-      // Estrae i dati del Piatto Unico sia se è un sotto-oggetto che se i campi sono sulla radice di data
-      const piattoUnicoObj = (typeof data.piattoUnico === 'object' && data.piattoUnico !== null)
-        ? data.piattoUnico
-        : {
-            titolo: getField(data, ['piattoUnico', 'title', 'titolo']),
-            ingredienti: getField(data, ['ingredienti', 'ingredientiPiattoUnico', 'ingredients']),
-            descrizione: getField(data, ['descrizione', 'procedimento', 'preparazione', 'descrizionePiattoUnico', 'description']),
-            imageUrl: data.imageUrl || data.pdfUrl || data.ricetta
-          };
+   
+// Unifica i dati del Piatto Unico cercando sia in data.piattoUnico, sia in data.primo, sia direttamente nella radice di data
+const fonteDati = data.piattoUnico || data.primo || data;
+
+const piattoUnicoObj = {
+  titolo: getField(data.piattoUnico, ['titolo', 'title']) || 
+          getField(data.primo, ['titolo', 'title']) || 
+          getField(data, ['title', 'titolo']),
+
+  ingredienti: getField(data.piattoUnico, ['ingredienti', 'ingredients', 'ingredientiPiattoUnico']) || 
+               getField(data.primo, ['ingredienti', 'ingredients']) || 
+               getField(data, ['ingredienti', 'ingredientiPiattoUnico']),
+
+  descrizione: getField(data.piattoUnico, ['descrizione', 'procedimento', 'preparazione', 'descrizionePiattoUnico', 'description']) || 
+               getField(data.primo, ['descrizione', 'procedimento', 'preparazione', 'description']) || 
+               getField(data, ['descrizione', 'procedimento', 'preparazione', 'descrizionePiattoUnico']),
+
+  imageUrl: (data.piattoUnico && data.piattoUnico.imageUrl) || 
+            (data.primo && data.primo.imageUrl) || 
+            data.imageUrl
+};
 
       console.log('Dati elaborati per Piatto Unico:', piattoUnicoObj);
 
