@@ -4,4 +4,4 @@ NODE_ENV=development node index.js
 
 
 
-
+fetch('/api/recipe/latest', { credentials: 'include' }).then(r => r.json()).then(d => console.log('=== DATI DA MONGO ===', d));

@@ -140,15 +140,19 @@
 document.addEventListener('DOMContentLoaded', async () => {
   const btn = document.getElementById('salvaMenuR');
 
-  // Helper per impostare il testo negli elementi HTML
-  const setText = (id, text) => {
+  // Helper per impostare il testo e impedire sovrascritture vuote o trattini
+  const setProtectedText = (id, text) => {
     const el = document.getElementById(id);
-    if (el && text) {
+    if (!el) return;
+
+    if (text && text.trim() !== '' && text.trim() !== '-') {
       el.textContent = text;
+      // Marchiamo l'elemento come già popolato con successo
+      el.dataset.populated = 'true';
     }
   };
 
-  // Helper per gestire le immagini
+  // Helper per le immagini
   const ensureImg = (container, imgId, src) => {
     if (!container) return;
     let img = document.getElementById(imgId);
@@ -166,7 +170,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     img.src = src;
   };
 
-  // HELPER ROBUSTO: Scarta stringhe vuote, null, undefined o trattini '-'
+  // Cerca la prima stringa valida che NON sia vuota né '-'
   const getVal = (...vals) => {
     for (let v of vals) {
       if (v !== undefined && v !== null) {
@@ -186,12 +190,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (!res.ok) return;
 
     const data = await res.json();
-    console.log('📌 DATI RICEVUTI DA MONGODB:', data);
 
     // 1. TITOLO GENERALE DEL MENU
     const titleVal = getVal(data.title, data.titolo);
-    setText('recipe_title_display_label', titleVal);
-    setText('recipe_title_display_intro', titleVal);
+    setProtectedText('recipe_title_display_label', titleVal);
+    setProtectedText('recipe_title_display_intro', titleVal);
 
     // 2. DOWNLOAD PDF
     const pdfLink = document.getElementById('downloadPdfLink');
@@ -214,7 +217,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       if (svolgimentoTrePortate) svolgimentoTrePortate.style.display = 'none';
       if (svolgimentoPiattoUnico) svolgimentoPiattoUnico.style.display = 'block';
 
-      // 🔍 Cerca il dato in QUALSIASI posizione possibile
+      // ESTRAZIONE DATI (controlla sia piattoUnico che primo)
       const titoloPU = getVal(
         data.piattoUnico?.titolo,
         data.titolo_PiattoUnico,
@@ -244,13 +247,21 @@ document.addEventListener('DOMContentLoaded', async () => {
         data.imageUrl
       );
 
-      // Popolamento elementi HTML
-      setText('titoloPiattoUnico_intro', titoloPU);
-      setText('titoloPiattoUnico_svolgimento', titoloPU);
-      setText('ingredientiPiattoUnico', ingredientiPU);
-      setText('descrizionePiattoUnico', descrizionePU);
+      // Funzione per applicare i testi
+      const applicaDati = () => {
+        setProtectedText('titoloPiattoUnico_intro', titoloPU);
+        setProtectedText('titoloPiattoUnico_svolgimento', titoloPU);
+        setProtectedText('ingredientiPiattoUnico', ingredientiPU);
+        setProtectedText('descrizionePiattoUnico', descrizionePU);
+        ensureImg(document.getElementById('piattoUnico'), 'imgPiattoUnico', imageUrlPU);
+      };
 
-      ensureImg(document.getElementById('piattoUnico'), 'imgPiattoUnico', imageUrlPU);
+      // Eseguiamo subito
+      applicaDati();
+
+      // Eseguiamo anche dopo 100ms e 500ms nel caso in cui un altro script sovrascriva i campi subito dopo
+      setTimeout(applicaDati, 100);
+      setTimeout(applicaDati, 500);
 
     } else {
       if (introTrePortate) introTrePortate.style.display = 'block';
@@ -259,26 +270,26 @@ document.addEventListener('DOMContentLoaded', async () => {
       if (svolgimentoPiattoUnico) svolgimentoPiattoUnico.style.display = 'none';
 
       if (data.primo) {
-        setText('titolop_intro', data.primo.titolo);
-        setText('titolop_svolgimento', data.primo.titolo);
-        setText('ingredientiPrimo', data.primo.ingredienti);
-        setText('descrizionePrimo', data.primo.descrizione);
+        setProtectedText('titolop_intro', data.primo.titolo);
+        setProtectedText('titolop_svolgimento', data.primo.titolo);
+        setProtectedText('ingredientiPrimo', data.primo.ingredienti);
+        setProtectedText('descrizionePrimo', data.primo.descrizione);
         ensureImg(document.getElementById('primo'), 'imgPrimo', data.primo.imageUrl);
       }
 
       if (data.secondo) {
-        setText('titolodefSecondo_intro', data.secondo.titolo);
-        setText('titolodefSecondo_svolgimento', data.secondo.titolo);
-        setText('ingredientiSecondo', data.secondo.ingredienti);
-        setText('descrizioneSecondo', data.secondo.descrizione);
+        setProtectedText('titolodefSecondo_intro', data.secondo.titolo);
+        setProtectedText('titolodefSecondo_svolgimento', data.secondo.titolo);
+        setProtectedText('ingredientiSecondo', data.secondo.ingredienti);
+        setProtectedText('descrizioneSecondo', data.secondo.descrizione);
         ensureImg(document.getElementById('secondo'), 'imgSecondo', data.secondo.imageUrl);
       }
 
       if (data.contorno) {
-        setText('titolodefConto_intro', data.contorno.titolo);
-        setText('titolodefConto_svolgimento', data.contorno.titolo);
-        setText('ingredientiContorno', data.contorno.ingredienti);
-        setText('descrizioneContorno', data.contorno.descrizione);
+        setProtectedText('titolodefConto_intro', data.contorno.titolo);
+        setProtectedText('titolodefConto_svolgimento', data.contorno.titolo);
+        setProtectedText('ingredientiContorno', data.contorno.ingredienti);
+        setProtectedText('descrizioneContorno', data.contorno.descrizione);
         ensureImg(document.getElementById('contorno'), 'imgContorno', data.contorno.imageUrl);
       }
     }

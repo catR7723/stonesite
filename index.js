@@ -442,7 +442,7 @@ app.delete('/elimina-ricetta-api/:id', ensureCucina, async (req, res) => {
   }
 });
 
-// GET immagine/urls di una ricetta (by title)
+
 // GET immagine/urls di una ricetta (by title)
 app.get('/getImageUrls/:recipeTitle', async (req, res) => {
   try {
@@ -454,43 +454,45 @@ app.get('/getImageUrls/:recipeTitle', async (req, res) => {
     }
 
     return res.json({
-      // ➕ AGGIUNTI I CAMPI DEL PIATTO UNICO
+      title: recipe.title,
       isPiattoUnico: recipe.isPiattoUnico || false,
-      piattoUnico: recipe.piattoUnico?.imageUrl,
-      piattoUnico_titolo: recipe.piattoUnico?.titolo,
-      piattoUnico_ingredienti: recipe.piattoUnico?.ingredienti,
-      piattoUnico_descrizione: recipe.piattoUnico?.descrizione,
 
-      primo: recipe.primo?.imageUrl,
-      primo_titolo: recipe.primo?.titolo,
-      primo_ingredienti: recipe.primo?.ingredienti,
-      primo_descrizione: recipe.primo?.descrizione,
+      // 🟢 Restituisce l'oggetto completo del piatto unico
+      piattoUnico: {
+        imageUrl: recipe.piattoUnico?.imageUrl || '',
+        titolo: recipe.piattoUnico?.titolo || recipe.primo?.titolo || '',
+        ingredienti: recipe.piattoUnico?.ingredienti || recipe.primo?.ingredienti || '',
+        descrizione: recipe.piattoUnico?.descrizione || recipe.primo?.descrizione || ''
+      },
 
-      secondo: recipe.secondo?.imageUrl,
-      secondo_titolo: recipe.secondo?.titolo,
-      secondo_ingredienti: recipe.secondo?.ingredienti,
-      secondo_descrizione: recipe.secondo?.descrizione,
+      // 🟢 E per compatibilità restituisce anche i singoli campi
+      piattoUnico_titolo: recipe.piattoUnico?.titolo || recipe.primo?.titolo || '',
+      piattoUnico_ingredienti: recipe.piattoUnico?.ingredienti || recipe.primo?.ingredienti || '',
+      piattoUnico_descrizione: recipe.piattoUnico?.descrizione || recipe.primo?.descrizione || '',
 
-      contorno: recipe.contorno?.imageUrl,
-      contorno_titolo: recipe.contorno?.titolo,
-      contorno_ingredienti: recipe.contorno?.ingredienti,
-      contorno_descrizione: recipe.contorno?.descrizione,
+      // Portate tradizionali
+      primo: recipe.primo || {},
+      primo_titolo: recipe.primo?.titolo || '',
+      primo_ingredienti: recipe.primo?.ingredienti || '',
+      primo_descrizione: recipe.primo?.descrizione || '',
 
-      ricetta: recipe.ricetta?.pdfUrl
+      secondo: recipe.secondo || {},
+      secondo_titolo: recipe.secondo?.titolo || '',
+      secondo_ingredienti: recipe.secondo?.ingredienti || '',
+      secondo_descrizione: recipe.secondo?.descrizione || '',
+
+      contorno: recipe.contorno || {},
+      contorno_titolo: recipe.contorno?.titolo || '',
+      contorno_ingredienti: recipe.contorno?.ingredienti || '',
+      contorno_descrizione: recipe.contorno?.descrizione || '',
+
+      ricetta: recipe.ricetta?.pdfUrl || recipe.ricetta || null
     });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Errore server' });
   }
 });
-
-// ============ MOUNT cucina routes (Opzione B) ============
-try {
-  const cucinaRouter = require('./routes/cucinaInsert')(upload, cloudinary);
-  app.use('/', cucinaRouter);
-} catch (err) {
-  console.warn('Router cucinaInsert non trovato o errore nel mount:', err.message || err);
-}
 
 // ============ ROTTE HOME PUBBLICHE ============
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'index.html')));
