@@ -164,8 +164,15 @@ document.addEventListener('DOMContentLoaded', async () => {
     img.src = src;
   };
 
-  // Helper per prendere il primo valore valido NON vuoto
-  const getVal = (...vals) => vals.find(v => v !== undefined && v !== null && v !== '') || '';
+  // 🔴 HELPER MAGICO: Prende la prima stringa valida che NON è vuota o di soli spazi
+  const getVal = (...vals) => {
+    for (let v of vals) {
+      if (v !== undefined && v !== null && String(v).trim() !== '') {
+        return String(v).trim();
+      }
+    }
+    return '';
+  };
 
   if (btn) btn.disabled = true;
 
@@ -187,8 +194,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (pdfLink) pdfLink.href = ricettaLink || '#';
     if (pdfContainer) pdfContainer.style.display = ricettaLink ? 'block' : 'none';
 
-    // 3. VERIFICA E VISIBILITÀ SEZIONI
-    // 🟢 Rileva Piatto Unico sia dal flag booleano che dalla presenza dell'oggetto nel DB
+    // 3. VISIBILITÀ SEZIONI
     const isPiattoUnico = !!(data.isPiattoUnico || data.piattoUnico || data.ingredienti_PiattoUnico);
 
     const introTrePortate = document.getElementById('intro-tre-portate');
@@ -197,48 +203,38 @@ document.addEventListener('DOMContentLoaded', async () => {
     const svolgimentoPiattoUnico = document.getElementById('svolgimento-piatto-unico');
 
     if (isPiattoUnico) {
-      // Mostra le sezioni Piatto Unico e nascondi le 3 portate
       if (introTrePortate) introTrePortate.style.display = 'none';
       if (introPiattoUnico) introPiattoUnico.style.display = 'block';
       if (svolgimentoTrePortate) svolgimentoTrePortate.style.display = 'none';
       if (svolgimentoPiattoUnico) svolgimentoPiattoUnico.style.display = 'block';
 
-      // Estrazione TITOLO
+      // 🟡 ESTRAZIONE ROBUSTA (scarta le stringhe vuote "")
       const titoloPU = getVal(
         data.piattoUnico?.titolo,
-        data.piattoUnico_titolo,
-        data.primo?.titolo,
-        data.title,
+        data.primo?.titolo,           
+        data.title,                   
         data.titolo
       ) || 'Piatto Unico';
 
-      // Estrazione INGREDIENTI
       const ingredientiPU = getVal(
         data.piattoUnico?.ingredienti,
-        data.piattoUnico_ingredienti,
-        data.ingredienti_PiattoUnico,
-        data.primo?.ingredienti,
-        data.ingredienti
+        data.primo?.ingredienti,       
+        data.ingredienti_PiattoUnico
       ) || 'Nessun ingrediente specificato';
 
-      // Estrazione DESCRIZIONE
       const descrizionePU = getVal(
         data.piattoUnico?.descrizione,
-        data.piattoUnico_descrizione,
-        data.descrizione_PiattoUnico,
-        data.primo?.descrizione,
-        data.descrizione
+        data.primo?.descrizione,       
+        data.descrizione_PiattoUnico
       ) || 'Nessuna preparazione specificata';
 
-      // Estrazione IMMAGINE
       const imageUrlPU = getVal(
-        data.piattoUnico?.imageUrl,
-        data.piattoUnico,
+        data.piattoUnico?.imageUrl,    
         data.primo?.imageUrl,
         data.imageUrl
       );
 
-      // Popolamento diretto dell'HTML
+      // Popolamento HTML Piatto Unico
       setText('titoloPiattoUnico_intro', titoloPU);
       setText('titoloPiattoUnico_svolgimento', titoloPU);
       setText('ingredientiPiattoUnico', ingredientiPU);
@@ -247,7 +243,6 @@ document.addEventListener('DOMContentLoaded', async () => {
       ensureImg(document.getElementById('piattoUnico'), 'imgPiattoUnico', imageUrlPU);
 
     } else {
-      // Mostra 3 portate e nascondi Piatto Unico
       if (introTrePortate) introTrePortate.style.display = 'block';
       if (introPiattoUnico) introPiattoUnico.style.display = 'none';
       if (svolgimentoTrePortate) svolgimentoTrePortate.style.display = 'block';
