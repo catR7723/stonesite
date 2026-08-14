@@ -189,6 +189,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (pdfContainer) pdfContainer.style.display = ricettaLink ? 'block' : 'none';
 
     // 3. VISIBILITÀ SEZIONI
+// 3. VISIBILITÀ SEZIONI
     const isPiattoUnico = !!data.isPiattoUnico;
     const introTrePortate = document.getElementById('intro-tre-portate');
     const introPiattoUnico = document.getElementById('intro-piatto-unico');
@@ -201,28 +202,31 @@ document.addEventListener('DOMContentLoaded', async () => {
       if (svolgimentoTrePortate) svolgimentoTrePortate.style.display = 'none';
       if (svolgimentoPiattoUnico) svolgimentoPiattoUnico.style.display = 'block';
 
-      // Estrazione dati ignorando le stringhe vuote
+      // 1. Estrazione TITOLO (Cerca prima in piattoUnico, poi in primo come ruota di scorta)
       const titoloPU = getVal(
-        data.primo && data.primo.titolo,
         data.piattoUnico && data.piattoUnico.titolo,
+        data.primo && data.primo.titolo,
         data.title,
         data.titolo
       ) || 'Piatto Unico';
 
+      // 2. Estrazione INGREDIENTI
       const ingredientiPU = getVal(
-        data.primo && data.primo.ingredienti,
         data.piattoUnico && data.piattoUnico.ingredienti,
+        data.primo && data.primo.ingredienti,
         data.ingredienti_PiattoUnico,
         data.ingredienti
       );
 
+      // 3. Estrazione DESCRIZIONE
       const descrizionePU = getVal(
-        data.primo && data.primo.descrizione,
         data.piattoUnico && data.piattoUnico.descrizione,
+        data.primo && data.primo.descrizione,
         data.descrizione_PiattoUnico,
         data.descrizione
       );
 
+      // 4. Estrazione IMMAGINE
       const imageUrlPU = getVal(
         data.piattoUnico && data.piattoUnico.imageUrl,
         data.primo && data.primo.imageUrl,
