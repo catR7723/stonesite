@@ -143,7 +143,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Helper per impostare il testo negli elementi HTML
   const setText = (id, text) => {
     const el = document.getElementById(id);
-    if (el) el.textContent = text || '';
+    if (el && text) {
+      el.textContent = text;
+    }
   };
 
   // Helper per gestire le immagini
@@ -164,11 +166,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     img.src = src;
   };
 
-  // 🔴 HELPER MAGICO: Prende la prima stringa valida che NON è vuota o di soli spazi
+  // HELPER ROBUSTO: Scarta stringhe vuote, null, undefined o trattini '-'
   const getVal = (...vals) => {
     for (let v of vals) {
-      if (v !== undefined && v !== null && String(v).trim() !== '') {
-        return String(v).trim();
+      if (v !== undefined && v !== null) {
+        const s = String(v).trim();
+        if (s !== '' && s !== '-') {
+          return s;
+        }
       }
     }
     return '';
@@ -181,6 +186,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (!res.ok) return;
 
     const data = await res.json();
+    console.log('📌 DATI RICEVUTI DA MONGODB:', data);
 
     // 1. TITOLO GENERALE DEL MENU
     const titleVal = getVal(data.title, data.titolo);
@@ -208,33 +214,37 @@ document.addEventListener('DOMContentLoaded', async () => {
       if (svolgimentoTrePortate) svolgimentoTrePortate.style.display = 'none';
       if (svolgimentoPiattoUnico) svolgimentoPiattoUnico.style.display = 'block';
 
-      // 🟡 ESTRAZIONE ROBUSTA (scarta le stringhe vuote "")
+      // 🔍 Cerca il dato in QUALSIASI posizione possibile
       const titoloPU = getVal(
         data.piattoUnico?.titolo,
-        data.primo?.titolo,           
-        data.title,                   
+        data.titolo_PiattoUnico,
+        data.primo?.titolo,
+        data.title,
         data.titolo
       ) || 'Piatto Unico';
 
       const ingredientiPU = getVal(
         data.piattoUnico?.ingredienti,
-        data.primo?.ingredienti,       
-        data.ingredienti_PiattoUnico
+        data.ingredienti_PiattoUnico,
+        data.primo?.ingredienti,
+        data.ingredienti
       ) || 'Nessun ingrediente specificato';
 
       const descrizionePU = getVal(
         data.piattoUnico?.descrizione,
-        data.primo?.descrizione,       
-        data.descrizione_PiattoUnico
+        data.descrizione_PiattoUnico,
+        data.primo?.descrizione,
+        data.descrizione
       ) || 'Nessuna preparazione specificata';
 
       const imageUrlPU = getVal(
-        data.piattoUnico?.imageUrl,    
+        data.piattoUnico?.imageUrl,
+        data.piattoUnico,
         data.primo?.imageUrl,
         data.imageUrl
       );
 
-      // Popolamento HTML Piatto Unico
+      // Popolamento elementi HTML
       setText('titoloPiattoUnico_intro', titoloPU);
       setText('titoloPiattoUnico_svolgimento', titoloPU);
       setText('ingredientiPiattoUnico', ingredientiPU);
