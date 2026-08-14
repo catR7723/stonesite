@@ -1,4 +1,6 @@
-<!DOCTYPE html><html lang="en"><head>
+<!DOCTYPE html>
+<html lang="it">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inserisci la Ricetta</title>
@@ -6,12 +8,9 @@
 </head>
 <body>
 
-<!-- HEADER con titolo visibile in tutti gli step -->
 <div id="header-title" style="display:none; position: sticky; top: 0; background: white; padding: 20px; border-bottom: 2px solid #ccc; z-index: 100;">
   <h2>Menu: <strong id="headerTitle"></strong></h2>
 </div>
-
-<!-- STEP 1: Titolo del Menu -->
 
 <div id="recipe-title-section" class="step-container active">
   <h2>Step 1: Crea il titolo del menu</h2>
@@ -26,7 +25,7 @@
   <button type="button" id="btnCreateTitle" class="btn">Crea Titolo del Menu</button>
   <p id="titleStatus">Titolo: <strong id="currentTitle">-</strong></p>
 </div>
-<!-- STEP 2: Carica Immagini -->
+
 <div id="step-upload-images" class="step-container" style="display:none;">
   <h2>Step 2: Carica le immagini</h2>
   <form action="/cucinaInsert" method="POST" enctype="multipart/form-data" id="topForm">
@@ -63,20 +62,18 @@
 
     <div style="margin-top: 20px;">
       <label>Carica pdf della ricetta:</label>
-      <input type="file" name="ricetta" id="filePdf" accept=".pdf" required>
+      <input type="file" name="ricetta" id="filePdf" accept=".pdf">
       <p id="pdfFileName" style="margin-top: 10px; color: #666;"></p>
     </div>
 
-    <button type="submit" style="margin-top: 20px;">Anteprima Immagini</button>
+    <button type="submit" style="margin-top: 20px;">Prosegui all'inserimento testi</button>
   </form>
 </div>
 
-<!-- STEP 3: Edita Primo -->
 <div id="step-primo" class="step-container" style="display:none;">
   <h2>Step 3: Modifica il Primo</h2>
   <div class="Conteiner_Primo" id="sezione-primo">
 
-    <!-- IMMAGINE DEL PRIMO -->
     <div id="primo-image-container">
       <img id="imgPrimo" src="" alt="Primo" width="200" style="display:none;">
       <div id="primo-button-container">
@@ -96,13 +93,13 @@
       <input type="hidden" name="recipeTitle" id="recipeTitle_primo">
       
       <label>Titolo del Primo:</label>
-      <input type="text" id="inputTitoloPrimo" name="titolo_Primo" placeholder="Inserisci il titolo del Primo" oninput="aggiornaAnteprima('primo')">
+      <input type="text" id="inputTitoloPrimo" name="titolo_Primo" placeholder="Inserisci il titolo del Primo">
 
       <label style="margin-top: 20px;">Ingredienti del Primo:</label>
-      <textarea id="ingredientiPrimoInput" name="ingredienti_Primo" placeholder="Inserisci gli ingredienti del primo..." rows="10" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc; font-family: sans-serif;" oninput="aggiornaAnteprima('primo')"></textarea>
+      <textarea id="ingredientiPrimoInput" name="ingredienti_Primo" placeholder="Inserisci gli ingredienti del primo..." rows="10" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc; font-family: sans-serif;"></textarea>
 
       <label style="margin-top: 20px;">Procedimento del Primo:</label>
-      <textarea id="descrizionePrimoInput" name="descrizione_Primo" placeholder="Inserisci qui tutto il procedimento..." rows="10" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc; font-family: sans-serif;" oninput="aggiornaAnteprima('primo')"></textarea>
+      <textarea id="descrizionePrimoInput" name="descrizione_Primo" placeholder="Inserisci qui tutto il procedimento..." rows="10" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc; font-family: sans-serif;"></textarea>
       
       <button class="btn" type="submit" style="margin-top: 10px;">Salva Primo</button>
       <button class="btn btn-delete" type="button" id="cancelPrimoBtn" style="margin-top: 10px;">Cancella Primo e Torna al Primo Step</button>
@@ -114,12 +111,10 @@
   </div>
 </div>
 
-<!-- STEP 4: Edita Secondo -->
 <div id="step-secondo" class="step-container" style="display:none;">
   <h2>Step 4: Modifica il Secondo</h2>
   <div class="Conteiner_Secondo" id="sezione-secondo">
     
-    <!-- IMMAGINE DEL SECONDO -->
     <div id="secondo-image-container">
       <img id="imgSecondo" src="" alt="Secondo" width="200" style="display:none;">
       <div id="secondo-button-container">
@@ -139,13 +134,13 @@
       <input type="hidden" name="recipeTitle" id="recipeTitle_secondo">
       
       <label>Titolo del Secondo:</label>
-      <input type="text" id="inputTitoloSecondo" name="titolo_Secondo" placeholder="Inserisci il titolo del Secondo" oninput="aggiornaAnteprima('secondo')">
+      <input type="text" id="inputTitoloSecondo" name="titolo_Secondo" placeholder="Inserisci il titolo del Secondo">
 
       <label style="margin-top: 20px;">Ingredienti del Secondo:</label>
-      <textarea id="ingredientiSecondoInput" name="ingredienti_Secondo" placeholder="Inserisci gli ingredienti del secondo..." rows="10" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc; font-family: sans-serif;" oninput="aggiornaAnteprima('secondo')"></textarea>
+      <textarea id="ingredientiSecondoInput" name="ingredienti_Secondo" placeholder="Inserisci gli ingredienti del secondo..." rows="10" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc; font-family: sans-serif;"></textarea>
 
       <label style="margin-top: 20px;">Procedimento del Secondo:</label>
-      <textarea id="descrizioneSecondoInput" name="descrizione_Secondo" placeholder="Inserisci qui tutto il procedimento..." rows="10" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc; font-family: sans-serif;" oninput="aggiornaAnteprima('secondo')"></textarea>
+      <textarea id="descrizioneSecondoInput" name="descrizione_Secondo" placeholder="Inserisci qui tutto il procedimento..." rows="10" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc; font-family: sans-serif;"></textarea>
       
       <button class="btn" type="submit" style="margin-top: 10px;">Salva Secondo</button>
       <button class="btn btn-delete" type="button" id="cancelSecondoBtn" style="margin-top: 10px;">Cancella Secondo e Torna al Secondo Step</button>
@@ -157,12 +152,10 @@
   </div>
 </div>
 
-<!-- STEP 5: Edita Contorno -->
 <div id="step-contorno" class="step-container" style="display:none;">
   <h2>Step 5: Modifica il Contorno</h2>
   <div class="Conteiner_Contorno" id="sezione-contorno">
     
-    <!-- IMMAGINE DEL CONTORNO -->
     <div id="contorno-image-container">
       <img id="imgContorno" src="" alt="Contorno" width="200" style="display:none;">
       <div id="contorno-button-container">
@@ -182,24 +175,19 @@
       <input type="hidden" name="recipeTitle" id="recipeTitle_contorno">
       
       <label>Titolo del Contorno:</label>
-      <input type="text" id="inputTitoloContorno" name="titolo_Contorno" placeholder="Inserisci il titolo del Contorno" oninput="aggiornaAnteprima('contorno')">
+      <input type="text" id="inputTitoloContorno" name="titolo_Contorno" placeholder="Inserisci il titolo del Contorno">
 
       <label style="margin-top: 20px;">Ingredienti del Contorno:</label>
-      <textarea id="ingredientiContornoInput" name="ingredienti_Contorno" placeholder="Inserisci gli ingredienti del contorno..." rows="10" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc; font-family: sans-serif;" oninput="aggiornaAnteprima('contorno')"></textarea>
+      <textarea id="ingredientiContornoInput" name="ingredienti_Contorno" placeholder="Inserisci gli ingredienti del contorno..." rows="10" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc; font-family: sans-serif;"></textarea>
 
       <label style="margin-top: 20px;">Procedimento del Contorno:</label>
-      <textarea id="descrizioneContornoInput" name="descrizione_Contorno" placeholder="Inserisci qui tutto il procedimento..." rows="10" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc; font-family: sans-serif;" oninput="aggiornaAnteprima('contorno')"></textarea>
+      <textarea id="descrizioneContornoInput" name="descrizione_Contorno" placeholder="Inserisci qui tutto il procedimento..." rows="10" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc; font-family: sans-serif;"></textarea>
       
       <button class="btn" type="submit" style="margin-top: 10px;">Salva Contorno</button>
       <button class="btn btn-delete" type="button" id="cancelContornoBtn" style="margin-top: 10px;">Cancella Contorno e Torna al Contorno Step</button>
     </form>
 
     <div id="contorno-completato" style="display:none; color: green; font-weight: bold; margin-top: 20px; font-size: 18px;">
-      ✓ Contorno completato! Puoi pubblicare il menu
-    </div>
-  </div>
-</div>
-<div id="contorno-completato" style="display:none; color: green; font-weight: bold; margin-top: 20px; font-size: 18px;">
       ✓ Contorno completato! Puoi pubblicare il menu
     </div>
   </div>
@@ -219,87 +207,7 @@
       <input type="hidden" name="recipeTitle" id="recipeTitle_piattoUnico">
       
       <label>Titolo del Piatto Unico:</label>
-      <input type="text" id="inputTitoloPiattoUnico" name="titolo_PiattoUnico" placeholder="Inserisci il titolo del Piatto Unico">
-
-      <label style="margin-top: 20px;">Ingredienti del Piatto Unico:</label>
-      <textarea id="ingredientiPiattoUnicoInput" name="ingredienti_PiattoUnico" placeholder="Inserisci gli ingredienti..." rows="10" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc; font-family: sans-serif;"></textarea>
-
-      <label style="margin-top: 20px;">Procedimento del Piatto Unico:</label>
-      <textarea id="descrizionePiattoUnicoInput" name="descrizione_PiattoUnico" placeholder="Inserisci qui tutto il procedimento..." rows="10" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc; font-family: sans-serif;"></textarea>
-      
-      <button class="btn" type="submit" style="margin-top: 10px;">Salva Piatto Unico</button>
-    </form>
-
-    <div id="piattoUnico-completato" style="display:none; color: green; font-weight: bold; margin-top: 20px; font-size: 18px;">
-      ✓ Piatto Unico completato! Procedi alla pubblicazione
-    </div>
-  </div>
-</div>
-<div id="step-6" class="step-container" style="display:none;">
-
-
-<!-- STEP 6: Download e Pubblicazione -->
-<div id="step-6" class="step-container" style="display:none;">
-  <h2>Step 6: Pubblica Menu</h2>
-
-  <div id="preview-piatto-unico" style="display:none;">
-    <div class="card-anteprima">
-      <h3>Anteprima Piatto Unico</h3>
-      <img id="previewPiattoUnicoImg" src="" alt="Piatto Unico" style="max-width: 250px; display:none; border-radius: 8px; margin-bottom: 10px;">
-      <p><strong>Titolo:</strong> <span id="previewPiattoUnicoTitolo">-</span></p>
-      <p><strong>Ingredienti:</strong> <span id="previewPiattoUnicoIngredienti">-</span></p>
-      <p><strong>Descrizione:</strong> <span id="previewPiattoUnicoDescrizione">-</span></p>
-      
-      <button type="button" onclick="eliminaPiattoUnicoFinal()" class="btn btn-danger" style="margin-top: 10px;">
-        Elimina Piatto Unico
-      </button>
-    </div>
-  </div>
-
-  <div id="preview-tre-portate">
-    <div class="card-anteprima">
-      <h3>Primo</h3>
-      <img id="previewPrimoImg" src="" alt="Primo" style="max-width: 200px; display:none; border-radius: 8px;">
-      <p><strong>Titolo:</strong> <span id="previewPrimoTitolo">-</span></p>
-      <p><strong>Ingredienti:</strong> <span id="previewPrimoIngredienti">-</span></p>
-      <p><strong>Descrizione:</strong> <span id="previewPrimoDescrizione">-</span></p>
-      <button type="button" onclick="eliminaPrimoFinal()" class="btn btn-danger">Elimina Primo</button>
-    </div>
-
-    <div class="card-anteprima" style="margin-top: 15px;">
-      <h3>Secondo</h3>
-      <img id="previewSecondoImg" src="" alt="Secondo" style="max-width: 200px; display:none; border-radius: 8px;">
-      <p><strong>Titolo:</strong> <span id="previewSecondoTitolo">-</span></p>
-      <p><strong>Ingredienti:</strong> <span id="previewSecondoIngredienti">-</span></p>
-      <p><strong>Descrizione:</strong> <span id="previewSecondoDescrizione">-</span></p>
-      <button type="button" onclick="eliminaSecondoFinal()" class="btn btn-danger">Elimina Secondo</button>
-    </div>
-
-    <div class="card-anteprima" style="margin-top: 15px;">
-      <h3>Contorno</h3>
-      <img id="previewContornoImg" src="" alt="Contorno" style="max-width: 200px; display:none; border-radius: 8px;">
-      <p><strong>Titolo:</strong> <span id="previewContornoTitolo">-</span></p>
-      <p><strong>Ingredienti:</strong> <span id="previewContornoIngredienti">-</span></p>
-      <p><strong>Descrizione:</strong> <span id="previewContornoDescrizione">-</span></p>
-      <button type="button" onclick="eliminaContornoFinal()" class="btn btn-danger">Elimina Contorno</button>
-    </div>
-  </div>
-
-  <div style="margin-top: 25px; padding-top: 15px; border-top: 1px solid #ccc;">
-    <p id="pdfContainer" style="display:none;">
-      <strong>Ricetta PDF:</strong> 
-      <a id="previewPdfLink" href="#" target="_blank" class="btn btn-info" style="margin-left: 10px;">Scarica la ricetta</a>
-    </p>
-
-    <form action="/salvaMenuR" method="POST" style="margin-top: 15px;">
-      <input type="hidden" name="recipeTitle" class="recipeTitle_hidden_field">
-      <button type="submit" class="btn btn-success" style="font-size: 1.1rem; padding: 10px 20px;">
-        Pubblica Menu
-      </button>
-    </form>
-  </div>
-</div>
-
+      <input type="text" id="inputTitolo
 <script>
 // ===== STATO GLOBALE =====
 let currentRecipeTitle = '';
@@ -677,11 +585,16 @@ document.getElementById('formContorno').addEventListener('submit', async (e) => 
 document.getElementById('formPiattoUnico').addEventListener('submit', async (e) => {
   e.preventDefault();
   
+  // Recupera i valori dagli input HTML
+  const titoloVal = document.getElementById('inputTitoloPiattoUnico')?.value || currentRecipeTitle;
+  const ingredientiVal = document.getElementById('ingredientiPiattoUnicoInput')?.value || '';
+  const descrizioneVal = document.getElementById('descrizionePiattoUnicoInput')?.value || '';
+
   const data = {
     recipeTitle: currentRecipeTitle,
-    titolo_PiattoUnico: document.getElementById('inputTitoloPiattoUnico').value || currentRecipeTitle,
-    ingredienti_PiattoUnico: document.getElementById('ingredientiPiattoUnicoInput').value,
-    descrizione_PiattoUnico: document.getElementById('descrizionePiattoUnicoInput').value
+    titolo_PiattoUnico: titoloVal,
+    ingredienti_PiattoUnico: ingredientiVal,
+    descrizione_PiattoUnico: descrizioneVal
   };
   
   await savePiatto('/salvaPiattoUnico', data, 'piattoUnico');

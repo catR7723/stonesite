@@ -136,18 +136,18 @@
             </div>
         </div>
     </div>
+
 <script>
 document.addEventListener('DOMContentLoaded', async () => {
+  const btn = document.getElementById('salvaMenuR');
+
+  // Helper per impostare il testo
   const setText = (id, text) => {
     const el = document.getElementById(id);
-    if (el) {
-      el.textContent = text || '';
-      console.log(`[DOM UPDATE] #${id} set to:`, text);
-    } else {
-      console.warn(`[DOM ERROR] Elemento #${id} NON trovato nel file HTML!`);
-    }
+    if (el) el.textContent = text || '';
   };
 
+  // Helper per gestire l'immagine
   const ensureImg = (container, imgId, src) => {
     if (!container) return;
     let img = document.getElementById(imgId);
@@ -165,91 +165,79 @@ document.addEventListener('DOMContentLoaded', async () => {
     img.src = src;
   };
 
+  // Helper per prendere il primo valore NON vuoto
+  const getVal = (...vals) => vals.find(v => v !== undefined && v !== null && v !== '') || '';
+
+  if (btn) btn.disabled = true;
+
   try {
     const res = await fetch('/api/recipe/latest', { credentials: 'include' });
-    console.log('Status risposta /api/recipe/latest:', res.status);
-    
-    if (!res.ok) {
-      console.error('L\'API ha risposto con errore:', res.status);
-      return;
-    }
+    if (!res.ok) return;
 
     const data = await res.json();
-    console.log('--- DATI RICEVUTI DA MONGODB ---', data);
 
-    // Titoli generali
-    const titleVal = data.title || data.titolo || '';
+    // 1. TITOLO GENERALE DEL MENU
+    const titleVal = getVal(data.title, data.titolo);
     setText('recipe_title_display_label', titleVal);
     setText('recipe_title_display_intro', titleVal);
 
-    // Gestione PDF
+    // 2. DOWNLOAD PDF
     const pdfLink = document.getElementById('downloadPdfLink');
     const pdfContainer = document.getElementById('downloadPdfContainer');
     const ricettaLink = (data.ricetta && typeof data.ricetta === 'object') ? (data.ricetta.pdfUrl || null) : (data.ricetta || null);
     if (ricettaLink && pdfLink) pdfLink.href = ricettaLink;
     if (pdfContainer) pdfContainer.style.display = ricettaLink ? 'block' : 'none';
 
-    // Controlla isPiattoUnico (gestisce booleani e stringhe "true")
-    const isPiattoUnico = data.isPiattoUnico === true || data.isPiattoUnico === 'true';
-    console.log('isPiattoUnico è:', isPiattoUnico);
-
+    // 3. VISIBILITÀ SEZIONI
+    const isPiattoUnico = !!data.isPiattoUnico;
     const introTrePortate = document.getElementById('intro-tre-portate');
     const introPiattoUnico = document.getElementById('intro-piatto-unico');
     const svolgimentoTrePortate = document.getElementById('svolgimento-tre-portate');
     const svolgimentoPiattoUnico = document.getElementById('svolgimento-piatto-unico');
-if (isPiattoUnico) {
+
+    if (isPiattoUnico) {
       if (introTrePortate) introTrePortate.style.display = 'none';
       if (introPiattoUnico) introPiattoUnico.style.display = 'block';
       if (svolgimentoTrePortate) svolgimentoTrePortate.style.display = 'none';
       if (svolgimentoPiattoUnico) svolgimentoPiattoUnico.style.display = 'block';
 
-      // Funzione helper per prendere il primo valore non vuoto
-      const getVal = (...vals) => vals.find(v => v !== undefined && v !== null && v !== '') || '';
-
-      // 1. Estrazione TITOLO (cerca in primo, poi piattoUnico, poi title generale)
-      const titolo = getVal(
+      // Estrazione dati ignorando le stringhe vuote
+      const titoloPU = getVal(
         data.primo && data.primo.titolo,
         data.piattoUnico && data.piattoUnico.titolo,
         data.title,
         data.titolo
       ) || 'Piatto Unico';
 
-      // 2. Estrazione INGREDIENTI
-      const ingredienti = getVal(
+      const ingredientiPU = getVal(
         data.primo && data.primo.ingredienti,
         data.piattoUnico && data.piattoUnico.ingredienti,
         data.ingredienti_PiattoUnico,
         data.ingredienti
       );
 
-      // 3. Estrazione PREPARAZIONE / DESCRIZIONE
-      const descrizione = getVal(
+      const descrizionePU = getVal(
         data.primo && data.primo.descrizione,
         data.piattoUnico && data.piattoUnico.descrizione,
         data.descrizione_PiattoUnico,
         data.descrizione
       );
 
-      // 4. Estrazione IMMAGINE (cerca prima in piattoUnico dove c'è la foto caricata)
-      const imageUrl = getVal(
+      const imageUrlPU = getVal(
         data.piattoUnico && data.piattoUnico.imageUrl,
         data.primo && data.primo.imageUrl,
         data.imageUrl
       );
 
-      console.log('Valori effettivi popolati:', { titolo, ingredienti, descrizione, imageUrl });
+      // Popolamento diretto HTML Piatto Unico
+      setText('titoloPiattoUnico_intro', titoloPU);
+      setText('titoloPiattoUnico_svolgimento', titoloPU);
+      setText('ingredientiPiattoUnico', ingredientiPU);
+      setText('descrizionePiattoUnico', descrizionePU);
 
-      // Popolamento HTML
-      setText('titoloPiattoUnico_intro', titolo);
-      setText('titoloPiattoUnico_svolgimento', titolo);
-      setText('ingredientiPiattoUnico', ingredienti);
-      setText('descrizionePiattoUnico', descrizione);
+      ensureImg(document.getElementById('piattoUnico'), 'imgPiattoUnico', imageUrlPU);
 
-      // Immagine
-      ensureImg(document.getElementById('piattoUnico'), 'imgPiattoUnico', imageUrl);
-
-    }
-  else {
+    } else {
       if (introTrePortate) introTrePortate.style.display = 'block';
       if (introPiattoUnico) introPiattoUnico.style.display = 'none';
       if (svolgimentoTrePortate) svolgimentoTrePortate.style.display = 'block';
@@ -281,10 +269,11 @@ if (isPiattoUnico) {
     }
 
   } catch (err) {
-    console.error('Errore durante la fetch /api/recipe/latest:', err);
+    console.error('Errore durante il caricamento della ricetta:', err);
+  } finally {
+    if (btn) btn.disabled = false;
   }
 });
 </script>
-
 </body>
 </html>
