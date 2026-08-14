@@ -494,6 +494,14 @@ app.get('/getImageUrls/:recipeTitle', async (req, res) => {
   }
 });
 
+// ============ MOUNT cucina routes (Opzione B) ============
+try {
+  const cucinaRouter = require('./routes/cucinaInsert')(upload, cloudinary);
+  app.use('/', cucinaRouter);
+} catch (err) {
+  console.warn('Router cucinaInsert non trovato o errore nel mount:', err.message || err);
+}
+
 // ============ ROTTE HOME PUBBLICHE ============
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'index.html')));
 app.get('/index.html', (req, res) => res.sendFile(path.join(__dirname, 'index.html')));
