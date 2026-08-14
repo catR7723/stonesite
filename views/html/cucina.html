@@ -149,43 +149,61 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   };
 
-  // Helper per inserire/aggiornare l'immagine
+  // Helper per le immagini con fall-back in caso di errore
   const ensureImg = (container, imgId, src) => {
     if (!container) return;
     let img = document.getElementById(imgId);
-    if (!src) {
+
+    if (!src || String(src).trim() === '') {
       if (img) img.remove();
       return;
     }
+
     if (!img) {
       img = document.createElement('img');
       img.id = imgId;
       img.style.maxWidth = '100%';
       img.style.height = 'auto';
       img.style.borderRadius = '8px';
+      img.style.marginBottom = '15px';
+      
+      img.onerror = () => { img.style.display = 'none'; };
+      img.onload = () => { img.style.display = 'block'; };
+
       container.appendChild(img);
     }
     img.src = src;
   };
 
-  // 🟢 Helper preso da ARCHIVIO.HTML per estrarre in modo sicuro tutti i dati di un piatto
+  // Helper da archivio.html per estrarre immagini e testi in qualunque forma
   const getPiatto = (p, sectionName = '') => {
-    if (!p) return { titolo: '', imageUrl: '', ingredienti: '', descrizione: '' };
+    if (!p) {
+      return {
+        titolo: getVal(window._latestData?.[`${sectionName}_titolo`]),
+        imageUrl: getVal(window._latestData?.[`${sectionName}_imageUrl`], window._latestData?.[`${sectionName}Img`], window._latestData?.[sectionName]),
+        ingredienti: getVal(window._latestData?.[`${sectionName}_ingredienti`]),
+        descrizione: getVal(window._latestData?.[`${sectionName}_descrizione`])
+      };
+    }
     
-    // Se è una stringa (magari è solo l'URL dell'immagine)
     if (typeof p === 'string') {
-      return { titolo: '', imageUrl: p, ingredienti: '', descrizione: '' };
+      return {
+        titolo: getVal(window._latestData?.[`${sectionName}_titolo`]),
+        imageUrl: p,
+        ingredienti: getVal(window._latestData?.[`${sectionName}_ingredienti`]),
+        descrizione: getVal(window._latestData?.[`${sectionName}_descrizione`])
+      };
     }
 
     return {
-      titolo: p.titolo || p.nome || p.title || p[`${sectionName}_titolo`] || '',
-      imageUrl: p.imageUrl || p.url || p.immagine || p.foto || p[`${sectionName}_imageUrl`] || '',
-      ingredienti: p.ingredienti || p.ingredients || p[`${sectionName}_ingredienti`] || '',
-      descrizione: p.descrizione || p.preparazione || p.procedimento || p[`${sectionName}_descrizione`] || ''
+      titolo: getVal(p.titolo, p.nome, p.title, window._latestData?.[`${sectionName}_titolo`]),
+      imageUrl: getVal(p.imageUrl, p.url, p.immagine, p.foto, window._latestData?.[`${sectionName}_imageUrl`], window._latestData?.[`${sectionName}Img`]),
+      ingredienti: getVal(p.ingredienti, p.ingredients, window._latestData?.[`${sectionName}_ingredienti`]),
+      descrizione: getVal(p.descrizione, p.preparazione, p.procedimento, window._latestData?.[`${sectionName}_descrizione`])
     };
   };
 
-  const getVal = (...vals) => {
+  function getVal(...vals) {
     for (let v of vals) {
       if (v !== undefined && v !== null) {
         const s = String(v).trim();
@@ -193,7 +211,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       }
     }
     return '';
-  };
+  }
 
   if (btn) btn.disabled = true;
 
@@ -202,22 +220,23 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (!res.ok) return;
 
     const data = await res.json();
-    console.log('📌 DATI COMPLETI RICEVUTI:', data);
+    window._latestData = data; // Salviamo lo stato globale per il recupero dei campi fallback
+    console.log('📌 DATI RICEVUTI:', data);
 
     // 1. TITOLO MENU
     const titleVal = getVal(data.title, data.titolo);
     setProtectedText('recipe_title_display_label', titleVal);
     setProtectedText('recipe_title_display_intro', titleVal);
 
-    // 2. PDF DOWNLOAD
+    // 2. PDF
     const pdfLink = document.getElementById('downloadPdfLink');
     const pdfContainer = document.getElementById('downloadPdfContainer');
     const ricettaLink = (data.ricetta && typeof data.ricetta === 'object') ? (data.ricetta.pdfUrl || null) : (data.ricetta || null);
     if (pdfLink) pdfLink.href = ricettaLink || '#';
     if (pdfContainer) pdfContainer.style.display = ricettaLink ? 'block' : 'none';
 
-    // 3. SEZIONI
-    const isPiattoUnico = !!(data.isPiattoUnico || data.piattoUnico?.titolo || data.ingredienti_PiattoUnico);
+    // 3. SELEZIONE LAYOUT (Strict boolean per evitare false-positive sul Piatto Unico)
+    const isPiattoUnico = data.isPiattoUnico === true || data.isPiattoUnico === 'true';
 
     const introTrePortate = document.getElementById('intro-tre-portate');
     const introPiattoUnico = document.getElementById('intro-piatto-unico');
@@ -245,6 +264,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       ensureImg(document.getElementById('piattoUnico'), 'imgPiattoUnico', imagePU);
 
     } else {
+      // 🟢 MOSTRA 3 PORTATE
       if (introTrePortate) introTrePortate.style.display = 'block';
       if (introPiattoUnico) introPiattoUnico.style.display = 'none';
       if (svolgimentoTrePortate) svolgimentoTrePortate.style.display = 'block';
@@ -252,33 +272,27 @@ document.addEventListener('DOMContentLoaded', async () => {
 
       // 🍝 1. PRIMO
       const primo = getPiatto(data.primo, 'primo');
-      if (primo.titolo || primo.imageUrl) {
-        setProtectedText('titolop_intro', primo.titolo);
-        setProtectedText('titolop_svolgimento', primo.titolo);
-        setProtectedText('ingredientiPrimo', primo.ingredienti);
-        setProtectedText('descrizionePrimo', primo.descrizione);
-        ensureImg(document.getElementById('primo'), 'imgPrimo', primo.imageUrl);
-      }
+      setProtectedText('titolop_intro', primo.titolo);
+      setProtectedText('titolop_svolgimento', primo.titolo);
+      setProtectedText('ingredientiPrimo', primo.ingredienti);
+      setProtectedText('descrizionePrimo', primo.descrizione);
+      ensureImg(document.getElementById('primo'), 'imgPrimo', primo.imageUrl);
 
       // 🍖 2. SECONDO
       const secondo = getPiatto(data.secondo, 'secondo');
-      if (secondo.titolo || secondo.imageUrl) {
-        setProtectedText('titolodefSecondo_intro', secondo.titolo);
-        setProtectedText('titolodefSecondo_svolgimento', secondo.titolo);
-        setProtectedText('ingredientiSecondo', secondo.ingredienti);
-        setProtectedText('descrizioneSecondo', secondo.descrizione);
-        ensureImg(document.getElementById('secondo'), 'imgSecondo', secondo.imageUrl);
-      }
+      setProtectedText('titolodefSecondo_intro', secondo.titolo);
+      setProtectedText('titolodefSecondo_svolgimento', secondo.titolo);
+      setProtectedText('ingredientiSecondo', secondo.ingredienti);
+      setProtectedText('descrizioneSecondo', secondo.descrizione);
+      ensureImg(document.getElementById('secondo'), 'imgSecondo', secondo.imageUrl);
 
       // 🥗 3. CONTORNO
       const contorno = getPiatto(data.contorno, 'contorno');
-      if (contorno.titolo || contorno.imageUrl) {
-        setProtectedText('titolodefConto_intro', contorno.titolo);
-        setProtectedText('titolodefConto_svolgimento', contorno.titolo);
-        setProtectedText('ingredientiContorno', contorno.ingredienti);
-        setProtectedText('descrizioneContorno', contorno.descrizione);
-        ensureImg(document.getElementById('contorno'), 'imgContorno', contorno.imageUrl);
-      }
+      setProtectedText('titolodefConto_intro', contorno.titolo);
+      setProtectedText('titolodefConto_svolgimento', contorno.titolo);
+      setProtectedText('ingredientiContorno', contorno.ingredienti);
+      setProtectedText('descrizioneContorno', contorno.descrizione);
+      ensureImg(document.getElementById('contorno'), 'imgContorno', contorno.imageUrl);
     }
 
   } catch (err) {
