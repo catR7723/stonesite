@@ -264,33 +264,56 @@ document.addEventListener('DOMContentLoaded', async () => {
       setTimeout(applicaDati, 500);
 
     } else {
+      // Mostra 3 portate e nascondi Piatto Unico
       if (introTrePortate) introTrePortate.style.display = 'block';
       if (introPiattoUnico) introPiattoUnico.style.display = 'none';
       if (svolgimentoTrePortate) svolgimentoTrePortate.style.display = 'block';
       if (svolgimentoPiattoUnico) svolgimentoPiattoUnico.style.display = 'none';
 
+      // 🟡 1. PRIMO
       if (data.primo) {
-        setProtectedText('titolop_intro', data.primo.titolo);
-        setProtectedText('titolop_svolgimento', data.primo.titolo);
-        setProtectedText('ingredientiPrimo', data.primo.ingredienti);
-        setProtectedText('descrizionePrimo', data.primo.descrizione);
-        ensureImg(document.getElementById('primo'), 'imgPrimo', data.primo.imageUrl);
+        setProtectedText('titolop_intro', getVal(data.primo.titolo, data.primo_titolo));
+        setProtectedText('titolop_svolgimento', getVal(data.primo.titolo, data.primo_titolo));
+        setProtectedText('ingredientiPrimo', getVal(data.primo.ingredienti, data.primo_ingredienti));
+        setProtectedText('descrizionePrimo', getVal(data.primo.descrizione, data.primo_descrizione));
+
+        // Cerca l'immagine sia dentro l'oggetto che nel campo singolo
+        const imgPrimoUrl = getVal(
+          typeof data.primo === 'string' ? data.primo : data.primo?.imageUrl,
+          data.primo_imageUrl,
+          data.primoImg
+        );
+        ensureImg(document.getElementById('primo'), 'imgPrimo', imgPrimoUrl);
       }
 
+      // 🟡 2. SECONDO
       if (data.secondo) {
-        setProtectedText('titolodefSecondo_intro', data.secondo.titolo);
-        setProtectedText('titolodefSecondo_svolgimento', data.secondo.titolo);
-        setProtectedText('ingredientiSecondo', data.secondo.ingredienti);
-        setProtectedText('descrizioneSecondo', data.secondo.descrizione);
-        ensureImg(document.getElementById('secondo'), 'imgSecondo', data.secondo.imageUrl);
+        setProtectedText('titolodefSecondo_intro', getVal(data.secondo.titolo, data.secondo_titolo));
+        setProtectedText('titolodefSecondo_svolgimento', getVal(data.secondo.titolo, data.secondo_titolo));
+        setProtectedText('ingredientiSecondo', getVal(data.secondo.ingredienti, data.secondo_ingredienti));
+        setProtectedText('descrizioneSecondo', getVal(data.secondo.descrizione, data.secondo_descrizione));
+
+        const imgSecondoUrl = getVal(
+          typeof data.secondo === 'string' ? data.secondo : data.secondo?.imageUrl,
+          data.secondo_imageUrl,
+          data.secondoImg
+        );
+        ensureImg(document.getElementById('secondo'), 'imgSecondo', imgSecondoUrl);
       }
 
+      // 🟡 3. CONTORNO
       if (data.contorno) {
-        setProtectedText('titolodefConto_intro', data.contorno.titolo);
-        setProtectedText('titolodefConto_svolgimento', data.contorno.titolo);
-        setProtectedText('ingredientiContorno', data.contorno.ingredienti);
-        setProtectedText('descrizioneContorno', data.contorno.descrizione);
-        ensureImg(document.getElementById('contorno'), 'imgContorno', data.contorno.imageUrl);
+        setProtectedText('titolodefConto_intro', getVal(data.contorno.titolo, data.contorno_titolo));
+        setProtectedText('titolodefConto_svolgimento', getVal(data.contorno.titolo, data.contorno_titolo));
+        setProtectedText('ingredientiContorno', getVal(data.contorno.ingredienti, data.contorno_ingredienti));
+        setProtectedText('descrizioneContorno', getVal(data.contorno.descrizione, data.contorno_descrizione));
+
+        const imgContornoUrl = getVal(
+          typeof data.contorno === 'string' ? data.contorno : data.contorno?.imageUrl,
+          data.contorno_imageUrl,
+          data.contornoImg
+        );
+        ensureImg(document.getElementById('contorno'), 'imgContorno', imgContornoUrl);
       }
     }
 
