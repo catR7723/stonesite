@@ -142,16 +142,20 @@ document.addEventListener('DOMContentLoaded', async () => {
   let inputId = document.getElementById('recipeId_salvaMenuR');
   const btn = document.getElementById('salvaMenuR');
 
-  // Helper per impostare il testo
+  // Helper per impostare il testo negli elementi
   const setText = (id, text) => {
     const el = document.getElementById(id);
     if (el) el.textContent = text || '';
   };
 
-  // Helper per le immagini
+  // Helper per mostrare/nascondere le immagini
   const ensureImg = (container, imgId, src) => {
-    if (!container || !src) return;
+    if (!container) return;
     let img = document.getElementById(imgId);
+    if (!src) {
+      if (img) img.remove();
+      return;
+    }
     if (!img) {
       img = document.createElement('img');
       img.id = imgId;
@@ -162,67 +166,24 @@ document.addEventListener('DOMContentLoaded', async () => {
     img.src = src;
   };
 
-  // Helper per inserire elementi di testo dinamici
-  const ensureTextElement = (parent, id, text, tag = 'p', afterEl = null) => {
-    if (!parent) return null;
-    let el = document.getElementById(id);
-    if (!el) {
-      el = document.createElement(tag);
-      el.id = id;
-      el.style.margin = '6px 0';
-      if (afterEl && afterEl.parentNode === parent) {
-        parent.insertBefore(el, afterEl.nextSibling);
-      } else {
-        parent.appendChild(el);
-      }
-    }
-    el.textContent = text || '';
-    return el;
-  };
-
-  // Helper per estrarre valori provando più chiavi (fallback)
-  const getField = (obj, keys) => {
-    if (!obj) return '';
-    for (const key of keys) {
-      if (obj[key] !== undefined && obj[key] !== null && obj[key] !== '') {
-        return obj[key];
-      }
-    }
-    return '';
-  };
-
   if (btn) btn.disabled = true;
 
   try {
     const res = await fetch('/api/recipe/latest', { credentials: 'include' });
     console.log('fetch /api/recipe/latest status:', res.status);
     if (!res.ok) {
-      console.log('Nessuna ricetta trovata:', res.status);
       if (btn) btn.disabled = false;
       return;
     }
     const data = await res.json();
     console.log('Dati ricevuti da /api/recipe/latest:', data);
 
-    // Gestione Title e ID per eventuale form
-    if (inputTitle) inputTitle.value = data.title || data.titolo || '';
-    if (!inputId) {
-      const form = document.querySelector('form[action="/salvaMenuR"]');
-      if (form) {
-        inputId = document.createElement('input');
-        inputId.type = 'hidden';
-        inputId.name = 'recipeId';
-        inputId.id = 'recipeId_salvaMenuR';
-        form.appendChild(inputId);
-      }
-    }
-    if (inputId) inputId.value = data.id || '';
+    // Titoli principali
+    const titleVal = data.title || data.titolo || '';
+    setText('recipe_title_display_label', titleVal);
+    setText('recipe_title_display_intro', titleVal);
 
-    // Titoli principali del menu
-    setText('recipe_title_display_label', data.title || data.titolo || '');
-    setText('recipe_title_display_intro', data.title || data.titolo || '');
-
-    // Download PDF Link
+    // Download PDF
     const pdfLink = document.getElementById('downloadPdfLink');
     const pdfContainer = document.getElementById('downloadPdfContainer');
     const ricettaLink = (data.ricetta && typeof data.ricetta === 'object') ? (data.ricetta.pdfUrl || null) : (data.ricetta || null);
@@ -233,66 +194,6 @@ document.addEventListener('DOMContentLoaded', async () => {
       pdfContainer.style.display = 'none';
     }
 
-    // Funzione per popolare ciascuna sezione
-    const fillSection = (prefix, value) => {
-      const container = document.getElementById(prefix);
-
-      let titleIntroId, titleSvolId, ingrId, descId, imgId;
-      if (prefix === 'primo') {
-        titleIntroId = 'titolop_intro'; titleSvolId = 'titolop_svolgimento';
-        ingrId = 'ingredientiPrimo'; descId = 'descrizionePrimo'; imgId = 'imgPrimo';
-      } else if (prefix === 'secondo') {
-        titleIntroId = 'titolodefSecondo_intro'; titleSvolId = 'titolodefSecondo_svolgimento';
-        ingrId = 'ingredientiSecondo'; descId = 'descrizioneSecondo'; imgId = 'imgSecondo';
-      } else if (prefix === 'contorno') {
-        titleIntroId = 'titolodefConto_intro'; titleSvolId = 'titolodefConto_svolgimento';
-        ingrId = 'ingredientiContorno'; descId = 'descrizioneContorno'; imgId = 'imgContorno';
-      } else if (prefix === 'piattoUnico') {
-        titleIntroId = 'titoloPiattoUnico_intro'; titleSvolId = 'titoloPiattoUnico_svolgimento';
-        ingrId = 'ingredientiPiattoUnico'; descId = 'descrizionePiattoUnico'; imgId = 'imgPiattoUnico';
-      }
-
-      const ingrIntroElId = `${ingrId}_intro`;
-      const descIntroElId = `${descId}_intro`;
-      const ingrIntroEl = document.getElementById(ingrIntroElId);
-      const descIntroEl = document.getElementById(descIntroElId);
-
-      if (!value) {
-        setText(titleIntroId, '');
-        setText(titleSvolId, '');
-        setText(ingrId, '');
-        setText(descId, '');
-        if (ingrIntroEl && ingrIntroEl.parentNode) ingrIntroEl.parentNode.removeChild(ingrIntroEl);
-        if (descIntroEl && descIntroEl.parentNode) descIntroEl.parentNode.removeChild(descIntroEl);
-        return;
-      }
-
-      // Estrazione intelligente dei campi supportando diversi nomi di proprietà
-      let titolo = getField(value, ['titolo', 'title', 'nome']);
-      let ingredienti = getField(value, ['ingredienti', 'ingredients', 'ingredientiPiattoUnico']);
-      let descrizione = getField(value, ['descrizione', 'description', 'procedimento', 'preparazione', 'descrizionePiattoUnico']);
-      let imageUrl = (typeof value === 'object') ? (value.imageUrl || value.pdfUrl || value.ricetta || null) : (typeof value === 'string' ? value : null);
-
-      if (titolo) {
-        setText(titleIntroId, titolo);
-        setText(titleSvolId, titolo);
-      }
-
-      // Popolamento dei campi nello svolgimento
-      setText(ingrId, ingredienti);
-      setText(descId, descrizione);
-
-      // Popolamento dinamico nell'intro
-      const titleIntroEl = document.getElementById(titleIntroId);
-      if (titleIntroEl && titleIntroEl.parentNode) {
-        if (ingredienti) ensureTextElement(titleIntroEl.parentNode, ingrIntroElId, ingredienti, 'p', titleIntroEl);
-        if (descrizione) ensureTextElement(titleIntroEl.parentNode, descIntroElId, descrizione, 'p', document.getElementById(ingrIntroElId) || titleIntroEl);
-      }
-
-      if (imageUrl && container) ensureImg(container, imgId, imageUrl);
-    };
-
-    // VISIBILITÀ E POPOLAMENTO PIATTO UNICO / TRE PORTATE
     const isPiattoUnico = !!data.isPiattoUnico;
     const introTrePortate = document.getElementById('intro-tre-portate');
     const introPiattoUnico = document.getElementById('intro-piatto-unico');
@@ -300,52 +201,72 @@ document.addEventListener('DOMContentLoaded', async () => {
     const svolgimentoPiattoUnico = document.getElementById('svolgimento-piatto-unico');
 
     if (isPiattoUnico) {
+      // Visibilità sezioni
       if (introTrePortate) introTrePortate.style.display = 'none';
       if (introPiattoUnico) introPiattoUnico.style.display = 'block';
       if (svolgimentoTrePortate) svolgimentoTrePortate.style.display = 'none';
       if (svolgimentoPiattoUnico) svolgimentoPiattoUnico.style.display = 'block';
 
-   
-// Unifica i dati del Piatto Unico cercando sia in data.piattoUnico, sia in data.primo, sia direttamente nella radice di data
-const fonteDati = data.piattoUnico || data.primo || data;
+      // Recupero dati Piatto Unico considerando sia data.primo che data.piattoUnico che data
+      const titolo = (data.piattoUnico && data.piattoUnico.titolo) || 
+                     (data.primo && data.primo.titolo) || 
+                     data.title || data.titolo || 'Piatto Unico';
 
-const piattoUnicoObj = {
-  titolo: getField(data.piattoUnico, ['titolo', 'title']) || 
-          getField(data.primo, ['titolo', 'title']) || 
-          getField(data, ['title', 'titolo']),
+      const ingredienti = (data.piattoUnico && (data.piattoUnico.ingredienti || data.piattoUnico.ingredientiPiattoUnico)) || 
+                          (data.primo && data.primo.ingredienti) || 
+                          data.ingredienti || data.ingredientiPiattoUnico || '';
 
-  ingredienti: getField(data.piattoUnico, ['ingredienti', 'ingredients', 'ingredientiPiattoUnico']) || 
-               getField(data.primo, ['ingredienti', 'ingredients']) || 
-               getField(data, ['ingredienti', 'ingredientiPiattoUnico']),
+      const descrizione = (data.piattoUnico && (data.piattoUnico.descrizione || data.piattoUnico.descrizionePiattoUnico || data.piattoUnico.procedimento)) || 
+                          (data.primo && data.primo.descrizione) || 
+                          data.descrizione || data.descrizionePiattoUnico || data.procedimento || '';
 
-  descrizione: getField(data.piattoUnico, ['descrizione', 'procedimento', 'preparazione', 'descrizionePiattoUnico', 'description']) || 
-               getField(data.primo, ['descrizione', 'procedimento', 'preparazione', 'description']) || 
-               getField(data, ['descrizione', 'procedimento', 'preparazione', 'descrizionePiattoUnico']),
+      const imageUrl = (data.piattoUnico && data.piattoUnico.imageUrl) || 
+                       (data.primo && data.primo.imageUrl) || 
+                       data.imageUrl || '';
 
-  imageUrl: (data.piattoUnico && data.piattoUnico.imageUrl) || 
-            (data.primo && data.primo.imageUrl) || 
-            data.imageUrl
-};
+      // Popolamento diretto degli elementi HTML
+      setText('titoloPiattoUnico_intro', titolo);
+      setText('titoloPiattoUnico_svolgimento', titolo);
+      setText('ingredientiPiattoUnico', ingredienti);
+      setText('descrizionePiattoUnico', descrizione);
 
-      console.log('Dati elaborati per Piatto Unico:', piattoUnicoObj);
+      // Immagine
+      const containerPU = document.getElementById('piattoUnico');
+      ensureImg(containerPU, 'imgPiattoUnico', imageUrl);
 
-      fillSection('piattoUnico', piattoUnicoObj);
-
-      // Svuota le 3 portate
-      fillSection('primo', null);
-      fillSection('secondo', null);
-      fillSection('contorno', null);
     } else {
+      // Gestione Tre Portate
       if (introTrePortate) introTrePortate.style.display = 'block';
       if (introPiattoUnico) introPiattoUnico.style.display = 'none';
       if (svolgimentoTrePortate) svolgimentoTrePortate.style.display = 'block';
       if (svolgimentoPiattoUnico) svolgimentoPiattoUnico.style.display = 'none';
 
-      fillSection('primo', data.primo || null);
-      fillSection('secondo', data.secondo || null);
-      fillSection('contorno', data.contorno || null);
+      // Primo
+      if (data.primo) {
+        setText('titolop_intro', data.primo.titolo);
+        setText('titolop_svolgimento', data.primo.titolo);
+        setText('ingredientiPrimo', data.primo.ingredienti);
+        setText('descrizionePrimo', data.primo.descrizione);
+        ensureImg(document.getElementById('primo'), 'imgPrimo', data.primo.imageUrl);
+      }
 
-      fillSection('piattoUnico', null);
+      // Secondo
+      if (data.secondo) {
+        setText('titolodefSecondo_intro', data.secondo.titolo);
+        setText('titolodefSecondo_svolgimento', data.secondo.titolo);
+        setText('ingredientiSecondo', data.secondo.ingredienti);
+        setText('descrizioneSecondo', data.secondo.descrizione);
+        ensureImg(document.getElementById('secondo'), 'imgSecondo', data.secondo.imageUrl);
+      }
+
+      // Contorno
+      if (data.contorno) {
+        setText('titolodefConto_intro', data.contorno.titolo);
+        setText('titolodefConto_svolgimento', data.contorno.titolo);
+        setText('ingredientiContorno', data.contorno.ingredienti);
+        setText('descrizioneContorno', data.contorno.descrizione);
+        ensureImg(document.getElementById('contorno'), 'imgContorno', data.contorno.imageUrl);
+      }
     }
 
   } catch (err) {
