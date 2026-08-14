@@ -138,17 +138,16 @@
     </div>
 <script>
 document.addEventListener('DOMContentLoaded', async () => {
-  const inputTitle = document.getElementById('recipeTitle_salvaMenuR');
-  let inputId = document.getElementById('recipeId_salvaMenuR');
-  const btn = document.getElementById('salvaMenuR');
-
-  // Helper per impostare il testo negli elementi
   const setText = (id, text) => {
     const el = document.getElementById(id);
-    if (el) el.textContent = text || '';
+    if (el) {
+      el.textContent = text || '';
+      console.log(`[DOM UPDATE] #${id} set to:`, text);
+    } else {
+      console.warn(`[DOM ERROR] Elemento #${id} NON trovato nel file HTML!`);
+    }
   };
 
-  // Helper per mostrare/nascondere le immagini
   const ensureImg = (container, imgId, src) => {
     if (!container) return;
     let img = document.getElementById(imgId);
@@ -166,51 +165,49 @@ document.addEventListener('DOMContentLoaded', async () => {
     img.src = src;
   };
 
-  if (btn) btn.disabled = true;
-
   try {
     const res = await fetch('/api/recipe/latest', { credentials: 'include' });
-    console.log('fetch /api/recipe/latest status:', res.status);
+    console.log('Status risposta /api/recipe/latest:', res.status);
+    
     if (!res.ok) {
-      if (btn) btn.disabled = false;
+      console.error('L\'API ha risposto con errore:', res.status);
       return;
     }
-    const data = await res.json();
-    console.log('Dati ricevuti da /api/recipe/latest:', data);
 
-    // Titoli principali
+    const data = await res.json();
+    console.log('--- DATI RICEVUTI DA MONGODB ---', data);
+
+    // Titoli generali
     const titleVal = data.title || data.titolo || '';
     setText('recipe_title_display_label', titleVal);
     setText('recipe_title_display_intro', titleVal);
 
-    // Download PDF
+    // Gestione PDF
     const pdfLink = document.getElementById('downloadPdfLink');
     const pdfContainer = document.getElementById('downloadPdfContainer');
     const ricettaLink = (data.ricetta && typeof data.ricetta === 'object') ? (data.ricetta.pdfUrl || null) : (data.ricetta || null);
-    if (ricettaLink) {
-      if (pdfLink) pdfLink.href = ricettaLink;
-      if (pdfContainer) pdfContainer.style.display = 'block';
-    } else if (pdfContainer) {
-      pdfContainer.style.display = 'none';
-    }
+    if (ricettaLink && pdfLink) pdfLink.href = ricettaLink;
+    if (pdfContainer) pdfContainer.style.display = ricettaLink ? 'block' : 'none';
 
-    const isPiattoUnico = !!data.isPiattoUnico;
+    // Controlla isPiattoUnico (gestisce booleani e stringhe "true")
+    const isPiattoUnico = data.isPiattoUnico === true || data.isPiattoUnico === 'true';
+    console.log('isPiattoUnico è:', isPiattoUnico);
+
     const introTrePortate = document.getElementById('intro-tre-portate');
     const introPiattoUnico = document.getElementById('intro-piatto-unico');
     const svolgimentoTrePortate = document.getElementById('svolgimento-tre-portate');
     const svolgimentoPiattoUnico = document.getElementById('svolgimento-piatto-unico');
 
     if (isPiattoUnico) {
-      // Visibilità sezioni
       if (introTrePortate) introTrePortate.style.display = 'none';
       if (introPiattoUnico) introPiattoUnico.style.display = 'block';
       if (svolgimentoTrePortate) svolgimentoTrePortate.style.display = 'none';
       if (svolgimentoPiattoUnico) svolgimentoPiattoUnico.style.display = 'block';
 
-      // Recupero dati Piatto Unico considerando sia data.primo che data.piattoUnico che data
+      // Estrazione dati da 'piattoUnico', 'primo' o dalla radice 'data'
       const titolo = (data.piattoUnico && data.piattoUnico.titolo) || 
                      (data.primo && data.primo.titolo) || 
-                     data.title || data.titolo || 'Piatto Unico';
+                     data.title || data.titolo || '';
 
       const ingredienti = (data.piattoUnico && (data.piattoUnico.ingredienti || data.piattoUnico.ingredientiPiattoUnico)) || 
                           (data.primo && data.primo.ingredienti) || 
@@ -224,24 +221,21 @@ document.addEventListener('DOMContentLoaded', async () => {
                        (data.primo && data.primo.imageUrl) || 
                        data.imageUrl || '';
 
-      // Popolamento diretto degli elementi HTML
+      console.log('Estratti per Piatto Unico:', { titolo, ingredienti, descrizione, imageUrl });
+
       setText('titoloPiattoUnico_intro', titolo);
       setText('titoloPiattoUnico_svolgimento', titolo);
       setText('ingredientiPiattoUnico', ingredienti);
       setText('descrizionePiattoUnico', descrizione);
 
-      // Immagine
-      const containerPU = document.getElementById('piattoUnico');
-      ensureImg(containerPU, 'imgPiattoUnico', imageUrl);
+      ensureImg(document.getElementById('piattoUnico'), 'imgPiattoUnico', imageUrl);
 
     } else {
-      // Gestione Tre Portate
       if (introTrePortate) introTrePortate.style.display = 'block';
       if (introPiattoUnico) introPiattoUnico.style.display = 'none';
       if (svolgimentoTrePortate) svolgimentoTrePortate.style.display = 'block';
       if (svolgimentoPiattoUnico) svolgimentoPiattoUnico.style.display = 'none';
 
-      // Primo
       if (data.primo) {
         setText('titolop_intro', data.primo.titolo);
         setText('titolop_svolgimento', data.primo.titolo);
@@ -250,7 +244,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         ensureImg(document.getElementById('primo'), 'imgPrimo', data.primo.imageUrl);
       }
 
-      // Secondo
       if (data.secondo) {
         setText('titolodefSecondo_intro', data.secondo.titolo);
         setText('titolodefSecondo_svolgimento', data.secondo.titolo);
@@ -259,7 +252,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         ensureImg(document.getElementById('secondo'), 'imgSecondo', data.secondo.imageUrl);
       }
 
-      // Contorno
       if (data.contorno) {
         setText('titolodefConto_intro', data.contorno.titolo);
         setText('titolodefConto_svolgimento', data.contorno.titolo);
@@ -270,9 +262,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
   } catch (err) {
-    console.error('Errore fetch /api/recipe/latest:', err);
-  } finally {
-    if (btn) btn.disabled = false;
+    console.error('Errore durante la fetch /api/recipe/latest:', err);
   }
 });
 </script>
