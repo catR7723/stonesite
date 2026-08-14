@@ -197,40 +197,59 @@ document.addEventListener('DOMContentLoaded', async () => {
     const introPiattoUnico = document.getElementById('intro-piatto-unico');
     const svolgimentoTrePortate = document.getElementById('svolgimento-tre-portate');
     const svolgimentoPiattoUnico = document.getElementById('svolgimento-piatto-unico');
-
-    if (isPiattoUnico) {
+if (isPiattoUnico) {
       if (introTrePortate) introTrePortate.style.display = 'none';
       if (introPiattoUnico) introPiattoUnico.style.display = 'block';
       if (svolgimentoTrePortate) svolgimentoTrePortate.style.display = 'none';
       if (svolgimentoPiattoUnico) svolgimentoPiattoUnico.style.display = 'block';
 
-      // Estrazione dati da 'piattoUnico', 'primo' o dalla radice 'data'
-      const titolo = (data.piattoUnico && data.piattoUnico.titolo) || 
-                     (data.primo && data.primo.titolo) || 
-                     data.title || data.titolo || '';
+      // Funzione helper per prendere il primo valore non vuoto
+      const getVal = (...vals) => vals.find(v => v !== undefined && v !== null && v !== '') || '';
 
-      const ingredienti = (data.piattoUnico && (data.piattoUnico.ingredienti || data.piattoUnico.ingredientiPiattoUnico)) || 
-                          (data.primo && data.primo.ingredienti) || 
-                          data.ingredienti || data.ingredientiPiattoUnico || '';
+      // 1. Estrazione TITOLO (cerca in primo, poi piattoUnico, poi title generale)
+      const titolo = getVal(
+        data.primo && data.primo.titolo,
+        data.piattoUnico && data.piattoUnico.titolo,
+        data.title,
+        data.titolo
+      ) || 'Piatto Unico';
 
-      const descrizione = (data.piattoUnico && (data.piattoUnico.descrizione || data.piattoUnico.descrizionePiattoUnico || data.piattoUnico.procedimento)) || 
-                          (data.primo && data.primo.descrizione) || 
-                          data.descrizione || data.descrizionePiattoUnico || data.procedimento || '';
+      // 2. Estrazione INGREDIENTI
+      const ingredienti = getVal(
+        data.primo && data.primo.ingredienti,
+        data.piattoUnico && data.piattoUnico.ingredienti,
+        data.ingredienti_PiattoUnico,
+        data.ingredienti
+      );
 
-      const imageUrl = (data.piattoUnico && data.piattoUnico.imageUrl) || 
-                       (data.primo && data.primo.imageUrl) || 
-                       data.imageUrl || '';
+      // 3. Estrazione PREPARAZIONE / DESCRIZIONE
+      const descrizione = getVal(
+        data.primo && data.primo.descrizione,
+        data.piattoUnico && data.piattoUnico.descrizione,
+        data.descrizione_PiattoUnico,
+        data.descrizione
+      );
 
-      console.log('Estratti per Piatto Unico:', { titolo, ingredienti, descrizione, imageUrl });
+      // 4. Estrazione IMMAGINE (cerca prima in piattoUnico dove c'è la foto caricata)
+      const imageUrl = getVal(
+        data.piattoUnico && data.piattoUnico.imageUrl,
+        data.primo && data.primo.imageUrl,
+        data.imageUrl
+      );
 
+      console.log('Valori effettivi popolati:', { titolo, ingredienti, descrizione, imageUrl });
+
+      // Popolamento HTML
       setText('titoloPiattoUnico_intro', titolo);
       setText('titoloPiattoUnico_svolgimento', titolo);
       setText('ingredientiPiattoUnico', ingredienti);
       setText('descrizionePiattoUnico', descrizione);
 
+      // Immagine
       ensureImg(document.getElementById('piattoUnico'), 'imgPiattoUnico', imageUrl);
 
-    } else {
+    }
+  else {
       if (introTrePortate) introTrePortate.style.display = 'block';
       if (introPiattoUnico) introPiattoUnico.style.display = 'none';
       if (svolgimentoTrePortate) svolgimentoTrePortate.style.display = 'block';
