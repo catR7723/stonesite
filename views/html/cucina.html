@@ -163,29 +163,36 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // Helper per le immagini
 
+// 🔍 FUNZIONE EXTRACTURL CON PARACADUTE RIGIDO
+const extractUrl = (val) => {
+  if (!val) return '';
+  if (typeof val === 'string') {
+    if (val.includes('[object Object]')) return '';
+    return val.trim();
+  }
+  if (typeof val === 'object') {
+    // Estrae la proprietà stringa se presente
+    const target = val.imageUrl || val.url || val.immagine || val.foto || val.src || val.pdfUrl;
+    if (typeof target === 'string') return target.trim();
+  }
+  return '';
+};
+
+// 🔍 ENSUREIMG CON STOP DI SICUREZZA ASSOLUTO
 const ensureImg = (container, imgId, rawSrc) => {
   if (!container) return;
 
-  // 1. Pulizia rigorosa del parametro rawSrc
-  let src = '';
+  const src = extractUrl(rawSrc);
 
-  if (typeof rawSrc === 'string') {
-    src = rawSrc.trim();
-  } else if (rawSrc && typeof rawSrc === 'object') {
-    // Se è stato passato per errore l'intero oggetto (es. data.primo), estraiamo l'URL
-    src = rawSrc.imageUrl || rawSrc.url || rawSrc.immagine || rawSrc.foto || rawSrc.src || '';
-  }
-
-  // 2. Controllo di sicurezza: se la stringa è vuota o contiene [object Object], abortiamo
-  if (!src || src.includes('[object Object]')) {
+  // SE SRC NON È UNA STRINGA VALIDA, BLOCCA SUBITO SENZA FARE NULLA
+  if (!src || typeof src !== 'string' || src.includes('[object Object]')) {
+    console.warn(`⚠️ Immagine annullata per ${imgId}. Valore non valido ricevuto:`, rawSrc);
     const existingImg = document.getElementById(imgId);
-    if (existingImg) existingImg.remove(); // Rimuove l'immagine se il dato non è valido
+    if (existingImg) existingImg.remove();
     return;
   }
 
-  // 3. Creazione o aggiornamento dell'elemento <img>
   let img = document.getElementById(imgId);
-
   if (!img) {
     img = document.createElement('img');
     img.id = imgId;
@@ -200,7 +207,6 @@ const ensureImg = (container, imgId, rawSrc) => {
     container.appendChild(img);
   }
 
-  // Imposta il link solo se è un URL valido
   img.src = src;
 };
   if (btn) btn.disabled = true;
