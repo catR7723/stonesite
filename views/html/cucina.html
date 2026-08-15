@@ -140,31 +140,31 @@
 document.addEventListener('DOMContentLoaded', async () => {
   const btn = document.getElementById('salvaMenuR');
 
-  // Helper per impostare il testo
+  // Helper per inserire il testo
   const setProtectedText = (id, text) => {
     const el = document.getElementById(id);
     if (!el) return;
-    if (text && typeof text === 'string' && text.trim() !== '' && text.trim() !== '-') {
-      el.textContent = text;
+    if (text !== undefined && text !== null && String(text).trim() !== '') {
+      el.textContent = String(text).trim();
     }
   };
 
-  // 🔴 HELPER PER IMMAGINI: Estrae l'URL reale ed evita di passare [object Object]
+  // Helper per estrarre SOLO l'URL (evita [object Object])
   const extractUrl = (val) => {
     if (!val) return '';
-    if (typeof val === 'string' && val.trim() !== '' && val !== '[object Object]') {
+    if (typeof val === 'string' && val.trim() !== '' && !val.includes('[object Object]')) {
       return val.trim();
     }
     if (typeof val === 'object') {
-      return extractUrl(val.imageUrl || val.url || val.immagine || val.foto || val.src || val.pdfUrl);
+      return extractUrl(val.imageUrl || val.url || val.immagine || val.foto || val.src);
     }
     return '';
   };
 
-  // Helper per creare/aggiornare il tag <img>
+  // Helper per le immagini
   const ensureImg = (container, imgId, rawSrc) => {
     if (!container) return;
-    const src = extractUrl(rawSrc); // <--- Estrae solo la stringa URL valida!
+    const src = extractUrl(rawSrc);
     let img = document.getElementById(imgId);
 
     if (!src) {
@@ -188,49 +188,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     img.src = src;
   };
 
-  const getVal = (...vals) => {
-    for (let v of vals) {
-      if (v !== undefined && v !== null && typeof v !== 'object') {
-        const s = String(v).trim();
-        if (s !== '' && s !== '-' && s !== '[object Object]') return s;
-      }
-    }
-    return '';
-  };
-
-  // Helper per estrarre il piatto
-const getPiatto = (p, sectionName = '') => {
-  const root = window._latestData || {};
-
-  // Se 'p' è null o undefined, cerca le proprietà flattened sul root (es. primo_titolo)
-  if (!p) {
-    return {
-      titolo: getVal(root[`${sectionName}_titolo`]),
-      imageUrl: extractUrl(root[`${sectionName}_imageUrl`] || root[`${sectionName}Img`]),
-      ingredienti: getVal(root[`${sectionName}_ingredienti`]),
-      descrizione: getVal(root[`${sectionName}_descrizione`])
-    };
-  }
-
-  // Se 'p' è una semplice stringa (es. solo l'URL dell'immagine)
-  if (typeof p === 'string') {
-    return {
-      titolo: getVal(root[`${sectionName}_titolo`]),
-      imageUrl: extractUrl(p),
-      ingredienti: getVal(root[`${sectionName}_ingredienti`]),
-      descrizione: getVal(root[`${sectionName}_descrizione`])
-    };
-  }
-
-  // 🟢 Se 'p' è un oggetto (es. data.primo = { titolo: "...", ingredienti: "..." })
-  return {
-    titolo: getVal(p.titolo, p.nome, p.title, root[`${sectionName}_titolo`]),
-    imageUrl: extractUrl(p.imageUrl || p.url || p.immagine || p.foto || root[`${sectionName}_imageUrl`]),
-    ingredienti: getVal(p.ingredienti, p.ingredients, root[`${sectionName}_ingredienti`]),
-    descrizione: getVal(p.descrizione, p.preparazione, p.procedimento, root[`${sectionName}_descrizione`])
-  };
-};
-
   if (btn) btn.disabled = true;
 
   try {
@@ -239,10 +196,9 @@ const getPiatto = (p, sectionName = '') => {
 
     const data = await res.json();
     window._latestData = data;
-    console.log('📌 DATI RICEVUTI:', data);
 
     // 1. TITOLO MENU
-    const titleVal = getVal(data.title, data.titolo);
+    const titleVal = data.title || data.titolo || '';
     setProtectedText('recipe_title_display_label', titleVal);
     setProtectedText('recipe_title_display_intro', titleVal);
 
@@ -253,7 +209,7 @@ const getPiatto = (p, sectionName = '') => {
     if (pdfLink) pdfLink.href = ricettaLink || '#';
     if (pdfContainer) pdfContainer.style.display = ricettaLink ? 'block' : 'none';
 
-    // 3. LAYOUT (Piatto Unico vs 3 Portate)
+    // 3. SELEZIONE LAYOUT (Piatto Unico vs 3 Portate)
     const isPiattoUnico = data.isPiattoUnico === true || data.isPiattoUnico === 'true';
 
     const introTrePortate = document.getElementById('intro-tre-portate');
@@ -267,18 +223,16 @@ const getPiatto = (p, sectionName = '') => {
       if (svolgimentoTrePortate) svolgimentoTrePortate.style.display = 'none';
       if (svolgimentoPiattoUnico) svolgimentoPiattoUnico.style.display = 'block';
 
-      const pu = getPiatto(data.piattoUnico, 'piattoUnico');
-      const primo = getPiatto(data.primo, 'primo');
-
-      const titoloPU = getVal(pu.titolo, primo.titolo, data.title) || 'Piatto Unico';
-      const ingredientiPU = getVal(pu.ingredienti, primo.ingredienti, data.ingredienti_PiattoUnico) || 'Nessun ingrediente';
-      const descrizionePU = getVal(pu.descrizione, primo.descrizione, data.descrizione_PiattoUnico) || 'Nessuna preparazione';
+      const pu = data.piattoUnico || {};
+      const titoloPU = pu.titolo || data.title || 'Piatto Unico';
+      const ingredientiPU = pu.ingredienti || 'Nessun ingrediente';
+      const descrizionePU = pu.descrizione || 'Nessuna preparazione';
 
       setProtectedText('titoloPiattoUnico_intro', titoloPU);
       setProtectedText('titoloPiattoUnico_svolgimento', titoloPU);
       setProtectedText('ingredientiPiattoUnico', ingredientiPU);
       setProtectedText('descrizionePiattoUnico', descrizionePU);
-      ensureImg(document.getElementById('piattoUnico'), 'imgPiattoUnico', pu.imageUrl || primo.imageUrl);
+      ensureImg(document.getElementById('piattoUnico'), 'imgPiattoUnico', pu.imageUrl);
 
     } else {
       // 🟢 MENU 3 PORTATE
@@ -288,32 +242,32 @@ const getPiatto = (p, sectionName = '') => {
       if (svolgimentoPiattoUnico) svolgimentoPiattoUnico.style.display = 'none';
 
       // 1. PRIMO
-      const primo = getPiatto(data.primo, 'primo');
+      const primo = data.primo || {};
       setProtectedText('titolop_intro', primo.titolo || 'Primo piatto');
       setProtectedText('titolop_svolgimento', primo.titolo || 'Primo piatto');
-      setProtectedText('ingredientiPrimo', primo.ingredienti || 'Nessun ingrediente specificato');
-      setProtectedText('descrizionePrimo', primo.descrizione || 'Nessuna preparazione specificata');
+      setProtectedText('ingredientiPrimo', primo.ingredienti || 'Nessun ingrediente');
+      setProtectedText('descrizionePrimo', primo.descrizione || 'Nessuna preparazione');
       ensureImg(document.getElementById('primo'), 'imgPrimo', primo.imageUrl);
 
       // 2. SECONDO
-      const secondo = getPiatto(data.secondo, 'secondo');
+      const secondo = data.secondo || {};
       setProtectedText('titolodefSecondo_intro', secondo.titolo || 'Secondo piatto');
       setProtectedText('titolodefSecondo_svolgimento', secondo.titolo || 'Secondo piatto');
-      setProtectedText('ingredientiSecondo', secondo.ingredienti || 'Nessun ingrediente specificato');
-      setProtectedText('descrizioneSecondo', secondo.descrizione || 'Nessuna preparazione specificata');
+      setProtectedText('ingredientiSecondo', secondo.ingredienti || 'Nessun ingrediente');
+      setProtectedText('descrizioneSecondo', secondo.descrizione || 'Nessuna preparazione');
       ensureImg(document.getElementById('secondo'), 'imgSecondo', secondo.imageUrl);
 
       // 3. CONTORNO
-      const contorno = getPiatto(data.contorno, 'contorno');
+      const contorno = data.contorno || {};
       setProtectedText('titolodefConto_intro', contorno.titolo || 'Contorno');
       setProtectedText('titolodefConto_svolgimento', contorno.titolo || 'Contorno');
-      setProtectedText('ingredientiContorno', contorno.ingredienti || 'Nessun ingrediente specificato');
-      setProtectedText('descrizioneContorno', contorno.descrizione || 'Nessuna preparazione specificata');
+      setProtectedText('ingredientiContorno', contorno.ingredienti || 'Nessun ingrediente');
+      setProtectedText('descrizioneContorno', contorno.descrizione || 'Nessuna preparazione');
       ensureImg(document.getElementById('contorno'), 'imgContorno', contorno.imageUrl);
     }
 
   } catch (err) {
-    console.error('Errore durante il caricamento della ricetta:', err);
+    console.error('Errore caricamento ricetta:', err);
   } finally {
     if (btn) btn.disabled = false;
   }
