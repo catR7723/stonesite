@@ -162,32 +162,47 @@ document.addEventListener('DOMContentLoaded', async () => {
   };
 
   // Helper per le immagini
-  const ensureImg = (container, imgId, rawSrc) => {
-    if (!container) return;
-    const src = extractUrl(rawSrc);
-    let img = document.getElementById(imgId);
 
-    if (!src) {
-      if (img) img.remove();
-      return;
-    }
+const ensureImg = (container, imgId, rawSrc) => {
+  if (!container) return;
 
-    if (!img) {
-      img = document.createElement('img');
-      img.id = imgId;
-      img.style.maxWidth = '100%';
-      img.style.height = 'auto';
-      img.style.borderRadius = '8px';
-      img.style.marginBottom = '15px';
-      
-      img.onerror = () => { img.style.display = 'none'; };
-      img.onload = () => { img.style.display = 'block'; };
+  // 1. Pulizia rigorosa del parametro rawSrc
+  let src = '';
 
-      container.appendChild(img);
-    }
-    img.src = src;
-  };
+  if (typeof rawSrc === 'string') {
+    src = rawSrc.trim();
+  } else if (rawSrc && typeof rawSrc === 'object') {
+    // Se è stato passato per errore l'intero oggetto (es. data.primo), estraiamo l'URL
+    src = rawSrc.imageUrl || rawSrc.url || rawSrc.immagine || rawSrc.foto || rawSrc.src || '';
+  }
 
+  // 2. Controllo di sicurezza: se la stringa è vuota o contiene [object Object], abortiamo
+  if (!src || src.includes('[object Object]')) {
+    const existingImg = document.getElementById(imgId);
+    if (existingImg) existingImg.remove(); // Rimuove l'immagine se il dato non è valido
+    return;
+  }
+
+  // 3. Creazione o aggiornamento dell'elemento <img>
+  let img = document.getElementById(imgId);
+
+  if (!img) {
+    img = document.createElement('img');
+    img.id = imgId;
+    img.style.maxWidth = '100%';
+    img.style.height = 'auto';
+    img.style.borderRadius = '8px';
+    img.style.marginBottom = '15px';
+    
+    img.onerror = () => { img.style.display = 'none'; };
+    img.onload = () => { img.style.display = 'block'; };
+
+    container.appendChild(img);
+  }
+
+  // Imposta il link solo se è un URL valido
+  img.src = src;
+};
   if (btn) btn.disabled = true;
 
   try {
