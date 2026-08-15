@@ -170,16 +170,24 @@ const extractUrl = (val) => {
 const ensureImg = (container, imgId, rawSrc) => {
   if (!container) return;
 
-  const src = extractUrl(rawSrc);
-
-  // SE SRC NON È UNA STRINGA VALIDA, BLOCCA SUBITO SENZA FARE NULLA
-  if (!src || typeof src !== 'string' || src.includes('[object Object]')) {
-    console.warn(`⚠️ Immagine annullata per ${imgId}. Valore non valido ricevuto:`, rawSrc);
-    const existingImg = document.getElementById(imgId);
-    if (existingImg) existingImg.remove();
-    return;
+  // 1. Estrazione rigorosa della stringa URL
+  let src = '';
+  if (typeof rawSrc === 'string') {
+    src = rawSrc.trim();
+  } else if (rawSrc && typeof rawSrc === 'object') {
+    src = typeof rawSrc.imageUrl === 'string' ? rawSrc.imageUrl.trim() : '';
   }
 
+  // 2. CONTROLLO DI SICUREZZA:
+  // Se src non è un URL valido (es. vuoto o contiene [object Object]), 
+  // Rimuove l'immagine esistente e INTERROMPE SUBITO l'esecuzione.
+  if (!src || src.includes('[object Object]') || !src.startsWith('http')) {
+    const existingImg = document.getElementById(imgId);
+    if (existingImg) existingImg.remove();
+    return; // <-- Si ferma qui e NON imposta mai img.src
+  }
+
+  // 3. Creazione o aggiornamento del tag <img>
   let img = document.getElementById(imgId);
   if (!img) {
     img = document.createElement('img');
@@ -188,13 +196,14 @@ const ensureImg = (container, imgId, rawSrc) => {
     img.style.height = 'auto';
     img.style.borderRadius = '8px';
     img.style.marginBottom = '15px';
-    
+
     img.onerror = () => { img.style.display = 'none'; };
     img.onload = () => { img.style.display = 'block'; };
 
     container.appendChild(img);
   }
 
+  // Viene eseguito SOLO se src è una stringa valida che inizia per http
   img.src = src;
 };
 
@@ -246,34 +255,28 @@ const ensureImg = (container, imgId, rawSrc) => {
 
     } else {
       // 🟢 MENU 3 PORTATE
-      if (introTrePortate) introTrePortate.style.display = 'block';
-      if (introPiattoUnico) introPiattoUnico.style.display = 'none';
-      if (svolgimentoTrePortate) svolgimentoTrePortate.style.display = 'block';
-      if (svolgimentoPiattoUnico) svolgimentoPiattoUnico.style.display = 'none';
+const primo = data.primo || {};
+setProtectedText('titolop_intro', primo.titolo || 'Primo piatto');
+setProtectedText('titolop_svolgimento', primo.titolo || 'Primo piatto');
+setProtectedText('ingredientiPrimo', primo.ingredienti || 'Nessun ingrediente');
+setProtectedText('descrizionePrimo', primo.descrizione || 'Nessuna preparazione');
+// PASSAGGI SICURI: estrae la stringa PRIMA di passare a ensureImg
+ensureImg(document.getElementById('primo'), 'imgPrimo', typeof primo.imageUrl === 'string' ? primo.imageUrl : '');
 
-      // 1. PRIMO
-      const primo = data.primo || {};
-      setProtectedText('titolop_intro', primo.titolo || 'Primo piatto');
-      setProtectedText('titolop_svolgimento', primo.titolo || 'Primo piatto');
-      setProtectedText('ingredientiPrimo', primo.ingredienti || 'Nessun ingrediente');
-      setProtectedText('descrizionePrimo', primo.descrizione || 'Nessuna preparazione');
-      ensureImg(document.getElementById('primo'), 'imgPrimo', primo.imageUrl);
+const secondo = data.secondo || {};
+setProtectedText('titolodefSecondo_intro', secondo.titolo || 'Secondo piatto');
+setProtectedText('titolodefSecondo_svolgimento', secondo.titolo || 'Secondo piatto');
+setProtectedText('ingredientiSecondo', secondo.ingredienti || 'Nessun ingrediente');
+setProtectedText('descrizioneSecondo', secondo.descrizione || 'Nessuna preparazione');
+ensureImg(document.getElementById('secondo'), 'imgSecondo', typeof secondo.imageUrl === 'string' ? secondo.imageUrl : '');
 
-      // 2. SECONDO
-      const secondo = data.secondo || {};
-      setProtectedText('titolodefSecondo_intro', secondo.titolo || 'Secondo piatto');
-      setProtectedText('titolodefSecondo_svolgimento', secondo.titolo || 'Secondo piatto');
-      setProtectedText('ingredientiSecondo', secondo.ingredienti || 'Nessun ingrediente');
-      setProtectedText('descrizioneSecondo', secondo.descrizione || 'Nessuna preparazione');
-      ensureImg(document.getElementById('secondo'), 'imgSecondo', secondo.imageUrl);
-
-      // 3. CONTORNO
-      const contorno = data.contorno || {};
-      setProtectedText('titolodefConto_intro', contorno.titolo || 'Contorno');
-      setProtectedText('titolodefConto_svolgimento', contorno.titolo || 'Contorno');
-      setProtectedText('ingredientiContorno', contorno.ingredienti || 'Nessun ingrediente');
-      setProtectedText('descrizioneContorno', contorno.descrizione || 'Nessuna preparazione');
-      ensureImg(document.getElementById('contorno'), 'imgContorno', contorno.imageUrl);
+const contorno = data.contorno || {};
+setProtectedText('titolodefConto_intro', contorno.titolo || 'Contorno');
+setProtectedText('titolodefConto_svolgimento', contorno.titolo || 'Contorno');
+setProtectedText('ingredientiContorno', contorno.ingredienti || 'Nessun ingrediente');
+setProtectedText('descrizioneContorno', contorno.descrizione || 'Nessuna preparazione');
+ensureImg(document.getElementById('contorno'), 'imgContorno', typeof contorno.imageUrl === 'string' ? contorno.imageUrl : '');
+      
     }
 
   } catch (err) {
