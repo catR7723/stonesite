@@ -199,33 +199,37 @@ document.addEventListener('DOMContentLoaded', async () => {
   };
 
   // Helper per estrarre il piatto
-  const getPiatto = (p, sectionName = '') => {
-    const root = window._latestData || {};
-    if (!p) {
-      return {
-        titolo: getVal(root[`${sectionName}_titolo`]),
-        imageUrl: extractUrl(root[`${sectionName}_imageUrl`] || root[`${sectionName}Img`] || root[sectionName]),
-        ingredienti: getVal(root[`${sectionName}_ingredienti`]),
-        descrizione: getVal(root[`${sectionName}_descrizione`])
-      };
-    }
+const getPiatto = (p, sectionName = '') => {
+  const root = window._latestData || {};
 
-    if (typeof p === 'string') {
-      return {
-        titolo: getVal(root[`${sectionName}_titolo`]),
-        imageUrl: extractUrl(p),
-        ingredienti: getVal(root[`${sectionName}_ingredienti`]),
-        descrizione: getVal(root[`${sectionName}_descrizione`])
-      };
-    }
-
+  // Se 'p' è null o undefined, cerca le proprietà flattened sul root (es. primo_titolo)
+  if (!p) {
     return {
-      titolo: getVal(p.titolo, p.nome, p.title, root[`${sectionName}_titolo`]),
-      imageUrl: extractUrl(p.imageUrl || p.url || p.immagine || p.foto || p || root[`${sectionName}_imageUrl`] || root[`${sectionName}Img`]),
-      ingredienti: getVal(p.ingredienti, p.ingredients, root[`${sectionName}_ingredienti`]),
-      descrizione: getVal(p.descrizione, p.preparazione, p.procedimento, root[`${sectionName}_descrizione`])
+      titolo: getVal(root[`${sectionName}_titolo`]),
+      imageUrl: extractUrl(root[`${sectionName}_imageUrl`] || root[`${sectionName}Img`]),
+      ingredienti: getVal(root[`${sectionName}_ingredienti`]),
+      descrizione: getVal(root[`${sectionName}_descrizione`])
     };
+  }
+
+  // Se 'p' è una semplice stringa (es. solo l'URL dell'immagine)
+  if (typeof p === 'string') {
+    return {
+      titolo: getVal(root[`${sectionName}_titolo`]),
+      imageUrl: extractUrl(p),
+      ingredienti: getVal(root[`${sectionName}_ingredienti`]),
+      descrizione: getVal(root[`${sectionName}_descrizione`])
+    };
+  }
+
+  // 🟢 Se 'p' è un oggetto (es. data.primo = { titolo: "...", ingredienti: "..." })
+  return {
+    titolo: getVal(p.titolo, p.nome, p.title, root[`${sectionName}_titolo`]),
+    imageUrl: extractUrl(p.imageUrl || p.url || p.immagine || p.foto || root[`${sectionName}_imageUrl`]),
+    ingredienti: getVal(p.ingredienti, p.ingredients, root[`${sectionName}_ingredienti`]),
+    descrizione: getVal(p.descrizione, p.preparazione, p.procedimento, root[`${sectionName}_descrizione`])
   };
+};
 
   if (btn) btn.disabled = true;
 
@@ -285,26 +289,26 @@ document.addEventListener('DOMContentLoaded', async () => {
 
       // 1. PRIMO
       const primo = getPiatto(data.primo, 'primo');
-      setProtectedText('titolop_intro', primo.titolo);
-      setProtectedText('titolop_svolgimento', primo.titolo);
-      setProtectedText('ingredientiPrimo', primo.ingredienti);
-      setProtectedText('descrizionePrimo', primo.descrizione);
+      setProtectedText('titolop_intro', primo.titolo || 'Primo piatto');
+      setProtectedText('titolop_svolgimento', primo.titolo || 'Primo piatto');
+      setProtectedText('ingredientiPrimo', primo.ingredienti || 'Nessun ingrediente specificato');
+      setProtectedText('descrizionePrimo', primo.descrizione || 'Nessuna preparazione specificata');
       ensureImg(document.getElementById('primo'), 'imgPrimo', primo.imageUrl);
 
       // 2. SECONDO
       const secondo = getPiatto(data.secondo, 'secondo');
-      setProtectedText('titolodefSecondo_intro', secondo.titolo);
-      setProtectedText('titolodefSecondo_svolgimento', secondo.titolo);
-      setProtectedText('ingredientiSecondo', secondo.ingredienti);
-      setProtectedText('descrizioneSecondo', secondo.descrizione);
+      setProtectedText('titolodefSecondo_intro', secondo.titolo || 'Secondo piatto');
+      setProtectedText('titolodefSecondo_svolgimento', secondo.titolo || 'Secondo piatto');
+      setProtectedText('ingredientiSecondo', secondo.ingredienti || 'Nessun ingrediente specificato');
+      setProtectedText('descrizioneSecondo', secondo.descrizione || 'Nessuna preparazione specificata');
       ensureImg(document.getElementById('secondo'), 'imgSecondo', secondo.imageUrl);
 
       // 3. CONTORNO
       const contorno = getPiatto(data.contorno, 'contorno');
-      setProtectedText('titolodefConto_intro', contorno.titolo);
-      setProtectedText('titolodefConto_svolgimento', contorno.titolo);
-      setProtectedText('ingredientiContorno', contorno.ingredienti);
-      setProtectedText('descrizioneContorno', contorno.descrizione);
+      setProtectedText('titolodefConto_intro', contorno.titolo || 'Contorno');
+      setProtectedText('titolodefConto_svolgimento', contorno.titolo || 'Contorno');
+      setProtectedText('ingredientiContorno', contorno.ingredienti || 'Nessun ingrediente specificato');
+      setProtectedText('descrizioneContorno', contorno.descrizione || 'Nessuna preparazione specificata');
       ensureImg(document.getElementById('contorno'), 'imgContorno', contorno.imageUrl);
     }
 
