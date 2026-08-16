@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="it">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -38,7 +38,7 @@
     let allRecipes = [];
     let isCucinaUser = false;
 
-    // Robust getter per piatti
+    // Robust getter per piatti (supporta vari nomi di campo)
     function getPiatto(p) {
       if (p === undefined || p === null) return null;
       if (typeof p === 'string') {
@@ -47,9 +47,9 @@
       if (typeof p !== 'object') return null;
       return {
         titolo: p.titolo || p.nome || p.title || '',
-        imageUrl: p.imageUrl || p.url || p.immagine || p.foto || '',
-        ingredienti: p.ingredienti || p.ingredients || '',
-        descrizione: p.descrizione || p.preparazione || p.procedimento || ''
+        imageUrl: p.imageUrl || p.url || p.immagine || p.foto || p.path || '',
+        ingredienti: p.ingredienti || p.ingredients || p.Ingredienti || '',
+        descrizione: p.descrizione || p.preparazione || p.procedimento || p.description || ''
       };
     }
 
@@ -83,7 +83,7 @@
     async function loadArchivio() {
       const container = document.getElementById('archivioContainer');
       try {
-        const response = await fetch('/archivio-api');
+        const response = await fetch('/archivio-api', { cache: "no-store" });
         if (!response.ok) throw new Error('Errore durante la risposta del server');
         const rawData = await response.json();
         allRecipes = Array.isArray(rawData) ? rawData : (rawData.recipes || rawData.data || rawData.archivio || []);
@@ -125,7 +125,7 @@
         const header = document.createElement('div');
         header.className = 'recipe-header';
         const h2 = document.createElement('h2');
-        h2.textContent = recipe.title || 'Ricetta Senza Titolo';
+        h2.textContent = recipe.title || recipe.titolo || 'Ricetta Senza Titolo';
         header.appendChild(h2);
         if (recipe.archiviataIl) {
           const span = document.createElement('span');
@@ -139,10 +139,11 @@
         const content = document.createElement('div');
         content.className = 'recipe-content';
 
+        // Normalizza sezioni usando il getter robusto
         const primo = getPiatto(recipe.primo);
         const secondo = getPiatto(recipe.secondo);
         const contorno = getPiatto(recipe.contorno);
-        const piattoUnico = getPiatto(recipe.piattoUnico);
+        const piattoUnico = getPiatto(recipe.piattoUnico || recipe.PiattoUnico || recipe.piatto_unico);
         const isPiattoUnico = recipe.isPiattoUnico === true || recipe.isPiattoUnico === 'true';
 
         function renderPiatto(label, obj) {
