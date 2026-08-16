@@ -1,220 +1,276 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Archivio Ricette</title>
-    <link rel="stylesheet" href="/assets/css/archivio.css">
-
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Archivio Ricette</title>
+  <link rel="stylesheet" href="/assets/css/archivio.css">
 </head>
 <body>
-    <div class="menu">
-        <ul>
-            <li class="home">
-                <a href="/stone">Home</a>
-            </li>
-            <li>
-                <a href="/archivio">Archivio</a>
-            </li>
-        </ul>
+  <div class="menu">
+    <ul>
+      <li class="home"><a href="/stone">Home</a></li>
+      <li><a href="/archivio">Archivio</a></li>
+    </ul>
+  </div>
+
+  <div class="nav">
+    <h1 class="title">📚 Archivio Ricette</h1>
+
+    <div class="archivio-controls">
+      <input type="text" id="searchInput" placeholder="Cerca ricetta...">
+      <select id="filterSort">
+        <option value="recent">Più recenti</option>
+        <option value="oldest">Più antiche</option>
+        <option value="title">Per titolo (A-Z)</option>
+      </select>
     </div>
 
-    <div class="nav">
-        <h1 class="title">📚 Archivio Ricette</h1>
-        
-        <div class="archivio-controls">
-            <input type="text" id="searchInput" placeholder="Cerca ricetta...">
-            <select id="filterSort">
-                <option value="recent">Più recenti</option>
-                <option value="oldest">Più antiche</option>
-                <option value="title">Per titolo (A-Z)</option>
-            </select>
-        </div>
-
-        <div id="archivioContainer" class="archivio-grid">
-            <p class="loading">Caricamento archivio...</p>
-        </div>
+    <div id="archivioContainer" class="archivio-grid">
+      <p class="loading">Caricamento archivio...</p>
     </div>
+  </div>
 
-    <div class="dev">CatRobotics DevSolutions</div>
+  <div class="dev">CatRobotics DevSolutions</div>
 
   <script>
+    // Stato globale
     let allRecipes = [];
-    let isCucinaUser = false; 
+    let isCucinaUser = false;
 
-    // Helper per estrarre in modo sicuro i dati dei piatti (primo, secondo, contorno)
+    // Robust getter per piatti
     function getPiatto(p) {
-        if (!p || typeof p !== 'object') return null;
-        return {
-            titolo: p.titolo || p.nome || p.title || '',
-            imageUrl: p.imageUrl || p.url || p.immagine || p.foto || '',
-            ingredienti: p.ingredienti || p.ingredients || '',
-            descrizione: p.descrizione || p.preparazione || p.procedimento || ''
-        };
+      if (p === undefined || p === null) return null;
+      if (typeof p === 'string') {
+        return { titolo: '', imageUrl: p || '', ingredienti: '', descrizione: '' };
+      }
+      if (typeof p !== 'object') return null;
+      return {
+        titolo: p.titolo || p.nome || p.title || '',
+        imageUrl: p.imageUrl || p.url || p.immagine || p.foto || '',
+        ingredienti: p.ingredienti || p.ingredients || '',
+        descrizione: p.descrizione || p.preparazione || p.procedimento || ''
+      };
     }
 
-    // Controllo permessi e avvio al caricamento della pagina
+    // Inizializzazione
     document.addEventListener('DOMContentLoaded', async () => {
-        // Inizializza prima i controlli di ricerca e ordinamento
-        const searchInput = document.getElementById('searchInput');
-        const filterSort = document.getElementById('filterSort');
-        
-        if (searchInput) searchInput.addEventListener('input', filterAndSort);
-        if (filterSort) filterSort.addEventListener('change', filterAndSort);
+      const searchInput = document.getElementById('searchInput');
+      const filterSort = document.getElementById('filterSort');
 
-        try {
-            // Controlla il ruolo sul server
-            const authResponse = await fetch('/check-ruolo-cucina');
-            const authData = await authResponse.json();
-            
-            if (authData.autorizzato) {
-                isCucinaUser = true;
-                console.log('✅ Utente abilitato come cucina.');
-            } else {
-                console.log('🔒 Utente non abilitato come cucina.');
-            }
-        } catch (err) {
-            console.error('Errore nel controllo autenticazione:', err);
+      if (searchInput) searchInput.addEventListener('input', filterAndSort);
+      if (filterSort) filterSort.addEventListener('change', filterAndSort);
+
+      // Controllo ruolo cucina (stessa-origin: i cookie della sessione sono inviati automaticamente)
+      try {
+        const authResponse = await fetch('/check-ruolo-cucina');
+        const authData = await authResponse.json();
+        if (authData.autorizzato) {
+          isCucinaUser = true;
+          console.log('✅ Utente abilitato come cucina.');
+        } else {
+          console.log('🔒 Utente non abilitato come cucina.');
         }
-        
-        // Carica l'archivio solo DOPO aver capito se l'utente è cucina o meno
-        await loadArchivio();
+      } catch (err) {
+        console.error('Errore nel controllo autenticazione:', err);
+      }
+
+      // Carica archivio
+      await loadArchivio();
     });
 
-    // Caricamento dell'archivio dal server
+    // Caricamento archivio dall'API
     async function loadArchivio() {
-        try {
-            const response = await fetch('/archivio-api');
-            if (!response.ok) throw new Error('Errore durante la risposta del server');
-            
-            const rawData = await response.json();
-            
-            // Estrae l'array dei dati
-            allRecipes = Array.isArray(rawData) ? rawData : (rawData.recipes || rawData.data || rawData.archivio || []);
-            
-            console.log('📦 Ricette caricate da MongoDB:', allRecipes);
-            displayArchivio(allRecipes);
-        } catch (err) {
-            console.error('Errore di caricamento:', err);
-            document.getElementById('archivioContainer').innerHTML = 
-                '<p class="error">Errore nel caricamento dell\'archivio</p>';
+      const container = document.getElementById('archivioContainer');
+      try {
+        const response = await fetch('/archivio-api');
+        if (!response.ok) throw new Error('Errore durante la risposta del server');
+        const rawData = await response.json();
+        allRecipes = Array.isArray(rawData) ? rawData : (rawData.recipes || rawData.data || rawData.archivio || []);
+        console.log('📦 Ricette caricate da MongoDB:', allRecipes.length);
+        displayArchivio(allRecipes);
+      } catch (err) {
+        console.error('Errore di caricamento:', err);
+        if (container) {
+          container.innerHTML = '';
+          const p = document.createElement('p');
+          p.className = 'error';
+          p.textContent = `Errore nel caricamento dell'archivio`;
+          container.appendChild(p);
         }
+      }
     }
 
-    // Renderizzazione delle schede nell'HTML
+    // Render DOM in modo sicuro (senza innerHTML per i contenuti del DB)
     function displayArchivio(recipes) {
-        const container = document.getElementById('archivioContainer');
-        if (!container) return;
-        
-        if (!Array.isArray(recipes) || recipes.length === 0) {
-            container.innerHTML = '<p class="empty">Nessuna ricetta nell\'archivio</p>';
-            return;
+      const container = document.getElementById('archivioContainer');
+      if (!container) return;
+
+      container.innerHTML = ''; // svuota
+
+      if (!Array.isArray(recipes) || recipes.length === 0) {
+        const p = document.createElement('p');
+        p.className = 'empty';
+        p.textContent = "Nessuna ricetta nell'archivio";
+        container.appendChild(p);
+        return;
+      }
+
+      recipes.forEach(recipe => {
+        const card = document.createElement('div');
+        card.className = 'recipe-card';
+        if (recipe._id) card.dataset.id = recipe._id;
+
+        // Header
+        const header = document.createElement('div');
+        header.className = 'recipe-header';
+        const h2 = document.createElement('h2');
+        h2.textContent = recipe.title || 'Ricetta Senza Titolo';
+        header.appendChild(h2);
+        if (recipe.archiviataIl) {
+          const span = document.createElement('span');
+          span.className = 'date';
+          span.textContent = new Date(recipe.archiviataIl).toLocaleDateString('it-IT');
+          header.appendChild(span);
+        }
+        card.appendChild(header);
+
+        // Content
+        const content = document.createElement('div');
+        content.className = 'recipe-content';
+
+        const primo = getPiatto(recipe.primo);
+        const secondo = getPiatto(recipe.secondo);
+        const contorno = getPiatto(recipe.contorno);
+        const piattoUnico = getPiatto(recipe.piattoUnico);
+        const isPiattoUnico = recipe.isPiattoUnico === true || recipe.isPiattoUnico === 'true';
+
+        function renderPiatto(label, obj) {
+          if (!obj || (Object.keys(obj).length === 0)) return;
+          const block = document.createElement('div');
+          block.className = 'piatto';
+          const h3 = document.createElement('h3');
+          h3.textContent = label;
+          block.appendChild(h3);
+
+          if (obj.titolo) {
+            const pTit = document.createElement('p');
+            const strong = document.createElement('strong');
+            strong.textContent = obj.titolo;
+            pTit.appendChild(strong);
+            block.appendChild(pTit);
+          }
+          if (obj.imageUrl) {
+            const img = document.createElement('img');
+            img.src = obj.imageUrl;
+            img.alt = label;
+            img.className = 'piatto-img';
+            block.appendChild(img);
+          }
+          if (obj.ingredienti) {
+            const pIng = document.createElement('p');
+            const s = document.createElement('strong');
+            s.textContent = 'Ingredienti: ';
+            pIng.appendChild(s);
+            pIng.appendChild(document.createTextNode(obj.ingredienti));
+            block.appendChild(pIng);
+          }
+          if (obj.descrizione) {
+            const pDesc = document.createElement('p');
+            const s2 = document.createElement('strong');
+            s2.textContent = 'Preparazione: ';
+            pDesc.appendChild(s2);
+            pDesc.appendChild(document.createTextNode(obj.descrizione));
+            block.appendChild(pDesc);
+          }
+          content.appendChild(block);
         }
 
-        container.innerHTML = recipes.map((recipe) => {
-            const primo = getPiatto(recipe.primo);
-            const secondo = getPiatto(recipe.secondo);
-            const contorno = getPiatto(recipe.contorno);
+        if (isPiattoUnico) {
+          renderPiatto('🍽️ Piatto Unico', piattoUnico || {});
+        } else {
+          renderPiatto('🍝 Primo', primo || {});
+          renderPiatto('🍖 Secondo', secondo || {});
+          renderPiatto('🥗 Contorno', contorno || {});
+        }
 
-            const dataFormatted = recipe.archiviataIl 
-                ? new Date(recipe.archiviataIl).toLocaleDateString('it-IT') 
-                : '';
+        card.appendChild(content);
 
-            return `
-                <div class="recipe-card" data-id="${recipe._id}">
-                    <div class="recipe-header">
-                        <h2>${recipe.title || 'Ricetta Senza Titolo'}</h2>
-                        ${dataFormatted ? `<span class="date">${dataFormatted}</span>` : ''}
-                    </div>
-                    
-                    <div class="recipe-content">
-                        ${primo && primo.titolo ? `
-                            <div class="piatto">
-                                <h3>🍝 Primo</h3>
-                                <p><strong>${primo.titolo}</strong></p>
-                                ${primo.imageUrl ? `<img src="${primo.imageUrl}" alt="Primo" class="piatto-img">` : ''}
-                            </div>
-                        ` : ''}
-                        
-                        ${secondo && secondo.titolo ? `
-                            <div class="piatto">
-                                <h3>🍖 Secondo</h3>
-                                <p><strong>${secondo.titolo}</strong></p>
-                                ${secondo.imageUrl ? `<img src="${secondo.imageUrl}" alt="Secondo" class="piatto-img">` : ''}
-                            </div>
-                        ` : ''}
-                        
-                        ${contorno && contorno.titolo ? `
-                            <div class="piatto">
-                                <h3>🥗 Contorno</h3>
-                                <p><strong>${contorno.titolo}</strong></p>
-                                ${contorno.imageUrl ? `<img src="${contorno.imageUrl}" alt="Contorno" class="piatto-img">` : ''}
-                            </div>
-                        ` : ''}
-                    </div>
-                    
-                    <div class="recipe-actions">
-
-                        <button class="btn-delete" style="display: ${isCucinaUser ? 'inline-block' : 'none'};" onclick="deleteRecipe('${recipe._id}')">🗑️ Elimina</button>
-                    </div>
-                </div>
-            `;
-        }).join('');
-    }
-
-    // Filtra e ordina le ricette
-    function filterAndSort() {
-        const searchInput = document.getElementById('searchInput');
-        const filterSort = document.getElementById('filterSort');
-        const searchTerm = searchInput ? searchInput.value.toLowerCase().trim() : '';
-        const sortBy = filterSort ? filterSort.value : 'recent';
-
-        let filtered = allRecipes.filter(recipe => {
-            const title = (recipe.title || '').toLowerCase();
-            const primo = (recipe.primo?.titolo || recipe.primo?.nome || '').toLowerCase();
-            const secondo = (recipe.secondo?.titolo || recipe.secondo?.nome || '').toLowerCase();
-            const contorno = (recipe.contorno?.titolo || recipe.contorno?.nome || '').toLowerCase();
-            
-            return title.includes(searchTerm) || 
-                   primo.includes(searchTerm) || 
-                   secondo.includes(searchTerm) || 
-                   contorno.includes(searchTerm);
+        // Actions
+        const actions = document.createElement('div');
+        actions.className = 'recipe-actions';
+        const btnDel = document.createElement('button');
+        btnDel.className = 'btn-delete';
+        btnDel.textContent = '🗑️ Elimina';
+        btnDel.style.display = isCucinaUser ? 'inline-block' : 'none';
+        btnDel.addEventListener('click', () => {
+          if (!confirm("Sei sicuro di voler eliminare questa ricetta definitivamente?")) return;
+          fetch('/elimina-ricetta-api/' + recipe._id, { method: 'DELETE' })
+            .then(res => {
+              if (res.ok) {
+                alert('Ricetta eliminata con successo!');
+                loadArchivio();
+              } else {
+                alert('Errore durante l\'eliminazione.');
+              }
+            })
+            .catch(err => {
+              console.error('Errore di rete:', err);
+              alert('Errore di rete durante l\'eliminazione.');
+            });
         });
+        actions.appendChild(btnDel);
+        card.appendChild(actions);
 
-        if (sortBy === 'recent') {
-            filtered.sort((a, b) => new Date(b.archiviataIl || 0) - new Date(a.archiviataIl || 0));
-        } else if (sortBy === 'oldest') {
-            filtered.sort((a, b) => new Date(a.archiviataIl || 0) - new Date(b.archiviataIl || 0));
-        } else if (sortBy === 'title') {
-            filtered.sort((a, b) => (a.title || '').localeCompare(b.title || ''));
-        }
-
-        displayArchivio(filtered);
+        container.appendChild(card);
+      });
     }
 
-    // Funzione fittizia per eliminare la ricetta (da mappare con la tua logica di backend)
-    async function deleteRecipe(id) {
-        if (!confirm("Sei sicuro di voler eliminare questa ricetta definitivamente?")) return;
-        
-        try {
-            const response = await fetch(`/elimina-ricetta-api/${id}`, { method: 'DELETE' });
-            if (response.ok) {
-                alert("Ricetta eliminata con successo!");
-                loadArchivio(); // Ricarica l'archivio aggiornato
-            } else {
-                alert("Errore durante l'eliminazione.");
-            }
-        } catch (err) {
-            console.error("Errore di rete:", err);
-        }
+    // Filtra e ordina
+    function filterAndSort() {
+      const searchInput = document.getElementById('searchInput');
+      const filterSort = document.getElementById('filterSort');
+      const searchTerm = searchInput ? searchInput.value.toLowerCase().trim() : '';
+      const sortBy = filterSort ? filterSort.value : 'recent';
+
+      let filtered = allRecipes.filter(recipe => {
+        const title = (recipe.title || '').toLowerCase();
+        const primoTit = (recipe.primo?.titolo || recipe.primo?.nome || '').toLowerCase();
+        const secondoTit = (recipe.secondo?.titolo || recipe.secondo?.nome || '').toLowerCase();
+        const contornoTit = (recipe.contorno?.titolo || recipe.contorno?.nome || '').toLowerCase();
+        const puTit = (recipe.piattoUnico?.titolo || recipe.piattoUnico?.nome || '').toLowerCase();
+
+        const primoText = ((recipe.primo?.ingredienti || '') + ' ' + (recipe.primo?.descrizione || '')).toLowerCase();
+        const secondoText = ((recipe.secondo?.ingredienti || '') + ' ' + (recipe.secondo?.descrizione || '')).toLowerCase();
+        const contornoText = ((recipe.contorno?.ingredienti || '') + ' ' + (recipe.contorno?.descrizione || '')).toLowerCase();
+        const puText = ((recipe.piattoUnico?.ingredienti || '') + ' ' + (recipe.piattoUnico?.descrizione || '')).toLowerCase();
+
+        return title.includes(searchTerm) ||
+               primoTit.includes(searchTerm) ||
+               secondoTit.includes(searchTerm) ||
+               contornoTit.includes(searchTerm) ||
+               puTit.includes(searchTerm) ||
+               primoText.includes(searchTerm) ||
+               secondoText.includes(searchTerm) ||
+               contornoText.includes(searchTerm) ||
+               puText.includes(searchTerm);
+      });
+
+      if (sortBy === 'recent') {
+        filtered.sort((a, b) => new Date(b.archiviataIl || 0) - new Date(a.archiviataIl || 0));
+      } else if (sortBy === 'oldest') {
+        filtered.sort((a, b) => new Date(a.archiviataIl || 0) - new Date(b.archiviataIl || 0));
+      } else if (sortBy === 'title') {
+        filtered.sort((a, b) => (a.title || '').localeCompare(b.title || ''));
+      }
+
+      displayArchivio(filtered);
     }
 
-    // Funzione fittizia per visualizzare la ricetta
-    function viewRecipe(id) {
-        window.location.href = `/ricetta/${id}`;
-    }
-</script>
-
-
+    // Esporta funzione per debug se necessario
+    window.filterAndSort = filterAndSort;
+    window.displayArchivio = displayArchivio;
+    window.loadArchivio = loadArchivio;
+  </script>
 </body>
 </html>
