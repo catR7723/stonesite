@@ -309,7 +309,7 @@ app.post('/admin/users', ensureBoss, async (req, res) => {
     // validazione minima
     if (!email || !allowedPage) return res.status(400).json({ error: 'Campi mancanti' });
 
-    const validRoles = ['boss', 'user', 'cucina'];
+    const validRoles = ['boss', 'user', 'cucina','cinema'];
     const validPages = ['cineforum', 'cucina', 'both'];
 
     // validazione role (se non fornito, default 'user')
@@ -373,7 +373,7 @@ app.delete('/admin/users/:id', ensureBoss, async (req, res) => {
 
 app.get('/logout', (req, res) => {
   req.session.destroy(err => {
-    res.clearCookie('sessionId');
+    res.clearCookie('sessionId');ß
     return res.redirect('/login.html');
   });
 });

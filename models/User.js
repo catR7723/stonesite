@@ -5,7 +5,7 @@ const UserSchema = new mongoose.Schema({
   username: { type: String, index: true },
   email: { type: String, required: true, unique: true },
   role: { type: String, enum: ['boss','user','cucina'], default: 'user' },
-  allowedPage: { type: String, enum: ['cineforum','cucina','both', null], default: null },
+  allowedPage: { type: String, enum: ['cineforum','cucina','cinema','both', null], default: null },
   passwordHash: { type: String },
   tempExpiresAt: { type: Date }
 }, { timestamps: true, collection: 'utenti' });
