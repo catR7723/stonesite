@@ -12,6 +12,7 @@ const cors = require('cors');
 
 const connectDB = require('./db');
 const User = require('./models/User');
+console.log('User role enum values:', User.schema.path('role').enumValues);
 const { Recipe, Archivio } = require('./models/Recipes');
 const { sendMail } = require('./utils/mailer');
 const cloudinary = require('./config/cloudinary');
@@ -373,7 +374,7 @@ app.delete('/admin/users/:id', ensureBoss, async (req, res) => {
 
 app.get('/logout', (req, res) => {
   req.session.destroy(err => {
-    res.clearCookie('sessionId');ß
+    res.clearCookie('sessionId');
     return res.redirect('/login.html');
   });
 });
