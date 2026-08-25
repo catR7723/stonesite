@@ -391,7 +391,18 @@ app.post('/logout', (req, res) => {
 // GET - Archivio Pubblico
 app.get('/archivio-api', async (req, res) => {
   try {
-    const ricette = await Archivio.find().sort({ archiviataIl: -1 });
+    const ricette = await Archivio.find()
+      .sort({ archiviataIl: -1 })
+      .lean();
+
+    console.log('========== ARCHIVIO API ==========');
+    ricette.forEach((r, i) => {
+      console.log(`Ricetta ${i}:`, r.title);
+      console.log('isPiattoUnico:', r.isPiattoUnico);
+      console.log('piattoUnico:', JSON.stringify(r.piattoUnico, null, 2));
+    });
+    console.log('==================================');
+
     res.json(ricette);
   } catch (err) {
     console.error('Errore nel recupero dell\'archivio:', err);

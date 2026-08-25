@@ -560,7 +560,8 @@ document.getElementById('formPiattoUnico')?.addEventListener('submit', async (e)
     recipeTitle: currentRecipeTitle,
     titolo_PiattoUnico: document.getElementById('inputTitoloPiattoUnico').value || currentRecipeTitle,
     ingredienti_PiattoUnico: document.getElementById('ingredientiPiattoUnicoInput').value,
-    descrizione_PiattoUnico: document.getElementById('descrizionePiattoUnicoInput').value
+    descrizione_PiattoUnico: document.getElementById('descrizionePiattoUnicoInput').value,
+    imageUrl_PiattoUnico: recipeData.piattoUnico.imageUrl
   };
   await savePiatto('/salvaPiattoUnico', data, 'piattoUnico');
 });

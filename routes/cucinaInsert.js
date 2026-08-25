@@ -244,36 +244,53 @@ module.exports = (upload, cloudinary) => {
     }
   });
 
-  // POST /salvaPiattoUnico (➕ NUOVO)
-  router.post('/salvaPiattoUnico', ensureCucinaAllowed, async (req, res) => {
-    try {
-      const { recipeTitle, titolo_PiattoUnico, ingredienti_PiattoUnico, descrizione_PiattoUnico } = req.body;
-      let recipe = await Recipe.findOne({ title: recipeTitle });
-      if (!recipe) {
-        recipe = new Recipe({ title: recipeTitle, userId: req.session && req.session.userId });
-      } else if (!recipe.userId && req.session && req.session.userId) {
-        recipe.userId = req.session.userId;
-      }
+  // POST /salvaPiattoUnico (CORRETTO)
+router.post('/salvaPiattoUnico', ensureCucinaAllowed, async (req, res) => {
+  try {
+    const { recipeTitle, titolo_PiattoUnico, ingredienti_PiattoUnico, descrizione_PiattoUnico } = req.body;
 
-      recipe.isPiattoUnico = true;
-      recipe.piattoUnico = {
-        titolo: titolo_PiattoUnico || '',
-        ingredienti: ingredienti_PiattoUnico || '',
-        descrizione: descrizione_PiattoUnico || '',
-        imageUrl: recipe.piattoUnico?.imageUrl || ''
-      };
-      recipe.updatedAt = new Date();
-      await recipe.save();
-
-      // pulizia collettiva (rimuove altri title diversi)
-      await cleanupOtherRecipes(recipe.title);
-
-      return res.json({ success: true, message: 'Piatto Unico salvato' });
-    } catch (err) {
-      console.error('Errore /salvaPiattoUnico:', err);
-      return res.status(500).json({ success: false, error: 'Errore server' });
+        console.log('📨 [salvaPiattoUnico] Ricevuti dal frontend:', {
+      recipeTitle,
+      titolo_PiattoUnico,
+      ingredienti_PiattoUnico: ingredienti_PiattoUnico?.substring(0, 30),
+      descrizione_PiattoUnico: descrizione_PiattoUnico?.substring(0, 30)
+    });
+    
+    let recipe = await Recipe.findOne({ title: recipeTitle });
+    if (!recipe) {
+      recipe = new Recipe({ title: recipeTitle, userId: req.session && req.session.userId });
+    } else if (!recipe.userId && req.session && req.session.userId) {
+      recipe.userId = req.session.userId;
     }
-  });
+
+    recipe.isPiattoUnico = true;
+    
+    // ✅ PRESERVA l'imageUrl che era stato caricato in /cucinaInsert
+    const existingImageUrl = recipe.piattoUnico?.imageUrl || '';
+    
+    recipe.piattoUnico = {
+      titolo: titolo_PiattoUnico || '',
+      ingredienti: ingredienti_PiattoUnico || '',
+      descrizione: descrizione_PiattoUnico || '',
+      imageUrl: existingImageUrl  // ← Mantiene l'URL che era stato salvato prima
+    };
+    
+    recipe.updatedAt = new Date();
+    await recipe.save();
+
+    await cleanupOtherRecipes(recipe.title);
+
+    console.log('✅ Piatto Unico salvato:', {
+      titolo: recipe.piattoUnico.titolo,
+      imageUrl: recipe.piattoUnico.imageUrl
+    });
+
+    return res.json({ success: true, message: 'Piatto Unico salvato' });
+  } catch (err) {
+    console.error('Errore /salvaPiattoUnico:', err);
+    return res.status(500).json({ success: false, error: 'Errore server' });
+  }
+});
 
   // GET /api/recipe/latest -> restituisce l'ultima ricetta PUBBLICA
   router.get('/api/recipe/latest', async (req, res) => {
