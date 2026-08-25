@@ -247,13 +247,20 @@ module.exports = (upload, cloudinary) => {
   // POST /salvaPiattoUnico (CORRETTO)
 router.post('/salvaPiattoUnico', ensureCucinaAllowed, async (req, res) => {
   try {
-    const { recipeTitle, titolo_PiattoUnico, ingredienti_PiattoUnico, descrizione_PiattoUnico } = req.body;
+    const { 
+      recipeTitle, 
+      titolo_PiattoUnico, 
+      ingredienti_PiattoUnico, 
+      descrizione_PiattoUnico,
+      imageUrl_PiattoUnico  // ✅ AGGIUNGI QUESTA LINEA
+    } = req.body;
 
-        console.log('📨 [salvaPiattoUnico] Ricevuti dal frontend:', {
+    console.log('📨 [salvaPiattoUnico] Ricevuti dal frontend:', {
       recipeTitle,
       titolo_PiattoUnico,
       ingredienti_PiattoUnico: ingredienti_PiattoUnico?.substring(0, 30),
-      descrizione_PiattoUnico: descrizione_PiattoUnico?.substring(0, 30)
+      descrizione_PiattoUnico: descrizione_PiattoUnico?.substring(0, 30),
+      imageUrl_PiattoUnico  // ✅ AGGIUNGI ANCHE QUI NEL LOG
     });
     
     let recipe = await Recipe.findOne({ title: recipeTitle });
@@ -265,14 +272,11 @@ router.post('/salvaPiattoUnico', ensureCucinaAllowed, async (req, res) => {
 
     recipe.isPiattoUnico = true;
     
-    // ✅ PRESERVA l'imageUrl che era stato caricato in /cucinaInsert
-    const existingImageUrl = recipe.piattoUnico?.imageUrl || '';
-    
     recipe.piattoUnico = {
       titolo: titolo_PiattoUnico || '',
       ingredienti: ingredienti_PiattoUnico || '',
       descrizione: descrizione_PiattoUnico || '',
-      imageUrl: existingImageUrl  // ← Mantiene l'URL che era stato salvato prima
+      imageUrl: imageUrl_PiattoUnico || ''  // ✅ USA imageUrl_PiattoUnico
     };
     
     recipe.updatedAt = new Date();
@@ -282,6 +286,8 @@ router.post('/salvaPiattoUnico', ensureCucinaAllowed, async (req, res) => {
 
     console.log('✅ Piatto Unico salvato:', {
       titolo: recipe.piattoUnico.titolo,
+      ingredienti: recipe.piattoUnico.ingredienti?.substring(0, 30),
+      descrizione: recipe.piattoUnico.descrizione?.substring(0, 30),
       imageUrl: recipe.piattoUnico.imageUrl
     });
 

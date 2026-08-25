@@ -430,7 +430,10 @@ app.delete('/elimina-ricetta-api/:id', ensureCucina, async (req, res) => {
     }
 
     const publicIdsDaEliminare = [];
+    
+    // ✅ Gestisci sia le tre portate che il piatto unico
     const piatti = ['primo', 'secondo', 'contorno'];
+    
     piatti.forEach(tipoPiatto => {
       if (ricetta[tipoPiatto] && ricetta[tipoPiatto].imageUrl) {
         const pId = getCloudinaryPublicId(ricetta[tipoPiatto].imageUrl);
@@ -438,19 +441,34 @@ app.delete('/elimina-ricetta-api/:id', ensureCucina, async (req, res) => {
       }
     });
 
+    // ✅ AGGIUNGI IL PIATTO UNICO
+    if (ricetta.piattoUnico && ricetta.piattoUnico.imageUrl) {
+      const pId = getCloudinaryPublicId(ricetta.piattoUnico.imageUrl);
+      if (pId) publicIdsDaEliminare.push(pId);
+    }
+
+    // ✅ Elimina anche il PDF della ricetta se presente
+    if (ricetta.ricetta && ricetta.ricetta.pdfUrl) {
+      const pId = getCloudinaryPublicId(ricetta.ricetta.pdfUrl);
+      if (pId) publicIdsDaEliminare.push(pId);
+    }
+
     if (publicIdsDaEliminare.length > 0) {
-      console.log(`Eliminazione immagini da Cloudinary: ${publicIdsDaEliminare}`);
-      await Promise.all(publicIdsDaEliminare.map(id => cloudinary.uploader.destroy(id).catch(e => {
-        console.error('Errore eliminazione immagine Cloudinary:', id, e);
-      })));
+      console.log(`🗑️ Eliminazione immagini da Cloudinary: ${publicIdsDaEliminare.join(', ')}`);
+      await Promise.all(publicIdsDaEliminare.map(id => 
+        cloudinary.uploader.destroy(id).catch(e => {
+          console.error('⚠️ Errore eliminazione immagine Cloudinary:', id, e.message);
+        })
+      ));
     }
 
     await Archivio.findByIdAndDelete(recId);
 
-    res.json({ message: 'Ricetta e relative immagini eliminate con successo!' });
+    console.log(`✅ Ricetta eliminata: ${ricetta.title}`);
+    return res.json({ message: 'Ricetta e relative immagini eliminate con successo!' });
   } catch (err) {
-    console.error('Errore durante l\'eliminazione della ricetta:', err);
-    res.status(500).json({ error: 'Errore interno del server durante l\'eliminazione' });
+    console.error('❌ Errore durante l\'eliminazione della ricetta:', err);
+    return res.status(500).json({ error: 'Errore interno del server durante l\'eliminazione' });
   }
 });
 
