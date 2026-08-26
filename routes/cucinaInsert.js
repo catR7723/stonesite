@@ -55,7 +55,7 @@ module.exports = (upload, cloudinary) => {
   });
 
   router.get('/cineforumInsert', ensureCineforumAllowed, (req, res) => {
-    return res.sendFile(path.join(__dirname, '..', 'cineforumInsert.html'));
+    return res.sendFile(path.join(__dirname, '..','views','html', 'cineforumInsert.html'));
   });
 
   // Alias protetto /cucina -> cucinaInsert.html

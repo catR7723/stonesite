@@ -94,7 +94,7 @@ document.getElementById('form-login').addEventListener('submit', async (e) => {
       setTimeout(() => location.href = '/bossPanel.html', 700);
     } else {
       const ap = data.allowedPage;
-      if (ap === 'cineforum') location.href = '/cineforum';
+      if (ap === 'cineforum') location.href = '/cineforumInsert';
       else if (ap === 'cucina') location.href = '/cucina';
       else if (ap === 'both') {
         setTimeout(() => location.href = '/scegli-pagina.html', 700);

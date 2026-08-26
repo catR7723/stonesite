@@ -159,18 +159,36 @@ async function uploadLocandina(file) {
   try {
     const fd = new FormData();
     fd.append('locandina', file);
-    const res = await fetch('/cineforumInsert', { method: 'POST', body: fd });
-    const json = await res.json();
-    console.log('/cineforumInsert ->', json);
+
+    const targetUrl = window.location.pathname; // robusto rispetto al mount del router
+
+    const res = await fetch(targetUrl, {
+      method: 'POST',
+      body: fd,
+      credentials: 'include'
+    });
+
+    const contentType = res.headers.get('content-type') || '';
+    let json;
+
+    if (contentType.includes('application/json')) {
+      json = await res.json(); // leggo solo una volta come JSON
+    } else {
+      const text = await res.text(); // leggo solo una volta come testo
+      console.error('Risposta non-JSON da', targetUrl, 'status:', res.status, 'body:', text);
+      throw new Error(`Server non ha ritornato JSON (status ${res.status}). Body: ${text.slice(0,300)}`);
+    }
+
+    console.log(targetUrl, '->', json);
     if (!res.ok || !json.success) {
-      showToast('Errore upload: ' + (json.error || json.message || 'server'));
+      showToast('Errore upload: ' + (json.error || json.message || ('status ' + res.status)));
       return;
     }
-    // salva info
+
     state.locandina.url = json.url || json.secure_url || null;
     state.locandina.publicId = json.publicId || json.public_id || null;
     if (json.filmId) { state._id = json.filmId; state.savedId = json.filmId; }
-    // mostra UI
+
     previewImg.src = state.locandina.url || previewImg.src;
     previewImg.classList.remove('hidden');
     deleteBtn.classList.remove('hidden');
@@ -178,7 +196,7 @@ async function uploadLocandina(file) {
     showToast('Locandina caricata');
   } catch (err) {
     console.error('uploadLocandina error', err);
-    showToast('Errore upload: ' + err.message);
+    showToast('Errore upload: ' + (err.message || err));
   } finally {
     setLoadingButton(btnLabel, false);
   }

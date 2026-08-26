@@ -1,19 +1,14 @@
 const express = require('express');
 const router = express.Router();
 const multer = require('multer');
-const cloudinary = require('./config/cloudinary').v2;
+const cloudinary = require('../config/cloudinary');
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
 const path = require('path');
 
 // modello Cineforum (assicurati di avere ./models/Cineforum.js)
 const Cine = require('../models/Cineforum');
 
-// --- CONFIGURAZIONE CLOUDINARY & MULTER ---
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET
-});
+
 
 const storage = new CloudinaryStorage({
   cloudinary,
@@ -27,16 +22,34 @@ const upload = multer({ storage });
 
 // --- MIDDLEWARE DI AUTENTICAZIONE ---
 const richiediCineforum = (req, res, next) => {
-  // modifica la logica se il nome del ruolo è diverso
-  if (req.session?.authenticated && req.session.role === 'cineforum') return next();
+  // Log di debug per vedere la sessione (rimuovi dopo il debug)
+  console.log('DEBUG richiediCineforum - session:', {
+    authenticated: !!req.session?.authenticated,
+    user: req.session?.user || null
+  });
+
+  // Controllo base autenticazione
+  if (!req.session?.authenticated || !req.session?.user) {
+    return res.status(403).json({ success: false, error: 'Accesso negato (non autenticato)' });
+  }
+
+  const role = (req.session.user.role || '').toString().toLowerCase();
+  const allowedPage = (req.session.user.allowedPage || '').toString().toLowerCase();
+
+  // Regole di autorizzazione: adattale se usi nomi diversi
+  if (
+    role === 'cineforum' ||     // se hai utenti con questo ruolo
+    role === 'cinema' ||        // se usi 'cinema' come ruolo abilitato
+    allowedPage === 'cineforum' ||
+    allowedPage === 'both'
+  ) {
+    return next();
+  }
+
   return res.status(403).json({ success: false, error: 'Accesso negato' });
 };
 
-// --- SERVIRE LA PAGINA DI INSERIMENTO ---
-// il file cineforumInsert.html è atteso nella root del progetto (../cineforumInsert.html)
-router.get('/cineforumInsert', richiediCineforum, (req, res) => {
-  res.sendFile(path.join(__dirname, '..', 'cineforumInsert.html'));
-});
+
 
 // --- 1. UPLOAD LOCANDINA ---
 // Riceve multipart/form-data con campo 'locandina'

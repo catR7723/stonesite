@@ -532,6 +532,18 @@ try {
   console.warn('Router cucinaInsert non trovato o errore nel mount:', err.message || err);
 }
 
+// ============ MOUNT CINEFORUM ROUTES ============
+
+try {
+  const cineforumRouter = require('./routes/cineforumInsert');
+  app.use('/', cineforumRouter);
+
+  console.log('✅ Router Cineforum caricato');
+} catch (err) {
+  console.error('❌ Errore mount cineforumInsert:', err.message || err);
+}
+
+
 // ============ ROTTE HOME PUBBLICHE ============
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'index.html')));
 app.get('/index.html', (req, res) => res.sendFile(path.join(__dirname, 'index.html')));
@@ -553,6 +565,8 @@ app.get('/musica_passiva', (req, res) => res.sendFile(path.join(__dirname, 'view
 app.get('/piscina', (req, res) => res.sendFile(path.join(__dirname, 'views', 'html', 'laboratori', 'piscina.html')));
 app.get('/menu', (req, res) => res.sendFile(path.join(__dirname, 'views', 'html', 'laboratori', 'menu.html')));
 app.get('/archivio', (req, res) => res.sendFile(path.join(__dirname, 'views', 'html', 'archivio.html')));
+app.get('/cineforumInsert', (req, res) => res.sendFile(path.join(__dirname, 'views', 'html', 'cineforumInsert.html')));
+app.get('/cineforum', (req, res) => res.sendFile(path.join(__dirname, 'views', 'html', 'laboratori', 'cineforum.html')));
 
 // ============ CONNESSIONE AL DATABASE E AVVIO SERVER ============
 // 5. CONNESSIONE AL DATABASE E AVVIO SERVER LOCALE
