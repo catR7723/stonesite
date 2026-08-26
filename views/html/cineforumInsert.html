@@ -372,14 +372,20 @@ document.getElementById('formPubblica').addEventListener('submit', async (e) => 
     console.log('/salvaFilmR ->', json);
     if (!res.ok || !json.success) { showToast('Errore pubblicazione: ' + (json.error || json.message || 'server')); return; }
     showToast('Film pubblicato con successo!');
-    // ricarica archivio per mostrare cambiamenti
+    // ricarica archivio per mostrare cambiamenti (se necessario)
     await caricaArchivio(true);
-    // opzionale: pulire form e stato
-    setTimeout(() => window.location.reload(), 900);
+
+    // reindirizza a /cineforum dopo un breve ritardo per lasciare vedere il toast
+    setTimeout(() => {
+      window.location.href = '/cineforum';
+    }, 900);
+
   } catch (err) {
     console.error('pubblica err', err);
     showToast('Errore: ' + err.message);
-  } finally { setLoadingButton(btn, false); }
+  } finally {
+    setLoadingButton(btn, false);
+  }
 });
 
 /* --- CARICA ARCHIVIO (con pulsante Elimina per ogni film) --- */
