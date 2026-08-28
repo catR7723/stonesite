@@ -5,3 +5,682 @@ NODE_ENV=development node index.js
 
 
 fetch('/api/recipe/latest', { credentials: 'include' }).then(r => r.json()).then(d => console.log('=== DATI DA MONGO ===', d));
+
+index.html scuro 
+
+=====================================
+ <!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stone Società Cooperativa Sociale a r.l.</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="/assets/css/main.css">
+</head>
+<body>
+
+
+    <div class="glow-bg"></div>
+
+   
+    <header class="navbar-wrapper">
+        <nav class="navbar">
+            <a href="#" class="brand-logo">
+                <img src="/images/logostone.png" alt="Stone Soc Coop Logo" class="logo-img">
+                <span>Stone Soc Coop</span>
+            </a>
+            
+            <input type="checkbox" id="nav-toggle" class="nav-toggle">
+            <label for="nav-toggle" class="nav-toggle-label">
+                <span></span>
+            </label>
+
+            <ul class="nav-menu">
+                <li><a href="/centro" target="_blank" rel="noopener noreferrer">Centro L'Aurora</a></li>
+                <li><a href="/cicala" target="_blank" rel="noopener noreferrer">La Casa della Cicala</a></li>
+                <li><a href="/chi_siamo" target="_blank" rel="noopener noreferrer">Chi Siamo</a></li>
+                <li><a href="/soon_ava" target="_blank" rel="noopener noreferrer">Shop</a></li>
+                <li><a href="/login" class="btn-login" target="_blank" rel="noopener noreferrer">Login</a></li>
+            </ul>
+        </nav>
+    </header>
+
+ 
+    <section class="hero">
+        <div class="hero-content">
+            <div class="logo-hero-wrapper">
+                <img src="/images/logostone.png" alt="Stone Logo" class="main-hero-logo">
+            </div>
+            <h1 class="hero-title">Stone Società Cooperativa Sociale</h1>
+            <p class="hero-subtitle">Inclusione, innovazione sociale e autonomia sul territorio.</p>
+        </div>
+    </section>
+
+   
+    <section class="grid-section">
+        <div class="bento-grid">
+            
+        
+            <div class="bento-card card-featured">
+                <input type="checkbox" id="toggle-different" class="toggle-different">
+                <label for="toggle-different" class="card-flip-wrapper" title="Clicca o passa sopra per scoprire perché siamo diversi">
+                    <div class="card-image img-default"></div>
+                    <div class="card-image img-hover"></div>
+                    
+                </label>
+            </div>
+
+            <div class="bento-card" id="box-musica"></div>
+            <div class="bento-card" id="box-cucina"></div>
+            <div class="bento-card" id="box-chanel"></div>
+            <div class="bento-card" id="box-cicala"></div>
+            <div class="bento-card" id="box-passeggiata"></div>
+            <div class="bento-card" id="box-ginnastica"></div>
+            <div class="bento-card" id="box-dalla"></div>
+            <div class="bento-card" id="box-piscina"></div>
+
+        </div>
+    </section>
+
+ 
+    <section class="content-section">
+        <h2 class="section-title">Alcuni Nostri Progetti</h2>
+        
+        <div class="accordion-container">
+            <details class="modern-accordion" open>
+                <summary>
+                    <span class="acc-number">01</span>
+                    <h3>Residenzialità Leggera, Una Nuova Casa per la Cicala</h3>
+                </summary>
+                <div class="acc-body">
+                    <p>La Cicala sta cercando uno spazio per creare tre o quattro mini appartamenti dove persone con disabilità potranno vivere assieme, condividendo servizi di supporto in un contesto sociale stimolante.</p>
+                    <a href="/cicala" target="_blank" rel="noopener noreferrer" class="btn-primary">Visita la Pagina</a>
+                </div>
+            </details>
+
+            <details class="modern-accordion">
+                <summary>
+                    <span class="acc-number">02</span>
+                    <h3>Canali Social e YouTube</h3>
+                </summary>
+                <div class="acc-body">
+                    <p>Spazi di comunicazione gestiti da persone con disabilità per acquisire competenze spendibili in ambito personale e lavorativo. Segui "stonesocial" ed il canale YouTube "non è il titolo".</p>
+                <div class="social-links">
+    <a href="https://www.facebook.com/profile.php?id=61561618764897" target="_blank" rel="noopener noreferrer" class="social-btn fb">
+        <img src="/images/socialimages/linkfacebook.png" alt="Facebook">
+    </a>
+    <a href="https://www.instagram.com/stonesociale/" target="_blank" rel="noopener noreferrer" class="social-btn ig">
+        <img src="/images/socialimages/linkistagram.png" alt="Instagram">
+    </a>
+    <a href="https://www.youtube.com/@noneiltitolo" target="_blank" rel="noopener noreferrer" class="social-btn yt">
+        <img src="/images/socialimages/youtube.png" alt="YouTube">
+    </a>
+</div>
+                </div>
+            </details>
+
+            <details class="modern-accordion">
+                <summary>
+                    <span class="acc-number">03</span>
+                    <h3>Virtual Social City, il Centro Sociale Virtuale</h3>
+                </summary>
+                <div class="acc-body">
+                    <p>Un centro socio-educativo virtuale rivolto a persone disabili e ragazzi dove socializzare, imparare e fare giochi guidati da personale qualificato in totale sicurezza.</p>
+                    <a href="/virtualCity" target="_blank" rel="noopener noreferrer" class="btn-primary">Visita la Pagina</a>
+                </div>
+            </details>
+        </div>
+    </section>
+
+    <section class="content-section">
+        <h2 class="section-title">Cosa dicono di noi</h2>
+        
+        <div class="opinions-grid">
+            <div class="opinion-card">
+                <h3>Valutazioni Generali</h3>
+                <ul class="progress-list">
+                    <li>
+                        <span>Sono attenti ai bisogni</span>
+                        <progress max="100" value="90"></progress>
+                    </li>
+                    <li>
+                        <span>Hanno molta esperienza</span>
+                        <progress max="100" value="90"></progress>
+                    </li>
+                    <li>
+                        <span>Le attività sono utili</span>
+                        <progress max="100" value="80"></progress>
+                    </li>
+                    <li>
+                        <span>Sanno essere simpatici</span>
+                        <progress max="100" value="80"></progress>
+                    </li>
+                    <li>
+                        <span>Riescono a collaborare</span>
+                        <progress max="100" value="80"></progress>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="opinion-card">
+                <h3>Soddisfazione Enti, Famiglie ed Utenti</h3>
+                <ul class="progress-list">
+                    <li>
+                        <span>I laboratori innovativi</span>
+                        <progress max="100" value="90"></progress>
+                    </li>
+                    <li>
+                        <span>Progetti personalizzati</span>
+                        <progress max="100" value="90"></progress>
+                    </li>
+                    <li>
+                        <span>Si fanno gite e vacanze</span>
+                        <progress max="100" value="90"></progress>
+                    </li>
+                    <li>
+                        <span>Attività per l'Autonomia</span>
+                        <progress max="100" value="80"></progress>
+                    </li>
+                    <li>
+                        <span>Attività sportive utili</span>
+                        <progress max="100" value="80"></progress>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+   
+    <footer class="footer-section">
+        <div class="footer-grid">
+            <div class="footer-card">
+                <h3>Destina il 5 per Mille</h3>
+                <p>Un gesto semplice che non ti costa nulla.</p>
+                <div class="code-box">Codice Fiscale: <strong>02842630127</strong></div>
+            </div>
+
+            <div class="footer-card highlight-card">
+                <h3>Un Gesto Utile, Dona Ora!</h3>
+                <p>Aiuta le persone della tua comunità.</p>
+                <p class="iban">IBAN: <span>IT50S0306909606100000003453</span></p>
+                <a href="https://www.paypal.com/donate/?hosted_button_id=4R8KNTDTP6RKN" target="_blank" rel="noopener noreferrer" class="btn-paypal">
+                    Dona con PayPal
+                </a>
+            </div>
+
+            <div class="footer-card">
+                <h3>Contatti</h3>
+                <p><strong>Stone Società Cooperativa Sociale a r.l.</strong></p>
+                <p>via San Rocco s.n.c. - 21030 Castello Cabiaglio (VA)</p>
+                <p>Email: <a href="mailto:infocoopstone@gmail.com">infocoopstone@gmail.com</a></p>
+                <p>Tel: 0332-1808064</p>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <div class="policy-links">
+                <a href="https://www.iubenda.com/privacy-policy/44804857" target="_blank" rel="noopener noreferrer">Privacy Policy</a>
+                <a href="https://www.iubenda.com/privacy-policy/44804857/cookie-policy" target="_blank" rel="noopener noreferrer">Cookie Policy</a>
+            </div>
+            <p class="credits">CatRobotics DevSolutions</p>
+        </div>
+    </footer>
+
+</body>
+
+</html>
+
+main.css scuro
+===========================================================
+:root {
+    /* Sfondo scuro sfumato continuo (schermo opaco spegnimento) */
+    --bg-base: #0f131d;
+    --bg-card: rgba(255, 255, 255, 0.04);
+    --border-card: rgba(255, 255, 255, 0.08);
+    --border-glow: rgba(22, 178, 235, 0.5);
+    
+    --accent-blue: #3b82f6;
+    --accent-cyan: #06b6d4;
+    --accent-green: #10b981;
+    
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--bg-base);
+    color: var(--text-primary);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    overflow-x: hidden;
+    line-height: 1.6;
+    width: 100%;
+}
+
+/* Sfondo scuro sfumato tridimensionale */
+.glow-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: 
+        radial-gradient(circle at 10% 20%, rgba(30, 58, 138, 0.25) 0%, transparent 50%),
+        radial-gradient(circle at 90% 80%, rgba(14, 116, 144, 0.2) 0%, transparent 50%),
+        linear-gradient(180deg, #111827 0%, #080c14 100%);
+    z-index: -1;
+    pointer-events: none;
+}
+
+/* Navbar Glassmorphism Full Width */
+.navbar-wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 100;
+    padding: 12px 2%;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 30px;
+    background: rgba(17, 24, 39, 0.75);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--border-card);
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+}
+
+.brand-logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: var(--text-primary);
+    font-weight: 700;
+}
+
+.logo-img {
+    height: 40px;
+    object-fit: contain;
+}
+
+.nav-menu {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    list-style: none;
+}
+
+.nav-menu a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 0.95rem;
+    transition: color 0.3s;
+}
+
+.nav-menu a:hover {
+    color: var(--accent-cyan);
+}
+
+.btn-login {
+    padding: 8px 20px;
+    background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan));
+    color: #fff !important;
+    border-radius: 10px;
+    font-weight: 600;
+}
+
+.nav-toggle, .nav-toggle-label { display: none; }
+
+/* Hero Section */
+.hero {
+    padding: 160px 2% 40px;
+    text-align: center;
+}
+
+.main-hero-logo {
+    max-width: 150px;
+    filter: drop-shadow(0 0 25px rgba(6, 182, 212, 0.35));
+    transition: transform 0.5s ease;
+}
+
+.main-hero-logo:hover {
+    transform: scale(1.05);
+}
+
+.hero-title {
+    font-size: clamp(2.2rem, 5vw, 4rem);
+    font-weight: 800;
+    margin-top: 20px;
+    background: linear-gradient(180deg, #FFFFFF 0%, #94A3B8 100%);
+    
+  
+    background-clip: text;
+    
+
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.hero-subtitle {
+    color: var(--text-secondary);
+    font-size: 1.2rem;
+    margin-top: 10px;
+}
+
+/* Grid Section a Tutto Schermo */
+.grid-section {
+    width: 100%;
+    padding: 20px 2%;
+}
+
+.bento-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-auto-rows: 240px;
+    gap: 16px;
+    width: 100%;
+}
+
+.bento-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-card);
+    border-radius: 20px;
+    overflow: hidden;
+    position: relative;
+    transition: border 0.3s, transform 0.3s;
+}
+
+.bento-card:hover {
+    border-color: var(--border-glow);
+    transform: translateY(-3px);
+}
+
+/* Immagini della Griglia */
+#box-musica { background: url(/images/grid-img/musica.jpg) center/cover; }
+#box-cucina { background: url(/images/grid-img/cucina.jpg) center/cover; }
+#box-chanel { background: url(/images/grid-img/chanel.jpg) center/cover; }
+#box-cicala { background: url(/images/grid-img/casacicala2.jpeg) center/cover; }
+#box-passeggiata { background: url(/images/grid-img/passeggiata.jpg) center/cover; }
+#box-ginnastica { background: url(/images/grid-img/ginnastica.png) center/cover; }
+#box-dalla { background: url(/images/grid-img/dalla.jpg) center/cover; }
+#box-piscina { background: url(/images/grid-img/piscina.jpg) center/cover; }
+
+/* PERCHÈ SIAMO DIVERSI CARD */
+.card-featured {
+    grid-column: span 2;
+    grid-row: span 2;
+}
+.card-featured .card-image {
+    background-size: cover;
+    background-position: top center; /* Allinea l'immagine in alto */
+}
+
+.toggle-different { display: none; }
+
+.card-flip-wrapper {
+    display: block;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    position: relative;
+}
+
+.card-image {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    transition: opacity 0.5s ease-in-out;
+}
+
+.img-default {
+    background-image: url('/images/grid-img/diversi.jpg');
+    opacity: 1;
+    z-index: 1;
+}
+
+.img-hover {
+    background-image: url('/images/perche.jpg');
+    opacity: 0;
+    z-index: 2;
+}
+
+.card-flip-wrapper:hover .img-hover,
+.toggle-different:checked ~ .card-flip-wrapper .img-hover {
+    opacity: 1;
+}
+
+.card-badge {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    z-index: 3;
+    padding: 8px 18px;
+    background: rgba(15, 23, 42, 0.75);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 100px;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+/* Sezioni Contenuti (Progetti e Opinioni) */
+.content-section {
+    width: 100%;
+    padding: 60px 2%;
+}
+
+.section-title {
+    font-size: 2.2rem;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.accordion-container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.modern-accordion {
+    background: var(--bg-card);
+    border: 1px solid var(--border-card);
+    border-radius: 16px;
+    margin-bottom: 16px;
+    overflow: hidden;
+}
+
+.modern-accordion summary {
+    padding: 24px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    cursor: pointer;
+}
+
+.acc-number {
+    font-weight: 800;
+    color: var(--accent-cyan);
+    font-size: 1.2rem;
+}
+
+.acc-body {
+    padding: 0 24px 24px 64px;
+    color: var(--text-secondary);
+}
+
+.btn-primary {
+    display: inline-block;
+    margin-top: 16px;
+    padding: 10px 22px;
+    background: var(--accent-blue);
+    color: #fff;
+    border-radius: 8px;
+    text-decoration: none;
+}
+
+/* Layout del contenitore dei bottoni social */
+.social-links {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    margin-top: 10px;
+}
+
+/* Dimensione e forma dei pulsanti */
+.social-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;  /* Regola larghezza desiderata */
+    height: 40px; /* Regola altezza desiderata */
+    padding: 6px;
+    border-radius: 8px;
+    background-color: #f4f4f5;
+    transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+/* Forza l'immagine dell'icona a contenersi nel pulsante */
+.social-btn img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* Impedisce che l'icona si sgrani o esca */
+    display: block;
+}
+
+/* Effetto Hover (opzionale) */
+.social-btn:hover {
+    transform: translateY(-2px);
+    background-color: #e4e4e7;
+}
+
+.opinion-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-card);
+    padding: 30px;
+    border-radius: 20px;
+}
+
+.opinion-card h3 {
+    margin-bottom: 20px;
+    color: var(--accent-cyan);
+    font-size: 1.3rem;
+}
+
+.progress-list {
+    list-style: none;
+}
+
+.progress-list li {
+    margin-bottom: 16px;
+}
+
+.progress-list span {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+}
+
+progress {
+    width: 100%;
+    height: 10px;
+    border-radius: 10px;
+    overflow: hidden;
+    appearance: none;
+    -webkit-appearance: none;
+}
+
+progress::-webkit-progress-bar {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+progress::-webkit-progress-value {
+    background: linear-gradient(90deg, var(--accent-blue), var(--accent-cyan));
+    border-radius: 10px;
+}
+
+/* Footer Full Width */
+.footer-section {
+    background: rgba(10, 14, 23, 0.95);
+    border-top: 1px solid var(--border-card);
+    padding: 80px 2% 40px;
+    margin-top: 80px;
+    width: 100%;
+}
+
+.footer-grid {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+}
+
+.footer-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-card);
+    padding: 30px;
+    border-radius: 16px;
+}
+
+.highlight-card {
+    border-color: var(--accent-cyan);
+}
+
+.btn-paypal {
+    display: block;
+    text-align: center;
+    background: #0070ba;
+    color: white;
+    padding: 12px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: 600;
+    margin-top: 16px;
+}
+
+.footer-bottom {
+    width: 100%;
+    margin-top: 60px;
+    display: flex;
+    justify-content: space-between;
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    border-top: 1px solid rgba(255,255,255,0.05);
+    padding-top: 20px;
+}
+
+.policy-links a {
+    color: var(--text-secondary);
+    margin-right: 15px;
+}
+
+/* Responsive Mobile */
+@media (max-width: 900px) {
+    .bento-grid {
+        grid-template-columns: 1fr;
+        grid-auto-rows: 220px;
+    }
+    .card-featured {
+        grid-column: span 1;
+        grid-row: span 2;
+    }
+    .nav-menu { display: none; }
+}

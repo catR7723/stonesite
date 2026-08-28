@@ -174,67 +174,83 @@ body{
             display: none;
         }
         }
-/*grid*/
-        .grid{
-            position: relative;
-            width: 100%;
-            height: 60vw;
-            display: grid;
-        grid-template-columns:repeat(1fr);
-        grid-template-rows:repeat(1fr);
-        grid-template-areas:
-            "box-1 box-2 box-3 box-4"
-            "box-1 box-5 box-5 box-4"
-            "box-6 box-5 box-5 box-7"
-            "box-8 box-8 box-9 box-7";
-            gap: 1vw;
-           padding: 10vw 2vw 0 2vw;
-        }
-        .grid img{
-            height: 100%;
-            width: 100%;
-        }
-        #box01{
-            background:url(/images/grid-img/musica.jpg);
-        background-size:100% 100%; 
-        }
-        #box02{
-            background-image:url(/images/grid-img/cucina.jpg);
-        background-size:100% 100%; 
-        cursor:none;
-        src:none;
-        }
-        #box03{
-            background-image:url(/images/grid-img/chanel.jpg);
-        background-size:100% 100%; 
-        }
-        #box04{
-            background-image:url(/images/grid-img/casacicala2.jpeg);
-        background-size:cover; 
-        }
+/* Grid Principale */
+.grid {
+  position: relative;
+  width: 100%;
+  height: 60vw;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(4, 1fr);
+  grid-template-areas:
+    "box-1 box-2 box-3 box-4"
+    "box-1 box-5 box-5 box-4"
+    "box-6 box-5 box-5 box-7"
+    "box-8 box-8 box-9 box-7";
+  gap: 1vw;
+  padding: 10vw 2vw 0 2vw;
+}
 
-        #box06{
-            background-image:url(/images/grid-img/passeggiata.jpg);
-        background-size:cover; 
-        }
-        #box07{
-            background-image:url(/images/grid-img/ginnastica.png);
-        background-size:100% 100%; 
-        }
-        #box08{
-            background:url(/images/grid-img/dalla.jpg) right bottom no-repeat ;
-            background-size:105% 120%;
-        }
-        #box09{
-            background:url(/images/grid-img/piscina.jpg) right bottom no-repeat;
-            background-size: 100% 140%;
-        }
-        .collcentro{
-            display: none;
-        }
-        .collcicala{
-            display: none;
-        } 
+/* Contenitore wrapper per ogni elemento della griglia */
+.box-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* Le immagini coprono interamente il loro contenitore */
+.grid .center-box,
+.grid img {
+  height: 100%;
+  width: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+/* Regole di posizionamento specifiche per alcune immagini */
+#box08 {
+  object-position: right bottom;
+}
+
+#box09 {
+  object-position: right bottom;
+}
+
+/* Gestione dei pulsanti Boss sopra le immagini */
+.boss-actions {
+  display: none;
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  gap: 6px;
+  z-index: 10;
+}
+
+/* Visibili solo quando il body ha la classe 'is-boss' */
+body.is-boss .boss-actions {
+  display: flex;
+}
+
+.boss-actions button {
+  background: rgba(0, 0, 0, 0.85);
+  color: #ffffff;
+  border: 1px solid #ffffff;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.boss-actions button:hover {
+  background: #e74c3c;
+}
+
+.collcentro,
+.collcicala {
+  display: none;
+}
     @media(max-width: 640px){
             .grid{
             position: relative;
@@ -327,6 +343,7 @@ body{
             height: 100%;
         }
     }
+
 /*bestbutton*/
         #best{
             display: none;
