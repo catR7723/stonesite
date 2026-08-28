@@ -407,34 +407,40 @@
 
   // 4. Upload dell'immagine ridimensionata verso la Serverless Function
   async function inviaNuovaImmagine(event) {
-    const file = event.target.files[0];
-    if (!file || !publicIdInModifica) return;
+  const file = event.target.files[0];
+  if (!file || !publicIdInModifica) return;
 
-    try {
-      // Ridimensiona se necessario (max 1600px, qualità 80%)
-      const base64Image = await ridimensionaEComprimiImmagine(file, 1600, 0.8);
+  try {
+    const base64Image = await ridimensionaEComprimiImmagine(file, 1600, 0.8);
 
-      const res = await fetch('/api/upload', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          imageBase64: base64Image,
-          public_id: publicIdInModifica
-        })
-      });
+    const res = await fetch('/api/upload', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        imageBase64: base64Image,
+        public_id: publicIdInModifica
+      })
+    });
 
-      const data = await res.json();
-      if (data.success) {
-        alert("Immagine caricata e ottimizzata con successo!");
-        location.reload();
-      } else {
-        alert("Errore durante il caricamento: " + (data.error || 'Errore sconosciuto'));
-      }
-    } catch (err) {
-      console.error(err);
-      alert("Si è verificato un errore durante l'elaborazione o l'upload dell'immagine.");
+    // Se il server risponde con errore (es. 404 o 500), blocca la decodifica JSON ed evidenzia l'errore
+    if (!res.ok) {
+      const errorText = await res.text();
+      throw new Error(`Errore Server (${res.status}): ${errorText}`);
     }
+
+    const data = await res.json();
+
+    if (data.success || data.ok) {
+      alert("Immagine caricata con successo!");
+      location.reload();
+    } else {
+      alert("Errore caricamento: " + (data.error || 'Errore sconosciuto'));
+    }
+  } catch (err) {
+    console.error(err);
+    alert(err.message || "Errore durante l'upload dell'immagine.");
   }
+}
 
   // 5. Eliminazione immagine
   async function eliminaImmagine(publicId) {
