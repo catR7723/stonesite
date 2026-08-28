@@ -85,6 +85,21 @@ document.getElementById('form-login').addEventListener('submit', async (e) => {
     const password = document.getElementById('login-password').value;
     const data = await postJson('/auth/login', { username, password });
     
+    // ✅ Salva il ruolo restituito dal server nel localStorage
+    if (data.role) {
+      localStorage.setItem('role', data.role);
+    }
+    // 1. Legge il ruolo da sessionStorage e abilita la modalità corretta
+  document.addEventListener('DOMContentLoaded', () => {
+    const role = sessionStorage.getItem('role');
+
+    // Se il ruolo è 'boss', mostra i comandi di modifica/eliminazione
+    if (role === 'boss') {
+      document.body.classList.add('is-boss');
+    }
+
+  });
+
     // ✅ NON salvare token, le sessioni sono automatiche via cookie
     msgEl.className = 'message ok';
     msgEl.textContent = 'Login effettuato. Reindirizzamento...';
